@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# www → apex
+https://www.llmcfo.com/*  https://llmcfo.com/:splat  301!
+
+# Trailing-slash normalization handled by Cloudflare
