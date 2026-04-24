@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Semantic caching for LLMs · LLM CFO</title>
+<meta name="description" content="When semantic caching works, when it doesn't, and how to pick a similarity threshold without breaking output quality." />
+<meta name="keywords" content="semantic caching, embedding cache, LLM cache, GPTCache, vector cache, similarity threshold, RAG caching" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://llmcfo.com/research/semantic-caching" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WP8B74J4');</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Semantic <em>caching.</em></h1>
+  <p class="updated">25 April 2026</p>
+
+  <p class="lede">Semantic caching embeds an incoming request, looks up the nearest prior request above a similarity threshold, and returns that prior response instead of calling the model. When it works, it cuts spend 20–40% on the affected endpoint with zero added latency. When it doesn't, it returns wrong answers — and you get told about it on Twitter.</p>
+
+  <h2>Where it works</h2>
+  <ul>
+    <li><strong>RAG retrieval where the corpus is stable.</strong> Documentation Q&amp;A, internal knowledge bases, product help.</li>
+    <li><strong>Classification and tagging.</strong> Sentiment, intent, content moderation — the inputs cluster naturally.</li>
+    <li><strong>High-volume customer support flows</strong> with a long tail of duplicated questions.</li>
+    <li><strong>Boilerplate generation</strong> — legal clauses, marketing variants, templated emails.</li>
+  </ul>
+
+  <h2>Where it breaks</h2>
+  <ul>
+    <li><strong>Personalized output.</strong> "Summarize my last 3 emails" must never hit a cache from another user. Scope keys to user/session.</li>
+    <li><strong>Time-sensitive answers.</strong> Stock prices, news, schedules. Use TTLs aggressively or skip the cache entirely.</li>
+    <li><strong>Long-context, low-repetition workloads</strong> like fresh document analysis. Hit rate stays under 5% — not worth the embedding cost.</li>
+    <li><strong>Anything where "approximately right" is wrong.</strong> Code generation, financial calculations, medical.</li>
+  </ul>
+
+  <h2>Picking a similarity threshold</h2>
+  <p>This is the lever that destroys quality if you set it wrong. Defaults we use as a starting point (cosine similarity on `text-embedding-3-small`):</p>
+  <table class="kv">
+    <tr><td>RAG retrieval</td><td>0.95</td></tr>
+    <tr><td>Classification</td><td>0.92</td></tr>
+    <tr><td>Customer support</td><td>0.97</td></tr>
+    <tr><td>Boilerplate</td><td>0.90</td></tr>
+  </table>
+  <p>Tune by sampling 200 cache hits per endpoint, judging each pair (input, served-from-cache response) with an LLM-as-judge + human spot-check. If precision drops below 95%, raise the threshold.</p>
+
+  <h2>Implementation cost</h2>
+  <p>Embedding tokens are not free. At `$0.02 / 1M tokens` for `text-embedding-3-small`, the embedding cost is negligible vs. a frontier-model call — but if you embed every request and your hit rate is 3%, you're paying for embeddings without the savings to justify them. <strong>Measure hit rate before scaling.</strong></p>
+
+  <h2>Stack we typically use</h2>
+  <ul>
+    <li><strong>Embedding model</strong>: `text-embedding-3-small` (default), Voyage `voyage-3` or Cohere `embed-v3` for domain-specific corpora.</li>
+    <li><strong>Vector store</strong>: pgvector for &lt;5M entries, Qdrant or Pinecone above that.</li>
+    <li><strong>Gateway</strong>: LiteLLM with custom cache backend, or Helicone's built-in semantic cache.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/model-routing">Model routing without quality regressions</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>

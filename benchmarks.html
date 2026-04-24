@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Benchmarks · LLM CFO</title>
+<meta name="description" content="Reference price-per-1M-token tables across OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, and Azure OpenAI. Updated quarterly." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://llmcfo.com/benchmarks" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WP8B74J4');</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH</div>
+  <h1 class="page-title">Provider <em>price benchmarks.</em></h1>
+  <p class="updated">Last updated: 24 April 2026 · refreshed quarterly</p>
+
+  <p class="lede">Reference prices per 1M tokens across the five major frontier providers. Numbers come from public price pages on the date above. Cache-read and batch-API discounts are tracked separately because they're billed separately on real invoices.</p>
+
+  <div class="callout"><strong>How to use:</strong> these are list prices. Real engagement pricing factors enterprise discounts, committed-use, and cross-region routing. Treat the numbers below as an upper bound, not a quote.</div>
+
+  <h2>Frontier-tier reasoning models</h2>
+  <table class="kv">
+    <tr><td>OpenAI · gpt-5 (input)</td><td>$10.00 / 1M</td></tr>
+    <tr><td>OpenAI · gpt-5 (output)</td><td>$30.00 / 1M</td></tr>
+    <tr><td>Anthropic · claude-opus-4 (input)</td><td>$15.00 / 1M</td></tr>
+    <tr><td>Anthropic · claude-opus-4 (output)</td><td>$75.00 / 1M</td></tr>
+    <tr><td>Google · gemini-2.5-pro (input)</td><td>$1.25 / 1M</td></tr>
+    <tr><td>Google · gemini-2.5-pro (output)</td><td>$10.00 / 1M</td></tr>
+  </table>
+
+  <h2>Mid-tier workhorses</h2>
+  <table class="kv">
+    <tr><td>OpenAI · gpt-5-mini (input)</td><td>$0.25 / 1M</td></tr>
+    <tr><td>OpenAI · gpt-5-mini (output)</td><td>$2.00 / 1M</td></tr>
+    <tr><td>Anthropic · claude-sonnet-4 (input)</td><td>$3.00 / 1M</td></tr>
+    <tr><td>Anthropic · claude-sonnet-4 (output)</td><td>$15.00 / 1M</td></tr>
+    <tr><td>Google · gemini-2.5-flash (input)</td><td>$0.30 / 1M</td></tr>
+    <tr><td>Google · gemini-2.5-flash (output)</td><td>$2.50 / 1M</td></tr>
+  </table>
+
+  <h2>Discount mechanics</h2>
+  <table class="kv">
+    <tr><td>OpenAI prompt cache (cache-read)</td><td>~50% off input price</td></tr>
+    <tr><td>Anthropic prompt cache (cache-read, 5-min)</td><td>~90% off input price</td></tr>
+    <tr><td>Anthropic extended cache (cache-read, 1-hr)</td><td>~90% off input price · 25% premium on writes</td></tr>
+    <tr><td>OpenAI Batch API</td><td>50% off list (24-hr SLA)</td></tr>
+    <tr><td>Anthropic Batch API</td><td>50% off list (24-hr SLA)</td></tr>
+  </table>
+
+  <h2>Why this list is short</h2>
+  <p>We track ~120 model SKUs across providers internally for pricing math. We're not publishing the full table because it goes stale within a quarter and nobody benefits from a wrong number on a search-engine result. If you need a specific model's current price for a procurement document, <a href="mailto:hello@llmcfo.com?subject=Price%20benchmark">email us</a> — we'll send our internal sheet.</p>
+
+  <h2>Methodology</h2>
+  <ul>
+    <li>Prices are pulled directly from each provider's public price page on the "last updated" date.</li>
+    <li>We don't include prices behind enterprise sales paywalls.</li>
+    <li>Bedrock/Vertex/Azure pricing for OpenAI/Anthropic/Google models matches first-party where the providers publish parity; cross-region surcharges aren't included.</li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>

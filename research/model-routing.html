@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Model routing without quality regressions · LLM CFO</title>
+<meta name="description" content="How to route easy queries to a cheaper model and hard queries to the frontier model — without breaking output quality." />
+<meta name="keywords" content="model routing, LLM routing, cascading models, RouteLLM, cost-aware routing, LLM router" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://llmcfo.com/research/model-routing" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WP8B74J4');</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Model <em>routing.</em></h1>
+  <p class="updated">25 April 2026</p>
+
+  <p class="lede">Most production traffic doesn't need the frontier model. Routing easy queries to a smaller/cheaper model and hard queries to the frontier model is the single highest-leverage optimization in the playbook — typically 30–50% reduction with no quality regression, when you do it right. Here's how we do it.</p>
+
+  <h2>The two routing patterns that actually work</h2>
+
+  <h3>1. Classifier-up-front</h3>
+  <p>A small classifier (often a fine-tuned `gpt-5-mini`, `claude-haiku`, or a local distilled BERT) reads the incoming request and predicts difficulty. Easy → cheap model. Hard → frontier model. Edge cases → frontier model.</p>
+  <p>Works well when your traffic has visibly distinct difficulty buckets (e.g. customer support: simple FAQ vs. multi-turn troubleshooting). Doesn't work when difficulty is uncorrelated with surface features.</p>
+
+  <h3>2. Cascade with confidence</h3>
+  <p>Cheap model attempts the answer. If its self-reported confidence (or a verifier check) is below threshold, escalate to the frontier model. Pay the cheap-model token cost twice for ~10–20% of traffic; pay the frontier-model cost on a fraction of overall traffic.</p>
+  <p>Works well when the cheap model is right most of the time and confidence is well-calibrated. Don't trust raw `logprobs` as confidence on aligned chat models — train or distill a verifier.</p>
+
+  <h2>Patterns that don't work</h2>
+  <ul>
+    <li><strong>Round-robin or weighted random</strong> across models of different quality. You'll meet your savings target and miss your quality SLO.</li>
+    <li><strong>"Pick the cheapest model that passed eval"</strong> as a static decision. Real traffic distribution drifts away from your eval set within weeks.</li>
+    <li><strong>Routing on token count alone.</strong> Long doesn't mean hard. Short doesn't mean easy.</li>
+  </ul>
+
+  <h2>Quality measurement</h2>
+  <p>Every router ships with a 7-day A/B against the production baseline. Quality SLOs are agreed per endpoint:</p>
+  <ul>
+    <li><strong>LLM-as-judge</strong> on a held-out eval set, scored against the frontier-model output as reference.</li>
+    <li><strong>Production proxies</strong> — thumbs-up rate, conversation length, escalation rate, downstream task completion.</li>
+    <li><strong>Human spot-checks</strong> on 50–200 sampled responses per week.</li>
+  </ul>
+  <p>If any SLO degrades meaningfully, the router auto-rolls back. There's no shipping a router without a rollback path.</p>
+
+  <h2>Stack</h2>
+  <ul>
+    <li><strong>Gateway with routing logic</strong>: LiteLLM, Helicone, or a custom proxy. We tend toward custom when the routing rules are non-trivial.</li>
+    <li><strong>Classifier</strong>: fine-tuned mini-model on the platform you're already on (avoids adding a new vendor).</li>
+    <li><strong>Verifier for cascades</strong>: distilled BERT or a fine-tuned mini-model trained on your eval traces.</li>
+    <li><strong>A/B framework</strong>: anything that can split by user/session and persist assignment for at least 7 days.</li>
+  </ul>
+
+  <h2>Order of operations</h2>
+  <ol>
+    <li>Identify the top 3 spend endpoints.</li>
+    <li>For each: build a 200-row eval set with frontier-model answers as reference.</li>
+    <li>Test 2–3 candidate cheaper models against the eval set. Keep the ones that pass quality.</li>
+    <li>Build the classifier or cascade on the candidates that passed.</li>
+    <li>Ship at 1% traffic. Then 10%. Then 50%. Then 100%. A/B at every step.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/semantic-caching">Semantic caching: when it works and when it doesn't</a></li>
+    <li><a href="/benchmarks">Provider price benchmarks</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>

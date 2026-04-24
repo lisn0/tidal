@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Security · LLM CFO</title>
+<meta name="description" content="How LLM CFO handles your data: read-only by default, no prompt content storage, NDA + DPA on request." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://llmcfo.com/security" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WP8B74J4');</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">TRUST</div>
+  <h1 class="page-title">Security &amp; <em>data handling.</em></h1>
+  <p class="updated">Last updated: 24 April 2026</p>
+
+  <p class="lede">We're an early-stage firm. We don't have SOC 2 yet. Here's exactly what we do — and don't do — with your data, written plainly so you can decide if it's enough for your security review.</p>
+
+  <div class="callout"><strong>Honest baseline:</strong> read-only access by default · no prompt or output content stored · NDA + DPA signed before any data exchange · SOC 2 Type II is on the roadmap, not in hand.</div>
+
+  <h2>1. What we touch</h2>
+  <ul>
+    <li><strong>Provider invoices &amp; usage exports</strong> — OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, Azure OpenAI billing CSVs/JSON.</li>
+    <li><strong>Gateway logs</strong> — LiteLLM, Helicone, Langfuse, OpenRouter, or your own proxy. Aggregated metadata only (model, token counts, latency, request volume).</li>
+    <li><strong>Read-only API keys</strong> with billing-export scope, never write keys, never production model keys.</li>
+  </ul>
+
+  <h2>2. What we don't touch</h2>
+  <ul>
+    <li>Prompt content, model output, and end-user PII are <strong>not</strong> stored in our systems by default.</li>
+    <li>If a specific optimization (e.g. semantic cache tuning) needs prompt samples, we ask explicit per-feature approval and scope sampling tightly. You can revoke any time.</li>
+    <li>We never use your data to train any model. We never sell or share with third parties.</li>
+  </ul>
+
+  <h2>3. How we handle credentials</h2>
+  <ul>
+    <li>Credentials live in a password manager with hardware-key-protected access. They are never committed to git, never pasted into Slack/email, never embedded in reports.</li>
+    <li>You can rotate or revoke at any time without notice. We log every credential use to your engagement audit trail.</li>
+    <li>Engagement ends → credentials are revoked by you and purged from our manager within 7 days.</li>
+  </ul>
+
+  <h2>4. Where data lives</h2>
+  <ul>
+    <li>Encrypted databases (AES-256 at rest, TLS 1.2+ in transit). Region selectable EU or US at engagement kickoff.</li>
+    <li>Backups are encrypted and retained 30 days.</li>
+    <li>Access is limited to operators assigned to your engagement; access is logged.</li>
+  </ul>
+
+  <h2>5. Sub-processors</h2>
+  <p>We disclose every sub-processor in the DPA. Current list (subject to change with notice):</p>
+  <table class="kv">
+    <tr><td>Cloud hosting</td><td>AWS (us-east-1 / eu-west-1)</td></tr>
+    <tr><td>Email</td><td>Google Workspace</td></tr>
+    <tr><td>Analytics (this site)</td><td>Google Analytics 4 / Tag Manager</td></tr>
+    <tr><td>Payments</td><td>Stripe</td></tr>
+  </table>
+
+  <h2>6. Compliance</h2>
+  <ul>
+    <li><strong>GDPR / UK GDPR / CCPA</strong> — DPA available on request. EU/UK transfers covered by SCCs.</li>
+    <li><strong>HIPAA</strong> — not currently set up. Don't send us PHI.</li>
+    <li><strong>SOC 2 Type II</strong> — on roadmap. We can share our controls memo and pen-test summary under NDA in the meantime.</li>
+  </ul>
+
+  <h2>7. Reporting a vulnerability</h2>
+  <p>Email <a href="mailto:security@llmcfo.com">security@llmcfo.com</a>. We acknowledge within 2 business days. See also <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</p>
+
+  <h2>8. Incident response</h2>
+  <p>Security incidents involving customer data are disclosed to affected customers within 72 hours of confirmation. Post-mortems are shared within 14 days.</p>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
+</footer>
+</body>
+</html>
