@@ -14,7 +14,7 @@ Single-file static HTML. No build step. No dependencies.
 
 ## Analytics
 
-Google Tag Manager: **GTM-WP8B74J4** (head + noscript fallback).
+Google Analytics 4: **G-QLN7D39SDK** loaded by `assets/consent.js` only after explicit analytics consent.
 
 ## SEO
 

@@ -2,11 +2,11 @@
 (function () {
 	'use strict';
 
-	var GTM_ID = 'GTM-WP8B74J4';
+	var GA4_ID = 'G-QLN7D39SDK';
 	var COOKIE_NAME = 'llmcfo_consent';
 	var COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
 
-	// 1. Initialize dataLayer + gtag shim BEFORE GTM loads.
+	// 1. Initialize dataLayer + gtag shim before GA4 loads.
 	window.dataLayer = window.dataLayer || [];
 	function gtag() { window.dataLayer.push(arguments); }
 	window.gtag = window.gtag || gtag;
@@ -22,20 +22,20 @@
 		security_storage: 'granted',
 		wait_for_update: 500
 	});
+	gtag('set', 'ads_data_redaction', true);
 
-	// 3. Load GTM container only after explicit analytics consent.
-	var gtmLoaded = false;
-	function loadGtm(w, d, s, l, i) {
-		if (gtmLoaded) return;
-		gtmLoaded = true;
-		w[l] = w[l] || [];
-		w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+	// 3. Load GA4 only after explicit analytics consent.
+	var ga4Loaded = false;
+	function loadGa4(w, d, s, i) {
+		if (ga4Loaded) return;
+		ga4Loaded = true;
 		var f = d.getElementsByTagName(s)[0];
 		var j = d.createElement(s);
-		var dl = l !== 'dataLayer' ? '&l=' + l : '';
 		j.async = true;
-		j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+		j.src = 'https://www.googletagmanager.com/gtag/js?id=' + i;
 		f.parentNode.insertBefore(j, f);
+		gtag('js', new Date());
+		gtag('config', i);
 	}
 
 	// 4. Cookie helpers.
@@ -59,7 +59,7 @@
 			personalization_storage: 'granted',
 			security_storage: 'granted'
 		});
-		loadGtm(window, document, 'script', 'dataLayer', GTM_ID);
+		loadGa4(window, document, 'script', GA4_ID);
 	}
 
 	// 6. Read existing decision.
