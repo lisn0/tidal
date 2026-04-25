@@ -91,17 +91,17 @@
     --ink-2:      #1A1C18;
     --fg:         #2A2C26;
     --fg-2:       #6B6D64;
-    --fg-3:       #9A9B8F;
+    --fg-3:       #5F6158;
     --rule:       #E0DCCE;
     --rule-soft:  #EEEADE;
-    --accent:     #FF5F2E;   /* warm orange highlight — not gradient */
+    --accent:     #B83A13;   /* warm orange highlight with WCAG AA contrast */
     --green:      #1F7A3F;
-    --green-2:    #2B9B51;
+    --green-2:    #176B35;
     --green-soft: #E3F4EA;
     --chip:       #F6E8DF;   /* soft peach, used for v2.3 badge */
     --code-bg:    #0E0F0C;
     --code-fg:    #E6E3D5;
-    --code-dim:   #6B6D64;
+    --code-dim:   #B8B6A8;
     --code-str:   #FFB37A;
     --code-kw:    #F08A5D;
     --code-fn:    #8EB8E0;
@@ -310,6 +310,8 @@
     padding: 16px 24px;
   }
   .recon table { width: 100%; border-collapse: collapse; font-family: 'Geist Mono', monospace; font-size: 13px; }
+  .recon th { padding: 0 0 8px; border-bottom: 1px solid var(--rule); color: var(--fg-2); font-weight: 600; text-align: left; }
+  .recon th:nth-child(2), .recon th:nth-child(3) { text-align: right; }
   .recon td { padding: 7px 0; border-bottom: 1px dashed var(--rule); color: var(--fg); }
   .recon tr:last-child td { border-bottom: none; }
   .recon td.k { color: var(--fg-2); }
@@ -484,7 +486,7 @@
     margin-bottom: 16px;
     opacity: 0.95;
   }
-  .how .step h4 {
+  .how .step h3 {
     font-size: 19px; font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--ink);
@@ -540,7 +542,7 @@
     padding: 48px;
     background: var(--bg-2);
   }
-  .pricing .right h4 {
+  .pricing .right .example-label {
     font-family: 'Geist Mono', monospace;
     font-size: 11px;
     color: var(--fg-2);
@@ -548,6 +550,8 @@
     margin-bottom: 20px;
   }
   .example-t { width: 100%; border-collapse: collapse; font-family: 'Geist Mono', monospace; font-size: 13px; }
+  .example-t th { padding: 0 0 8px; border-bottom: 1px solid var(--rule); color: var(--fg-2); font-weight: 600; text-align: left; }
+  .example-t th:last-child { text-align: right; }
   .example-t td { padding: 10px 0; border-bottom: 1px dashed var(--rule); }
   .example-t td:last-child { text-align: right; }
   .example-t tr.g td { color: var(--green); font-weight: 600; }
@@ -661,7 +665,7 @@
   .cta h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
   .cta p { font-size: 18px; color: #C6C4B6; max-width: 52ch; line-height: 1.6; }
   .cta .cta-right { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
-  .cta .btn-dark { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+  .cta .btn-dark { background: var(--accent); color: #fff; border-color: var(--accent); }
   .cta .btn-dark:hover { background: #fff; border-color: #fff; color: var(--ink); }
   .cta .btn-ghost { color: var(--bg); border-color: #4A4C44; }
   .cta .btn-ghost:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
@@ -682,7 +686,7 @@
     padding-bottom: 44px;
     border-bottom: 1px solid var(--rule);
   }
-  footer.site h5 {
+  footer.site .foot-heading {
     font-family: 'Geist Mono', monospace;
     font-size: 11px; color: var(--fg-2);
     letter-spacing: -0.01em;
@@ -728,8 +732,6 @@
 <body>
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <a class="skip" href="#main">Skip to main content</a>
@@ -846,12 +848,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Receipt — illustrative example, not a real customer -->
         <div class="recon" aria-label="Illustrative reconciliation example">
           <table>
-            <tr><td class="k">baseline</td><td class="v">$165,000/mo</td><td class="v">—</td></tr>
-            <tr><td class="k">model routing</td><td class="v">flagship → small</td><td class="v neg">−30 to −50%</td></tr>
-            <tr><td class="k">semantic cache</td><td class="v">near-duplicate hits</td><td class="v neg">−20 to −40%</td></tr>
-            <tr><td class="k">prompt compress</td><td class="v">system + context</td><td class="v neg">−15 to −30%</td></tr>
-            <tr><td class="k">provider arb.</td><td class="v">capability per $</td><td class="v neg">−20 to −35%</td></tr>
-            <tr class="total"><td>EXAMPLE · COMBINED RANGE</td><td class="v">illustrative</td><td class="v">−40 to −60%</td></tr>
+            <thead>
+              <tr>
+                <th scope="col">Lever</th>
+                <th scope="col">Change</th>
+                <th scope="col">Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="k">baseline</td><td class="v">$165,000/mo</td><td class="v">—</td></tr>
+              <tr><td class="k">model routing</td><td class="v">flagship → small</td><td class="v neg">−30 to −50%</td></tr>
+              <tr><td class="k">semantic cache</td><td class="v">near-duplicate hits</td><td class="v neg">−20 to −40%</td></tr>
+              <tr><td class="k">prompt compress</td><td class="v">system + context</td><td class="v neg">−15 to −30%</td></tr>
+              <tr><td class="k">provider arb.</td><td class="v">capability per $</td><td class="v neg">−20 to −35%</td></tr>
+              <tr class="total"><td>EXAMPLE · COMBINED RANGE</td><td class="v">illustrative</td><td class="v">−40 to −60%</td></tr>
+            </tbody>
           </table>
         </div>
       </aside>
@@ -983,25 +994,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="step">
         <div class="w">WEEK 01 · AUDIT</div>
         <div class="num">01</div>
-        <h4>Map every dollar.</h4>
+        <h3>Map every dollar.</h3>
         <p>Ingest invoices and gateway logs. Baseline locked and countersigned.</p>
       </div>
       <div class="step">
         <div class="w">WEEK 02 · PLAN</div>
         <div class="num">02</div>
-        <h4>Rank by waste.</h4>
+        <h3>Rank by waste.</h3>
         <p>Optimizations ranked by dollar impact. Quality SLOs agreed per endpoint.</p>
       </div>
       <div class="step">
         <div class="w">WEEKS 03–05 · SHIP</div>
         <div class="num">03</div>
-        <h4>Ship &amp; A/B.</h4>
+        <h3>Ship &amp; A/B.</h3>
         <p>Feature-flagged, tested 7 days vs. baseline, graduated to 100%.</p>
       </div>
       <div class="step">
         <div class="w">ONGOING · RECONCILE</div>
         <div class="num">04</div>
-        <h4>Signed, monthly.</h4>
+        <h3>Signed, monthly.</h3>
         <p>Statement of Savings reconciled to raw provider invoices. Every month.</p>
       </div>
     </div>
@@ -1031,13 +1042,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </div>
       <div class="right" style="max-width: none;">
-        <h4>// illustrative example · $165K baseline · 50% reduction</h4>
+        <p class="example-label">// illustrative example · $165K baseline · 50% reduction</p>
         <table class="example-t">
-          <tr><td>Baseline AI spend</td><td>$165,000</td></tr>
-          <tr><td>After optimization (≈50%)</td><td>$82,500</td></tr>
-          <tr class="g"><td>Monthly savings</td><td>$82,500</td></tr>
-          <tr><td>LLM CFO fee (20%)</td><td>− $16,500</td></tr>
-          <tr class="total"><td>Customer keeps</td><td>$66,000 /mo</td></tr>
+          <thead>
+            <tr><th scope="col">Line item</th><th scope="col">Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Baseline AI spend</td><td>$165,000</td></tr>
+            <tr><td>After optimization (≈50%)</td><td>$82,500</td></tr>
+            <tr class="g"><td>Monthly savings</td><td>$82,500</td></tr>
+            <tr><td>LLM CFO fee (20%)</td><td>− $16,500</td></tr>
+            <tr class="total"><td>Customer keeps</td><td>$66,000 /mo</td></tr>
+          </tbody>
         </table>
         <div class="ex-foot">
           <div class="l">// ILLUSTRATIVE ANNUAL NET — NOT A CUSTOMER FIGURE</div>
@@ -1243,7 +1259,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div>
-        <h5>Platform</h5>
+        <p class="foot-heading">Platform</p>
         <ul>
           <li><a href="#platform">How it works</a></li>
           <li><a href="#techniques">Techniques</a></li>
@@ -1253,7 +1269,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </div>
       <div>
-        <h5>Research</h5>
+        <p class="foot-heading">Research</p>
         <ul>
           <li><a href="/research/llm-cost-optimization">Cost opt. guide</a></li>
           <li><a href="/research/semantic-caching">Semantic caching</a></li>
@@ -1262,7 +1278,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </div>
       <div>
-        <h5>Company</h5>
+        <p class="foot-heading">Company</p>
         <ul>
           <li><a href="/about">About</a></li>
           <li><a href="/case-studies">Case studies</a></li>
@@ -1271,7 +1287,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <p class="foot-heading">Legal</p>
         <ul>
           <li><a href="/privacy">Privacy</a></li>
           <li><a href="/terms">Terms</a></li>

@@ -26,7 +26,6 @@
 <script src="/assets/consent.js" defer></script>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
 
 <main class="wrap">
@@ -56,10 +55,13 @@
   <h2>Picking a similarity threshold</h2>
   <p>This is the lever that destroys quality if you set it wrong. Defaults we use as a starting point (cosine similarity on `text-embedding-3-small`):</p>
   <table class="kv">
-    <tr><td>RAG retrieval</td><td>0.95</td></tr>
-    <tr><td>Classification</td><td>0.92</td></tr>
-    <tr><td>Customer support</td><td>0.97</td></tr>
-    <tr><td>Boilerplate</td><td>0.90</td></tr>
+    <thead><tr><th scope="col">Workload</th><th scope="col">Starting threshold</th></tr></thead>
+    <tbody>
+      <tr><td>RAG retrieval</td><td>0.95</td></tr>
+      <tr><td>Classification</td><td>0.92</td></tr>
+      <tr><td>Customer support</td><td>0.97</td></tr>
+      <tr><td>Boilerplate</td><td>0.90</td></tr>
+    </tbody>
   </table>
   <p>Tune by sampling 200 cache hits per endpoint, judging each pair (input, served-from-cache response) with an LLM-as-judge + human spot-check. If precision drops below 95%, raise the threshold.</p>
 

@@ -26,7 +26,6 @@
 <script src="/assets/consent.js" defer></script>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
 
 <main class="wrap">
@@ -39,9 +38,12 @@
 
   <h2>The one-line version</h2>
   <table class="kv">
-    <tr><td>LiteLLM</td><td>a multi-provider <strong>gateway / SDK</strong> — unify the API surface, route, fall over, key-vault</td></tr>
-    <tr><td>Helicone</td><td>a <strong>logging proxy</strong> — passthrough that captures every request and gives you a dashboard</td></tr>
-    <tr><td>LangFuse</td><td>an <strong>observability platform</strong> — traces, evals, prompt management, datasets, experiments</td></tr>
+    <thead><tr><th scope="col">Tool</th><th scope="col">Primary role</th></tr></thead>
+    <tbody>
+      <tr><td>LiteLLM</td><td>a multi-provider <strong>gateway / SDK</strong> — unify the API surface, route, fall over, key-vault</td></tr>
+      <tr><td>Helicone</td><td>a <strong>logging proxy</strong> — passthrough that captures every request and gives you a dashboard</td></tr>
+      <tr><td>LangFuse</td><td>an <strong>observability platform</strong> — traces, evals, prompt management, datasets, experiments</td></tr>
+    </tbody>
   </table>
 
   <h2>LiteLLM</h2>
@@ -97,11 +99,14 @@
 
   <h2>How to pick</h2>
   <table class="kv">
-    <tr><td>You need one API across many providers + budgets + fallback</td><td>LiteLLM</td></tr>
-    <tr><td>You want logs and cost attribution this afternoon, no code refactor</td><td>Helicone</td></tr>
-    <tr><td>You're building agents and need real traces, evals, and prompt versioning</td><td>LangFuse</td></tr>
-    <tr><td>You need all three things</td><td>LiteLLM as gateway + LangFuse as observability layer; skip Helicone</td></tr>
-    <tr><td>You're a small team with one provider and one product surface</td><td>Helicone alone is often enough</td></tr>
+    <thead><tr><th scope="col">Need</th><th scope="col">Recommended tool</th></tr></thead>
+    <tbody>
+      <tr><td>You need one API across many providers + budgets + fallback</td><td>LiteLLM</td></tr>
+      <tr><td>You want logs and cost attribution this afternoon, no code refactor</td><td>Helicone</td></tr>
+      <tr><td>You're building agents and need real traces, evals, and prompt versioning</td><td>LangFuse</td></tr>
+      <tr><td>You need all three things</td><td>LiteLLM as gateway + LangFuse as observability layer; skip Helicone</td></tr>
+      <tr><td>You're a small team with one provider and one product surface</td><td>Helicone alone is often enough</td></tr>
+    </tbody>
   </table>
 
   <h2>Combining them is normal</h2>

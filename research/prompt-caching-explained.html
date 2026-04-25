@@ -26,7 +26,6 @@
 <script src="/assets/consent.js" defer></script>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
 
 <main class="wrap">
@@ -42,11 +41,14 @@
 
   <h2>What each provider charges</h2>
   <table class="kv">
-    <tr><td>OpenAI · cache-read</td><td>~50% off input price · 5–10 min TTL · auto on prompts ≥ 1024 tokens</td></tr>
-    <tr><td>Anthropic · ephemeral cache</td><td>~90% off input · 5 min TTL · 25% write premium · explicit `cache_control` block</td></tr>
-    <tr><td>Anthropic · extended cache</td><td>~90% off input · 1 hour TTL · 100% write premium · explicit beta header</td></tr>
-    <tr><td>AWS Bedrock (Anthropic on Bedrock)</td><td>matches Anthropic terms · region availability varies</td></tr>
-    <tr><td>Google Vertex (Gemini)</td><td>context cache · per-token-per-hour storage fee + ~75% read discount · explicit cache resource</td></tr>
+    <thead><tr><th scope="col">Provider cache</th><th scope="col">Mechanics</th></tr></thead>
+    <tbody>
+      <tr><td>OpenAI · cache-read</td><td>~50% off input price · 5–10 min TTL · auto on prompts ≥ 1024 tokens</td></tr>
+      <tr><td>Anthropic · ephemeral cache</td><td>~90% off input · 5 min TTL · 25% write premium · explicit `cache_control` block</td></tr>
+      <tr><td>Anthropic · extended cache</td><td>~90% off input · 1 hour TTL · 100% write premium · explicit beta header</td></tr>
+      <tr><td>AWS Bedrock (Anthropic on Bedrock)</td><td>matches Anthropic terms · region availability varies</td></tr>
+      <tr><td>Google Vertex (Gemini)</td><td>context cache · per-token-per-hour storage fee + ~75% read discount · explicit cache resource</td></tr>
+    </tbody>
   </table>
 
   <h2>How to structure prompts so the cache hits</h2>

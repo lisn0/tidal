@@ -23,8 +23,11 @@
 		wait_for_update: 500
 	});
 
-	// 3. Load GTM container.
-	(function (w, d, s, l, i) {
+	// 3. Load GTM container only after explicit analytics consent.
+	var gtmLoaded = false;
+	function loadGtm(w, d, s, l, i) {
+		if (gtmLoaded) return;
+		gtmLoaded = true;
 		w[l] = w[l] || [];
 		w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
 		var f = d.getElementsByTagName(s)[0];
@@ -33,7 +36,7 @@
 		j.async = true;
 		j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
 		f.parentNode.insertBefore(j, f);
-	})(window, document, 'script', 'dataLayer', GTM_ID);
+	}
 
 	// 4. Cookie helpers.
 	function getCookie(name) {
@@ -56,6 +59,7 @@
 			personalization_storage: 'granted',
 			security_storage: 'granted'
 		});
+		loadGtm(window, document, 'script', 'dataLayer', GTM_ID);
 	}
 
 	// 6. Read existing decision.
@@ -90,7 +94,7 @@
 
 		var msg = document.createElement('div');
 		msg.style.cssText = 'margin-bottom:12px; color:#0E0F0C;';
-		msg.innerHTML = 'We use cookies for anonymous analytics (GA4). See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#FF5F2E; text-underline-offset:3px;">Privacy Policy</a>.';
+		msg.innerHTML = 'We use cookies for anonymous analytics (GA4). See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#B83A13; text-underline-offset:3px;">Privacy Policy</a>.';
 
 		var row = document.createElement('div');
 		row.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;';
@@ -104,8 +108,8 @@
 				'font-size:12px', 'letter-spacing:-0.01em',
 				'padding:8px 14px', 'cursor:pointer',
 				'border:1px solid #0E0F0C',
-				primary ? 'background:#FF5F2E' : 'background:#FBFAF6',
-				primary ? 'color:#0E0F0C' : 'color:#0E0F0C',
+				primary ? 'background:#B83A13' : 'background:#FBFAF6',
+				primary ? 'color:#FFFFFF' : 'color:#0E0F0C',
 				'font-weight:600'
 			].join(';');
 			return b;

@@ -26,7 +26,6 @@
 <script src="/assets/consent.js" defer></script>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
 
 <main class="wrap">
@@ -40,10 +39,13 @@
   <h2>How the line items lay out</h2>
   <p>An Anthropic invoice (and the `usage` block on each API response) breaks token consumption into four kinds:</p>
   <table class="kv">
-    <tr><td>input_tokens</td><td>uncached input — full price</td></tr>
-    <tr><td>cache_creation_input_tokens</td><td>cache writes — 1.25× input price (5-min) or 2× (1-hour)</td></tr>
-    <tr><td>cache_read_input_tokens</td><td>cache hits — ~0.1× input price</td></tr>
-    <tr><td>output_tokens</td><td>generated output — full output price</td></tr>
+    <thead><tr><th scope="col">Counter</th><th scope="col">Billing meaning</th></tr></thead>
+    <tbody>
+      <tr><td>input_tokens</td><td>uncached input — full price</td></tr>
+      <tr><td>cache_creation_input_tokens</td><td>cache writes — 1.25× input price (5-min) or 2× (1-hour)</td></tr>
+      <tr><td>cache_read_input_tokens</td><td>cache hits — ~0.1× input price</td></tr>
+      <tr><td>output_tokens</td><td>generated output — full output price</td></tr>
+    </tbody>
   </table>
   <p>Before caching is enabled, `cache_read_input_tokens` is zero and every input token is in the `input_tokens` bucket. After caching is enabled, the same prompt traffic is split: the static prefix shows up under `cache_read_input_tokens` (or `cache_creation_input_tokens` on first hit), and only the dynamic suffix is in `input_tokens`.</p>
 
@@ -57,18 +59,24 @@
 
   <p><strong>Day 1 — caching off:</strong></p>
   <table class="kv">
-    <tr><td>input_tokens</td><td>10,000 × 8,500 = 85,000,000 → $255.00</td></tr>
-    <tr><td>output_tokens</td><td>10,000 × 300 = 3,000,000 → $45.00</td></tr>
-    <tr><td>total</td><td>$300.00</td></tr>
+    <thead><tr><th scope="col">Uncached line item</th><th scope="col">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>input_tokens</td><td>10,000 × 8,500 = 85,000,000 → $255.00</td></tr>
+      <tr><td>output_tokens</td><td>10,000 × 300 = 3,000,000 → $45.00</td></tr>
+      <tr><td>total</td><td>$300.00</td></tr>
+    </tbody>
   </table>
 
   <p><strong>Day 2 — caching on, 95% cache-read hit on the 8,000-token prefix:</strong></p>
   <table class="kv">
-    <tr><td>input_tokens (suffix only + cold prefix)</td><td>~9,000,000 → $27.00</td></tr>
-    <tr><td>cache_creation_input_tokens (cold writes)</td><td>~4,000,000 × 1.25 → $15.00</td></tr>
-    <tr><td>cache_read_input_tokens</td><td>~76,000,000 × 0.1 → $22.80</td></tr>
-    <tr><td>output_tokens</td><td>3,000,000 → $45.00</td></tr>
-    <tr><td>true total</td><td><strong>$109.80</strong></td></tr>
+    <thead><tr><th scope="col">Cached line item</th><th scope="col">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>input_tokens (suffix only + cold prefix)</td><td>~9,000,000 → $27.00</td></tr>
+      <tr><td>cache_creation_input_tokens (cold writes)</td><td>~4,000,000 × 1.25 → $15.00</td></tr>
+      <tr><td>cache_read_input_tokens</td><td>~76,000,000 × 0.1 → $22.80</td></tr>
+      <tr><td>output_tokens</td><td>3,000,000 → $45.00</td></tr>
+      <tr><td>true total</td><td><strong>$109.80</strong></td></tr>
+    </tbody>
   </table>
 
   <p>The real saving is ~63%. But if the analyst's dashboard only tracks `input_tokens × input_price + output_tokens × output_price`, they see <strong>$72.00</strong> and report a 76% saving. They are double-counting the discount because they never added the cache lines back in. When the CFO asks why the invoice doesn't match the dashboard, the engagement loses credibility.</p>
