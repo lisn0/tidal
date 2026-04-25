@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LLM cost optimization: a practical guide · LLM CFO</title>
 <meta name="description" content="A practical guide to LLM cost optimization — model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage." />
-<meta name="keywords" content="LLM cost optimization, FinOps for AI, AI FinOps, prompt caching, semantic caching, model routing, prompt compression, batch API, provider arbitrage, OpenAI cost, Anthropic cost, Bedrock cost, Vertex AI cost, Azure OpenAI cost" />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <link rel="canonical" href="https://llmcfo.com/research/llm-cost-optimization" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"LLM cost optimization: a practical guide · LLM CFO","description":"A practical guide to LLM cost optimization — model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage.","url":"https://llmcfo.com/research/llm-cost-optimization","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research/"},{"@type":"ListItem","position":3,"name":"LLM cost optimization: a practical guide","item":"https://llmcfo.com/research/llm-cost-optimization"}]}
+</script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -15,9 +20,10 @@
 <meta name="theme-color" content="#FBFAF6" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/page.css" />
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WP8B74J4');</script>
+<script src="/assets/consent.js" defer></script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -27,6 +33,7 @@
   <div class="eye">RESEARCH · GUIDE</div>
   <h1 class="page-title">LLM cost <em>optimization.</em></h1>
   <p class="updated">A practical guide · 25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
 
   <p class="lede">If your LLM bill is north of $20K/month, there is almost certainly 30–60% of waste in it. This guide is the order in which we look for that waste during a Tidal/LLM CFO engagement, and the techniques we apply once we find it.</p>
 

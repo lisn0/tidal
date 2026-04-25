@@ -21,6 +21,7 @@ h1.page-title { font-family:'Geist',sans-serif; font-weight:800; font-size:clamp
 h1.page-title em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; }
 .lede { font-size:19px; color:var(--fg); max-width:60ch; margin-bottom:8px; line-height:1.55; }
 .updated { font-family:'Geist Mono',monospace; font-size:12px; color:var(--fg-2); margin:6px 0 40px; }
+.byline { font-size: 14px; color: var(--muted, #6b6b6b); margin: -8px 0 24px; font-family: 'Geist', system-ui, sans-serif; }
 h2 { font-family:'Geist',sans-serif; font-size:24px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); margin:44px 0 12px; }
 h3 { font-family:'Geist',sans-serif; font-size:18px; font-weight:600; letter-spacing:-0.015em; color:var(--ink); margin:28px 0 8px; }
 p, li { font-size:16px; color:var(--fg); margin-bottom:14px; }

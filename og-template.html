@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OG · LLM CFO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#FBFAF6; --ink:#0E0F0C; --fg:#2A2C26; --fg-2:#6B6D64; --rule:#E0DCCE; --accent:#FF5F2E; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1200px; height:630px; overflow:hidden; }
+  body {
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Geist',-apple-system,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    padding:64px 72px;
+    background-image:
+      radial-gradient(circle at 92% 8%, rgba(255,95,46,0.10) 0%, rgba(255,95,46,0) 38%),
+      linear-gradient(180deg, var(--bg) 0%, #F3F1EA 100%);
+  }
+  .frame {
+    position:absolute; inset:24px;
+    border:1.5px solid var(--ink);
+    pointer-events:none;
+  }
+  .corner {
+    position:absolute;
+    width:18px; height:18px;
+    border:1.5px solid var(--ink);
+    background:var(--bg);
+  }
+  .corner.tl { top:24px; left:24px; transform:translate(-50%,-50%); }
+  .corner.tr { top:24px; right:24px; transform:translate(50%,-50%); }
+  .corner.bl { bottom:24px; left:24px; transform:translate(-50%,50%); }
+  .corner.br { bottom:24px; right:24px; transform:translate(50%,50%); }
+
+  .brand {
+    position:relative; z-index:2;
+    display:flex; align-items:center; gap:14px;
+  }
+  .mark {
+    width:44px; height:44px;
+    border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Geist Mono',monospace;
+    font-size:22px; font-weight:700;
+    background:var(--bg);
+  }
+  .wordmark {
+    font-family:'Geist',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:-0.02em;
+  }
+  .eyebrow {
+    position:relative; z-index:2;
+    font-family:'Geist Mono',monospace;
+    font-size:14px;
+    color:var(--accent);
+    letter-spacing:0.02em;
+    margin-top:38px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before {
+    content:""; width:24px; height:1.5px; background:var(--accent);
+  }
+  .eyebrow em {
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-weight:400;
+    color:var(--accent);
+    font-size:18px;
+  }
+  h1 {
+    position:relative; z-index:2;
+    font-family:'Geist',sans-serif;
+    font-weight:800;
+    font-size:108px;
+    line-height:1.0;
+    letter-spacing:-0.045em;
+    color:var(--ink);
+    margin-top:18px;
+    max-width:1000px;
+  }
+  h1 em {
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-weight:400;
+    color:var(--accent);
+  }
+  .sub {
+    position:relative; z-index:2;
+    font-family:'Geist Mono',monospace;
+    font-size:18px;
+    color:var(--fg);
+    margin-top:30px;
+    letter-spacing:-0.01em;
+  }
+  .sub strong { color:var(--ink); font-weight:600; }
+  .pills {
+    position:relative; z-index:2;
+    display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;
+  }
+  .pill {
+    font-family:'Geist Mono',monospace;
+    font-size:13px;
+    padding:6px 12px;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    background:var(--bg);
+    letter-spacing:-0.01em;
+  }
+  .url {
+    position:absolute;
+    right:72px; bottom:64px;
+    font-family:'Geist Mono',monospace;
+    font-size:16px;
+    color:var(--fg-2);
+    letter-spacing:-0.01em;
+    z-index:2;
+  }
+  .url strong { color:var(--ink); font-weight:600; }
+  .grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(to right, rgba(14,15,12,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(14,15,12,0.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    pointer-events:none; z-index:0;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="frame"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="brand">
+    <div class="mark">$</div>
+    <div class="wordmark">LLM CFO</div>
+  </div>
+
+  <div class="eyebrow"><em>Managed</em> AI FinOps</div>
+
+  <h1>Cut your<br/>LLM API <em>bill</em><br/>in half.</h1>
+
+  <div class="sub"><strong>Audit · optimize · govern</strong> — across providers</div>
+
+  <div class="pills">
+    <span class="pill">OpenAI</span>
+    <span class="pill">Anthropic</span>
+    <span class="pill">Bedrock</span>
+    <span class="pill">Vertex</span>
+    <span class="pill">Azure</span>
+  </div>
+
+  <div class="url">// <strong>llmcfo.com</strong></div>
+</body>
+</html>

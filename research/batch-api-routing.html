@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Batch API routing: 50% off for the work that can wait · LLM CFO</title>
+<meta name="description" content="How to route evals, enrichment, and nightly LLM jobs to Batch APIs while keeping latency-sensitive paths on synchronous models." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/batch-api-routing" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Batch API routing: 50% off for the work that can wait · LLM CFO","description":"OpenAI and Anthropic Batch APIs cut input+output costs by ~50% in exchange for a 24-hour SLA. What's eligible, what isn't, and how to route eval, enrichment, and nightly jobs to batch without touching your latency-sensitive paths.","url":"https://llmcfo.com/research/batch-api-routing","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research/"},{"@type":"ListItem","position":3,"name":"Batch API routing: 50% off for the work that can wait","item":"https://llmcfo.com/research/batch-api-routing"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Batch API <em>routing.</em></h1>
+  <p class="updated">25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">The Batch API is the cheapest dollar-for-dollar lever in the playbook: a flat ~50% off both input and output tokens in exchange for a 24-hour completion window. The only reason teams don't use it is they haven't audited which of their workloads are actually latency-sensitive.</p>
+
+  <h2>What you get</h2>
+  <table class="kv">
+    <tr><td>OpenAI Batch</td><td>~50% off input + output · 24-hour SLA · JSONL upload · most chat/completions/embeddings models</td></tr>
+    <tr><td>Anthropic Message Batches</td><td>~50% off input + output · 24-hour SLA · up to 100k requests / 256 MB per batch · all current Claude models</td></tr>
+    <tr><td>Bedrock batch inference</td><td>~50% off · async S3 in/out · region + model coverage varies</td></tr>
+    <tr><td>Vertex batch prediction</td><td>~50% off list price for Gemini · BigQuery or GCS in/out</td></tr>
+  </table>
+
+  <h2>How it actually works</h2>
+  <p>You upload a file of requests; the provider runs them when capacity is available; you poll or webhook for the result file. Caching, function calling, and structured outputs are typically supported. Streaming is not — by definition, batch is async. Failed individual requests come back in an error file alongside the success file.</p>
+
+  <h2>Workloads that should be on batch today</h2>
+  <ol>
+    <li><strong>Eval pipelines.</strong> Regression tests, LLM-as-judge runs, golden-set scoring. These are the canonical batch case — you don't care if results land in 3 minutes or 3 hours, you care about the bill.</li>
+    <li><strong>Data enrichment.</strong> Tagging, classification, entity extraction over a backlog of records. If it's a one-time job over a million rows, it belongs in batch.</li>
+    <li><strong>Content generation at scale.</strong> Bulk product descriptions, alt text, translations, marketing variants. Anything where a human reviews the output later anyway.</li>
+    <li><strong>Nightly summarization.</strong> Daily digests, account-level recaps, weekly reports. Schedule the batch to start at 22:00; results are ready before the morning email goes out.</li>
+    <li><strong>Embeddings backfills.</strong> Reindexing a corpus, migrating embedding models. Long-tail volume that doesn't need to land synchronously.</li>
+    <li><strong>Synthetic data and fine-tune dataset prep.</strong> Generating training pairs, paraphrases, instruction variants.</li>
+  </ol>
+
+  <h2>Anti-patterns: do not route to batch</h2>
+  <ul>
+    <li><strong>User-facing endpoints.</strong> Anything where a human is waiting on a screen.</li>
+    <li><strong>Interactive agents and chat.</strong> The 24-hour SLA is a contract, not a soft target — your batch could land in 8 minutes or 22 hours.</li>
+    <li><strong>Tool-calling loops</strong> where one call's output feeds the next call's input. Batch can't do multi-step within a single batch.</li>
+    <li><strong>Anything tied to a webhook fan-out</strong> with a tight timeout (Stripe, GitHub, etc.).</li>
+    <li><strong>"Nice to have" real-time UX.</strong> If a PM can't articulate why the user needs it in 2 seconds, ask — but don't assume.</li>
+  </ul>
+
+  <h2>Practical migration order</h2>
+  <ol>
+    <li>Pull last 30 days of usage by endpoint or job-name. Sort by spend.</li>
+    <li>For the top 10, ask the owner: "would 24 hours later be fine?" In our audits, the answer is yes for 30–50% of spend.</li>
+    <li>Migrate one endpoint at a time. Keep a fallback to sync for the long tail of items where 24 hours is genuinely too long.</li>
+    <li>Reconcile the next invoice. Batch line items appear separately; confirm the discount actually landed.</li>
+  </ol>
+
+  <h2>Subtleties that bite</h2>
+  <ul>
+    <li><strong>Rate limits are separate</strong> from sync. You can typically queue more, but the per-batch token caps still apply.</li>
+    <li><strong>Cost reports don't auto-attribute</strong> batch lines to the right cost center unless you tag them in metadata.</li>
+    <li><strong>Cache hits don't compound with batch discounts</strong> on every provider — read the small print before modeling savings.</li>
+    <li><strong>Output token estimates are best-guess.</strong> Set a reasonable `max_tokens` ceiling; batch failures from one runaway request can hold up the whole file.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching explained</a></li>
+    <li><a href="/research/model-routing">Model routing</a></li>
+    <li><a href="/glossary">Glossary</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>

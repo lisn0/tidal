@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LiteLLM vs Helicone vs LangFuse · LLM CFO</title>
+<meta name="description" content="An honest comparison of three LLM gateway / observability tools. What each does well, what each doesn't, and how to choose without locking yourself in." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/litellm-vs-helicone-vs-langfuse" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"LiteLLM vs Helicone vs LangFuse · LLM CFO","description":"An honest comparison of three LLM gateway / observability tools. What each does well, what each doesn't, and how to choose without locking yourself in.","url":"https://llmcfo.com/research/litellm-vs-helicone-vs-langfuse","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research/"},{"@type":"ListItem","position":3,"name":"LiteLLM vs Helicone vs LangFuse","item":"https://llmcfo.com/research/litellm-vs-helicone-vs-langfuse"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · TOOLING</div>
+  <h1 class="page-title">LiteLLM vs Helicone vs <em>LangFuse.</em></h1>
+  <p class="updated">25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">These three tools get conflated because they all sit between your app and the model providers. They solve different problems. Picking the wrong one is one of the more expensive mistakes a platform team can make — not because of license cost, but because ripping a gateway out of a hot path takes a quarter.</p>
+
+  <h2>The one-line version</h2>
+  <table class="kv">
+    <tr><td>LiteLLM</td><td>a multi-provider <strong>gateway / SDK</strong> — unify the API surface, route, fall over, key-vault</td></tr>
+    <tr><td>Helicone</td><td>a <strong>logging proxy</strong> — passthrough that captures every request and gives you a dashboard</td></tr>
+    <tr><td>LangFuse</td><td>an <strong>observability platform</strong> — traces, evals, prompt management, datasets, experiments</td></tr>
+  </table>
+
+  <h2>LiteLLM</h2>
+  <p>Open-source Python SDK + standalone proxy. Speaks the OpenAI Chat Completions schema and translates to ~100 providers underneath. Used as a library in code, or as a drop-in HTTP proxy your services point at.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>One API surface across OpenAI, Anthropic, Bedrock, Vertex, Azure, OpenRouter, Together, Fireworks, etc.</li>
+    <li>Virtual keys, per-team budgets, rate limiting, fallbacks, retries, timeouts.</li>
+    <li>Cost tracking computed locally from token counts × a built-in price table.</li>
+    <li>Self-hostable; the proxy is a single container.</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>Rich tracing for multi-step agents — flat request/response only.</li>
+    <li>Prompt management, version control, A/B testing of prompts.</li>
+    <li>Eval and dataset workflows.</li>
+    <li>Quality of the cost table depends on how recently it was updated; verify against your invoice.</li>
+  </ul>
+
+  <h2>Helicone</h2>
+  <p>HTTP proxy in front of provider endpoints. Your code keeps calling `api.openai.com` (via a base-URL swap), Helicone logs every request and exposes them in a dashboard. Open-source self-host or hosted.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>Easiest possible install — change a base URL, get logs.</li>
+    <li>Per-user / per-key cost attribution, simple budget alerts, prompt search across history.</li>
+    <li>Caching layer (built-in) for exact-match request reuse.</li>
+    <li>Property-based filters (custom headers tag traffic by feature/customer).</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>Multi-provider abstraction — it's a proxy per provider, not a unified API.</li>
+    <li>Deep multi-step agent tracing.</li>
+    <li>Structured evals and dataset-driven experiments.</li>
+    <li>Adds a hop on the hot path; latency depends on hosted region or your self-host placement.</li>
+  </ul>
+
+  <h2>LangFuse</h2>
+  <p>SDK-based observability platform. You instrument your code with traces and spans (or use the LangChain/LlamaIndex integration); LangFuse stores the trace tree, lets you score traces, run evals, manage prompts, and curate datasets.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>Multi-step agent traces with parent/child spans, tool calls, retrieved context.</li>
+    <li>Prompt management with versioning, environment promotion, and template variables.</li>
+    <li>Eval pipelines: LLM-as-judge, custom Python scorers, regression dashboards.</li>
+    <li>Dataset curation from production traces — turn real traffic into a test set.</li>
+    <li>Open-source self-host on Postgres + ClickHouse.</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>It is not a gateway. It does not route, fall over, or rate-limit.</li>
+    <li>Cost numbers are derived from a price table you maintain (or upstream defaults that lag).</li>
+    <li>Heavier integration — instrumentation everywhere your code calls a model, not a single base-URL swap.</li>
+  </ul>
+
+  <h2>How to pick</h2>
+  <table class="kv">
+    <tr><td>You need one API across many providers + budgets + fallback</td><td>LiteLLM</td></tr>
+    <tr><td>You want logs and cost attribution this afternoon, no code refactor</td><td>Helicone</td></tr>
+    <tr><td>You're building agents and need real traces, evals, and prompt versioning</td><td>LangFuse</td></tr>
+    <tr><td>You need all three things</td><td>LiteLLM as gateway + LangFuse as observability layer; skip Helicone</td></tr>
+    <tr><td>You're a small team with one provider and one product surface</td><td>Helicone alone is often enough</td></tr>
+  </table>
+
+  <h2>Combining them is normal</h2>
+  <p>The common production stack is LiteLLM for routing/budgets and LangFuse for tracing/evals. They don't overlap. LiteLLM ships a built-in LangFuse callback so traces are emitted automatically. Helicone is rarely run alongside LiteLLM because both want to be the proxy on the hot path; pick one.</p>
+
+  <h2>The honest caveats</h2>
+  <ul>
+    <li><strong>All three are moving fast.</strong> Feature parity changes quarterly. The above reflects the state we see in current engagements; verify before betting a quarter on it.</li>
+    <li><strong>Don't trust any tool's cost numbers as the source of truth.</strong> Reconcile against the provider invoice. Price tables drift, cache-read accounting is subtle (<a href="/research/cache-read-tokens-baseline-trap">see the baseline trap</a>).</li>
+    <li><strong>Self-host vs. hosted is a real decision.</strong> Sending prompts to a third-party SaaS is a data-handling event. Read your DPA before sending PII through any of these.</li>
+    <li><strong>None of these tools save money on their own.</strong> They make spend visible. The savings come from acting on what you see.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens: the baseline trap</a></li>
+    <li><a href="/research/model-routing">Model routing</a></li>
+    <li><a href="/glossary">Glossary</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Provider arbitrage: same model, different price · LLM CFO</title>
+<meta name="description" content="How to compare LLM providers for price, quality parity, routing overhead, egress costs, and silent model-version drift." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/provider-arbitrage" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Provider arbitrage: same model, different price · LLM CFO","description":"The same open-weights model is priced 30–60% lower on Bedrock, Vertex, OpenRouter, or Together than on the source provider. How to A/B for true parity, account for egress and routing costs, and not get bitten by silent version drift.","url":"https://llmcfo.com/research/provider-arbitrage","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research/"},{"@type":"ListItem","position":3,"name":"Provider arbitrage: same model, different price","item":"https://llmcfo.com/research/provider-arbitrage"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP8B74J4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">← home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · ROUTING</div>
+  <h1 class="page-title">Provider <em>arbitrage.</em></h1>
+  <p class="updated">25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A surprising amount of LLM spend is paying retail when wholesale is on the next shelf. The same open-weights model — Llama, Mistral, DeepSeek, Qwen — is hosted on a dozen providers at meaningfully different prices. Even closed models (Claude on Bedrock, Gemini on Vertex) sit on different pricing curves than their first-party endpoints when you factor in committed-use discounts and reserved capacity.</p>
+
+  <h2>Where the price gaps actually live</h2>
+  <ul>
+    <li><strong>Open-weights on managed clouds vs. specialty hosts.</strong> Llama 3.1 70B on Together or Fireworks is typically 30–60% cheaper per million tokens than Bedrock's on-demand list. Bedrock pays back via reserved capacity and same-VPC inference.</li>
+    <li><strong>OpenRouter as a price-discovery layer.</strong> Same model, multiple backends, real-time routing to the cheapest healthy one. Useful for benchmarking what a fair price actually is.</li>
+    <li><strong>Claude on Bedrock vs. Anthropic direct.</strong> List prices are usually identical, but EDP / committed-use discounts on AWS materially change the effective rate. Anthropic also offers committed pricing — get both quotes.</li>
+    <li><strong>Gemini on Vertex vs. AI Studio.</strong> Same model name, different pricing tiers, different rate limits, and different region/quota governance.</li>
+    <li><strong>DeepSeek, Qwen, Mistral hosted variants.</strong> Often a 5–10× spread between the cheapest and most expensive host of the exact same checkpoint.</li>
+  </ul>
+
+  <h2>The catches that erase the win</h2>
+  <ol>
+    <li><strong>Version drift.</strong> "Llama 3.1 70B Instruct" on Provider A and Provider B may be different quantizations (FP16 vs FP8 vs AWQ) and produce subtly different outputs. The cheaper provider sometimes serves a more aggressive quant. Always pin the exact version string and re-run your eval.</li>
+    <li><strong>Egress and routing cost.</strong> If your app runs in AWS us-east-1 and you call a provider in GCP europe-west, NAT and egress can swallow 5–15% of the savings. Co-locate or accept the tax explicitly.</li>
+    <li><strong>Regional availability.</strong> Bedrock and Vertex roll out models region-by-region. The model you want at the price you want may not be in the region your data residency policy allows.</li>
+    <li><strong>Rate limits and tail latency.</strong> Specialty hosts can have lower base rate limits and noisier p99 latency than the hyperscalers. Run a real load test, not a single-shot curl.</li>
+    <li><strong>Tool-calling and structured-output fidelity.</strong> Open-weights hosts implement function calling differently. The schema-conformance rate often degrades versus the source provider — your downstream JSON parser will tell you.</li>
+    <li><strong>Compliance.</strong> SOC 2 / HIPAA / data-processing terms vary by host. The legal review on a new provider can take longer than the savings are worth for a small endpoint.</li>
+  </ol>
+
+  <h2>How to A/B for true parity</h2>
+  <ol>
+    <li><strong>Build a representative eval set</strong> from your own logs (anonymized). 200–500 examples across the distribution of real traffic. Include the long tail.</li>
+    <li><strong>Run both providers head-to-head</strong> on the same prompts, same temperature, same seed where supported. Capture full output, latency, error rate, and cost per request.</li>
+    <li><strong>Score with your existing quality metric</strong> — LLM-as-judge against a stronger model, exact-match on structured tasks, or a rubric the product owner trusts.</li>
+    <li><strong>Decide on a quality floor, not a target.</strong> "We accept any provider whose pass rate is within 1 percentage point of incumbent." Then take the cheapest qualifying option.</li>
+    <li><strong>Re-run the eval monthly.</strong> Hosts silently swap quants. Your pass rate is not a one-time measurement.</li>
+  </ol>
+
+  <h2>Cross-vendor swaps where quality genuinely matches</h2>
+  <p>Some swaps are durable because the underlying weights are identical and the host is just renting hardware:</p>
+  <ul>
+    <li><strong>Claude Sonnet on Bedrock vs. Anthropic</strong> — same weights, often a wash on price, sometimes a meaningful win on AWS commits.</li>
+    <li><strong>GPT-4o on Azure OpenAI vs. OpenAI</strong> — same weights, Azure adds enterprise terms; pricing is parity-ish, EA discounts can swing it.</li>
+    <li><strong>Llama 3.1 across Bedrock, Vertex, Together, Fireworks, Groq</strong> — same checkpoint family, but quantization and serving stack vary; eval before swapping.</li>
+  </ul>
+  <p>Closed-model swaps across vendors (GPT to Claude to Gemini) are not arbitrage — that's <a href="/research/model-routing">model routing</a>, and it requires a real eval because the answers will differ.</p>
+
+  <h2>When arbitrage is and isn't worth pursuing</h2>
+  <ul>
+    <li><strong>Worth it:</strong> a single high-volume endpoint &gt;$5k/mo, stable prompts, eval-able outputs.</li>
+    <li><strong>Not worth it:</strong> long tail of small endpoints with bespoke prompts and no shared quality metric. The eval cost dominates.</li>
+    <li><strong>Worth it:</strong> moving from on-demand to a committed/reserved tier with the incumbent — same provider, lower price, no eval needed.</li>
+    <li><strong>Maybe worth it:</strong> using a router (LiteLLM, OpenRouter) as a price-discovery and failover layer even if you don't switch primary provider.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/model-routing">Model routing</a></li>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM vs Helicone vs LangFuse</a></li>
+    <li><a href="/glossary">Glossary</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>
