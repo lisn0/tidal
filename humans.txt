@@ -8,4 +8,4 @@ Twitter: @llmcfo
 Last update: 2026/04/24
 Standards: HTML5, CSS, JSON-LD
 Components: Geist, Instrument Serif, Geist Mono
-Software: Hand-written HTML. No bundler. No framework. No tracking beyond GTM.
+Software: Hand-written HTML. No bundler. No framework. Consent-gated GA4 only.
