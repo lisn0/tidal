@@ -48,10 +48,7 @@
 <meta name="twitter:description" content="Managed AI cost optimization. Targeting 40–60% reduction. Pay on results." />
 <meta name="twitter:image" content="https://llmcfo.com/og.png" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=optional" />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=optional" rel="stylesheet" />
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com","description":"Managed AI FinOps and LLM cost optimization service. Audit LLM spend across OpenAI, Anthropic, Bedrock, Vertex, and Azure OpenAI. Implement model routing, semantic caching, prompt caching, and prompt compression. Pay only on delivered savings.","contactPoint":[{"@type":"ContactPoint","email":"hello@llmcfo.com","contactType":"sales"}]}
@@ -726,6 +723,48 @@
     .pricing .left, .pricing .right { border-right: none; border-bottom: 1px solid var(--rule); }
     section { padding: 56px 0; }
     .panel { min-height: 560px; }
+  }
+  @media (max-width: 768px) {
+    .wrap { padding: 0 16px; }
+    .announce { font-size: 12px; padding: 8px 12px; line-height: 1.4; }
+    .nav { gap: 12px; padding: 12px 0; }
+    .nav-right { gap: 8px; }
+    .nav-right .signin { display: none; }
+    .cta-top { padding: 10px 14px; font-size: 13px; min-height: 44px; }
+    .brand-name { font-size: 16px; }
+    .hero { padding: 48px 0 24px; }
+    .hero-grid { gap: 36px; }
+    h1.hero-title { font-size: clamp(36px, 9vw, 56px); margin: 16px 0 18px; }
+    .hero-lead { font-size: 16px; margin-bottom: 22px; }
+    .btn { padding: 14px 20px; font-size: 15px; min-height: 44px; }
+    .hero-cta { gap: 10px; }
+    .hero-cta .btn { width: 100%; justify-content: center; }
+    .nums, .tech, .how { grid-template-columns: 1fr; }
+    .nums .n, .tech-cell, .how .step { border-right: none !important; border-bottom: 1px solid var(--rule); }
+    .panel { min-height: auto; }
+    .code { font-size: 12px; padding: 16px; line-height: 1.65; }
+    .recon { padding: 14px 16px; }
+    .recon table { font-size: 11.5px; }
+    .panel-tabs { overflow-x: auto; }
+    .panel-tabs .tab { padding: 10px 14px; white-space: nowrap; }
+    section { padding: 44px 0; }
+    .logos { padding: 20px 0 36px; margin-top: 24px; }
+    .logos-row { gap: 18px; justify-content: flex-start; }
+    .logos-row .lg { font-size: 18px; }
+    .faq-grid h2 { max-width: none; }
+    table { font-size: 13px; }
+    .recon, .panel { overflow-x: auto; }
+  }
+  @media (max-width: 480px) {
+    .wrap { padding: 0 14px; }
+    h1.hero-title { font-size: 34px; line-height: 1.05; }
+    .hero-lead { font-size: 15px; }
+    .btn { font-size: 14px; padding: 13px 18px; }
+    .cta-top { font-size: 12px; }
+    .brand-mark { width: 26px; height: 26px; font-size: 12px; }
+    .brand-name { font-size: 15px; }
+    .code { font-size: 11px; padding: 14px; }
+    .nav-right .signin { display: none; }
   }
 </style>
 </head>

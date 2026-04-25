@@ -38,3 +38,40 @@ table.kv th { padding:0 0 8px; border-bottom:1px solid var(--rule); color:var(--
 table.kv th:last-child { text-align:right; }
 table.kv td { padding:10px 0; border-bottom:1px dashed var(--rule); }
 table.kv td:last-child { text-align:right; color:var(--ink); font-weight:500; }
+
+/* Self-hosted fonts (latin subset, fontsource MIT) */
+@font-face { font-family:'Instrument Serif'; font-style:normal; font-weight:400; font-display:swap; src:url('/assets/fonts/instrument-serif-latin-400-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Instrument Serif'; font-style:italic; font-weight:400; font-display:swap; src:url('/assets/fonts/instrument-serif-latin-400-italic.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist'; font-style:normal; font-weight:400; font-display:swap; src:url('/assets/fonts/geist-latin-400-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist'; font-style:normal; font-weight:500; font-display:swap; src:url('/assets/fonts/geist-latin-500-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist'; font-style:normal; font-weight:600; font-display:swap; src:url('/assets/fonts/geist-latin-600-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist'; font-style:normal; font-weight:700; font-display:swap; src:url('/assets/fonts/geist-latin-700-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist'; font-style:normal; font-weight:800; font-display:swap; src:url('/assets/fonts/geist-latin-800-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist Mono'; font-style:normal; font-weight:400; font-display:swap; src:url('/assets/fonts/geist-mono-latin-400-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('/assets/fonts/geist-mono-latin-500-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family:'Geist Mono'; font-style:normal; font-weight:600; font-display:swap; src:url('/assets/fonts/geist-mono-latin-600-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* Mobile responsiveness — page.css (legal/article pages) */
+@media (max-width: 768px) {
+  .topbar .inner { padding:0 16px; }
+  .topbar .nav { font-size:12px; }
+  .topbar .brand { font-size:16px; }
+  .wrap { padding:40px 16px 64px; }
+  h1.page-title { font-size:clamp(32px,7vw,44px); }
+  .lede { font-size:17px; }
+  h2 { font-size:21px; margin:36px 0 10px; }
+  h3 { font-size:17px; margin:24px 0 8px; }
+  p, li { font-size:16px; }
+  .callout { padding:14px 16px; font-size:15px; }
+  .pagefoot { padding:20px 16px; flex-direction:column; align-items:flex-start; gap:8px; }
+  table.kv { font-size:12px; display:block; overflow-x:auto; }
+  .back { padding:12px 18px; min-height:44px; display:inline-flex; align-items:center; }
+  a { min-height:auto; }
+  .topbar .nav, .topbar .brand { padding:6px 0; }
+}
+@media (max-width: 480px) {
+  .wrap { padding:32px 14px 56px; }
+  h1.page-title { font-size:30px; }
+  .lede { font-size:16px; }
+  table.kv th, table.kv td { padding:8px 6px; }
+}
