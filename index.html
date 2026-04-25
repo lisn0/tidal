@@ -52,8 +52,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=optional" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=optional" rel="stylesheet" />
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com","description":"Managed AI FinOps and LLM cost optimization service. Audit LLM spend across OpenAI, Anthropic, Bedrock, Vertex, and Azure OpenAI. Implement model routing, semantic caching, prompt caching, and prompt compression. Pay only on delivered savings.","contactPoint":[{"@type":"ContactPoint","email":"hello@llmcfo.com","contactType":"sales"}]}
@@ -244,6 +244,7 @@
     background: var(--bg);
     border: 1px solid var(--rule);
     box-shadow: 0 30px 60px -36px rgba(14,15,12,0.35), 0 10px 24px -16px rgba(14,15,12,0.15);
+    min-height: 548px;
   }
   .panel-tabs {
     display: flex;
@@ -565,7 +566,7 @@
   }
   .ex-foot .l {
     font-family: 'Geist Mono', monospace;
-    font-size: 11px; color: var(--fg-3);
+    font-size: 11px; color: #C6C4B6;
     margin-bottom: 6px;
   }
   .ex-foot .big {
@@ -577,7 +578,7 @@
     line-height: 1;
   }
   .ex-foot .big em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
-  .ex-foot .yr { font-family: 'Geist Mono', monospace; font-size: 12px; color: #9A9B8F; margin-top: 8px; }
+  .ex-foot .yr { font-family: 'Geist Mono', monospace; font-size: 12px; color: #C6C4B6; margin-top: 8px; }
 
   /* ============== FAQ ============== */
   .faq-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 64px; }
@@ -649,7 +650,7 @@
   .cta .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: end; }
   .cta .eye {
     font-family: 'Geist Mono', monospace;
-    font-size: 12px; color: var(--accent);
+    font-size: 12px; color: #FFB37A;
     letter-spacing: -0.01em;
   }
   .cta h2 {
@@ -662,7 +663,7 @@
     max-width: 14ch;
     margin: 18px 0 22px;
   }
-  .cta h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+  .cta h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #FFB37A; }
   .cta p { font-size: 18px; color: #C6C4B6; max-width: 52ch; line-height: 1.6; }
   .cta .cta-right { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
   .cta .btn-dark { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -671,7 +672,7 @@
   .cta .btn-ghost:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
   .cta .fine {
     font-family: 'Geist Mono', monospace;
-    font-size: 11px; color: var(--fg-3); letter-spacing: -0.01em;
+    font-size: 11px; color: #C6C4B6; letter-spacing: -0.01em;
     margin-top: 4px;
   }
 
@@ -726,13 +727,11 @@
     nav.primary { display: none; }
     .pricing .left, .pricing .right { border-right: none; border-bottom: 1px solid var(--rule); }
     section { padding: 56px 0; }
+    .panel { min-height: 560px; }
   }
 </style>
 </head>
 <body>
-
-<!-- Google Tag Manager (noscript) -->
-<!-- End Google Tag Manager (noscript) -->
 
 <a class="skip" href="#main">Skip to main content</a>
 
