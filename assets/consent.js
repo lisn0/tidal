@@ -2,7 +2,7 @@
 (function () {
 	'use strict';
 
-	var GA4_ID = 'G-QLN7D39SDK';
+	var GA4_ID = 'G-30NBV0P9QN';
 	var COOKIE_NAME = 'llmcfo_consent';
 	var COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
 

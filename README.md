@@ -14,7 +14,7 @@ Single-file static HTML. No build step. No dependencies.
 
 ## Analytics
 
-Google Analytics 4: **G-QLN7D39SDK** loaded by `assets/consent.js` only after explicit analytics consent.
+Google Analytics 4: **G-30NBV0P9QN** loaded by `assets/consent.js` only after explicit analytics consent.
 
 ## SEO
 
