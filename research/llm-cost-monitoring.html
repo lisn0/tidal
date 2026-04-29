@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LLM cost monitoring: what to track and how to control it &middot; LLM CFO</title>
+<meta name="description" content="A practical guide to LLM cost monitoring: the metrics, dashboards, telemetry fields, and tooling you need to track usage and control AI spend in production." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/llm-cost-monitoring" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"LLM cost monitoring: what to track and how to control it · LLM CFO","description":"A practical guide to LLM cost monitoring: the metrics, dashboards, telemetry fields, and tooling you need to track usage and control AI spend in production.","url":"https://llmcfo.com/research/llm-cost-monitoring","datePublished":"2026-04-29","dateModified":"2026-04-29","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"LLM cost monitoring: what to track and how to control it","item":"https://llmcfo.com/research/llm-cost-monitoring"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · OPERATIONS</div>
+  <h1 class="page-title">LLM cost <em>monitoring.</em></h1>
+  <p class="updated">Operations guide · 29 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">LLM cost monitoring is the practice of tracking spend at request level, not just invoice level. If you cannot explain which feature, user, model, or retry pattern created the cost spike, you are not monitoring spend. You are only seeing the bill after the damage is done.</p>
+
+  <h2>The four layers of monitoring</h2>
+  <p>Good LLM cost monitoring combines four data sources. Provider billing tells you what was charged. Gateway logs tell you routing and policy decisions. Application telemetry tells you product context. Warehouse reporting lets you join spend to customers, plans, releases, and margin.</p>
+  <p>Each layer answers a different question. Provider data answers "what is true?" Application telemetry answers "why did it happen?"</p>
+
+  <h2>What to track on every request</h2>
+  <ul>
+    <li><strong>Provider and model.</strong> Exact model identity matters because pricing changes by model tier and version.</li>
+    <li><strong>Feature or endpoint.</strong> This is usually the fastest route to actionable savings.</li>
+    <li><strong>User, account, or workspace.</strong> Necessary for abuse detection, pricing, and chargebacks.</li>
+    <li><strong>Input and output tokens.</strong> The basic cost driver.</li>
+    <li><strong>Cached tokens.</strong> Especially useful with provider-native prompt caching.</li>
+    <li><strong>Latency, retries, and tool calls.</strong> Hidden cost often sits in failed or repeated work.</li>
+    <li><strong>Estimated cost.</strong> So you can alert before invoice close.</li>
+  </ul>
+
+  <h2>Use a consistent telemetry schema</h2>
+  <p>OpenTelemetry's GenAI conventions are a strong baseline because they standardize fields like model, input tokens, output tokens, cache-read tokens, conversation identifiers, and provider names. That makes it easier to swap vendors or observability backends without rebuilding your data model every quarter.</p>
+
+  <h2>The dashboards that matter</h2>
+  <p>Most teams overbuild their dashboard layer and underbuild their tagging layer. Start with five views:</p>
+  <ol>
+    <li><strong>Spend by feature.</strong> Top ten endpoints or workflows by total cost.</li>
+    <li><strong>Spend by model.</strong> Where the premium models are actually being used.</li>
+    <li><strong>Spend by customer or workspace.</strong> Profitability and quota control.</li>
+    <li><strong>Input and output token trends.</strong> Detect prompt growth and verbose output drift.</li>
+    <li><strong>Cache hit and retry rates.</strong> Two of the easiest places to find waste.</li>
+  </ol>
+
+  <h2>Alerts worth setting up</h2>
+  <ul>
+    <li><strong>Daily spend threshold by feature.</strong></li>
+    <li><strong>Unexpected model mix shift.</strong> Example: a cheap endpoint suddenly starts defaulting to a frontier model.</li>
+    <li><strong>Prompt length regression.</strong></li>
+    <li><strong>Retry storm or agent loop behavior.</strong></li>
+    <li><strong>Reconciliation variance.</strong> Internal estimate drifts too far from provider truth.</li>
+  </ul>
+
+  <h2>Common failure modes</h2>
+  <p>The most common monitoring mistake is relying on response usage fields alone and assuming they are enough for finance. They are not. Another common mistake is logging usage without business metadata, which makes it impossible to tie spend back to customers or features. A third is ignoring tool-call costs and caching behavior, which increasingly show up as material line items.</p>
+
+  <div class="callout"><strong>Monitoring rule:</strong> if your dashboard cannot tell you whether the spike came from prompt growth, model drift, retries, or one noisy customer, your instrumentation is still too thin.</div>
+
+  <h2>Simple stack that works</h2>
+  <p>For a startup, a practical stack is provider-native billing plus a gateway, request metadata in application logs, and an observability tool like Langfuse or Helicone. For larger teams, add a warehouse layer and monthly reconciliation against provider or cloud billing exports.</p>
+
+  <h2>Monitoring is not optimization, but it is the prerequisite</h2>
+  <p>Monitoring alone does not lower your bill. It gives you the ranked list of what to fix first. Once that list is visible, the usual wins are smaller default models, output caps, prompt cleanup, prompt caching, batching, and quota controls.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-finops">AI FinOps: the operating model for LLM spend</a></li>
+    <li><a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM vs Helicone vs LangFuse</a></li>
+    <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>
