@@ -4,4 +4,7 @@
 # www → apex
 https://www.llmcfo.com/*  https://llmcfo.com/:splat  301!
 
+# Company booking URL.
+/book  https://cal.eu/llmcfo  302
+
 # Trailing-slash normalization handled by Cloudflare
