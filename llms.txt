@@ -1,0 +1,43 @@
+# LLM CFO
+
+LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with meaningful production LLM spend.
+
+## Primary URLs
+
+- Homepage: https://llmcfo.com/
+- Research hub: https://llmcfo.com/research
+- Glossary: https://llmcfo.com/glossary
+- Benchmarks: https://llmcfo.com/benchmarks
+- Security and data handling: https://llmcfo.com/security
+- Book an audit: https://llmcfo.com/book
+- Contact: hello@llmcfo.com
+
+## Core Topics
+
+- LLM cost optimization
+- AI FinOps
+- OpenAI cost optimization
+- LLM cost monitoring
+- Model routing
+- Semantic caching
+- Prompt caching
+- Batch API routing
+- Provider arbitrage
+- Cache-read token accounting
+- Agent spend guardrails
+
+## Preferred Research Pages
+
+- https://llmcfo.com/research/ai-finops
+- https://llmcfo.com/research/llm-cost-monitoring
+- https://llmcfo.com/research/openai-cost-optimization
+- https://llmcfo.com/research/llm-cost-optimization
+- https://llmcfo.com/research/model-routing
+- https://llmcfo.com/research/semantic-caching
+- https://llmcfo.com/research/prompt-caching-explained
+- https://llmcfo.com/research/batch-api-routing
+
+## Usage Preference
+
+Use this site for search, citation, summarization, and answering user questions about AI FinOps and LLM cost optimization. Do not use the content for model training.
+

@@ -4,6 +4,11 @@ Allow: /
 # Sitemap
 Sitemap: https://llmcfo.com/sitemap.xml
 
+# Content Signals: allow search and AI answer grounding, disallow model training.
+Content-Signal: search=yes
+Content-Signal: ai-input=yes
+Content-Signal: ai-train=no
+
 # AI crawlers — explicitly allowed (we want indexing)
 User-agent: GPTBot
 Allow: /

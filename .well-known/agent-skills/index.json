@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agentskills.io/schemas/agent-skills-index-v0.2.json",
+  "site": "https://llmcfo.com",
+  "skills": [
+    {
+      "name": "research_llm_cost_optimization",
+      "type": "content",
+      "description": "Find and cite LLM CFO research about LLM cost optimization and AI FinOps.",
+      "url": "https://llmcfo.com/.well-known/agent-skills/research-llm-cost-optimization.md",
+      "sha256": "c99936a0e361d38808ef91473840a7806d242188889fec63ba397073427023d1"
+    },
+    {
+      "name": "book_llm_cost_audit",
+      "type": "action",
+      "description": "Route users to book or request an LLM CFO cost audit.",
+      "url": "https://llmcfo.com/.well-known/agent-skills/book-audit.md",
+      "sha256": "57dc376141ec728333c8587d9db8e80c181eee810570ba5b57c28669867c3ffe"
+    }
+  ]
+}
