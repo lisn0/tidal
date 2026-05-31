@@ -27,3 +27,30 @@ Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
+
+# Anthropic — live retrieval & search (citations)
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Perplexity — live retrieval (citations)
+User-agent: Perplexity-User
+Allow: /
+
+# Apple Intelligence / Siri answers
+User-agent: Applebot
+Allow: /
+
+# Amazon (Alexa / Rufus answers)
+User-agent: Amazonbot
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Mistral (Le Chat retrieval)
+User-agent: MistralAI-User
+Allow: /
