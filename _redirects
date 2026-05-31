@@ -7,7 +7,4 @@ https://www.llmcfo.com/*  https://llmcfo.com/:splat  301!
 # Company booking URL.
 /book  https://cal.eu/llmcfo  302
 
-# Internal-only: never serve the marketing context docs.
-/.agents/*  /404.html  404
-
 # Trailing-slash normalization handled by Cloudflare
