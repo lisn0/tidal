@@ -16,8 +16,9 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
+# Google Gemini / Vertex generative grounding + citations
 User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: OAI-SearchBot
 Allow: /
