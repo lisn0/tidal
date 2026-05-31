@@ -3,6 +3,7 @@
 
 /*
   Link: </sitemap.xml>; rel="sitemap"; type="application/xml", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/security.txt>; rel="security.txt"; type="text/plain", </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"
+  Content-Signal: search=yes, ai-input=yes, ai-train=no
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
