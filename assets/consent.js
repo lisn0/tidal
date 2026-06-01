@@ -3,6 +3,7 @@
 	'use strict';
 
 	var GA4_ID = 'G-30NBV0P9QN';
+	var CLARITY_ID = 'x04m83yv0b';
 	var COOKIE_NAME = 'llmcfo_consent';
 	var COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
 
@@ -38,6 +39,17 @@
 		gtag('config', i);
 	}
 
+	// 3b. Load Microsoft Clarity (heatmaps + session replay) only after consent.
+	var clarityLoaded = false;
+	function loadClarity(c, l, a, r, i, t, y) {
+		if (clarityLoaded || !i) return;
+		clarityLoaded = true;
+		c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+		t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+		y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+		c[a]('consent');
+	}
+
 	// 4. Cookie helpers.
 	function getCookie(name) {
 		var match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.$?*|{}()[\]\\\/+^]/g, '\\$&') + '=([^;]*)'));
@@ -60,6 +72,7 @@
 			security_storage: 'granted'
 		});
 		loadGa4(window, document, 'script', GA4_ID);
+		loadClarity(window, document, 'clarity', 'script', CLARITY_ID);
 	}
 
 	// 6. Read existing decision.
@@ -94,7 +107,7 @@
 
 		var msg = document.createElement('div');
 		msg.style.cssText = 'margin-bottom:12px; color:#0E0F0C;';
-		msg.innerHTML = 'We use cookies for anonymous analytics (GA4). See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#B83A13; text-underline-offset:3px;">Privacy Policy</a>.';
+		msg.innerHTML = 'We use cookies for anonymous analytics (GA4) and product usage insights, including heatmaps and session replay (Microsoft Clarity). See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#B83A13; text-underline-offset:3px;">Privacy Policy</a>.';
 
 		var row = document.createElement('div');
 		row.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;';

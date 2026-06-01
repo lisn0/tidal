@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /cdn-cgi/
-# Content Signals: allow search and AI answer grounding, disallow model training.
-Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Sitemap
 Sitemap: https://llmcfo.com/sitemap.xml
