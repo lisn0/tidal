@@ -1,8 +1,8 @@
 # Cloudflare Pages redirects
 # https://developers.cloudflare.com/pages/configuration/redirects/
 
-# www → apex
-https://www.llmcfo.com/*  https://llmcfo.com/:splat  301!
+# www → apex is handled in worker.js (Workers static-assets _redirects matches
+# path only and rejects absolute-URL/host-based sources, so it can't live here).
 
 # Company booking URL.
 /book  https://cal.eu/llmcfo  302

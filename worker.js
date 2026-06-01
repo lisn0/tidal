@@ -1,60 +1,72 @@
 /**
- * Markdown for Agents — dependency-free edge content negotiation.
+ * LLM CFO — static-assets Worker with Markdown for Agents.
  *
- * When a client (typically an AI agent) sends `Accept: text/markdown`, this
- * middleware fetches the requested static HTML page, extracts its <main>
- * content, and converts it to Markdown on the fly. Browsers and normal crawlers
- * (which do not ask for text/markdown) are passed through untouched.
+ * Runs in front of the static assets (assets.run_worker_first = true). For
+ * normal browser/crawler traffic it transparently proxies to env.ASSETS. When
+ * a client negotiates `Accept: text/markdown` (typically an AI agent), it
+ * converts the page's <main> HTML to Markdown at the edge.
  *
- * This is the free-plan equivalent of Cloudflare's paid "Markdown for Agents".
- * Critically, it preserves LLM CFO's AI-training opt-out:
- *   Content-Signal: search=yes, ai-input=yes, ai-train=no
- * (Cloudflare's native feature defaults to ai-train=yes — we intentionally do not.)
+ * Free-plan equivalent of Cloudflare's paid "Markdown for Agents". Crucially it
+ * preserves the AI-training opt-out (Content-Signal: ai-train=no) rather than
+ * Cloudflare's native ai-train=yes default.
+ *
+ * Also performs the www -> apex redirect here, because Workers static-assets
+ * _redirects matches on path only and cannot see the request hostname.
  */
 
+const APEX = 'llmcfo.com';
+const DEFAULT_TITLE = 'LLM CFO';
 const CONTENT_SIGNAL = 'search=yes, ai-input=yes, ai-train=no';
 
-export async function onRequest(context) {
-	const { request, next } = context;
+export default {
+	async fetch(request, env) {
+		const url = new URL(request.url);
 
-	// Only consider GET requests that explicitly negotiate markdown.
-	const accept = request.headers.get('Accept') || '';
-	if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
-		return next();
-	}
+		// 1. www -> apex (301).
+		if (url.hostname === 'www.' + APEX) {
+			url.hostname = APEX;
+			return Response.redirect(url.toString(), 301);
+		}
 
-	// Fetch whatever the static host would serve for this path.
-	const response = await next();
-	const contentType = response.headers.get('Content-Type') || '';
+		// 2. Fetch whatever the static host would serve (also applies _redirects/_headers).
+		const assetResponse = await env.ASSETS.fetch(request);
 
-	// Only transform real HTML pages; everything else passes through.
-	if (!contentType.includes('text/html') || response.status !== 200) {
-		return response;
-	}
+		// 3. Only transform GET requests that explicitly negotiate markdown.
+		const accept = request.headers.get('Accept') || '';
+		if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
+			return assetResponse;
+		}
 
-	const html = await response.text();
-	const url = new URL(request.url);
-	const markdown = htmlToMarkdown(html, url);
+		// 4. Only transform real HTML pages.
+		const contentType = assetResponse.headers.get('Content-Type') || '';
+		if (assetResponse.status !== 200 || !contentType.includes('text/html')) {
+			return assetResponse;
+		}
 
-	const headers = new Headers({
-		'Content-Type': 'text/markdown; charset=utf-8',
-		'Content-Signal': CONTENT_SIGNAL,
-		'X-Content-Type-Options': 'nosniff',
-		'Cache-Control': 'public, max-age=0, must-revalidate',
-		'Vary': 'Accept',
-	});
-	return new Response(markdown, { status: 200, headers });
-}
+		const html = await assetResponse.text();
+		const markdown = htmlToMarkdown(html, url, DEFAULT_TITLE);
+
+		return new Response(markdown, {
+			status: 200,
+			headers: {
+				'Content-Type': 'text/markdown; charset=utf-8',
+				'Content-Signal': CONTENT_SIGNAL,
+				'X-Content-Type-Options': 'nosniff',
+				'Cache-Control': 'public, max-age=0, must-revalidate',
+				'Vary': 'Accept',
+			},
+		});
+	},
+};
 
 /* ------------------------------------------------------------------ */
 /* HTML -> Markdown (heuristic, no dependencies)                       */
 /* ------------------------------------------------------------------ */
 
-function htmlToMarkdown(html, url) {
-	const title = extractTitle(html);
+function htmlToMarkdown(html, url, defaultTitle) {
+	const title = extractTitle(html, defaultTitle);
 	let body = extractMain(html);
 
-	// Drop non-content blocks entirely.
 	body = body
 		.replace(/<script[\s\S]*?<\/script>/gi, '')
 		.replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -64,7 +76,6 @@ function htmlToMarkdown(html, url) {
 		.replace(/<form[\s\S]*?<\/form>/gi, '')
 		.replace(/<!--[\s\S]*?-->/g, '');
 
-	// Inline conversions (do links first so their text survives tag-stripping).
 	body = body.replace(/<a\b[^>]*?href=(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/gi, (m, q, href, text) => {
 		const label = stripTags(text).trim();
 		if (!label) return '';
@@ -78,24 +89,19 @@ function htmlToMarkdown(html, url) {
 	body = body.replace(/<code\b[^>]*>([\s\S]*?)<\/code>/gi, (m, inner) => `\`${stripTags(inner).trim()}\``);
 	body = body.replace(/<br\s*\/?>/gi, '\n');
 
-	// Headings.
 	body = body.replace(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi, (m, level, inner) => {
 		const text = stripTags(inner).trim();
 		return text ? `\n\n${'#'.repeat(Number(level))} ${text}\n\n` : '';
 	});
 
-	// List items.
 	body = body.replace(/<li\b[^>]*>([\s\S]*?)<\/li>/gi, (m, inner) => `\n- ${stripTags(inner).replace(/\s+/g, ' ').trim()}`);
 
-	// Block boundaries -> blank lines.
 	body = body
 		.replace(/<\/(p|div|section|article|ul|ol|header|footer|main|figure|blockquote|table|tr)>/gi, '\n\n')
 		.replace(/<(p|div|section|article|ul|ol|header|footer|figure|blockquote|table|tr)\b[^>]*>/gi, '\n\n');
 
-	// Strip any remaining tags and decode entities.
 	body = decode(stripTags(body));
 
-	// Whitespace normalisation.
 	body = body
 		.replace(/\r/g, '')
 		.replace(/[ \t]+\n/g, '\n')
@@ -107,9 +113,9 @@ function htmlToMarkdown(html, url) {
 	return `${header}${body}\n`;
 }
 
-function extractTitle(html) {
+function extractTitle(html, defaultTitle) {
 	const t = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i);
-	return t ? decode(stripTags(t[1])).trim() : 'LLM CFO';
+	return t ? decode(stripTags(t[1])).trim() : defaultTitle;
 }
 
 function extractMain(html) {
