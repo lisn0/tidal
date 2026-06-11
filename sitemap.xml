@@ -181,6 +181,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://llmcfo.com/research/llm-cost-dashboards</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://llmcfo.com/research/opentelemetry-genai-cost-tracking</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://llmcfo.com/research/llm-token-usage-tracking</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://llmcfo.com/research/llm-cost-per-request</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://llmcfo.com/methodology</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
