@@ -6,3 +6,11 @@ functions
 node_modules
 package.json
 package-lock.json
+# Repo internals — must never be public (verified exposed 2026-06-11).
+.git
+.gitignore
+.claude
+.agents
+README.md
+seo-keyword-research.md
+og-template.html
