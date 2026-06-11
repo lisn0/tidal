@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LLM cost per request: the unit economics metric &middot; LLM CFO</title>
+<meta name="description" content="The unit economics formula for LLM cost per request. How to segment by feature, model, and customer. Why averages mislead and how to use cost-per-request for margin analysis." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/llm-cost-per-request" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"LLM cost per request: the unit economics metric · LLM CFO","description":"The unit economics formula for LLM cost per request. How to segment by feature, model, and customer. Why averages mislead and how to use cost-per-request for margin analysis.","url":"https://llmcfo.com/research/llm-cost-per-request","datePublished":"2026-06-11","dateModified":"2026-06-11","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"LLM cost per request: the unit economics metric","item":"https://llmcfo.com/research/llm-cost-per-request"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · OPERATIONS</div>
+  <h1 class="page-title">LLM cost <em>per request.</em></h1>
+  <p class="updated">Operations guide · 11 June 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">LLM cost per request is the unit economics metric that measures the total cost to serve one API call. It is the atomic unit of LLM profitability. If you only know total spend and total requests, you cannot distinguish between a cheap mass-market feature and an expensive specialist workflow—yet they require opposite optimization strategies.</p>
+
+  <h2>The formula</h2>
+  <p>Cost per request is deceptively simple to state and challenging to compute correctly. The formula is:</p>
+  <p style="font-family: 'Courier New', monospace; padding: 1em; background: rgba(0, 0, 0, 0.05); border-radius: 4px; line-height: 1.6;">
+    cost_per_request = <br>
+    (input_tokens × input_price_per_1m) +<br>
+    (output_tokens × output_price_per_1m) +<br>
+    (cache_read_tokens × discounted_price_per_1m)
+  </p>
+  <p>The trick is the pricing table. It must be keyed by <strong>provider + model + token type</strong> because OpenAI's GPT-4o input and output prices differ, Anthropic's cache-read discount is ~90% (not 50%), and the same model name on Azure or Bedrock has different pricing than native.</p>
+
+  <h2>Why averages are dangerous</h2>
+  <ul>
+    <li><strong>Mean hides the long tail.</strong> If one customer submits 100k-token prompts and the rest submit 1k tokens, the mean cost per request is misleading. The p95 cost per request matters more for margin planning.</li>
+    <li><strong>Model mix shift is invisible at the aggregate.</strong> Switching one endpoint from GPT-3.5 to GPT-4 doubles cost per request for that endpoint. If it is 5% of your traffic, the overall cost per request rise is barely visible until the bill arrives.</li>
+    <li><strong>Feature profitability inverts with scale.</strong> A feature that costs $0.001 per request and generates $0.002 revenue is profitable at 100k users. At 1M users, if operational costs are fixed, it becomes a loss leader—but only if you segment by feature.</li>
+    <li><strong>Caching returns are invisible to the aggregate.</strong> Implementing prompt caching on one endpoint might reduce its cost per request by 60%, but if that endpoint is only 3% of your traffic, you will not see it in the company-wide metric.</li>
+  </ul>
+
+  <h2>Segment by feature, model, customer, and request type</h2>
+  <p>The operational power of cost per request comes from segmentation:</p>
+  <ul>
+    <li><strong>By feature or endpoint.</strong> Which workflows are expensive? Which are cheap? Are your high-margin features using cheap models?</li>
+    <li><strong>By model.</strong> What is the actual cost per request for GPT-4, Sonnet, and Haiku in your actual prompt distribution? Real data beats benchmark sheets.</li>
+    <li><strong>By customer or workspace.</strong> Do heavy users trigger longer contexts or more retries? Does one customer pay more per request than another because they use different models?</li>
+    <li><strong>By request type.</strong> Is your search feature cheaper than your summarization feature? Which retry loops are the most expensive?</li>
+  </ul>
+
+  <h2>Use it for margin analysis</h2>
+  <p>Cost per request is the denominator of unit economics. The numerator is revenue per request, which you compute the same way:</p>
+  <p style="font-family: 'Courier New', monospace; padding: 1em; background: rgba(0, 0, 0, 0.05); border-radius: 4px;">
+    margin_per_request = revenue_per_request − cost_per_request
+  </p>
+  <p>For a feature billed at $0.01 per request, a cost per request of $0.004 leaves a $0.006 contribution. For the same billed price, if cost per request rises to $0.008, the contribution drops to $0.002. At scale, that difference is material. Tools like Langfuse and Helicone expose this data directly; internal deployments can compute it from provider billing exports plus application logs.</p>
+
+  <h2>What moves cost per request</h2>
+  <ul>
+    <li><strong>Model choice.</strong> Switching to a smaller model is the fastest lever. GPT-3.5 costs ~12% of GPT-4o input price.</li>
+    <li><strong>Prompt length.</strong> Longer system prompts, few-shot examples, and context windows all scale input tokens linearly with cost.</li>
+    <li><strong>Output caps.</strong> Limiting max completion tokens is a hard ceiling on output cost per request.</li>
+    <li><strong>Prompt caching.</strong> OpenAI and Anthropic both discount cached tokens heavily (Anthropic ~90%, OpenAI ~50%). For stable context (system prompts, retrieved documents, code samples), caching returns 5–10× ROI.</li>
+    <li><strong>Retries and fallbacks.</strong> Each retry or model fallback adds cost per request. Minimize failed requests and timeouts.</li>
+    <li><strong>Batch processing.</strong> For latency-insensitive work, batch API endpoints usually have lower per-token pricing than synchronous calls.</li>
+  </ul>
+
+  <div class="callout"><strong>Unit economics rule:</strong> if your margin per request is below 50% of your gross margin per user, that feature is a loss leader masquerading as a commodity.</div>
+
+  <h2>How to measure it in practice</h2>
+  <p>Start with your observability layer. If you use OpenTelemetry GenAI conventions, you have provider, model, input tokens, output tokens, and cache tokens on every span. Multiply each by the price table. If you use LiteLLM, it tracks cost per request natively. If you self-host, export provider usage CSVs (OpenAI, Anthropic, Bedrock, Azure, Vertex) and join them to application logs by timestamp and model. The result is a cost column you can segment by any business dimension.</p>
+
+  <h2>Directional guidance only: compute your own baseline</h2>
+  <p>Every team's cost per request is shaped by their own models, context length, output requirements, and caching strategy. Publishing a benchmark number like "Sonnet costs $0.002 per request" is tempting but useless: it depends on whether you cache, how long your prompts are, whether you retry, and which token ratios apply to your workload. Instead, use the formula above, gather 30 days of real telemetry, compute the p50 and p95 cost per request for each feature, and use those as your baseline. Then measure whether prompt caching, smaller models, or shorter contexts actually reduce it. Real data beats industry folklore every time.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/llm-cost-optimization">LLM cost optimization: strategies that actually work</a></li>
+    <li><a href="/research/ai-finops">AI FinOps: the operating model for LLM spend</a></li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching explained: implementation and cost savings</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>
