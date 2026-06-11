@@ -8,7 +8,7 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <link rel="canonical" href="https://llmcfo.com/research/ai-finops" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"AI FinOps: the operating model for LLM spend · LLM CFO","description":"What AI FinOps actually means in production: how to measure, allocate, optimize, and reconcile LLM spend across providers, teams, and features.","url":"https://llmcfo.com/research/ai-finops","datePublished":"2026-04-29","dateModified":"2026-04-29","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"AI FinOps: the operating model for LLM spend · LLM CFO","description":"What AI FinOps actually means in production: how to measure, allocate, optimize, and reconcile LLM spend across providers, teams, and features.","url":"https://llmcfo.com/research/ai-finops","datePublished":"2026-04-29","dateModified":"2026-06-11","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"AI FinOps: the operating model for LLM spend","item":"https://llmcfo.com/research/ai-finops"}]}
@@ -47,7 +47,7 @@
 
   <h2>The minimum data model</h2>
   <p>Every model call should be tagged with provider, model, feature, environment, customer or workspace, and request path. You also want input tokens, output tokens, cache-read or cache-write tokens where available, latency, retry count, and estimated cost. Without that, AI FinOps turns into month-end guesswork.</p>
-  <p>OpenTelemetry's GenAI semantic conventions are useful here because they give teams a common schema for token usage, model identity, conversation identifiers, and retrieval context. Even if you never expose raw traces to finance, the discipline of structured telemetry keeps cost data consistent.</p>
+  <p><a href="/research/genai-telemetry-schema">OpenTelemetry's GenAI semantic conventions</a> are useful here because they give teams a common schema for token usage, model identity, conversation identifiers, and retrieval context. Even if you never expose raw traces to finance, the discipline of structured telemetry keeps cost data consistent.</p>
 
   <h2>Where the real savings usually come from</h2>
   <p>AI FinOps is not mostly about negotiating list prices. Most savings come from changing the request path.</p>
@@ -84,6 +84,8 @@
   <h2>Related</h2>
   <ul>
     <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/genai-telemetry-schema">Your GenAI telemetry schema is now a cost decision</a></li>
+    <li><a href="/research/ai-governance-framework">AI governance framework</a></li>
     <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
     <li><a href="/research/llm-cost-optimization">LLM cost optimization: a practical guide</a></li>
   </ul>
