@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Langfuse vs LiteLLM vs OpenLIT · LLM CFO</title>
+<meta name="description" content="Three open-source tools teams reach for when they want LLM cost data inside their existing observability stack. What each is, where the cost numbers come from, and why OpenTelemetry-native matters." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="canonical" href="https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Langfuse vs LiteLLM vs OpenLIT · LLM CFO","description":"Three open-source tools teams reach for when they want LLM cost data inside their existing observability stack. What each is, where the cost numbers come from, and why OpenTelemetry-native matters.","url":"https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit","datePublished":"2026-06-20","dateModified":"2026-06-20","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"Langfuse vs LiteLLM vs OpenLIT","item":"https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit"}]}
+</script>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/page.css" />
+<script src="/assets/consent.js" defer></script>
+</head>
+<body>
+<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+
+<main class="wrap">
+  <div class="eye">RESEARCH · TOOLING</div>
+  <h1 class="page-title">Langfuse vs LiteLLM vs <em>OpenLIT.</em></h1>
+  <p class="updated">20 June 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">We already compared <a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM, Helicone, and LangFuse</a> as gateway vs. proxy vs. platform. This is the other question we keep getting: of the open-source tools that emit LLM cost and usage data, which ones speak OpenTelemetry — so the numbers land in the stack you already run (Grafana, Datadog, Honeycomb, ClickHouse) instead of a tool-specific dashboard somebody has to babysit?</p>
+
+  <h2>The one-line version</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Tool</th><th scope="col">Primary role</th><th scope="col">OpenTelemetry-native?</th></tr></thead>
+    <tbody>
+      <tr><td>LiteLLM</td><td>multi-provider <strong>gateway / SDK</strong> — unify the API, route, budget, fall over</td><td>Partial — emits OTLP via a callback</td></tr>
+      <tr><td>LangFuse</td><td>tracing + <strong>eval + prompt</strong> platform with its own data model</td><td>Partial — ingests OTLP, stores in its own schema</td></tr>
+      <tr><td>OpenLIT</td><td><strong>OpenTelemetry-native</strong> GenAI observability — traces, metrics, cost</td><td>Yes — OTLP by design</td></tr>
+    </tbody>
+  </table>
+
+  <h2>LiteLLM</h2>
+  <p>A multi-provider gateway and SDK: one OpenAI-shaped API surface across ~100 providers, with virtual keys, per-team budgets, fallbacks, and a local cost table. It is where you put routing and spend caps. We cover it in depth in the <a href="/research/litellm-vs-helicone-vs-langfuse">three-way gateway comparison</a>. For this discussion the relevant fact is that LiteLLM can emit OpenTelemetry spans through a callback, so the gateway you already route through can become your cost-telemetry source without a second integration.</p>
+
+  <h2>LangFuse</h2>
+  <p>An observability platform built around traces, evals, prompt management, and datasets. It accepts OTLP and has SDKs, but it stores data in its own model and you read it primarily in the LangFuse UI. Pick it when you need agent traces, LLM-as-judge evals, and prompt versioning — the analysis surface, not just the cost line. Its cost numbers are derived from a price table you maintain, the same caveat as everything else here.</p>
+
+  <h2>OpenLIT</h2>
+  <p>OpenLIT is the OpenTelemetry-native option. You add one auto-instrumentation call and it wraps your LLM, vector-DB, and framework calls, emitting OTLP traces and metrics that follow the <a href="/research/opentelemetry-genai-cost-tracking">OpenTelemetry GenAI semantic conventions</a> (<code>gen_ai.*</code> attributes). Cost is computed from token counts against a pricing file and attached to the span, so it flows to whatever OTLP backend you already run.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>OTLP-first: traces and metrics go to any OpenTelemetry collector — Grafana/Tempo, Datadog, Honeycomb, ClickHouse — no proprietary lock-in on the data.</li>
+    <li>Auto-instrumentation across many SDKs and frameworks, plus vector DBs and GPU utilization, so token cost and infra cost sit in one trace.</li>
+    <li>Standard <code>gen_ai.usage.input_tokens</code> / <code>output_tokens</code> attributes, which means your cost queries are portable across services and tools.</li>
+    <li>Ships extras — a UI, prompt hub, secrets vault, evals — but none of them are required to get the telemetry out.</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>It is not a gateway. It does not route, set budgets, or fall over between providers — pair it with LiteLLM for that.</li>
+    <li>Its dashboards are younger and thinner than LangFuse's eval and prompt tooling.</li>
+    <li>You need somewhere to send OTLP. If you have no collector and no backend, "OTel-native" is setup cost, not a gift.</li>
+    <li>Cost is still token-count &times; price table — see below.</li>
+  </ul>
+
+  <h2>Where the cost number actually comes from</h2>
+  <p>All three compute spend the same way: token counts multiplied by a pricing table they ship or you maintain. None of them read your invoice. That means three identical failure modes — a stale price table, mis-accounted cache-read tokens (<a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>), and provider-specific discounts the table doesn't know about. Whatever you pick, reconcile the derived number against the provider bill monthly, or the dashboard quietly drifts from reality.</p>
+
+  <h2>The OpenTelemetry question</h2>
+  <p>The reason "OTel-native" is worth caring about is not purity. It is that a <code>gen_ai.*</code> span looks the same whether it came from your checkout service or your support agent, so one query answers "cost per request, by team" across the whole system — and it lives next to your latency and error telemetry instead of in a separate tool. If your <a href="/research/genai-telemetry-schema">telemetry schema</a> is already an OpenTelemetry decision, an OTel-native emitter like OpenLIT (or LiteLLM's OTLP callback) keeps LLM cost in that same pipe. If you are buying an analysis product anyway, LangFuse's richer surface may matter more than schema portability.</p>
+
+  <h2>How to pick</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Need</th><th scope="col">Recommended</th></tr></thead>
+    <tbody>
+      <tr><td>Routing, virtual keys, per-team budgets across providers</td><td>LiteLLM</td></tr>
+      <tr><td>LLM cost and usage inside your existing OTel/Grafana/Datadog stack</td><td>OpenLIT</td></tr>
+      <tr><td>Agent traces, evals, and prompt versioning as a product surface</td><td>LangFuse</td></tr>
+      <tr><td>You want all three things</td><td>LiteLLM to route + OpenLIT to emit OTLP; add LangFuse if you need evals</td></tr>
+      <tr><td>You have no observability backend yet</td><td>LangFuse hosted is the fastest path to a usable dashboard</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Combining them is normal</h2>
+  <p>These are layers, not competitors. A common 2026 stack is LiteLLM as the gateway (routing + budgets), OpenLIT auto-instrumentation emitting OTLP to your collector, and LangFuse where teams that need evals and prompt management want them. The unifying thread is the OpenTelemetry GenAI convention: if every layer speaks <code>gen_ai.*</code>, the cost number survives swapping any single tool out.</p>
+
+  <h2>The honest caveats</h2>
+  <ul>
+    <li><strong>All three move fast.</strong> Feature parity shifts quarterly; verify before betting a quarter on any single capability.</li>
+    <li><strong>None of them save money on their own.</strong> They make spend visible. The savings come from acting on what you see — routing, caching, and budgets.</li>
+    <li><strong>Self-host vs. hosted is a data-handling decision.</strong> Sending prompts to a third-party SaaS is an event your DPA should cover before you turn it on.</li>
+    <li><strong>OTel-native is a means, not a metric.</strong> The goal is one trustworthy cost number per request; OpenTelemetry is just the cheapest way to keep that number portable.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM vs Helicone vs LangFuse</a> — the gateway / proxy / platform comparison this page builds on</li>
+    <li><a href="/research/opentelemetry-genai-cost-tracking">Tracking LLM costs with OpenTelemetry GenAI conventions</a></li>
+    <li><a href="/research/genai-telemetry-schema">Your GenAI telemetry schema is now a cost decision</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>
+</main>
+
+<footer class="pagefoot">
+  <span>// © 2026 LLM CFO, Inc.</span>
+  <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/security">Security</a></span>
+</footer>
+</body>
+</html>
