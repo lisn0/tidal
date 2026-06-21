@@ -1,6 +1,18 @@
 # llmcfo.com
 
-Static landing page for **LLM CFO** — managed AI cost optimization platform.
+Static site for **LLM CFO** — managed AI cost optimization. Live at **https://llmcfo.com**.
+
+## Research
+
+Vendor-neutral research on LLM cost and observability:
+
+- [LiteLLM vs Helicone vs LangFuse](https://llmcfo.com/research/litellm-vs-helicone-vs-langfuse) — gateway vs proxy vs observability, and how to choose
+- [LLM cost optimization](https://llmcfo.com/research/llm-cost-optimization)
+- [LLM cost monitoring](https://llmcfo.com/research/llm-cost-monitoring)
+- [How to build an LLM CFO function](https://llmcfo.com/research/how-to-build-an-llm-cfo-function)
+- [Full research index](https://llmcfo.com/research)
+
+Discovery: [sitemap.xml](https://llmcfo.com/sitemap.xml) · [llms.txt](https://llmcfo.com/llms.txt)
 
 ## Stack
 
@@ -15,6 +27,12 @@ Single-file static HTML. No build step. No dependencies.
 ## Analytics
 
 Google Analytics 4: **G-30NBV0P9QN** loaded by `assets/consent.js` only after explicit analytics consent.
+
+`assets/attribution.js` records the visit's first-touch source (AI assistant /
+search / social / direct) in `sessionStorage` and fires a GA4 `book_click` event
+on booking-CTA clicks (post-consent only). Register the event params
+`book_source`, `book_medium`, and `landing_page` as custom dimensions in GA4 to
+break bookings down by source.
 
 ## SEO
 
