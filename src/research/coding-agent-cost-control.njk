@@ -1,0 +1,95 @@
+---
+layout: "research.njk"
+permalink: "research/coding-agent-cost-control.html"
+titleCore: "Coding agent cost control: loop termination and guardrails for AI developers"
+description: "Why coding agents (Claude Code, Cursor, Devin-style) loop and runaway on cost. Termination signals, context budgets, and per-task cost control for autonomous code agents."
+slug: "coding-agent-cost-control"
+schemaHeadline: "Coding agent cost control: loop termination and guardrails for AI developers · LLM CFO"
+schemaDescription: "Why coding agents (Claude Code, Cursor, Devin-style) loop and runaway on cost. Termination signals, context budgets, and per-task cost control for autonomous code agents."
+breadcrumbName: "Coding agent cost control: loop termination and guardrails"
+datePublished: "2026-07-01"
+dateModified: "2026-07-01"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I stop a coding agent from looping?","acceptedAnswer":{"@type":"Answer","text":"Coding agents loop when they retry failing tests or builds indefinitely. The minimum guardrails are: (1) max turns per task (e.g., 10 edits), (2) max tokens per task (e.g., 100K tokens), (3) no-progress detection (repeated identical diffs), and (4) wall-clock limits (e.g., 5 minutes). When any limit is hit, the agent must degrade or escalate — not retry."}},{"@type":"Question","name":"How much does a coding agent cost per task?","acceptedAnswer":{"@type":"Answer","text":"Typical costs range from $0.05 per simple change to $2–5 per complex multi-file refactor. The cost depends on: how many times the agent edits the code (each edit is one LLM call), how much context it carries (file size, repo size, conversation history), and which model it uses. Claude 3.5 Sonnet on a 5-edit task with 50K tokens input is roughly $0.30–0.50."}},{"@type":"Question","name":"What is a good max-turns limit for coding agents?","acceptedAnswer":{"@type":"Answer","text":"Start with 8–10 turns per task. Each turn is one code edit plus one test run. If your agent hits the limit frequently (>20% of tasks), the prompts or task scoping are too loose. If it never hits the limit, tighten to save cost. For autonomous refactoring, 4–6 turns is typical. For bug fixing, 8–12. For major features, cap at 15."}},{"@type":"Question","name":"Should coding agents use cheaper models for mechanical edits?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use two-tier routing: a frontier model (Claude 3.5 Sonnet) for test interpretation and architectural decisions, and a smaller model (Haiku) for straightforward edits, formatting, or test fixes. Route to the cheaper model when the task is mechanical (no ambiguity). This cuts costs 40–60% on repetitive tasks without quality loss."}},{"@type":"Question","name":"What is context compaction and why does it matter for coding agents?","acceptedAnswer":{"@type":"Answer","text":"Context compaction means reducing what the agent sees each turn: instead of showing the entire repo, show only changed files plus their direct dependencies; instead of all test output, show only failing tests; instead of full git history, show the last 3 commits. Coding agents waste 30–40% of tokens on irrelevant context. Compaction with clear chunking can cut per-task cost by 50%."}},{"@type":"Question","name":"How do I monitor per-task cost for coding agents?","acceptedAnswer":{"@type":"Answer","text":"Instrument three data points per task: (1) estimated cost at start and actual cost at finish, (2) number of turns + tokens per turn, (3) whether the task succeeded or hit a guardrail. Log this to your observability backend (Langfuse, Helicone, or custom). Alert if a single task exceeds $1 or takes >15 turns. Track median cost per task category (refactor vs bug fix vs test) to detect regressions."}}]}
+---
+  <div class="eye">RESEARCH · AGENTS</div>
+  <h1 class="page-title">Coding agent <em>cost control.</em></h1>
+  <p class="updated">Operations guide · 1 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Coding agents (Claude Code, Cursor, Devin-style autonomous developers) solve one LLM cost problem — they optimize the task itself — and create a new one: they can loop forever. If your agent retries a failing test without finding the root cause, or if it cycles through identical edits trying to satisfy a contradictory requirement, the task can balloon from $0.10 to $5 in seconds. Stop that with termination signals and per-task budgets.</p>
+
+  <h2>Why coding agents loop</h2>
+  <p>Coding agents cost differently from chat agents. A chat interaction has one request and one response. A coding task has edit cycles: the agent reads code, makes a change, runs tests, checks the result, and tries again. If the tests keep failing, or if the agent thinks one more retry will succeed, it loops.</p>
+
+  <p>Three patterns create runaway loops:</p>
+  <ul>
+    <li><strong>Test failures it cannot solve.</strong> A test fails for reasons outside the agent's control (flaky CI, missing environment variable, external API timeout). The agent retries the edit, the test still fails, and it retries again.</li>
+    <li><strong>Contradictory requirements.</strong> The task asks the agent to "reduce execution time" and "add detailed logging." The agent trades off: faster execution, then slower but more verbose, then back to faster. Each edit looks slightly different, so the agent thinks it is making progress.</li>
+    <li><strong>Edit-verify cycles without bounds.</strong> The agent has no hard stop. It keeps running tests and making small tweaks because "one more retry might do it."</li>
+  </ul>
+
+  <h2>Termination signals: the minimum guardrails</h2>
+  <p>Coding agents need explicit, non-overrideable stop conditions. Here are the four that matter:</p>
+
+  <h3>1. Max turns per task</h3>
+  <p>A "turn" is one edit cycle: one code change plus one test run. Cap at 8–10 for most tasks. If the agent does not solve the problem in 10 edits, it is not going to solve it with 15. At the limit, the agent must either succeed, escalate to a human, or degrade to a simpler goal. Do not let it retry indefinitely.</p>
+
+  <h3>2. Max tokens per task</h3>
+  <p>Set a token budget independent of turn count. If each turn costs 10K tokens, a 10-turn task costs 100K tokens ($0.30 at Sonnet pricing). If you allow unlimited turns but cap total tokens, the agent exhausts the budget more predictably than it does turn limits. Use both: max turns catches runaway loops early; max tokens is the financial backstop.</p>
+
+  <h3>3. No-progress detection</h3>
+  <p>If the agent makes the exact same change twice, or if the diff is identical across multiple edits, it has looped. Detect this by comparing the hash of the code state after each turn. If the code state repeats, stop and fail the task. This is cheaper than waiting for the token budget.</p>
+
+  <h3>4. Wall-clock timeout</h3>
+  <p>Even with the above guardrails, a slow test suite can eat time. Set a hard clock limit (e.g., 5 minutes per task, 30 minutes for big refactors). When time is up, the agent stops, returns what it has, or escalates.</p>
+
+  <h2>Cost-control levers specific to coding agents</h2>
+
+  <h3>Context compaction</h3>
+  <p>Coding agents are greedy for context. They want to see the entire repo, full git history, and all test output to make the safest decision. But that eats tokens. Instead, feed only what the agent needs per turn:</p>
+  <ul>
+    <li>Show the changed files plus their direct imports, not the entire codebase.</li>
+    <li>Show only the failing test names and their error messages, not the full test output.</li>
+    <li>Show the last 3 commits, not the last 30.</li>
+    <li>Show one error at a time, not ten.</li>
+  </ul>
+  <p>This cuts context size by 50–70% per turn and reduces cost proportionally, with no loss of agent capability.</p>
+
+  <h3>Cheaper model for mechanical steps</h3>
+  <p>Not every edit needs the frontier model. If the agent is doing a straightforward change — fixing a formatting error, renaming a variable, adding a missing import — use a smaller model like Haiku. Reserve Claude 3.5 Sonnet for test interpretation, architectural decisions, and root-cause analysis.</p>
+  <p>Route to the cheaper model when the task is <em>mechanical</em>: the instructions are unambiguous, the required change is obvious from the test error, and there is little room for interpretation. This can cut per-task cost by 40–60% without quality loss.</p>
+
+  <h3>Cache-friendly prompts</h3>
+  <p>Coding agents send the same system prompt and context setup on every turn. Use <a href="/research/prompt-caching-explained">prompt caching</a> to lock in the expensive context (system instructions, codebase structure, testing framework docs) and pay once. Each subsequent turn reuses the cached prefix, cutting input token cost by 50–90%.</p>
+  <p>Structure the prompt as: (1) cached system instructions (agent role, code style rules), (2) cached repo overview and test framework docs, (3) non-cached current edit, (4) non-cached test result. This way you pay full price once and near-zero on retries.</p>
+
+  <h3>Per-task token budgets</h3>
+  <p>Instead of global token limits, set per-task budgets aligned to task type. Simple fix (one file, obvious solution): 20K tokens. Medium refactor (3–5 files, multiple test fixes): 80K tokens. Complex redesign (10+ files, architectural decision): 200K tokens. When the agent exceeds the budget for its task category, it fails and escalates. This makes cost predictable per workflow type.</p>
+
+  <h2>Monitoring per-task cost</h2>
+  <p>Instrument three things for every coding task:</p>
+  <ol>
+    <li><strong>Estimated and actual cost.</strong> Compute estimated cost at task start (model + expected tokens). Log actual cost at finish. The delta reveals whether your token estimates are tight.</li>
+    <li><strong>Turn count and tokens per turn.</strong> Track how many edits it took and the average tokens per edit. If median turns trend up, your task scoping is getting looser.</li>
+    <li><strong>Success vs guardrail termination.</strong> Did the task complete within budget, or did it hit the max-turns limit? If >20% of tasks hit limits, the limits are too tight. If 0% hit limits, they are too loose.</li>
+  </ol>
+  <p>Send this data to an observability tool (<a href="/research/litellm-vs-helicone-vs-langfuse">Langfuse, Helicone, or LiteLLM</a>) and set up alerts: page if a single task exceeds $1, or if weekly median cost per task category (refactor vs bug fix) rises 20% month-over-month. Track cost by task type so you can catch regressions early.</p>
+
+  <div class="callout"><strong>Coding agent rule:</strong> if an agent can retry a test, it will loop on a flaky build. Max turns, max tokens, no-progress detection, and a wall-clock limit are the minimum defense. Add context compaction and model routing for serious cost reduction.</div>
+
+  <h2>The economics of task routing</h2>
+  <p>A simple heuristic: for tasks that cost <$0.50 (simple bug fix, one-file change), use one agent with tight guardrails. For tasks that cost $0.50–2 (multi-file refactor), add a cheaper-model fallback. For tasks >$2 (major redesigns), route to a human with the agent as a helper, not the decision-maker. This keeps most tasks cheap while avoiding infinite loops.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails: budgets, retries, and loop control</a> — the parent concept, covering all agents.</li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching: OpenAI vs Anthropic vs Bedrock</a> — how to lock in expensive context for multi-turn tasks.</li>
+    <li><a href="/research/model-routing">Model routing without quality regressions</a> — the mechanics of swapping models by task type.</li>
+    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a> — why some reasoning-heavy tasks cost more than expected.</li>
+    <li><a href="/research/llm-cost-per-request">LLM cost per request</a> — unit economics for AI features.</li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

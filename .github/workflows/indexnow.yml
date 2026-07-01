@@ -1,0 +1,34 @@
+name: IndexNow
+
+# Ping IndexNow (Bing / Yandex / Seznam / Naver) with the live sitemap URLs after
+# every deploy, so new and changed pages get (re)crawled fast. Google ignores
+# IndexNow — that stays Search Console.
+#
+# The IndexNow key is PUBLIC (ownership is proven by the hosted /<key>.txt), so
+# this needs NO repo secrets. The script submits only URLs that return HTTP 200
+# live, built from the deployed sitemap — never the local file.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: indexnow-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Wait for Cloudflare deploy to go live
+        run: sleep 60
+      - name: Submit live sitemap URLs to IndexNow
+        env:
+          INDEXNOW_HOST: llmcfo.com
+          INDEXNOW_KEY: 9f7a91c496064b7e96137c3326d9b895
+        run: node scripts/indexnow-submit.mjs

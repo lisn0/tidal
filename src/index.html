@@ -1,0 +1,1380 @@
+---
+permalink: "index.html"
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+
+<title>LLM CFO — AI cost optimization & AI FinOps</title>
+<meta name="description" content="Managed AI cost management for teams spending heavily on LLMs. We audit AI spend, implement routing and caching, and price against verified savings." />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="theme-color" content="#FBFAF6" />
+<link rel="canonical" href="https://llmcfo.com/" />
+<link rel="alternate" hreflang="en-us" href="https://llmcfo.com/" />
+<link rel="alternate" hreflang="x-default" href="https://llmcfo.com/" />
+
+<!-- Icons & PWA -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Sitemap discovery -->
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+<!-- Author / publisher -->
+<meta name="author" content="LLM CFO, Inc." />
+<meta name="publisher" content="LLM CFO, Inc." />
+<meta name="application-name" content="LLM CFO" />
+<meta name="apple-mobile-web-app-title" content="LLM CFO" />
+<meta name="format-detection" content="telephone=no" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://llmcfo.com/" />
+<meta property="og:title" content="LLM CFO — Cut your AI cost in half." />
+<meta property="og:description" content="Managed AI cost optimization for teams running production LLMs. Targeting 40–60% reduction. Pay only on the savings we deliver." />
+<meta property="og:image" content="https://llmcfo.com/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="LLM CFO — cut your LLM API bill in half" />
+<meta property="og:site_name" content="LLM CFO" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@llmcfo" />
+<meta name="twitter:title" content="LLM CFO — Cut your LLM API bill in half." />
+<meta name="twitter:description" content="Managed AI cost optimization. Targeting 40–60% reduction. Pay on results." />
+<meta name="twitter:image" content="https://llmcfo.com/og.png" />
+
+<link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com","logo":"https://llmcfo.com/og.png","sameAs":["https://github.com/lisn0/tidal"],"description":"Managed AI FinOps and LLM cost optimization service. Audit LLM spend across OpenAI, Anthropic, Bedrock, Vertex, and Azure OpenAI. Implement model routing, semantic caching, prompt caching, and prompt compression. Pay only on delivered savings.","contactPoint":[{"@type":"ContactPoint","email":"hello@llmcfo.com","contactType":"sales"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["Service","ProfessionalService"],"name":"LLM CFO","provider":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com"},"areaServed":"Worldwide","serviceType":"AI cost optimization, FinOps for AI, LLM cost audit","priceRange":"Performance-based — % of delivered savings","description":"Managed AI FinOps service combining LLM cost audits, model routing, semantic caching, prompt caching, prompt compression, batch API routing, and monthly savings reconciliation against raw provider invoices.","offers":{"@type":"Offer","priceCurrency":"USD","description":"Free audit; then 15–25% of delivered monthly savings. No savings, no fee."}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"LLM CFO","url":"https://llmcfo.com/","description":"Managed AI cost optimization and FinOps for AI.","publisher":{"@type":"Organization","name":"LLM CFO"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is LLM CFO?","acceptedAnswer":{"@type":"Answer","text":"LLM CFO is a managed AI FinOps service for engineering teams spending $20K+/month on LLMs. We audit your LLM spend across OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, and Azure OpenAI, implement model routing, semantic caching, prompt caching, and prompt compression, and deliver monthly reports that reconcile against your raw provider invoices."}},
+{"@type":"Question","name":"What is FinOps for AI?","acceptedAnswer":{"@type":"Answer","text":"FinOps for AI applies cloud-cost-management principles — visibility, accountability, optimization — to LLM and inference spend. The unit of cost is the token; the challenges are attribution (which feature, team, or user is burning tokens) and architectural waste (over-routing to flagship models, missing cache opportunities, uncompressed prompts, no batch routing). LLM CFO delivers all three pillars as a managed service."}},
+{"@type":"Question","name":"How much can I reduce my OpenAI or Anthropic bill?","acceptedAnswer":{"@type":"Answer","text":"Published research and our engineering work suggests 40–60% reduction is achievable for most production workloads, depending on architecture. The biggest savings usually come from semantic caching (20–40%), model routing (30–50%), and prompt compression (15–30%). We commit to a target after the audit. If we don't deliver savings, you don't pay."}},
+{"@type":"Question","name":"How does pricing work?","acceptedAnswer":{"@type":"Answer","text":"Free audit. Then 15–25% of delivered monthly savings vs. a locked pre-engagement baseline, reconciled to raw provider invoices. No savings, no fee. No multi-year lock-ins."}},
+{"@type":"Question","name":"What LLM providers do you support?","acceptedAnswer":{"@type":"Answer","text":"OpenAI, Anthropic, Google Gemini and Vertex AI, AWS Bedrock, Azure OpenAI, Groq, Together AI, Mistral, Cohere, Fireworks, OpenRouter, and most OSS endpoints. We also work with LiteLLM, Helicone, and Langfuse gateways. Multi-provider setups typically have the largest savings surface."}},
+{"@type":"Question","name":"What's the difference between LLM observability and LLM cost optimization?","acceptedAnswer":{"@type":"Answer","text":"LLM observability tools (Helicone, Langfuse, LangSmith) tell you what your spend is. LLM cost optimization is the engineering work that reduces it: caching, routing, compression, batching, provider arbitrage, cache-read token strategy. LLM CFO is the managed-service layer that takes observability data and delivers reduction with reconciled monthly statements."}},
+{"@type":"Question","name":"How are savings measured?","acceptedAnswer":{"@type":"Answer","text":"We lock a pre-engagement baseline from your provider invoices and publish monthly reconciliation reports that tie end-to-end to raw billing, traffic-adjusted. Your CFO and finance team can audit the math."}},
+{"@type":"Question","name":"Is LLM CFO SOC 2 certified?","acceptedAnswer":{"@type":"Answer","text":"Not yet — we're an early-stage service and do not claim SOC 2, GDPR, or HIPAA certification. We follow read-only-by-default access for billing and gateway data, and can sign a mutual NDA and DPA before any engagement. Happy to share our security practices on request."}},
+{"@type":"Question","name":"How long does it take?","acceptedAnswer":{"@type":"Answer","text":"Target 3–5 weeks from kickoff to first reconciled invoice."}},
+{"@type":"Question","name":"Will optimization hurt output quality?","acceptedAnswer":{"@type":"Answer","text":"Every change is A/B tested against your production baseline for at least seven days before being rolled out and rolls back automatically on quality regression. Quality SLOs are agreed per endpoint at the start of the engagement."}}
+]}
+</script>
+
+<style>
+  :root {
+    --bg:         #FBFAF6;
+    --bg-2:       #F3F1EA;
+    --bg-3:       #E9E5D9;
+    --ink:        #0E0F0C;
+    --ink-2:      #1A1C18;
+    --fg:         #2A2C26;
+    --fg-2:       #6B6D64;
+    --fg-3:       #5F6158;
+    --rule:       #E0DCCE;
+    --rule-soft:  #EEEADE;
+    --accent:     #B83A13;   /* warm orange highlight with WCAG AA contrast */
+    --green:      #1F7A3F;
+    --green-2:    #176B35;
+    --green-soft: #E3F4EA;
+    --chip:       #F6E8DF;   /* soft peach, used for v2.3 badge */
+    --code-bg:    #0E0F0C;
+    --code-fg:    #E6E3D5;
+    --code-dim:   #B8B6A8;
+    --code-str:   #FFB37A;
+    --code-kw:    #F08A5D;
+    --code-fn:    #8EB8E0;
+    --code-num:   #9BE08D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Geist', -apple-system, system-ui, sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv11";
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .serif { font-family: 'Instrument Serif', Georgia, serif; }
+  .mono  { font-family: 'Geist Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  ::selection { background: var(--accent); color: #fff; }
+  img, svg { display: block; max-width: 100%; }
+  .skip { position: absolute; top: -50px; left: 12px; background: var(--ink); color: var(--bg); padding: 10px 14px; font-weight: 600; z-index: 999; }
+  .skip:focus { top: 12px; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+  /* ============== ANNOUNCE BAR ============== */
+  .announce {
+    background: var(--ink);
+    color: #E6E3D5;
+    font-size: 13px;
+    padding: 8px 0;
+    text-align: center;
+    font-family: 'Geist', sans-serif;
+  }
+  .announce .star { color: var(--accent); margin-right: 8px; }
+  .announce a { color: #E6E3D5; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; font-weight: 500; }
+  .announce a:hover { color: #fff; }
+
+  /* ============== HEADER ============== */
+  header.site {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(251,250,246,0.92);
+    backdrop-filter: saturate(150%) blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav { display: flex; align-items: center; gap: 36px; padding: 16px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+  .brand:hover { text-decoration: none; }
+  .brand-mark {
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px; font-weight: 700;
+    color: var(--ink);
+  }
+  .brand-name { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  nav.primary { display: flex; gap: 6px; flex: 1; }
+  nav.primary a {
+    color: var(--fg); font-size: 14px; font-weight: 500;
+    padding: 6px 12px;
+  }
+  nav.primary a:hover { color: var(--ink); text-decoration: none; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-right .signin { color: var(--fg); font-size: 14px; font-weight: 500; }
+  .nav-right .signin:hover { color: var(--ink); text-decoration: none; }
+  .cta-top {
+    background: var(--ink); color: var(--bg);
+    padding: 9px 16px;
+    font-weight: 600; font-size: 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cta-top:hover { background: #000; text-decoration: none; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px;
+    font-weight: 600; font-size: 15px;
+    text-decoration: none; border: 1px solid transparent;
+    transition: all .15s; cursor: pointer;
+    border-radius: 0;
+  }
+  .btn-dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn-dark:hover { background: #000; text-decoration: none; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--bg); text-decoration: none; }
+
+  /* ============== HERO ============== */
+  .hero { padding: 80px 0 40px; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1.08fr;
+    gap: 72px; align-items: center;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 6px 12px;
+    background: var(--green-soft);
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    letter-spacing: -0.01em;
+  }
+  .badge .v { background: var(--green); color: #fff; padding: 2px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  h1.hero-title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 6.8vw, 92px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: var(--ink);
+    margin: 22px 0 24px;
+  }
+  h1.hero-title .hl {
+    background: linear-gradient(180deg, transparent 62%, var(--chip) 62%);
+    padding: 0 2px;
+  }
+  .hero-lead {
+    font-size: 18px; line-height: 1.6;
+    color: var(--fg);
+    max-width: 52ch;
+    margin-bottom: 28px;
+  }
+  .hero-lead strong { color: var(--ink); font-weight: 600; }
+  .hero-cta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .hero-meta {
+    margin-top: 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--fg-2);
+    letter-spacing: -0.01em;
+    display: flex; gap: 20px; flex-wrap: wrap;
+  }
+  .hero-meta span::before { content: "◦ "; color: var(--accent); }
+
+  /* ============== CODE PANEL ============== */
+  .panel {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    box-shadow: 0 30px 60px -36px rgba(14,15,12,0.35), 0 10px 24px -16px rgba(14,15,12,0.15);
+    min-height: 548px;
+  }
+  .panel-tabs {
+    display: flex;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--rule);
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    position: relative;
+  }
+  .panel-tabs .tab {
+    padding: 12px 18px;
+    color: var(--fg-2);
+    cursor: pointer;
+    border-right: 1px solid var(--rule);
+    position: relative;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--rule);
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .panel-tabs .tab.active {
+    color: var(--ink);
+    background: var(--bg);
+    font-weight: 500;
+  }
+  .panel-tabs .tab.active::before {
+    content: "";
+    position: absolute; left: 0; right: 0; top: 0;
+    height: 2px; background: var(--accent);
+  }
+  .panel-tabs .spacer { flex: 1; border-right: 1px solid var(--rule); }
+  .panel-tabs .file {
+    padding: 12px 18px; color: var(--fg-2);
+    margin-left: auto;
+  }
+
+  .code {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: 'Geist Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.75;
+    padding: 22px 24px;
+    overflow-x: auto;
+    min-height: 280px;
+    letter-spacing: -0.005em;
+  }
+  .code .pane { white-space: pre; }
+  .code .cm { color: var(--code-dim); font-style: italic; }
+  .code .kw { color: var(--code-kw); }
+  .code .str { color: var(--code-str); }
+  .code .fn { color: var(--code-fn); }
+  .code .num { color: var(--code-num); }
+  .code .pun { color: #9A9B8F; }
+  .code .id { color: var(--code-fg); }
+  .code .pane { display: none; }
+  .code .pane.active { display: block; }
+
+  /* receipt / reconciliation table inside panel */
+  .recon {
+    border-top: 1px solid var(--rule);
+    background: var(--bg);
+    padding: 16px 24px;
+  }
+  .recon table { width: 100%; border-collapse: collapse; font-family: 'Geist Mono', monospace; font-size: 13px; }
+  .recon th { padding: 0 0 8px; border-bottom: 1px solid var(--rule); color: var(--fg-2); font-weight: 600; text-align: left; }
+  .recon th:nth-child(2), .recon th:nth-child(3) { text-align: right; }
+  .recon td { padding: 7px 0; border-bottom: 1px dashed var(--rule); color: var(--fg); }
+  .recon tr:last-child td { border-bottom: none; }
+  .recon td.k { color: var(--fg-2); }
+  .recon td.v { text-align: right; color: var(--ink); font-weight: 500; }
+  .recon td.v.neg { color: var(--green-2); font-weight: 600; }
+  .recon .total td { border-top: 1.5px solid var(--ink); border-bottom: none; padding-top: 12px; color: var(--ink); font-weight: 700; font-size: 14px; }
+  .recon .total td.v { color: var(--green); }
+
+  /* ============== LOGO STRIP ============== */
+  .logos {
+    padding: 28px 0 52px;
+    border-top: 1px solid var(--rule);
+    margin-top: 40px;
+  }
+  .logos-head {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--fg-2);
+    margin-bottom: 24px;
+  }
+  .logos-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 36px;
+    flex-wrap: wrap;
+  }
+  .logos-row .lg {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--fg-2);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* ============== SECTION FRAMEWORK ============== */
+  section { padding: 96px 0; border-top: 1px solid var(--rule); }
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--accent);
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .eyebrow::before { content: ""; width: 14px; height: 1px; background: var(--accent); display: inline-block; }
+  h2.sec-title {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 4.8vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  h2.sec-title em, h1.hero-title em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .sec-sub {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--fg);
+    max-width: 60ch;
+    margin-top: 18px;
+  }
+  .sec-head { margin-bottom: 56px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: end; }
+  .sec-head .right { font-size: 15px; color: var(--fg-2); max-width: 38ch; line-height: 1.6; padding-bottom: 8px; }
+
+  /* ============== RESULT NUMBERS ============== */
+  .nums {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .nums .n {
+    padding: 28px 24px;
+    border-right: 1px solid var(--rule);
+  }
+  .nums .n:last-child { border-right: none; }
+  .nums .n .k {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--fg-2);
+    letter-spacing: -0.01em;
+  }
+  .nums .n .v {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 10px 0 8px;
+  }
+  .nums .n .v em { font-family: 'Instrument Serif', serif; font-weight: 400; font-style: italic; }
+  .nums .n .v .u { font-size: 22px; color: var(--fg-2); margin-left: 2px; }
+  .nums .n .sub { font-size: 13px; color: var(--fg-2); line-height: 1.5; }
+
+  /* ============== TECHNIQUES ============== */
+  .tech {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .tech-cell {
+    padding: 32px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .tech-cell:nth-child(3n) { border-right: none; }
+  .tech-cell:nth-last-child(-n+3) { border-bottom: none; }
+  .tech-cell .idx {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--fg-3);
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  .tech-cell h3 {
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .tech-cell .m {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--green);
+    margin-bottom: 12px;
+    background: var(--green-soft);
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .tech-cell p {
+    font-size: 15px; color: var(--fg); line-height: 1.55;
+  }
+  .tech-cell .savings {
+    position: absolute;
+    top: 28px; right: 28px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--fg-3);
+  }
+
+  /* ============== HOW IT WORKS (timeline) ============== */
+  .how {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .how .step {
+    background: var(--bg);
+    padding: 32px 26px;
+    position: relative;
+  }
+  .how .step .w {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .how .step .num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 64px;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    opacity: 0.95;
+  }
+  .how .step h3 {
+    font-size: 19px; font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .how .step p {
+    font-size: 14px; color: var(--fg); line-height: 1.55;
+  }
+
+  /* ============== PRICING ============== */
+  .pricing {
+    display: grid; grid-template-columns: 1.25fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .pricing .left {
+    padding: 48px;
+    border-right: 1px solid var(--rule);
+  }
+  .pricing .left .p {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .pricing .left .p em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+  .pricing ul { list-style: none; padding: 0; }
+  .pricing li {
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    display: grid; grid-template-columns: 24px 1fr;
+    gap: 14px;
+    font-size: 15px;
+    color: var(--fg);
+    line-height: 1.55;
+  }
+  .pricing li:first-child { border-top: 1px solid var(--ink); }
+  .pricing li:last-child { border-bottom: 1px solid var(--rule); }
+  .pricing li .chk {
+    width: 18px; height: 18px;
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--ink);
+    margin-top: 3px;
+  }
+  .pricing li strong { color: var(--ink); font-weight: 600; }
+
+  .pricing .right {
+    padding: 48px;
+    background: var(--bg-2);
+  }
+  .pricing .right .example-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--fg-2);
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+  .example-t { width: 100%; border-collapse: collapse; font-family: 'Geist Mono', monospace; font-size: 13px; }
+  .example-t th { padding: 0 0 8px; border-bottom: 1px solid var(--rule); color: var(--fg-2); font-weight: 600; text-align: left; }
+  .example-t th:last-child { text-align: right; }
+  .example-t td { padding: 10px 0; border-bottom: 1px dashed var(--rule); }
+  .example-t td:last-child { text-align: right; }
+  .example-t tr.g td { color: var(--green); font-weight: 600; }
+  .example-t tr.total td { font-size: 14px; font-weight: 700; color: var(--ink); border-bottom: none; border-top: 1.5px solid var(--ink); padding-top: 14px; }
+  .example-t tr.total td:last-child { color: var(--green); }
+  .ex-foot {
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .ex-foot .l {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: #C6C4B6;
+    margin-bottom: 6px;
+  }
+  .ex-foot .big {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+    letter-spacing: -0.04em;
+    color: #fff;
+    line-height: 1;
+  }
+  .ex-foot .big em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+  .ex-foot .yr { font-family: 'Geist Mono', monospace; font-size: 12px; color: #C6C4B6; margin-top: 8px; }
+
+  /* ============== FAQ ============== */
+  .faq-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 64px; }
+  .faq-grid h2 { max-width: 10ch; }
+  .faq-list {}
+  .faq-list details {
+    border-top: 1px solid var(--rule);
+    padding: 22px 0;
+  }
+  .faq-list details:last-child { border-bottom: 1px solid var(--rule); }
+  .faq-list summary {
+    list-style: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; gap: 18px;
+    font-weight: 600; font-size: 18px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .faq-list summary::-webkit-details-marker { display: none; }
+  .faq-list summary .icon {
+    font-family: 'Geist Mono', monospace;
+    color: var(--accent); font-size: 18px;
+    transition: transform .2s;
+  }
+  .faq-list details[open] summary .icon { transform: rotate(45deg); }
+  .faq-list .a {
+    padding-top: 14px;
+    font-size: 16px; line-height: 1.6; color: var(--fg);
+    max-width: 68ch;
+  }
+  .faq-list .a strong { color: var(--ink); font-weight: 600; }
+
+  /* ============== RESOURCES ============== */
+  .res { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .res-card {
+    border: 1px solid var(--rule);
+    padding: 28px;
+    background: var(--bg);
+    display: block;
+    color: var(--ink);
+    transition: transform .15s, border-color .15s;
+  }
+  .res-card:hover { transform: translateY(-3px); border-color: var(--ink); text-decoration: none; }
+  .res-card .tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: -0.01em;
+    display: flex; justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .res-card h3 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.025em;
+    margin-bottom: 10px; line-height: 1.18;
+  }
+  .res-card p { font-size: 14px; color: var(--fg); line-height: 1.55; }
+  .res-card .meta {
+    margin-top: 24px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--fg-2);
+    display: flex; justify-content: space-between;
+  }
+
+  /* ============== CTA ============== */
+  .cta {
+    padding: 120px 0;
+    background: var(--ink);
+    color: var(--bg);
+    border-top: 1px solid var(--ink);
+  }
+  .cta .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: end; }
+  .cta .eye {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: #FFB37A;
+    letter-spacing: -0.01em;
+  }
+  .cta h2 {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 6vw, 92px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: #fff;
+    max-width: 14ch;
+    margin: 18px 0 22px;
+  }
+  .cta h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #FFB37A; }
+  .cta p { font-size: 18px; color: #C6C4B6; max-width: 52ch; line-height: 1.6; }
+  .cta .cta-right { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .cta .btn-dark { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .cta .btn-dark:hover { background: #fff; border-color: #fff; color: var(--ink); }
+  .cta .btn-ghost { color: var(--bg); border-color: #4A4C44; }
+  .cta .btn-ghost:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+  .cta .fine {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: #C6C4B6; letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+
+  /* ============== FOOTER ============== */
+  footer.site {
+    background: var(--bg);
+    padding: 56px 0 24px;
+  }
+  .foot-top {
+    display: grid; grid-template-columns: 1.8fr repeat(4, 1fr);
+    gap: 40px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid var(--rule);
+  }
+  footer.site .foot-heading {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--fg-2);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  footer.site ul { list-style: none; padding: 0; }
+  footer.site li { padding: 5px 0; font-size: 14px; }
+  footer.site li a { color: var(--fg); }
+  footer.site li a:hover { color: var(--ink); text-decoration: underline; }
+  .foot-brand p {
+    font-size: 15px; color: var(--fg); margin-top: 16px; max-width: 36ch; line-height: 1.6;
+  }
+  .foot-compliance {
+    margin-top: 16px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .foot-compliance .c {
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px; color: var(--fg-2);
+    letter-spacing: -0.01em;
+  }
+  .foot-bottom {
+    padding-top: 20px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; color: var(--fg-2);
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 1000px) {
+    .hero-grid, .sec-head, .pricing, .faq-grid, .res, .foot-top, .cta .wrap { grid-template-columns: 1fr; }
+    .nums, .tech, .how { grid-template-columns: 1fr 1fr; }
+    .nums .n:nth-child(2n), .tech-cell:nth-child(2n), .how .step:nth-child(2n) { border-right: none; }
+    nav.primary { display: none; }
+    .pricing .left, .pricing .right { border-right: none; border-bottom: 1px solid var(--rule); }
+    section { padding: 56px 0; }
+    .panel { min-height: 560px; }
+  }
+  @media (max-width: 768px) {
+    .wrap { padding: 0 16px; }
+    .announce { font-size: 12px; padding: 8px 12px; line-height: 1.4; }
+    .nav { gap: 12px; padding: 12px 0; }
+    .nav-right { gap: 8px; }
+    .nav-right .signin { display: none; }
+    .cta-top { padding: 10px 14px; font-size: 13px; min-height: 44px; }
+    .brand-name { font-size: 16px; }
+    .hero { padding: 48px 0 24px; }
+    .hero-grid { gap: 36px; }
+    h1.hero-title { font-size: clamp(36px, 9vw, 56px); margin: 16px 0 18px; }
+    .hero-lead { font-size: 16px; margin-bottom: 22px; }
+    .btn { padding: 14px 20px; font-size: 15px; min-height: 44px; }
+    .hero-cta { gap: 10px; }
+    .hero-cta .btn { width: 100%; justify-content: center; }
+    .nums, .tech, .how { grid-template-columns: 1fr; }
+    .nums .n, .tech-cell, .how .step { border-right: none !important; border-bottom: 1px solid var(--rule); }
+    .panel { min-height: auto; }
+    .code { font-size: 12px; padding: 16px; line-height: 1.65; }
+    .recon { padding: 14px 16px; }
+    .recon table { font-size: 11.5px; }
+    .panel-tabs { overflow-x: auto; }
+    .panel-tabs .tab { padding: 10px 14px; white-space: nowrap; }
+    section { padding: 44px 0; }
+    .logos { padding: 20px 0 36px; margin-top: 24px; }
+    .logos-row { gap: 18px; justify-content: flex-start; }
+    .logos-row .lg { font-size: 18px; }
+    .faq-grid h2 { max-width: none; }
+    table { font-size: 13px; }
+    .recon, .panel { overflow-x: auto; }
+  }
+  @media (max-width: 480px) {
+    .wrap { padding: 0 14px; }
+    h1.hero-title { font-size: 34px; line-height: 1.05; }
+    .hero-lead { font-size: 15px; }
+    .btn { font-size: 14px; padding: 13px 18px; }
+    .cta-top { font-size: 12px; }
+    .brand-mark { width: 26px; height: 26px; font-size: 12px; }
+    .brand-name { font-size: 15px; }
+    .code { font-size: 11px; padding: 14px; }
+    .nav-right .signin { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to main content</a>
+
+<!-- ANNOUNCE -->
+<div class="announce" role="region" aria-label="Announcements">
+  <span class="star">✦</span>
+  Now taking the first cohort of audit engagements — limited slots.
+  <a href="/book">Book a free audit</a>
+</div>
+
+<!-- HEADER -->
+<header class="site" role="banner">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <a href="/" class="brand" aria-label="LLM CFO home">
+        <span class="brand-mark" aria-hidden="true">$</span>
+        <span class="brand-name">LLM CFO</span>
+      </a>
+      <nav class="primary" aria-label="Main menu">
+        <a href="#techniques">Techniques</a>
+        <a href="#platform">How it works</a>
+        <a href="/methodology">Methodology</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav-right">
+        <a class="signin" href="mailto:hello@llmcfo.com">Contact</a>
+        <a class="cta-top" href="/book">Book audit →</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero" style="border-top: none;">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="badge"><span class="v">new</span> Managed AI cost optimization · Pay on results</span>
+        <h1 class="hero-title">Cut your AI cost <span class="hl">in half.</span></h1>
+        <p class="hero-lead">
+          LLM CFO is <strong>managed AI cost optimization</strong> — for engineering teams spending $20K+/month on LLMs. We audit your <strong>OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, and Azure OpenAI</strong> spend, then implement <strong><a href="/research/model-routing">model routing</a>, <a href="/research/semantic-caching">semantic caching</a>, <a href="/research/prompt-caching-explained">prompt caching</a>, prompt compression, and batch routing</strong>. Every month we send a statement reconciled against your raw provider invoices. <strong>You only pay on the savings we deliver.</strong>
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-dark" href="/book">Book free audit →</a>
+          <a class="btn btn-ghost" href="#platform">See platform</a>
+        </div>
+        <div class="hero-meta">
+          <span>Targeting 40–60% reduction</span>
+          <span>3–5 week kickoff</span>
+          <span>No savings, no fee</span>
+        </div>
+      </div>
+
+      <!-- CODE PANEL + RECEIPT -->
+      <aside class="panel" aria-label="Audit script and reconciled savings">
+        <div class="panel-tabs" role="tablist">
+          <button class="tab active" role="tab" aria-selected="true" data-tab="audit">audit.ts</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="routing">routing.yml</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="report">report.md</button>
+          <span class="spacer"></span>
+          <span class="file">~/llmcfo/example</span>
+        </div>
+        <div class="code">
+          <!-- audit.ts -->
+          <div class="pane active" data-pane="audit">
+<span class="cm">// LLM CFO: baseline → optimized</span>
+<span class="kw">import</span> { audit, optimize } <span class="kw">from</span> <span class="str">"@llmcfo/core"</span>;
+
+<span class="kw">const</span> baseline = <span class="kw">await</span> <span class="fn">audit</span>({
+  providers: [<span class="str">"openai"</span>, <span class="str">"anthropic"</span>, <span class="str">"bedrock"</span>],
+  window:    <span class="str">"2026-03"</span>,
+});
+
+<span class="kw">const</span> plan = <span class="kw">await</span> <span class="fn">optimize</span>(baseline, {
+  techniques: [<span class="str">"routing"</span>, <span class="str">"cache"</span>, <span class="str">"compress"</span>],
+  ship:       <span class="num">true</span>,
+});
+          </div>
+          <!-- routing.yml -->
+          <div class="pane" data-pane="routing">
+<span class="cm"># routing tree — classified per request</span>
+<span class="kw">tiers</span>:
+  <span class="kw">reasoning</span>:
+    <span class="kw">model</span>: <span class="str">"claude-3.7-sonnet"</span>
+    <span class="kw">match</span>:   <span class="str">"complexity &gt; 0.7"</span>
+  <span class="kw">extraction</span>:
+    <span class="kw">model</span>: <span class="str">"claude-3.5-haiku"</span>
+    <span class="kw">match</span>:   <span class="str">"schema_required"</span>
+  <span class="kw">classify</span>:
+    <span class="kw">model</span>: <span class="str">"gpt-4o-mini"</span>
+    <span class="kw">match</span>:   <span class="str">"intent &amp;&amp; len &lt; 800"</span>
+
+<span class="kw">cache</span>:
+  <span class="kw">similarity</span>: <span class="num">0.92</span>
+  <span class="kw">ttl</span>:        <span class="str">"24h"</span>
+          </div>
+          <!-- report.md -->
+          <div class="pane" data-pane="report">
+<span class="cm"># Statement of Savings — example output</span>
+
+<span class="kw">Baseline</span>:  $165,000.00 / mo <span class="cm">(locked at kickoff)</span>
+<span class="kw">Target</span>:    $70,000–99,000 / mo
+<span class="kw">Range</span>:     <span class="num">40–60%</span> reduction <span class="cm">(architecture-dependent)</span>
+
+<span class="cm">## Reconciled to raw provider invoice each month</span>
+<span class="cm">## Quality A/B tested 7 days before rollout</span>
+<span class="cm">## Illustrative — not a real customer report</span>
+          </div>
+        </div>
+
+        <!-- Receipt — illustrative example, not a real customer -->
+        <div class="recon" aria-label="Illustrative reconciliation example">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Lever</th>
+                <th scope="col">Change</th>
+                <th scope="col">Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="k">baseline</td><td class="v">$165,000/mo</td><td class="v">—</td></tr>
+              <tr><td class="k">model routing</td><td class="v">flagship → small</td><td class="v neg">−30 to −50%</td></tr>
+              <tr><td class="k">semantic cache</td><td class="v">near-duplicate hits</td><td class="v neg">−20 to −40%</td></tr>
+              <tr><td class="k">prompt compress</td><td class="v">system + context</td><td class="v neg">−15 to −30%</td></tr>
+              <tr><td class="k">provider arb.</td><td class="v">capability per $</td><td class="v neg">−20 to −35%</td></tr>
+              <tr class="total"><td>EXAMPLE · COMBINED RANGE</td><td class="v">illustrative</td><td class="v">−40 to −60%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Logos -->
+    <div class="logos">
+      <p class="logos-head">// Reconciled against every major provider &amp; gateway</p>
+      <div class="logos-row">
+        <span class="lg">OpenAI</span>
+        <span class="lg">Anthropic</span>
+        <span class="lg">Gemini</span>
+        <span class="lg">Bedrock</span>
+        <span class="lg">Azure</span>
+        <span class="lg">Groq</span>
+        <span class="lg">Together</span>
+        <span class="lg">Mistral</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARGETS -->
+<section id="results" aria-labelledby="results-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">01 · Targets</span>
+        <h2 class="sec-title" id="results-title">What we <em>target</em> per engagement.</h2>
+      </div>
+      <div class="right">We're an early-stage service taking our first cohort. These are the targets we commit to at audit kickoff, sourced from public benchmarks and our own engineering work — not customer claims.</div>
+    </div>
+
+    <div class="nums">
+      <div class="n">
+        <div class="k">// reduction range</div>
+        <div class="v">40–60<span class="u">%</span></div>
+        <p class="sub">Architecture-dependent. Confirmed against your invoices at audit.</p>
+      </div>
+      <div class="n">
+        <div class="k">// time to savings</div>
+        <div class="v">3–5<span class="u">wks</span></div>
+        <p class="sub">Kickoff → first reconciled provider invoice.</p>
+      </div>
+      <div class="n">
+        <div class="k">// quality SLO</div>
+        <div class="v">A/B<span class="u">7d</span></div>
+        <p class="sub">Every change A/B tested 7 days minimum. Auto-rollback on regression.</p>
+      </div>
+      <div class="n">
+        <div class="k">// audit fee</div>
+        <div class="v">$0</div>
+        <p class="sub">Free. No savings, no fee — performance pricing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNIQUES -->
+<section id="techniques" aria-labelledby="tech-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">02 · Techniques</span>
+        <h2 class="sec-title" id="tech-title">Six levers we pull, <em>every</em> engagement.</h2>
+      </div>
+      <div class="right">Most engagements combine three or four of these. The audit tells us which dominate your spend surface.</div>
+    </div>
+
+    <div class="tech">
+      <div class="tech-cell">
+        <div class="idx">01</div>
+        <span class="savings">30–50%</span>
+        <div class="m">model routing</div>
+        <h3>Right model, right request.</h3>
+        <p>Classify each request and route to the cheapest model that passes your quality bar. Reasoning goes to flagships; extraction and classification go to small fast models.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">02</div>
+        <span class="savings">20–40%</span>
+        <div class="m">semantic cache</div>
+        <h3>Near-duplicates, served instantly.</h3>
+        <p>Fingerprint prompts with embeddings and serve identical answers from sub-10ms cache. Similarity thresholds and invalidation tuned per feature.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">03</div>
+        <span class="savings">15–30%</span>
+        <div class="m">prompt compression</div>
+        <h3>Tokens that don't earn their keep.</h3>
+        <p>Audit system prompts for redundancy. Deduplicate examples. Compress retrieved context with LLMLingua-style techniques. Every change A/B tested.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">04</div>
+        <span class="savings">10–50%</span>
+        <div class="m">batch &amp; async</div>
+        <h3>Non-interactive work pays less.</h3>
+        <p>Route background jobs to batch endpoints (up to 50% discount) with SLO-aware queueing for anything time-sensitive.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">05</div>
+        <span class="savings">20–35%</span>
+        <div class="m">provider arbitrage</div>
+        <h3>Same capability, different price.</h3>
+        <p>Identical tasks often cost 2–3× more at one provider. We route by capability-per-dollar, not by the SDK your team happened to start with.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">06</div>
+        <span class="savings">5–15%</span>
+        <div class="m">fallback chains</div>
+        <h3>Graceful degradation, not over-provisioning.</h3>
+        <p>Smart retries and tiered fallbacks beat worst-case over-provisioning. Maintain SLO without paying flagship prices on every call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="platform" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">03 · How it works</span>
+        <h2 class="sec-title" id="how-title">Audit. Implement. <em>Reconcile.</em> Repeat.</h2>
+      </div>
+      <div class="right">Every engagement follows the same four-phase shape. Most customers are on month-end reconciliation by week five.</div>
+    </div>
+
+    <div class="how">
+      <div class="step">
+        <div class="w">WEEK 01 · AUDIT</div>
+        <div class="num">01</div>
+        <h3>Map every dollar.</h3>
+        <p>Ingest invoices and gateway logs. Baseline locked and countersigned.</p>
+      </div>
+      <div class="step">
+        <div class="w">WEEK 02 · PLAN</div>
+        <div class="num">02</div>
+        <h3>Rank by waste.</h3>
+        <p>Optimizations ranked by dollar impact. Quality SLOs agreed per endpoint.</p>
+      </div>
+      <div class="step">
+        <div class="w">WEEKS 03–05 · SHIP</div>
+        <div class="num">03</div>
+        <h3>Ship &amp; A/B.</h3>
+        <p>Feature-flagged, tested 7 days vs. baseline, graduated to 100%.</p>
+      </div>
+      <div class="step">
+        <div class="w">ONGOING · RECONCILE</div>
+        <div class="num">04</div>
+        <h3>Signed, monthly.</h3>
+        <p>Statement of Savings reconciled to raw provider invoices. Every month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">04 · Pricing</span>
+        <h2 class="sec-title" id="pricing-title">We only get paid <em>when you save.</em></h2>
+      </div>
+      <div class="right">Performance pricing, tied to your provider invoices. No savings, no fee. No multi-year lock-ins.</div>
+    </div>
+
+    <div class="pricing">
+      <div class="left">
+        <div class="p">Free audit,<br/>then <em>15–25%</em><br/>of verified savings.</div>
+        <ul>
+          <li><span class="chk">✓</span><span>Audit is <strong>free</strong> and credited against implementation.</span></li>
+          <li><span class="chk">✓</span><span>Savings measured vs. <strong>locked pre-engagement baseline</strong>, reconciled to raw provider invoices.</span></li>
+          <li><span class="chk">✓</span><span>Quality SLOs enforced; regressions <strong>auto-rollback</strong>.</span></li>
+          <li><span class="chk">✓</span><span>Minimum engagement: <strong>$20K/month</strong> LLM spend.</span></li>
+          <li><span class="chk">✓</span><span>Cancel for any reason — <strong>no multi-year lock-ins</strong>.</span></li>
+        </ul>
+      </div>
+      <div class="right" style="max-width: none;">
+        <p class="example-label">// illustrative example · $165K baseline · 50% reduction</p>
+        <table class="example-t">
+          <thead>
+            <tr><th scope="col">Line item</th><th scope="col">Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Baseline AI spend</td><td>$165,000</td></tr>
+            <tr><td>After optimization (≈50%)</td><td>$82,500</td></tr>
+            <tr class="g"><td>Monthly savings</td><td>$82,500</td></tr>
+            <tr><td>LLM CFO fee (20%)</td><td>− $16,500</td></tr>
+            <tr class="total"><td>Customer keeps</td><td>$66,000 /mo</td></tr>
+          </tbody>
+        </table>
+        <div class="ex-foot">
+          <div class="l">// ILLUSTRATIVE ANNUAL NET — NOT A CUSTOMER FIGURE</div>
+          <div class="big">$792<em>,000</em></div>
+          <div class="yr">Mid-range example only. Your audit produces a real number.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" aria-labelledby="faq-title">
+  <div class="wrap">
+    <div class="faq-grid">
+      <div>
+          <span class="eyebrow">05 · FAQ</span>
+        <h2 class="sec-title" id="faq-title">Common <em>questions.</em></h2>
+        <p class="sec-sub">Missing something? Write to <a href="mailto:hello@llmcfo.com" style="color: var(--accent); text-decoration: underline;">hello@llmcfo.com</a> — we respond within one business day.</p>
+      </div>
+      <div class="faq-list">
+        <details open>
+          <summary>What is LLM CFO? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">LLM CFO is a managed <strong>FinOps for AI</strong> service. We audit LLM spend across OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, and Azure OpenAI; implement model routing, semantic caching, prompt caching, and prompt compression; and deliver monthly reconciled savings statements that tie end-to-end to raw provider invoices.</div>
+        </details>
+        <details>
+          <summary>What is FinOps for AI? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">FinOps for AI applies cloud-cost-management principles — <strong>visibility, accountability, optimization</strong> — to LLM and inference spend. The unit of cost is the token; the challenges are <strong>attribution</strong> (which feature, team, or user is burning tokens) and <strong>architectural waste</strong> (over-routing to flagship models, missing cache opportunities, uncompressed prompts, no batch routing). LLM CFO delivers all three pillars as a managed service.</div>
+        </details>
+        <details>
+          <summary>How much can I reduce my OpenAI or Anthropic bill? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">Published research and our engineering work suggests <strong>40–60% reduction</strong> is achievable for most production workloads. The biggest savings usually come from semantic caching (20–40%), model routing (30–50%), and prompt compression (15–30%). We commit to a target after the audit. <strong>If we don't deliver savings, you don't pay.</strong></div>
+        </details>
+        <details>
+          <summary>How is pricing structured? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a"><strong>Performance pricing.</strong> Free audit, then 15–25% of delivered monthly savings vs. a locked pre-engagement baseline. No savings in a given month, no fee. No multi-year lock-ins.</div>
+        </details>
+        <details>
+          <summary>What's the minimum monthly spend? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">$20K+/month on LLM APIs, or teams projected to cross that within a quarter. Below that, self-serve observability tooling (Helicone, Langfuse) is a better fit.</div>
+        </details>
+        <details>
+          <summary>Which LLM providers do you support? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a"><strong>OpenAI, Anthropic, Gemini &amp; Vertex AI, AWS Bedrock, Azure OpenAI, Groq, Together AI, Mistral, Cohere, Fireworks, OpenRouter</strong>, and most OSS endpoints. We also work with <strong>LiteLLM, Helicone, and Langfuse</strong> gateways. Multi-provider setups typically have the largest savings surface.</div>
+        </details>
+        <details>
+          <summary>What's the difference between LLM observability and LLM cost optimization? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a"><strong>Observability tools</strong> (Helicone, Langfuse, LangSmith) tell you what your spend is. <strong>Cost optimization</strong> is the engineering work that reduces it: caching, routing, compression, batching, <a href="/research/provider-arbitrage">provider arbitrage</a>, cache-read token strategy. LLM CFO is the managed-service layer on top — we take the observability data and deliver reduction with reconciled monthly statements.</div>
+        </details>
+        <details>
+          <summary>How are savings verified? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">We lock a pre-engagement baseline from your provider invoices. Each month, our reconciliation report compares optimized spend to that baseline, traffic-adjusted, reconciled to raw billing. Your finance team can audit the math.</div>
+        </details>
+        <details>
+          <summary>Are you SOC 2, GDPR, or HIPAA certified? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a"><strong>Not yet — we're being honest.</strong> We're an early-stage service and don't claim SOC 2, GDPR, or HIPAA certification. We follow <strong>read-only-by-default</strong> access for billing and gateway data, and can sign a mutual NDA and DPA before any engagement. Happy to share our security practices on request.</div>
+        </details>
+        <details>
+          <summary>Will optimization hurt output quality? <span class="icon" aria-hidden="true">+</span></summary>
+          <div class="a">Every change is A/B tested against your production baseline for <strong>seven days minimum</strong>. Regressions roll back automatically. Quality SLOs are agreed per endpoint at the start of the engagement and monitored continuously alongside cost.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE OPTIMIZE (keyword-rich glossary) -->
+<section id="glossary" aria-labelledby="glossary-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">06 · Vocabulary</span>
+        <h2 class="sec-title" id="glossary-title">The vocabulary of <em>AI FinOps.</em></h2>
+      </div>
+      <div class="right">If your team is searching for any of these, we work on all of them. The audit tells us which dominate your spend surface.</div>
+    </div>
+
+    <div class="tech">
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">prompt caching</div>
+        <h3>Prompt &amp; context caching.</h3>
+        <p>OpenAI prompt caching, Anthropic prompt caching, Gemini context caching. <strong>Cache-read tokens</strong> tracked separately from input tokens (50–90% discount). We tune cache hit rates without breaking determinism.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">semantic caching</div>
+        <h3>Near-duplicate request collapsing.</h3>
+        <p>~31% of enterprise LLM queries are semantically identical. Embedding fingerprints + similarity thresholds + per-feature invalidation. Sub-10ms responses on cache hits.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">model routing</div>
+        <h3>Tiered LLM routing.</h3>
+        <p>Reasoning → flagship. Extraction → small fast. Classification → mini. The largest single savings lever for most teams (30–50%).</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">prompt compression</div>
+        <h3>Token-efficient prompts.</h3>
+        <p>System-prompt audit, example deduplication, LLMLingua-style context compression. Quality A/B-tested 7 days minimum before rollout.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">batch API</div>
+        <h3>Async &amp; batch routing.</h3>
+        <p>Background and async work routed to batch endpoints — up to 50% discount. SLO-aware queueing for anything time-sensitive.</p>
+      </div>
+      <div class="tech-cell">
+        <div class="idx">·</div>
+        <div class="m">provider arbitrage</div>
+        <h3>OpenAI · Anthropic · Bedrock · Vertex · Azure.</h3>
+        <p>Identical capability often costs 2–3× more at one provider. We route by capability-per-dollar across <strong>OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, Azure OpenAI, Groq, Together, Fireworks</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources" aria-labelledby="res-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+          <span class="eyebrow">07 · Resources</span>
+        <h2 class="sec-title" id="res-title">Briefs, benchmarks &amp; <em>tools.</em></h2>
+      </div>
+      <div class="right">Long-form research for engineering leaders evaluating AI FinOps, LLM cost monitoring, OpenAI cost optimization, and multi-provider spend control. <a href="/research">Browse all research</a>.</div>
+    </div>
+
+    <div class="res">
+      <a class="res-card" href="/research/ai-finops">
+        <div class="tag"><span>CATEGORY</span><span>↗</span></div>
+        <h3>AI FinOps: the operating model for LLM spend</h3>
+        <p>How finance, engineering, and product teams measure, allocate, optimize, and reconcile AI costs together.</p>
+        <div class="meta"><span>CATEGORY · APR '26</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/research/llm-cost-monitoring">
+        <div class="tag"><span>OPERATIONS</span><span>↗</span></div>
+        <h3>LLM cost monitoring that catches waste early</h3>
+        <p>The request-level metrics, alerts, and dashboards you need before invoices turn into surprises.</p>
+        <div class="meta"><span>GUIDE · MONITORING</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/research/openai-cost-optimization">
+        <div class="tag"><span>PROVIDER</span><span>↗</span></div>
+        <h3>OpenAI cost optimization for production teams</h3>
+        <p>Smaller models, token discipline, caching, Batch API, and Flex processing in one playbook.</p>
+        <div class="meta"><span>OPENAI · APR '26</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/research/llm-cost-optimization">
+        <div class="tag"><span>GUIDE</span><span>↗</span></div>
+        <h3>The complete guide to LLM cost optimization</h3>
+        <p>Every technique, benchmark, and decision framework for reducing your OpenAI &amp; Anthropic bills.</p>
+        <div class="meta"><span>GUIDE · APR '26</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/research/semantic-caching">
+        <div class="tag"><span>TUTORIAL</span><span>↗</span></div>
+        <h3>Production semantic caching for LLM apps</h3>
+        <p>Fingerprinting, similarity thresholds, and invalidation — with a reference implementation.</p>
+        <div class="meta"><span>TUTORIAL · CODE</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/research/model-routing">
+        <div class="tag"><span>GUIDE</span><span>↗</span></div>
+        <h3>Model routing patterns that actually work</h3>
+        <p>A decision tree for flagship vs. budget model selection without quality regressions.</p>
+        <div class="meta"><span>GUIDE · BENCHMARKS</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/benchmarks">
+        <div class="tag"><span>DATA</span><span>↗</span></div>
+        <h3>LLM price-per-capability benchmark</h3>
+        <p>Cost-per-successful-task across GPT, Claude, Gemini, Mistral, Llama — sourced from public pricing and our own runs.</p>
+        <div class="meta"><span>UPDATED MONTHLY</span><span>FREE</span></div>
+      </a>
+      <a class="res-card" href="/case-studies">
+        <div class="tag"><span>CASE STUDIES</span><span>↗</span></div>
+        <h3>Customer engagements</h3>
+        <p>We're early-stage and don't yet have public case studies. We'll publish reconciled outcomes here as customers approve them.</p>
+        <div class="meta"><span>COMING SOON</span><span>HONEST</span></div>
+      </a>
+      <a class="res-card" href="/changelog">
+        <div class="tag"><span>CHANGELOG</span><span>↗</span></div>
+        <h3>What's new at LLM CFO</h3>
+        <p>Service updates, new provider adapters, audit-template improvements. Public release notes.</p>
+        <div class="meta"><span>WEEKLY</span><span>FREE</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta">
+  <div class="wrap">
+    <div>
+        <div class="eye">07 · Start here</div>
+      <h2>Book the audit. <em>Keep the savings.</em></h2>
+      <p>Two weeks. Read-only access. We return with a full map of your spend, ranked by waste, and a baseline our platform can track against. Free. No implementation commitment.</p>
+    </div>
+    <div class="cta-right">
+      <a class="btn btn-dark" href="/book">Book free audit →</a>
+      <a class="btn btn-ghost" href="mailto:hello@llmcfo.com">Talk to us</a>
+      <p class="fine">30-MIN DISCOVERY · READ-ONLY ACCESS · NDA + DPA ON REQUEST</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site" role="contentinfo">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="/" class="brand" aria-label="LLM CFO home">
+          <span class="brand-mark" aria-hidden="true">$</span>
+          <span class="brand-name">LLM CFO</span>
+        </a>
+        <p>Managed FinOps for AI. Audit, optimize, and reconcile LLM spend across OpenAI, Anthropic, Bedrock, Vertex, and Azure OpenAI — for teams where AI is a top-3 line item.</p>
+        <div class="foot-compliance">
+          <span class="c">READ-ONLY BY DEFAULT</span>
+          <span class="c">NDA + DPA ON REQUEST</span>
+          <span class="c">EARLY-STAGE</span>
+        </div>
+      </div>
+      <div>
+        <p class="foot-heading">Platform</p>
+        <ul>
+          <li><a href="#platform">How it works</a></li>
+          <li><a href="#techniques">Techniques</a></li>
+          <li><a href="#glossary">Vocabulary</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="/changelog">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="foot-heading">Research</p>
+        <ul>
+          <li><a href="/research/ai-finops">AI FinOps</a></li>
+          <li><a href="/research/llm-cost-monitoring">Cost monitoring</a></li>
+          <li><a href="/research/openai-cost-optimization">OpenAI cost opt.</a></li>
+          <li><a href="/benchmarks">Benchmarks</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="foot-heading">Company</p>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/case-studies">Case studies</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="mailto:hello@llmcfo.com">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="foot-heading">Legal</p>
+        <ul>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/security">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>// © 2026 LLM CFO, Inc. · llmcfo.com</span>
+      <span>// Reconciled &amp; signed · For teams where AI is a top-3 line item</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Panel tabs
+  (function(){
+    const tabs = document.querySelectorAll('.panel-tabs .tab');
+    const panes = document.querySelectorAll('.code .pane');
+    tabs.forEach(t => {
+      t.addEventListener('click', () => {
+        tabs.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+        t.classList.add('active'); t.setAttribute('aria-selected','true');
+        const key = t.dataset.tab;
+        panes.forEach(p => p.classList.toggle('active', p.dataset.pane === key));
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

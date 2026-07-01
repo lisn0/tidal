@@ -1,0 +1,76 @@
+---
+layout: "research.njk"
+permalink: "research/prompt-caching-explained.html"
+titleCore: "Prompt caching: OpenAI vs Anthropic vs Bedrock"
+description: "How provider-native prompt caching works, what it discounts, and how to structure prompts so the cache actually hits."
+slug: "prompt-caching-explained"
+schemaHeadline: "Prompt caching explained: OpenAI vs Anthropic vs Bedrock · LLM CFO"
+schemaDescription: "How provider-native prompt caching works, what it discounts, and how to structure prompts so the cache actually hits."
+breadcrumbName: "Prompt caching explained: OpenAI vs Anthropic vs Bedrock"
+datePublished: "2026-04-25"
+dateModified: "2026-07-01"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: >-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does prompt caching reduce LLM costs?","acceptedAnswer":{"@type":"Answer","text":"Prompt caching reuses the model state for repeated prompt prefixes instead of recomputing the full input every time. The provider charges a write fee when the prefix is first cached, then a discounted read fee on later matching requests. The output is identical to an uncached call, but long repeated input becomes much cheaper."}},{"@type":"Question","name":"Which parts of a prompt should be cached?","acceptedAnswer":{"@type":"Answer","text":"Put static content first and dynamic content last because the cache matches a prefix. System prompts, tool definitions, and few-shot examples belong in the stable prefix. User messages, retrieved documents, timestamps, session IDs, and other changing fields should stay in the suffix."}},{"@type":"Question","name":"What breaks prompt caching in production?","acceptedAnswer":{"@type":"Answer","text":"Small differences in the prefix break cache hits. Trailing whitespace, random tool order, drifting JSON key order, daily dates in the system prompt, or user/session IDs inside the prefix can silently disable caching. Deterministic prompt construction matters as much as turning the provider feature on."}},{"@type":"Question","name":"When does prompt caching not help?","acceptedAnswer":{"@type":"Answer","text":"Prompt caching does not help much for single-shot prompts with no shared prefix, prompts below provider minimum token thresholds, or workloads that burst once and then sit idle for hours. It works best when many requests share a long stable prefix over a short period."}}]}
+---
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Prompt caching, <em>explained.</em></h1>
+  <p class="updated">25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Prompt caching is the highest-ROI optimization in the playbook because it's <strong>provider-native</strong>, requires almost no code change, and discounts the most expensive token type on your bill: long, repeated input. Done right, you cut 30–60% off cache-eligible endpoints in a week.</p>
+
+  <h2>How it works (in one paragraph)</h2>
+  <p>The model's KV cache — the intermediate state computed when reading your prompt — is normally thrown away after each request. With prompt caching, the provider keeps that state for a few minutes and reuses it when your next request shares an identical prefix. You pay a small write fee the first time and a steeply discounted read fee on every subsequent hit. The output is identical to an uncached call.</p>
+
+  <h2>What each provider charges</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Provider cache</th><th scope="col">Mechanics</th></tr></thead>
+    <tbody>
+      <tr><td>OpenAI · cache-read</td><td>~50% off input price · 5–10 min TTL · auto on prompts ≥ 1024 tokens</td></tr>
+      <tr><td>Anthropic · ephemeral cache</td><td>~90% off input · 5 min TTL · 25% write premium · explicit `cache_control` block</td></tr>
+      <tr><td>Anthropic · extended cache</td><td>~90% off input · 1 hour TTL · 100% write premium · explicit beta header</td></tr>
+      <tr><td>AWS Bedrock (Anthropic on Bedrock)</td><td>matches Anthropic terms · region availability varies</td></tr>
+      <tr><td>Google Vertex (Gemini)</td><td>context cache · per-token-per-hour storage fee + ~75% read discount · explicit cache resource</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How to structure prompts so the cache hits</h2>
+  <ol>
+    <li><strong>Static content first, dynamic content last.</strong> The cache matches a <em>prefix</em>. Anything before the first byte of difference is cacheable; everything after is not.</li>
+    <li><strong>Move tools, system prompt, and few-shot examples into the prefix.</strong> These are the largest static blocks in most production prompts.</li>
+    <li><strong>Pin the user message, retrieved docs, and timestamps to the suffix.</strong> They change per request anyway.</li>
+    <li><strong>Don't interpolate the date into the system prompt.</strong> One unstable byte per day kills a year of cache hits.</li>
+    <li><strong>Anthropic-only:</strong> add `cache_control: {type: "ephemeral"}` to the last block you want cached. Up to 4 break-points.</li>
+  </ol>
+
+  <h2>Common mistakes that silently disable caching</h2>
+  <ul>
+    <li><strong>Trailing whitespace</strong> from a templating engine breaking byte-equality.</li>
+    <li><strong>Random tool order</strong> when serializing a `tools` array — sort it.</li>
+    <li><strong>JSON key order drift</strong> from a non-deterministic serializer.</li>
+    <li><strong>User ID or session ID</strong> embedded in the system prompt for "personalization." Move it to the user message.</li>
+    <li><strong>Streaming tools that re-issue the full conversation</strong> instead of reusing the conversation prefix. Check your SDK.</li>
+  </ul>
+
+  <h2>The cache-read token baseline trap</h2>
+  <p>Cache-read tokens are <strong>billed and reported separately</strong> from input tokens on Anthropic. Many teams set their pre-engagement baseline by summing all input-tokens lines and miss the cache-read line entirely — then "savings" mysteriously appear that are really just a column shift. Always reconcile against the raw provider invoice with cache-read as a distinct line item. We wrote up the trap in detail: <a href="/research/cache-read-tokens-baseline-trap">cache-read tokens: the baseline trap</a>.</p>
+
+  <h2>When prompt caching doesn't help</h2>
+  <ul>
+    <li><strong>Single-shot prompts</strong> with no shared prefix between users.</li>
+    <li><strong>Hot reloads of system prompt</strong> on every deploy. Pin it.</li>
+    <li><strong>Prompts under the minimum token threshold</strong> (OpenAI: 1024 tokens; Anthropic: 1024 for Sonnet, 2048 for Haiku, 1024 for Opus).</li>
+    <li><strong>Workloads bursting then idling for hours.</strong> Use Anthropic extended (1-hr) cache or accept the cold-start cost.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/cache-invalidation-cost">Cache invalidation cost: the hidden line item</a></li>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens: the baseline trap</a></li>
+    <li><a href="/research/semantic-caching">Semantic caching: when it works and when it doesn't</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

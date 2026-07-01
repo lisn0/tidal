@@ -1,0 +1,60 @@
+---
+layout: "research.njk"
+permalink: "research/genai-telemetry-schema.html"
+titleCore: "Your GenAI telemetry schema is now a cost decision"
+description: "Why OpenTelemetry GenAI conventions matter in 2026 for cost attribution, reasoning-token visibility, cache accounting, and agent workflow analysis."
+slug: "genai-telemetry-schema"
+schemaHeadline: "Your GenAI telemetry schema is now a cost decision · LLM CFO"
+schemaDescription: "Why OpenTelemetry GenAI conventions matter in 2026 for cost attribution, reasoning-token visibility, cache accounting, and agent workflow analysis."
+breadcrumbName: "Your GenAI telemetry schema is now a cost decision"
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · OBSERVABILITY</div>
+  <h1 class="page-title">Your GenAI telemetry schema is a <em>cost decision.</em></h1>
+  <p class="updated">Observability note · 12 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">For a long time, telemetry schema sounded like a boring implementation detail. In 2026, that is changing. If your GenAI observability model cannot separate reasoning tokens, cache-read tokens, workflow names, and tool spans, then your cost analytics are weaker than they look.</p>
+
+  <h2>Why this matters now</h2>
+  <p>OpenTelemetry's GenAI conventions are getting richer in exactly the places AI cost control needs most. There are now explicit concepts for input tokens, output tokens, reasoning output tokens, cache-read tokens, workflows, retrievals, and tool execution spans. That is not just observability polish. It changes what teams can attribute, compare, and optimize.</p>
+
+  <h2>The old dashboard problem</h2>
+  <p>Legacy dashboards often flatten everything into one row per request: model, input tokens, output tokens, done. That was barely enough even for simple chat. It breaks down once agents, tools, retrieval, reasoning, and caching enter the picture. At that point, poor telemetry structure becomes an economic blind spot.</p>
+
+  <h2>What a better schema gives you</h2>
+  <ul>
+    <li><strong>Reasoning-token visibility.</strong> Even when the content is hidden, the cost category should not be.</li>
+    <li><strong>Cache-read accounting.</strong> Essential for prompt-caching economics.</li>
+    <li><strong>Workflow attribution.</strong> Cost by workflow, not only by endpoint.</li>
+    <li><strong>Tool-span analysis.</strong> Which tool path actually drove the bill.</li>
+  </ul>
+
+  <div class="callout"><strong>Simple rule:</strong> if your schema cannot express the thing you want to optimize, the dashboard will hide the waste instead of exposing it.</div>
+
+  <h2>Why this is bigger than one vendor</h2>
+  <p>Good schema design lowers switching cost and reduces reporting drift across providers, gateways, and frameworks. That matters because AI stacks are increasingly hybrid. A common telemetry shape gives teams a better shot at consistent chargeback, anomaly detection, and optimization ranking even when the underlying vendors differ.</p>
+
+  <h2>What teams should instrument first</h2>
+  <ol>
+    <li><strong>Provider and model identifiers</strong></li>
+    <li><strong>Input, output, reasoning, and cache-read token counts where available</strong></li>
+    <li><strong>Workflow or feature name</strong></li>
+    <li><strong>Tool execution spans</strong></li>
+    <li><strong>Retry and error metadata</strong></li>
+  </ol>
+
+  <h2>What this changes for FinOps</h2>
+  <p>AI FinOps keeps moving closer to engineering telemetry. The better your schema, the easier it is to connect operational behavior to cost behavior. That is why instrumentation quality is turning into a financial-control issue, not just an SRE issue.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a></li>
+    <li><a href="/research/ai-finops">AI FinOps: the operating model for LLM spend</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

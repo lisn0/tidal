@@ -1,0 +1,60 @@
+---
+layout: "research.njk"
+permalink: "research/prompt-caching-2026.html"
+titleCore: "Prompt caching in 2026: why teams still leave money on the table"
+description: "Prompt caching is still the easiest win in 2026, yet many teams are breaking their cache prefixes, missing discounts, and misreading the economics."
+slug: "prompt-caching-2026"
+schemaHeadline: "Prompt caching in 2026: why teams still leave money on the table · LLM CFO"
+schemaDescription: "Prompt caching is still the easiest win in 2026, yet many teams are breaking their cache prefixes, missing discounts, and misreading the economics."
+breadcrumbName: "Prompt caching in 2026: why teams still leave money on the table"
+datePublished: "2026-05-01"
+dateModified: "2026-06-11"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · TREND</div>
+  <h1 class="page-title">Prompt caching in <em>2026.</em></h1>
+  <p class="updated">Trend note · 1 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Prompt caching is still one of the highest-ROI optimizations available to production AI teams. The surprising part in 2026 is not that it works. It is that so many teams are still structured in ways that prevent it from paying off.</p>
+
+  <h2>The easy story versus the real story</h2>
+  <p>The easy story is simple: keep repeated context stable, get cheaper input tokens, enjoy faster requests. The real story is messier. Agent frameworks reorder tool definitions. Retrieval systems inject unstable context too early. Prompt templates sneak timestamps into system instructions. Small implementation details quietly destroy cache reuse.</p>
+
+  <h2>Why this matters more now</h2>
+  <p>As agent-style workloads grow, repeated long-horizon context becomes more common. That should make caching more valuable. But it also creates more opportunities to break cacheable prefixes across turns. The result is that teams think they have "enabled caching" while the architecture still behaves like a cold-start machine.</p>
+
+  <h2>The 2026 mistake pattern</h2>
+  <ul>
+    <li><strong>Dynamic data too early.</strong> Timestamps, user IDs, or session-specific metadata inside the stable prefix.</li>
+    <li><strong>Non-deterministic tool serialization.</strong> Same tools, different byte order, no cache hit.</li>
+    <li><strong>RAG before stability.</strong> Retrieved context is inserted before the truly reusable system and few-shot blocks.</li>
+    <li><strong>Long agent loops.</strong> Each turn mutates enough context to invalidate the next one.</li>
+  </ul>
+
+  <h2>What teams should be optimizing for</h2>
+  <p>The interesting 2026 lesson is that prompt caching is now as much an architecture problem as a provider feature. The best teams are designing for stable prefixes on purpose. They are separating durable context from per-request context, sorting tool schemas deterministically, and treating cache hit rate as a real KPI rather than a lucky side effect.</p>
+
+  <h2>Why this is still a trend story</h2>
+  <p>This topic is becoming more important because providers are making cached paths more meaningful economically, while agentic products are making long repeated context more common operationally. That combination means the upside is growing at the same time the failure modes are getting subtler.</p>
+
+  <div class="callout"><strong>The practical takeaway:</strong> in 2026, "we turned on prompt caching" is not the right question. The right question is whether your request architecture was built to preserve stable prefixes across real production traffic.</div>
+
+  <h2>What to do next</h2>
+  <ol>
+    <li>Measure cache-read or cached-token usage separately from ordinary input tokens.</li>
+    <li>Audit every source of instability in the system prompt and tools block.</li>
+    <li>Push dynamic context later in the request whenever possible.</li>
+    <li>Treat cache hit rate as a monitored cost metric, not a hidden implementation detail.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/cache-invalidation-cost">Cache invalidation cost: the hidden line item</a></li>
+    <li><a href="/research/conversation-state-costs">Conversation state is a cost lever now</a></li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching explained: OpenAI vs Anthropic vs Bedrock</a></li>
+    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens: the baseline trap</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

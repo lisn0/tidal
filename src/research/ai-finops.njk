@@ -1,0 +1,79 @@
+---
+layout: "research.njk"
+permalink: "research/ai-finops.html"
+titleCore: "AI FinOps: the operating model for LLM spend"
+description: "What AI FinOps actually means in production: how to measure, allocate, optimize, and reconcile LLM spend across providers, teams, and features."
+slug: "ai-finops"
+schemaHeadline: "AI FinOps: the operating model for LLM spend · LLM CFO"
+schemaDescription: "What AI FinOps actually means in production: how to measure, allocate, optimize, and reconcile LLM spend across providers, teams, and features."
+breadcrumbName: "AI FinOps: the operating model for LLM spend"
+datePublished: "2026-04-29"
+dateModified: "2026-06-11"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · CATEGORY</div>
+  <h1 class="page-title">AI <em>FinOps.</em></h1>
+  <p class="updated">Operating model guide · 29 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">AI FinOps is the discipline of measuring, allocating, optimizing, and reconciling AI spend against business value. In practice, that means making LLM usage visible by team, feature, customer, and provider, then applying the same financial rigor to token spend that cloud teams already apply to compute and storage.</p>
+
+  <h2>Why AI FinOps exists at all</h2>
+  <p>Traditional cloud FinOps assumes infrastructure-like units: instances, storage, bandwidth, reservations. LLM systems behave differently. Cost is driven by prompts, output length, retries, model choice, cache behavior, tool calls, and agent loops. The unit of waste is not only infrastructure. It is architectural.</p>
+  <p>That is why AI FinOps sits between engineering, finance, and product. Finance needs reconciled reporting. Engineering needs request-level visibility. Product needs to know whether a feature is economically viable at current usage and quality.</p>
+
+  <h2>The four jobs of AI FinOps</h2>
+  <ol>
+    <li><strong>Measure.</strong> Track tokens, tool calls, latency, model mix, cache hits, and estimated cost per request.</li>
+    <li><strong>Allocate.</strong> Attribute spend to teams, features, environments, customers, and internal cost centers.</li>
+    <li><strong>Optimize.</strong> Reduce waste with routing, batching, prompt cleanup, caching, and quota controls.</li>
+    <li><strong>Reconcile.</strong> Tie internal estimates back to provider or cloud billing truth every month.</li>
+  </ol>
+
+  <h2>The minimum data model</h2>
+  <p>Every model call should be tagged with provider, model, feature, environment, customer or workspace, and request path. You also want input tokens, output tokens, cache-read or cache-write tokens where available, latency, retry count, and estimated cost. Without that, AI FinOps turns into month-end guesswork.</p>
+  <p><a href="/research/genai-telemetry-schema">OpenTelemetry's GenAI semantic conventions</a> are useful here because they give teams a common schema for token usage, model identity, conversation identifiers, and retrieval context. Even if you never expose raw traces to finance, the discipline of structured telemetry keeps cost data consistent.</p>
+
+  <h2>Where the real savings usually come from</h2>
+  <p>AI FinOps is not mostly about negotiating list prices. Most savings come from changing the request path.</p>
+  <ul>
+    <li><strong>Model mix.</strong> Move easy work to cheaper default models and reserve frontier models for hard or high-value calls.</li>
+    <li><strong>Prompt cleanup.</strong> Remove repeated instructions, stale examples, and oversized retrieval payloads.</li>
+    <li><strong>Prompt caching.</strong> Push stable prefixes into provider-native caching where supported.</li>
+    <li><strong>Batching.</strong> Route evals, backfills, enrichment, and other offline tasks to batch processing.</li>
+    <li><strong>Semantic caching.</strong> Reuse near-duplicate answers where the workload tolerates it.</li>
+    <li><strong>Guardrails.</strong> Stop runaway retries, agent loops, and expensive tool chains.</li>
+  </ul>
+
+  <h2>What a good AI FinOps stack looks like</h2>
+  <p>The best stack usually has four layers. Provider or cloud billing is the system of record. A gateway or proxy layer centralizes routing and policy. An observability layer adds product context. A warehouse or BI layer joins AI spend to business dimensions like account, plan, and margin.</p>
+  <div class="callout"><strong>Rule of thumb:</strong> if finance, platform, and product all use different numbers for AI spend, you do not have AI FinOps yet. You have dashboards.</div>
+
+  <h2>Which metrics matter most</h2>
+  <ul>
+    <li><strong>Spend by feature.</strong> Where the money actually goes.</li>
+    <li><strong>Spend by customer or workspace.</strong> Essential for chargebacks and profitability.</li>
+    <li><strong>Model mix.</strong> Which traffic is hitting expensive models by default.</li>
+    <li><strong>Average input and output tokens.</strong> The fastest way to spot bloated prompts and verbose responses.</li>
+    <li><strong>Cache hit rate.</strong> Especially important for OpenAI and Anthropic prompt caching.</li>
+    <li><strong>Retry and tool-call rate.</strong> Hidden cost often sits here.</li>
+    <li><strong>Reconciled variance.</strong> Difference between internal estimates and actual billed spend.</li>
+  </ul>
+
+  <h2>Who owns AI FinOps</h2>
+  <p>No single team can do it alone. Engineering owns instrumentation and optimization. Finance owns reporting and controls. Product owns value and traffic intent. A workable operating model usually gives one platform or FinOps lead responsibility for the scorecard, then pushes optimization into the engineering teams that own the expensive endpoints.</p>
+
+  <h2>When teams need help</h2>
+  <p>The inflection point is usually when AI becomes a top-three line item or when no one can explain the invoice by feature. At that stage, you need more than prompt advice. You need baseline reconciliation, ranked savings opportunities, and a governance model that survives the next provider or product launch.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/genai-telemetry-schema">Your GenAI telemetry schema is now a cost decision</a></li>
+    <li><a href="/research/ai-governance-framework">AI governance framework</a></li>
+    <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
+    <li><a href="/research/llm-cost-optimization">LLM cost optimization: a practical guide</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

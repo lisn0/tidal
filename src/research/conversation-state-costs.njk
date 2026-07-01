@@ -1,0 +1,64 @@
+---
+layout: "research.njk"
+permalink: "research/conversation-state-costs.html"
+titleCore: "Conversation state is a cost lever now"
+description: "Why conversation state and previous-response handling are now real cost levers in 2026, especially for multi-step AI workflows and tool use."
+slug: "conversation-state-costs"
+schemaHeadline: "Conversation state is a cost lever now · LLM CFO"
+schemaDescription: "Why conversation state and previous-response handling are now real cost levers in 2026, especially for multi-step AI workflows and tool use."
+breadcrumbName: "Conversation state is a cost lever now"
+datePublished: "2026-05-04"
+dateModified: "2026-05-04"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · ARCHITECTURE</div>
+  <h1 class="page-title">Conversation state is a <em>cost lever.</em></h1>
+  <p class="updated">Architecture note · 4 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">In 2026, conversation state is no longer just a product-design concern. It is part of your cost architecture. Teams that keep re-sending too much history, or restart reasoning unnecessarily between tool steps, are paying avoidable token tax on every multi-step workflow.</p>
+
+  <h2>Why this matters more now</h2>
+  <p>OpenAI's newer conversation-state and reasoning guidance makes the shift clear: context windows now include input, output, and reasoning tokens. Meanwhile, multi-step workflows increasingly depend on previous responses, tool outputs, and intermediate state. Once these flows get longer, how you carry state becomes an economic decision.</p>
+
+  <h2>The expensive mistake</h2>
+  <p>The expensive pattern is simple: every turn replays too much history, too much tool output, and too much irrelevant context. The system feels stateless from an application perspective, but the model keeps paying to re-ingest what it already effectively knows.</p>
+
+  <h2>What better state handling does</h2>
+  <ul>
+    <li><strong>Reduces repeated input tokens.</strong></li>
+    <li><strong>Reduces the chance of restarting reasoning work.</strong></li>
+    <li><strong>Keeps long workflows from inflating into giant prompts.</strong></li>
+    <li><strong>Makes tool-based conversations more cache- and context-friendly.</strong></li>
+  </ul>
+
+  <h2>Where teams should look first</h2>
+  <ol>
+    <li><strong>Tool loops.</strong> Are you re-sending full history between every function call?</li>
+    <li><strong>Session summaries.</strong> Are you summarizing older turns instead of carrying raw transcript forever?</li>
+    <li><strong>Previous-response chaining.</strong> Are you using API features that preserve relevant context instead of reconstructing it manually every time?</li>
+    <li><strong>Prompt boundaries.</strong> Have you separated durable instructions from noisy conversational state?</li>
+  </ol>
+
+  <div class="callout"><strong>Cost takeaway:</strong> many teams think they have a model-cost problem when they really have a conversation-state problem.</div>
+
+  <h2>Why this pairs with prompt caching</h2>
+  <p>Conversation-state discipline and prompt caching reinforce each other. Better state handling reduces unnecessary replay, while stable prompt structure increases the portion of that replay that becomes cheap. If your state is chaotic, your cache will be chaotic too.</p>
+
+  <h2>What to measure</h2>
+  <ul>
+    <li><strong>Average context size by turn number</strong></li>
+    <li><strong>Input-token growth across long sessions</strong></li>
+    <li><strong>Model calls per completed workflow</strong></li>
+    <li><strong>Cost per tool step</strong></li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/prompt-caching-2026">Prompt caching in 2026</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

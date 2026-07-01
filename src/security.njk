@@ -1,0 +1,98 @@
+---
+layout: "page.njk"
+permalink: "security.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security · LLM CFO</title>
+  <meta name="description" content="How LLM CFO handles your data: read-only by default, no prompt content storage, NDA + DPA on request." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/security" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/security" />
+  <meta property="og:title" content="Security · LLM CFO" />
+  <meta property="og:description" content="How LLM CFO handles your data: read-only by default, no prompt content storage, NDA + DPA on request." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Security · LLM CFO" />
+  <meta name="twitter:description" content="How LLM CFO handles your data: read-only by default, no prompt content storage, NDA + DPA on request." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebPage","name":"Security · LLM CFO","description":"How LLM CFO handles your data: read-only by default, no prompt content storage, NDA + DPA on request.","url":"https://llmcfo.com/security","isPartOf":{"@type":"WebSite","name":"LLM CFO","url":"https://llmcfo.com/"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+  </script>
+---
+  <div class="eye">TRUST</div>
+  <h1 class="page-title">Security &amp; <em>data handling.</em></h1>
+  <p class="updated">Last updated: 24 April 2026</p>
+
+  <p class="lede">We're an early-stage firm. We don't have SOC 2 yet. Here's exactly what we do — and don't do — with your data, written plainly so you can decide if it's enough for your security review.</p>
+
+  <div class="callout"><strong>Honest baseline:</strong> read-only access by default · no prompt or output content stored · NDA + DPA signed before any data exchange · SOC 2 Type II is on the roadmap, not in hand.</div>
+
+  <h2>1. What we touch</h2>
+  <ul>
+    <li><strong>Provider invoices &amp; usage exports</strong> — OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, Azure OpenAI billing CSVs/JSON.</li>
+    <li><strong>Gateway logs</strong> — LiteLLM, Helicone, Langfuse, OpenRouter, or your own proxy. Aggregated metadata only (model, token counts, latency, request volume).</li>
+    <li><strong>Read-only API keys</strong> with billing-export scope, never write keys, never production model keys.</li>
+  </ul>
+
+  <h2>2. What we don't touch</h2>
+  <ul>
+    <li>Prompt content, model output, and end-user PII are <strong>not</strong> stored in our systems by default.</li>
+    <li>If a specific optimization (e.g. semantic cache tuning) needs prompt samples, we ask explicit per-feature approval and scope sampling tightly. You can revoke any time.</li>
+    <li>We never use your data to train any model. We never sell or share with third parties.</li>
+  </ul>
+
+  <h2>3. How we handle credentials</h2>
+  <ul>
+    <li>Credentials live in a password manager with hardware-key-protected access. They are never committed to git, never pasted into Slack/email, never embedded in reports.</li>
+    <li>You can rotate or revoke at any time without notice. We log every credential use to your engagement audit trail.</li>
+    <li>Engagement ends → credentials are revoked by you and purged from our manager within 7 days.</li>
+  </ul>
+
+  <h2>4. Where data lives</h2>
+  <ul>
+    <li>Encrypted databases (AES-256 at rest, TLS 1.2+ in transit). Region selectable EU or US at engagement kickoff.</li>
+    <li>Backups are encrypted and retained 30 days.</li>
+    <li>Access is limited to operators assigned to your engagement; access is logged.</li>
+  </ul>
+
+  <h2>5. Sub-processors</h2>
+  <p>We disclose every sub-processor in the DPA. Current list (subject to change with notice):</p>
+  <table class="kv">
+    <thead><tr><th scope="col">Subprocessor</th><th scope="col">Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Cloud hosting</td><td>AWS (us-east-1 / eu-west-1)</td></tr>
+      <tr><td>Email</td><td>Google Workspace</td></tr>
+      <tr><td>Analytics (this site)</td><td>Google Analytics 4 after consent</td></tr>
+      <tr><td>Payments</td><td>Stripe</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Compliance</h2>
+  <ul>
+    <li><strong>GDPR / UK GDPR / CCPA</strong> — DPA available on request. EU/UK transfers covered by SCCs.</li>
+    <li><strong>HIPAA</strong> — not currently set up. Don't send us PHI.</li>
+    <li><strong>SOC 2 Type II</strong> — on roadmap. We can share our controls memo and pen-test summary under NDA in the meantime.</li>
+  </ul>
+
+  <h2>7. Reporting a vulnerability</h2>
+  <p>Email <a href="mailto:security@llmcfo.com">security@llmcfo.com</a>. We acknowledge within 2 business days. See also <a href="/.well-known/security.txt">/.well-known/security.txt</a>.</p>
+
+  <h2>8. Incident response</h2>
+  <p>Security incidents involving customer data are disclosed to affected customers within 72 hours of confirmation. Post-mortems are shared within 14 days.</p>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

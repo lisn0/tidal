@@ -1,0 +1,62 @@
+---
+layout: "research.njk"
+permalink: "research/multimodal-costs.html"
+titleCore: "Multimodal costs sneak up faster than text costs"
+description: "Image, audio, and realtime workloads are becoming a bigger AI cost center in 2026. Here's where multimodal spend grows and how teams keep it under control."
+slug: "multimodal-costs"
+schemaHeadline: "Multimodal costs sneak up faster than text costs · LLM CFO"
+schemaDescription: "Image, audio, and realtime workloads are becoming a bigger AI cost center in 2026. Here's where multimodal spend grows and how teams keep it under control."
+breadcrumbName: "Multimodal costs sneak up faster than text costs"
+datePublished: "2026-05-07"
+dateModified: "2026-05-07"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · MULTIMODAL</div>
+  <h1 class="page-title">Multimodal costs <em>sneak up.</em></h1>
+  <p class="updated">Cost note · 7 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A lot of teams still manage AI cost like it is mostly a text-token problem. That is getting less true every quarter. Once image inputs, image generation, audio, or realtime sessions enter the product, cost grows in new directions and the old dashboards stop telling the full story.</p>
+
+  <h2>Why this matters now</h2>
+  <p>OpenAI's current pricing makes the shape of the issue obvious. Image tokens, audio tokens, realtime audio, and image generation each carry their own pricing logic, and some of them are materially more expensive than plain text input. The result is that a product can feel "chat-like" from the outside while actually being driven by image, audio, or realtime spend under the hood.</p>
+
+  <h2>The common blind spot</h2>
+  <p>Teams often aggregate everything into one AI bill and lose the modality split. Then they try to optimize text prompts while the real growth is coming from image detail settings, large input images, long audio sessions, or repeated multimodal retries.</p>
+
+  <h2>Where the spend usually appears</h2>
+  <ul>
+    <li><strong>Vision inputs.</strong> Large images and high-detail inspection paths.</li>
+    <li><strong>Image generation.</strong> Resolution and quality tiers change the economics fast.</li>
+    <li><strong>Realtime audio.</strong> Long sessions can quietly accumulate high token volume.</li>
+    <li><strong>Multimodal retries.</strong> Re-sending images or audio after validation failures.</li>
+  </ul>
+
+  <h2>How teams keep it under control</h2>
+  <ol>
+    <li><strong>Track spend by modality, not just by model.</strong></li>
+    <li><strong>Downshift quality where the user value is low.</strong> Not every image generation needs the highest tier.</li>
+    <li><strong>Use lower-fidelity inspection when possible.</strong></li>
+    <li><strong>Limit session length and repeated uploads.</strong></li>
+    <li><strong>Separate realtime from offline workflows.</strong> They should not share the same economic assumptions.</li>
+  </ol>
+
+  <div class="callout"><strong>Simple rule:</strong> if a feature touches images, audio, or realtime, break it out as its own cost center before you assume text optimization will fix it.</div>
+
+  <h2>What to measure</h2>
+  <ul>
+    <li><strong>Spend by modality</strong></li>
+    <li><strong>Average cost per image task</strong></li>
+    <li><strong>Average audio session duration</strong></li>
+    <li><strong>Retry rate on multimodal requests</strong></li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
+    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

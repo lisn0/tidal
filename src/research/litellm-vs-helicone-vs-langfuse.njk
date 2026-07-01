@@ -1,0 +1,143 @@
+---
+layout: "research.njk"
+permalink: "research/litellm-vs-helicone-vs-langfuse.html"
+titleCore: "LiteLLM vs Helicone vs LangFuse (2026): how to choose"
+description: "LiteLLM is a gateway, Helicone is a logging proxy, LangFuse is an observability platform. A side-by-side comparison of what each does, what it costs you to pick wrong, and when to run LiteLLM and LangFuse together."
+slug: "litellm-vs-helicone-vs-langfuse"
+schemaHeadline: "LiteLLM vs Helicone vs LangFuse (2026): how to choose"
+schemaDescription: "LiteLLM is a gateway, Helicone is a logging proxy, LangFuse is an observability platform. A side-by-side comparison of what each does, what it costs you to pick wrong, and when to run LiteLLM and LangFuse together."
+breadcrumbName: "LiteLLM vs Helicone vs LangFuse"
+datePublished: "2026-04-25"
+dateModified: "2026-06-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the difference between LiteLLM and LangFuse?","acceptedAnswer":{"@type":"Answer","text":"LiteLLM is a gateway/SDK that sits on the request path: it unifies the API across ~100 providers and adds routing, fallbacks, virtual keys and per-team budgets. LangFuse is an observability platform you instrument your code with: it stores trace trees, runs evals, and manages prompts. LiteLLM controls and routes traffic; LangFuse explains and scores it. They do not overlap, and the common production stack runs both."}},{"@type":"Question","name":"Is Helicone or LangFuse better for cost tracking?","acceptedAnswer":{"@type":"Answer","text":"Helicone gets you per-user and per-key cost attribution fastest — change one base URL and you have a dashboard the same afternoon. LangFuse ties cost to full multi-step traces and evals, which is more useful once you are debugging agents. Neither number is authoritative: both derive cost from a price table that can lag, so reconcile against the provider invoice."}},{"@type":"Question","name":"Can you use LiteLLM and LangFuse together?","acceptedAnswer":{"@type":"Answer","text":"Yes — that is the standard combination. LiteLLM handles routing and budgets on the hot path; LangFuse handles tracing, evals and prompt versioning. LiteLLM ships a built-in LangFuse callback, so traces are emitted automatically. They address different layers and do not compete."}},{"@type":"Question","name":"Do I still need Helicone if I use LiteLLM?","acceptedAnswer":{"@type":"Answer","text":"Usually not. Helicone and LiteLLM both want to be the proxy on the hot path, so running both is redundant. Pick LiteLLM when you need multi-provider routing and budgets; pick Helicone alone when you have one provider and want logs with zero code change. For deep agent tracing add LangFuse, not Helicone."}}]}
+---
+  <div class="eye">RESEARCH · TOOLING</div>
+  <h1 class="page-title">LiteLLM vs Helicone vs <em>LangFuse.</em></h1>
+  <p class="updated">Updated 21 June 2026 · first published 25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">These three tools get conflated because they all sit between your app and the model providers. They solve different problems. Picking the wrong one is one of the more expensive mistakes a platform team can make — not because of license cost, but because ripping a gateway out of a hot path takes a quarter.</p>
+
+  <h2>At a glance</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">&nbsp;</th><th scope="col">LiteLLM</th><th scope="col">Helicone</th><th scope="col">LangFuse</th></tr></thead>
+    <tbody>
+      <tr><td>What it is</td><td>Gateway / SDK</td><td>Logging proxy</td><td>Observability platform</td></tr>
+      <tr><td>Sits on the hot path</td><td>Yes (routes traffic)</td><td>Yes (passthrough)</td><td>No (SDK instrumentation)</td></tr>
+      <tr><td>Multi-provider routing &amp; fallback</td><td>Yes</td><td>No</td><td>No</td></tr>
+      <tr><td>Per-team budgets &amp; virtual keys</td><td>Yes</td><td>Basic alerts</td><td>No</td></tr>
+      <tr><td>Cost attribution</td><td>Token-table, per request</td><td>Per user / per key</td><td>Per trace</td></tr>
+      <tr><td>Multi-step agent tracing</td><td>Weak (flat)</td><td>Weak</td><td>Strong (span trees)</td></tr>
+      <tr><td>Evals &amp; prompt versioning</td><td>No</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Install effort</td><td>Medium (proxy/SDK)</td><td>Low (base-URL swap)</td><td>Higher (instrument code)</td></tr>
+      <tr><td>Self-host</td><td>Single container</td><td>Yes</td><td>Postgres + ClickHouse</td></tr>
+    </tbody>
+  </table>
+  <p>Short version: <strong>LiteLLM</strong> routes and budgets, <strong>Helicone</strong> logs with near-zero setup, <strong>LangFuse</strong> traces and evaluates. The rows below explain each in depth, and <a href="#pick">How to pick</a> maps needs to tools.</p>
+
+  <h2>The one-line version</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Tool</th><th scope="col">Primary role</th></tr></thead>
+    <tbody>
+      <tr><td>LiteLLM</td><td>a multi-provider <strong>gateway / SDK</strong> — unify the API surface, route, fall over, key-vault</td></tr>
+      <tr><td>Helicone</td><td>a <strong>logging proxy</strong> — passthrough that captures every request and gives you a dashboard</td></tr>
+      <tr><td>LangFuse</td><td>an <strong>observability platform</strong> — traces, evals, prompt management, datasets, experiments</td></tr>
+    </tbody>
+  </table>
+
+  <h2>LiteLLM</h2>
+  <p>Open-source Python SDK + standalone proxy. Speaks the OpenAI Chat Completions schema and translates to ~100 providers underneath. Used as a library in code, or as a drop-in HTTP proxy your services point at.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>One API surface across OpenAI, Anthropic, Bedrock, Vertex, Azure, OpenRouter, Together, Fireworks, etc.</li>
+    <li>Virtual keys, per-team budgets, rate limiting, fallbacks, retries, timeouts.</li>
+    <li>Cost tracking computed locally from token counts × a built-in price table.</li>
+    <li>Self-hostable; the proxy is a single container.</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>Rich tracing for multi-step agents — flat request/response only.</li>
+    <li>Prompt management, version control, A/B testing of prompts.</li>
+    <li>Eval and dataset workflows.</li>
+    <li>Quality of the cost table depends on how recently it was updated; verify against your invoice.</li>
+  </ul>
+
+  <h2>Helicone</h2>
+  <p>HTTP proxy in front of provider endpoints. Your code keeps calling `api.openai.com` (via a base-URL swap), Helicone logs every request and exposes them in a dashboard. Open-source self-host or hosted.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>Easiest possible install — change a base URL, get logs.</li>
+    <li>Per-user / per-key cost attribution, simple budget alerts, prompt search across history.</li>
+    <li>Caching layer (built-in) for exact-match request reuse.</li>
+    <li>Property-based filters (custom headers tag traffic by feature/customer).</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>Multi-provider abstraction — it's a proxy per provider, not a unified API.</li>
+    <li>Deep multi-step agent tracing.</li>
+    <li>Structured evals and dataset-driven experiments.</li>
+    <li>Adds a hop on the hot path; latency depends on hosted region or your self-host placement.</li>
+  </ul>
+
+  <h2>LangFuse</h2>
+  <p>SDK-based observability platform. You instrument your code with traces and spans (or use the LangChain/LlamaIndex integration); LangFuse stores the trace tree, lets you score traces, run evals, manage prompts, and curate datasets.</p>
+  <p><strong>What it does well:</strong></p>
+  <ul>
+    <li>Multi-step agent traces with parent/child spans, tool calls, retrieved context.</li>
+    <li>Prompt management with versioning, environment promotion, and template variables.</li>
+    <li>Eval pipelines: LLM-as-judge, custom Python scorers, regression dashboards.</li>
+    <li>Dataset curation from production traces — turn real traffic into a test set.</li>
+    <li>Open-source self-host on Postgres + ClickHouse.</li>
+  </ul>
+  <p><strong>What it doesn't do (or does weakly):</strong></p>
+  <ul>
+    <li>It is not a gateway. It does not route, fall over, or rate-limit.</li>
+    <li>Cost numbers are derived from a price table you maintain (or upstream defaults that lag).</li>
+    <li>Heavier integration — instrumentation everywhere your code calls a model, not a single base-URL swap.</li>
+  </ul>
+
+  <h2 id="pick">How to pick</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Need</th><th scope="col">Recommended tool</th></tr></thead>
+    <tbody>
+      <tr><td>You need one API across many providers + budgets + fallback</td><td>LiteLLM</td></tr>
+      <tr><td>You want logs and cost attribution this afternoon, no code refactor</td><td>Helicone</td></tr>
+      <tr><td>You're building agents and need real traces, evals, and prompt versioning</td><td>LangFuse</td></tr>
+      <tr><td>You need all three things</td><td>LiteLLM as gateway + LangFuse as observability layer; skip Helicone</td></tr>
+      <tr><td>You're a small team with one provider and one product surface</td><td>Helicone alone is often enough</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Combining them is normal</h2>
+  <p>The common production stack is LiteLLM for routing/budgets and LangFuse for tracing/evals. They don't overlap. LiteLLM ships a built-in LangFuse callback so traces are emitted automatically. Helicone is rarely run alongside LiteLLM because both want to be the proxy on the hot path; pick one.</p>
+
+  <h2>The honest caveats</h2>
+  <ul>
+    <li><strong>All three are moving fast.</strong> Feature parity changes quarterly. The above reflects the state we see in current engagements; verify before betting a quarter on it.</li>
+    <li><strong>Don't trust any tool's cost numbers as the source of truth.</strong> Reconcile against the provider invoice. Price tables drift, cache-read accounting is subtle (<a href="/research/cache-read-tokens-baseline-trap">see the baseline trap</a>).</li>
+    <li><strong>Self-host vs. hosted is a real decision.</strong> Sending prompts to a third-party SaaS is a data-handling event. Read your DPA before sending PII through any of these.</li>
+    <li><strong>None of these tools save money on their own.</strong> They make spend visible. The savings come from acting on what you see.</li>
+  </ul>
+
+  <h2>Common questions</h2>
+  <h3>What is the difference between LiteLLM and LangFuse?</h3>
+  <p>LiteLLM is a gateway/SDK that sits on the request path — it unifies the API across ~100 providers and adds routing, fallbacks, virtual keys and per-team budgets. LangFuse is an observability platform you instrument your code with — it stores trace trees, runs evals, and manages prompts. LiteLLM controls and routes traffic; LangFuse explains and scores it. They don't overlap, and the common production stack runs both.</p>
+  <h3>Is Helicone or LangFuse better for cost tracking?</h3>
+  <p>Helicone gets you per-user and per-key cost attribution fastest — change one base URL and you have a dashboard the same afternoon. LangFuse ties cost to full multi-step traces and evals, which is more useful once you're debugging agents. Neither number is authoritative: both derive cost from a price table that can lag, so reconcile against the provider invoice.</p>
+  <h3>Can you use LiteLLM and LangFuse together?</h3>
+  <p>Yes — that's the standard combination. LiteLLM handles routing and budgets on the hot path; LangFuse handles tracing, evals and prompt versioning. LiteLLM ships a built-in LangFuse callback, so traces are emitted automatically.</p>
+  <h3>Do I still need Helicone if I use LiteLLM?</h3>
+  <p>Usually not. Helicone and LiteLLM both want to be the proxy on the hot path, so running both is redundant. Pick LiteLLM for multi-provider routing and budgets; pick Helicone alone when you have one provider and want logs with zero code change. For deep agent tracing, add LangFuse — not Helicone.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens: the baseline trap</a></li>
+    <li><a href="/research/model-routing">Model routing</a></li>
+    <li><a href="/glossary">Glossary</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

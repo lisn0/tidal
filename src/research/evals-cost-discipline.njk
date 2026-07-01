@@ -1,0 +1,61 @@
+---
+layout: "research.njk"
+permalink: "research/evals-cost-discipline.html"
+titleCore: "Evals need cost discipline too"
+description: "Evals are essential, but in 2026 they are also a real spend category. Here's how teams keep evaluation quality high without turning eval pipelines into a hidden AI bill."
+slug: "evals-cost-discipline"
+schemaHeadline: "Evals need cost discipline too · LLM CFO"
+schemaDescription: "Evals are essential, but in 2026 they are also a real spend category. Here's how teams keep evaluation quality high without turning eval pipelines into a hidden AI bill."
+breadcrumbName: "Evals need cost discipline too"
+datePublished: "2026-05-07"
+dateModified: "2026-05-07"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · EVALS</div>
+  <h1 class="page-title">Evals need cost <em>discipline.</em></h1>
+  <p class="updated">Operations note · 7 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Everybody says to run more evals. That advice is directionally right, but incomplete. In production teams, evals are not free. They consume tokens, grader runs, reasoning time, and often repeated comparison passes. By 2026, eval pipelines are becoming a real spend category of their own.</p>
+
+  <h2>Why eval spend gets ignored</h2>
+  <p>Evals feel like internal tooling, so they often escape the same scrutiny as customer-facing inference. The problem is that successful AI teams run evals constantly: before releases, after prompt changes, during routing changes, and during regression testing. That means the volume can get large fast.</p>
+
+  <h2>Where the bill comes from</h2>
+  <ul>
+    <li><strong>Large gold sets.</strong> Every run multiplies the same dataset cost.</li>
+    <li><strong>High-end graders.</strong> Teams use premium models for every judgment even when cheaper ones are good enough.</li>
+    <li><strong>Repeated full-suite runs.</strong> Minor changes trigger expensive complete reruns.</li>
+    <li><strong>No batching.</strong> Eval work stays on the synchronous path when it should be cheap offline traffic.</li>
+  </ul>
+
+  <h2>What better eval economics look like</h2>
+  <ol>
+    <li><strong>Tier the evals.</strong> Fast smoke tests on small sets, deeper runs only when needed.</li>
+    <li><strong>Batch what can wait.</strong> Eval pipelines are the classic candidate for cheaper asynchronous processing.</li>
+    <li><strong>Use cheaper graders when quality allows.</strong></li>
+    <li><strong>Measure eval cost as its own line item.</strong> Do not bury it inside generic model usage.</li>
+  </ol>
+
+  <h2>Why this matters strategically</h2>
+  <p>Good eval culture is still non-negotiable. The point is not to run fewer evals blindly. The point is to run them like an engineered system instead of a free habit. Once eval cost is visible, teams can decide where exhaustive coverage is worth it and where lighter checks are enough.</p>
+
+  <div class="callout"><strong>Practical rule:</strong> if your eval system is good enough to protect quality, it is important enough to deserve its own cost dashboard.</div>
+
+  <h2>What to measure</h2>
+  <ul>
+    <li><strong>Spend per eval suite</strong></li>
+    <li><strong>Spend per release cycle</strong></li>
+    <li><strong>Grader model mix</strong></li>
+    <li><strong>Batch vs synchronous eval volume</strong></li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/openai-flex-vs-batch">OpenAI Flex vs Batch: the 2026 cost playbook</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

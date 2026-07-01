@@ -1,0 +1,74 @@
+---
+layout: "research.njk"
+permalink: "research/openai-flex-vs-batch.html"
+titleCore: "OpenAI Flex vs Batch: the 2026 cost playbook"
+description: "When to use OpenAI Flex processing vs Batch API in 2026, and how to think about lower-cost async paths without hurting the product."
+slug: "openai-flex-vs-batch"
+schemaHeadline: "OpenAI Flex vs Batch: the 2026 cost playbook · LLM CFO"
+schemaDescription: "When to use OpenAI Flex processing vs Batch API in 2026, and how to think about lower-cost async paths without hurting the product."
+breadcrumbName: "OpenAI Flex vs Batch: the 2026 cost playbook"
+datePublished: "2026-05-01"
+dateModified: "2026-06-11"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · PROVIDER TREND</div>
+  <h1 class="page-title">OpenAI Flex vs <em>Batch.</em></h1>
+  <p class="updated">Provider playbook · 1 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">One of the more useful 2026 shifts in OpenAI economics is that teams now have two clearer low-cost paths for non-urgent work: Batch API and Flex processing. The hard part is not knowing they exist. It is deciding which workloads belong where.</p>
+
+  <h2>What changed</h2>
+  <p>Batch API has been the obvious answer for asynchronous jobs: collect requests, submit them, and get lower pricing in exchange for waiting. Flex processing is a newer, more interesting option because it keeps the same request shape as standard processing while trading off speed and availability for lower cost.</p>
+
+  <h2>The simplest distinction</h2>
+  <ul>
+    <li><strong>Use Batch</strong> when work is explicitly offline and can be handled as a job queue.</li>
+    <li><strong>Use Flex</strong> when the request still looks like a normal API call but is low-priority enough to tolerate slower handling and occasional resource unavailability.</li>
+  </ul>
+
+  <h2>Good Batch candidates</h2>
+  <ul>
+    <li>eval runs</li>
+    <li>nightly enrichment</li>
+    <li>content backfills</li>
+    <li>large document reprocessing</li>
+    <li>offline classification</li>
+  </ul>
+
+  <h2>Good Flex candidates</h2>
+  <ul>
+    <li>internal tools</li>
+    <li>non-customer-facing background jobs</li>
+    <li>low-priority asynchronous requests</li>
+    <li>workloads that benefit from simpler request plumbing than Batch</li>
+  </ul>
+
+  <h2>Where teams get this wrong</h2>
+  <p>The common mistake is leaving too much work on the standard real-time path because "it only takes a few seconds." At scale, that assumption becomes expensive. The better question is not whether the call is fast enough. It is whether the user needs the result immediately, and what the business loses if it arrives later.</p>
+
+  <h2>Why Flex is interesting</h2>
+  <p>Flex matters because it lowers the activation energy for cost optimization. You do not need to redesign a workload into a fully separate batch pipeline on day one. For some teams, moving a low-priority request to <code>service_tier=flex</code> is the first realistic step toward a cheaper architecture.</p>
+
+  <h2>Why Batch still matters</h2>
+  <p>Batch remains the cleanest answer when the workflow is clearly job-shaped. It gives you economic discipline by forcing you to admit that some workloads were never meant to be synchronous in the first place. That architectural honesty is often worth as much as the pricing delta.</p>
+
+  <div class="callout"><strong>The 2026 takeaway:</strong> real savings are coming from reclassifying work by urgency. Standard processing is no longer the default answer for everything that looks like an API call.</div>
+
+  <h2>How to choose between them</h2>
+  <ol>
+    <li>If the user never waits on it, start by asking whether it should be Batch.</li>
+    <li>If it still needs API-style handling but is low priority, consider Flex.</li>
+    <li>If the workload is revenue-critical or latency-sensitive, keep standard processing and optimize elsewhere first.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/scale-tier-decision">Scale Tier vs Flex vs Batch vs Standard</a></li>
+    <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
+    <li><a href="/research/batch-api-routing">Batch API routing: 50% off for the work that can wait</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

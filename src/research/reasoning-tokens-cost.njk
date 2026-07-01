@@ -1,0 +1,58 @@
+---
+layout: "research.njk"
+permalink: "research/reasoning-tokens-cost.html"
+titleCore: "Reasoning tokens are the hidden line item on your AI bill"
+description: "Why reasoning tokens are becoming a real cost driver in 2026, how they behave, and what production teams can do before they quietly blow up output spend."
+slug: "reasoning-tokens-cost"
+schemaHeadline: "Reasoning tokens are the hidden line item on your AI bill · LLM CFO"
+schemaDescription: "Why reasoning tokens are becoming a real cost driver in 2026, how they behave, and what production teams can do before they quietly blow up output spend."
+breadcrumbName: "Reasoning tokens are the hidden line item on your AI bill"
+datePublished: "2026-05-04"
+dateModified: "2026-07-01"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: >-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are reasoning tokens?","acceptedAnswer":{"@type":"Answer","text":"Reasoning tokens are hidden tokens a reasoning model spends while working through a problem. They are not visible in the final answer, but they consume context space and are billed as output tokens. That makes them an extra cost center beyond visible input and output."}},{"@type":"Question","name":"Why do reasoning tokens surprise finance teams?","acceptedAnswer":{"@type":"Answer","text":"The user may see a short answer and assume the request was cheap, while the provider bill records hidden output-side work. Dashboards that only emphasize prompt length or visible answer length can miss the source of output spend drift. This makes reasoning-token cost look like unexplained model overuse until it is segmented by endpoint and model."}},{"@type":"Question","name":"Where do reasoning token costs usually show up?","acceptedAnswer":{"@type":"Answer","text":"They usually appear in hard routing thresholds, agent loops, overuse of reasoning models for simple tasks, and loose output budgets. Any workflow that escalates too much traffic into a reasoning model can turn hidden thinking into a material bill line."}},{"@type":"Question","name":"How do I control reasoning token spend?","acceptedAnswer":{"@type":"Answer","text":"Separate model tiers by task value, track output spend by endpoint and model, reserve reasoning models for genuinely complex work, and use smaller models to pre-route requests. The right question is which requests justify invisible output spend, not whether reasoning models are good or bad."}}]}
+---
+  <div class="eye">RESEARCH · COST DRIVER</div>
+  <h1 class="page-title">Reasoning tokens are the <em>hidden bill.</em></h1>
+  <p class="updated">Cost note · 4 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A lot of teams still think in a 2024 pricing model: input tokens, visible output tokens, done. That mental model is getting outdated. Reasoning models now create an extra cost center because the model can spend tokens thinking, and those tokens are billed as output even when you never see them.</p>
+
+  <h2>What changed</h2>
+  <p>OpenAI's reasoning-model guidance is explicit: reasoning tokens are not visible through the API, but they still consume context space and are billed as output tokens. That matters because output tokens are usually the expensive side of the bill. Once teams start routing harder traffic to reasoning models, the economics change fast.</p>
+
+  <h2>Why this catches teams off guard</h2>
+  <p>Most dashboards still emphasize prompt length because input size is easy to see and easy to blame. Reasoning-token cost is harder to spot. The user sees a short answer and assumes the request was cheap. Finance sees output spend drift upward and assumes the model is over-talking. Sometimes the real source is hidden reasoning work in the middle.</p>
+
+  <h2>Where it usually shows up</h2>
+  <ul>
+    <li><strong>Hard routing thresholds.</strong> Too much traffic gets escalated to premium reasoning paths.</li>
+    <li><strong>Agent loops.</strong> The model re-thinks each step of a long workflow.</li>
+    <li><strong>Overusing reasoning models.</strong> Work that should stay on a smaller model ends up on a heavier path by default.</li>
+    <li><strong>Loose output budgets.</strong> Teams optimize the prompt but never constrain total output and reasoning headroom.</li>
+  </ul>
+
+  <h2>How to manage it</h2>
+  <ol>
+    <li><strong>Separate model tiers by task value.</strong> Not every endpoint deserves deep reasoning.</li>
+    <li><strong>Track output spend by endpoint and model.</strong> That is the closest operational signal when reasoning tokens are invisible.</li>
+    <li><strong>Reserve reasoning for real complexity.</strong> Classification, extraction, and simple transformations usually do not need it.</li>
+    <li><strong>Use smaller models for pre-routing.</strong> Let a cheap model decide whether the expensive model is necessary.</li>
+  </ol>
+
+  <div class="callout"><strong>Practical rule:</strong> if your output spend rises faster than visible answer length, suspect hidden reasoning before you blame the user prompt.</div>
+
+  <h2>What this means for cost optimization</h2>
+  <p>Reasoning tokens do not make reasoning models bad. They make sloppy routing expensive. The right question is not "should we use reasoning?" It is "which requests are valuable enough to justify invisible output spend?" That pushes teams back toward the basics: better task segmentation, tighter routing, and explicit economic thresholds.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/openai-cost-optimization">OpenAI cost optimization for production teams</a></li>
+    <li><a href="/research/model-routing">Model routing without quality regressions</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

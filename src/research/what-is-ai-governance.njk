@@ -1,0 +1,103 @@
+---
+layout: "research.njk"
+permalink: "research/what-is-ai-governance.html"
+titleCore: "What is AI governance? A plain-English definition for 2026"
+description: "What AI governance actually means in 2026 — a plain-English definition covering policy, allocation, budgets, approvals, and accountability for AI spend."
+slug: "what-is-ai-governance"
+schemaHeadline: "What is AI governance? A plain-English definition for 2026"
+schemaDescription: "What AI governance actually means in 2026 — a plain-English definition covering policy, allocation, budgets, approvals, and accountability for AI spend."
+breadcrumbName: "What is AI governance?"
+datePublished: "2026-05-21"
+dateModified: "2026-06-11"
+copyrightSymbol: "&copy;"
+footerSeparator: "&middot;"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is AI governance in simple terms?","acceptedAnswer":{"@type":"Answer","text":"AI governance is the set of policies, controls, and ownership rules that make AI usage safe, accountable, and predictable. In 2026 it covers four things: which AI is allowed (policy), who pays for it (allocation), how much they can spend (budgets), and how decisions are recorded (audit)."}},{"@type":"Question","name":"What is the difference between AI governance and AI ethics?","acceptedAnswer":{"@type":"Answer","text":"AI ethics defines the principles. AI governance is how those principles get enforced — via gateway controls, budget caps, approval workflows, and audit trails. Ethics without governance is a position paper. Governance without ethics is bureaucracy."}},{"@type":"Question","name":"Who owns AI governance?","acceptedAnswer":{"@type":"Answer","text":"In our experience the program needs three named owners: a finance lead (FinOps or FP&A), an engineering lead (gateway or platform owner), and an executive sponsor (CFO or CTO). Anything less and decisions stall on jurisdiction."}},{"@type":"Question","name":"Is AI governance the same as AI compliance?","acceptedAnswer":{"@type":"Answer","text":"No. Compliance proves you met a regulation. Governance is the operating model that produces compliant outcomes month after month. Governance is broader and includes spend, allocation, and approvals — not just regulatory boxes."}}]}
+---
+  <div class="eye">RESEARCH &middot; GOVERNANCE</div>
+  <h1 class="page-title">What is <em>AI governance?</em></h1>
+  <p class="updated">Definition &middot; 21 May 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">AI governance is the set of policies, controls, and ownership rules that make AI usage inside a company safe, accountable, and predictable. In 2026 it covers four things at once: which AI is allowed, who pays for it, how much they can spend, and how decisions are recorded.</p>
+
+  <h2>The short answer</h2>
+  <p>AI governance is the operating model that turns AI usage into a managed line item. It defines:</p>
+  <ul>
+    <li><strong>Policy</strong> &mdash; which providers, which models, which use cases.</li>
+    <li><strong>Allocation</strong> &mdash; which team, feature, or customer each dollar belongs to.</li>
+    <li><strong>Budgets and quotas</strong> &mdash; how much each workload can spend, and what happens at the limit.</li>
+    <li><strong>Approvals</strong> &mdash; who signs off on premium models or new providers.</li>
+    <li><strong>Audit</strong> &mdash; how the company reconciles internal estimates to the actual provider invoice.</li>
+  </ul>
+  <p>If any of those five is missing, what you have is a dashboard, not governance.</p>
+
+  <h2>Why "AI governance" became a finance phrase in 2026</h2>
+  <p>Through 2024 the term mostly meant model risk, bias testing, and security review. That work still matters &mdash; but the financial controls were missing. Two things changed in 2025 and 2026:</p>
+  <ol>
+    <li>AI moved from pilot budgets to multi-million-dollar production line items.</li>
+    <li>Reasoning models, agents, and background work made spend less predictable per request.</li>
+  </ol>
+  <p>Finance leaders responded the way finance always responds: with policy, allocation, budgets, approvals, and reconciliation. That bundle is what people now mean by AI governance.</p>
+
+  <h2>AI governance vs AI ethics vs AI compliance</h2>
+  <p>These three get conflated. They are not the same:</p>
+  <ul>
+    <li><strong>AI ethics</strong> defines the principles &mdash; fairness, transparency, accountability, human oversight.</li>
+    <li><strong>AI governance</strong> is how the principles get enforced &mdash; gateway controls, budgets, approvals, and audit trails.</li>
+    <li><strong>AI compliance</strong> is the proof you produced for a specific regulation (EU AI Act, NIST AI RMF, sector rules).</li>
+  </ul>
+  <p>Ethics without governance is a position paper. Compliance without governance is a checkbox that does not survive the next audit.</p>
+
+  <div class="callout"><strong>The principle:</strong> AI governance is normal financial governance applied to AI. The novelty is the technology, not the controls.</div>
+
+  <h2>What AI governance looks like, in practice</h2>
+  <p>A company with real AI governance can answer five questions in under five minutes, with numbers, on any business day:</p>
+  <ol>
+    <li>Which AI providers and models are approved, and which are blocked?</li>
+    <li>What was last month's spend, broken out by feature and team?</li>
+    <li>Which workloads are over budget, and what is the gateway doing about it?</li>
+    <li>Who approved the most recent premium-model rollout, and on what basis?</li>
+    <li>What was the delta between our internal estimate and the provider invoice, and why?</li>
+  </ol>
+  <p>If those answers take a day or a week, the governance program is on paper, not in production.</p>
+
+  <h2>The five components, in detail</h2>
+
+  <h3>1. Policy</h3>
+  <p>A short document &mdash; not a roadmap &mdash; that lists approved providers, approved models per job, and blocked use cases. Reviewed quarterly. Enforced at the gateway, not by trust.</p>
+
+  <h3>2. Allocation</h3>
+  <p>Every request tagged with feature, environment, customer or workspace, and team. Untagged requests go to a default bucket that has a named owner. Without allocation you cannot run any of the other four components.</p>
+
+  <h3>3. Budgets and quotas</h3>
+  <p>A monthly budget per workload. Soft quota at 80% pages the team. Hard quota at 100% degrades to a cheaper model or pauses new requests. Quotas without enforcement are theatre.</p>
+
+  <h3>4. Approval workflow</h3>
+  <p>Premium reasoning models, long-context, agents in production, and new providers all require approval &mdash; with a stated use case, expected budget, and rollback plan. Approvals are logged.</p>
+
+  <h3>5. Audit and reconciliation</h3>
+  <p>Monthly close reconciles internal cost estimates to the actual provider invoice. The delta is documented. Recurring deltas trigger a fix &mdash; in pricing, in tagging, or in tooling.</p>
+
+  <h2>What AI governance is not</h2>
+  <ul>
+    <li>It is not a security review.</li>
+    <li>It is not a model evaluation framework.</li>
+    <li>It is not a dashboard.</li>
+    <li>It is not a one-time policy doc.</li>
+    <li>It is not the same as model risk management &mdash; though they share controls.</li>
+  </ul>
+
+  <h2>Who owns AI governance</h2>
+  <p>Three named owners: a finance lead (FinOps or FP&amp;A partner), an engineering lead (the AI gateway or platform owner), and an executive sponsor (CFO or CTO). Anything less and the program stalls on jurisdiction.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-governance">AI governance for finance leaders</a> &mdash; the pillar guide.</li>
+    <li><a href="/research/ai-governance-framework">AI governance framework</a> &mdash; the operating model laid out as a framework.</li>
+    <li><a href="/research/ai-chargeback-showback">AI chargeback &amp; showback</a> &mdash; attributing AI spend back to the teams that drive it.</li>
+    <li><a href="/research/ai-finops">AI FinOps</a> &mdash; the financial operating model AI governance plugs into.</li>
+    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails</a> &mdash; governance for agent workloads specifically.</li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

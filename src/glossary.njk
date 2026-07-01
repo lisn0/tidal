@@ -1,0 +1,218 @@
+---
+layout: "page.njk"
+permalink: "glossary.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glossary — LLM cost &amp; AI FinOps terms · LLM CFO</title>
+  <meta name="description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/glossary" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/glossary" />
+  <meta property="og:title" content="Glossary — LLM cost &amp; AI FinOps terms · LLM CFO" />
+  <meta property="og:description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Glossary — LLM cost &amp; AI FinOps terms · LLM CFO" />
+  <meta name="twitter:description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Glossary — LLM cost & AI FinOps terms · LLM CFO","description":"Plain-English definitions of the terms that show up on AI bills and in cost-optimization conversations. Cache-read tokens, batch API, model routing, provider arbitrage, semantic cache, and the rest.","url":"https://llmcfo.com/glossary","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llmcfo.com/glossary"}]}
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+  <style>
+    dl.glossary { margin: 12px 0 32px; }
+    dl.glossary dt { font-family:'Geist',sans-serif; font-weight:700; color:var(--ink); margin-top:22px; font-size:16px; letter-spacing:-0.01em; }
+    dl.glossary dd { margin: 6px 0 0; font-size:15px; color:var(--fg); line-height:1.55; }
+    .gloss-index { font-family:'Geist Mono',monospace; font-size:12px; color:var(--fg-2); margin: 8px 0 28px; display:flex; flex-wrap:wrap; gap:8px; }
+    .gloss-index a { color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; justify-content:center; min-width:28px; min-height:28px; padding:2px 8px; border:1px solid var(--rule); }
+    .gloss-index a:hover { color:var(--ink); }
+    h2.letter { font-family:'Geist Mono',monospace; font-size:13px; color:var(--accent); margin: 36px 0 0; letter-spacing:-0.01em; border-top:1px solid var(--rule); padding-top:18px; }
+  </style>
+---
+  <div class="eye">REFERENCE</div>
+  <h1 class="page-title"><em>Glossary.</em></h1>
+  <p class="updated">25 April 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Plain-English definitions of the terms that show up on AI bills and in optimization conversations. Where a term has a deeper write-up, the link goes there.</p>
+
+  <div class="gloss-index">
+    <a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><a href="#d">D</a><a href="#e">E</a><a href="#f">F</a><a href="#h">H</a><a href="#i">I</a><a href="#k">K</a><a href="#l">L</a><a href="#m">M</a><a href="#o">O</a><a href="#p">P</a><a href="#r">R</a><a href="#s">S</a><a href="#t">T</a><a href="#v">V</a>
+  </div>
+
+  <h2 class="letter" id="a">A</h2>
+  <dl class="glossary">
+    <dt>AI FinOps</dt>
+    <dd>The practice of governing AI / LLM spend the way cloud FinOps governs cloud spend: visibility, attribution, baselines, optimization, and accountability. See the <a href="/research/llm-cost-optimization">cost optimization guide</a>.</dd>
+    <dt>Anthropic</dt>
+    <dd>Maker of the Claude family of models (Haiku, Sonnet, Opus). First-party API and also resold via AWS Bedrock and Google Vertex AI. Bills cache writes, cache reads, input, and output as separate line items — see <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
+    <dt>Azure OpenAI</dt>
+    <dd>Microsoft's enterprise reseller of OpenAI models. Same weights as the OpenAI API, but with EA pricing, regional residency, and Microsoft commercial terms. Sometimes a meaningful price win versus OpenAI direct depending on your Microsoft EA.</dd>
+  </dl>
+
+  <h2 class="letter" id="b">B</h2>
+  <dl class="glossary">
+    <dt>Batch API</dt>
+    <dd>An async inference mode (OpenAI, Anthropic, Bedrock, Vertex) that discounts input and output by ~50% in exchange for a 24-hour completion SLA. The right home for evals, enrichment, and nightly jobs. See <a href="/research/batch-api-routing">batch API routing</a>.</dd>
+    <dt>Bedrock</dt>
+    <dd>AWS's managed inference service. Hosts Anthropic, Meta Llama, Mistral, Cohere, Amazon Nova, and others. Same-VPC inference, IAM auth, and reserved capacity make it attractive for AWS-resident workloads. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="c">C</h2>
+  <dl class="glossary">
+    <dt>Cache-read tokens</dt>
+    <dd>Input tokens served from a prompt cache hit. Discounted ~50% (OpenAI) or ~90% (Anthropic) versus full-price input. Reported as a separate invoice line — easy to miscount when setting a baseline. See <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
+    <dt>Cache-write tokens</dt>
+    <dd>Input tokens that populated a cache entry on the first request. On Anthropic, billed at 1.25× (5-min ephemeral) or 2× (1-hour extended) the input rate. The premium pays back fast on any reused prefix. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
+    <dt>Cascade routing</dt>
+    <dd>A model-routing pattern: try a cheap model first; only escalate to an expensive model if a cheap classifier or self-confidence check says the cheap answer is unreliable. See <a href="/research/model-routing">model routing</a>.</dd>
+    <dt>Context caching (Vertex)</dt>
+    <dd>Google's prompt-cache equivalent on Vertex Gemini. Charges a per-token-per-hour storage fee plus a discounted read rate. Slightly different mental model than OpenAI/Anthropic — you provision a cache resource explicitly.</dd>
+    <dt>Cosine similarity</dt>
+    <dd>A measure of how close two embedding vectors are, in the range -1 to 1. The standard threshold knob in semantic caching: hits above the threshold reuse a prior response. See <a href="/research/semantic-caching">semantic caching</a>.</dd>
+    <dt>Cost per task</dt>
+    <dd>Spend divided by a business-meaningful unit (per ticket resolved, per row enriched, per query answered). The only KPI worth reporting up — invariant to traffic and aligned to value.</dd>
+  </dl>
+
+  <h2 class="letter" id="d">D</h2>
+  <dl class="glossary">
+    <dt>Distillation</dt>
+    <dd>Training a smaller "student" model to mimic a larger "teacher" model on a specific task. Done well, you get most of the quality at a fraction of the inference cost. The cost of training and eval is non-trivial — only worth it for high-volume, narrow tasks.</dd>
+  </dl>
+
+  <h2 class="letter" id="e">E</h2>
+  <dl class="glossary">
+    <dt>Embedding</dt>
+    <dd>A dense vector representation of a piece of text. The basis for retrieval, semantic search, and semantic caching. Embedding model spend is usually a small fraction of total LLM spend but underpins a lot of the optimization stack.</dd>
+    <dt>Ephemeral cache</dt>
+    <dd>Anthropic's short-TTL prompt cache (~5 minutes). Default option. Cheaper write premium (1.25×). Right choice for most workloads. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
+    <dt>Extended cache</dt>
+    <dd>Anthropic's long-TTL prompt cache (~1 hour). Higher write premium (2×). Right choice for bursty workloads with long idle gaps.</dd>
+  </dl>
+
+  <h2 class="letter" id="f">F</h2>
+  <dl class="glossary">
+    <dt>Fine-tuning</dt>
+    <dd>Adapting a base model's weights on your data. Lowers per-call cost on smaller fine-tuned models and can lift quality on narrow tasks; adds training cost, eval cost, and lifecycle risk. Often less attractive than prompt engineering plus caching for the first ~$100k of spend.</dd>
+  </dl>
+
+  <h2 class="letter" id="h">H</h2>
+  <dl class="glossary">
+    <dt>Helicone</dt>
+    <dd>A logging proxy for LLM API calls. Drop-in via base-URL swap; surfaces request history, cost attribution, and a built-in exact-match cache. See <a href="/research/litellm-vs-helicone-vs-langfuse">the comparison</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="i">I</h2>
+  <dl class="glossary">
+    <dt>Inference cost</dt>
+    <dd>The cost of running a model to produce an output, billed in tokens (input + output, with caching variants). Distinct from training cost. The vast majority of an AI product's bill is inference.</dd>
+  </dl>
+
+  <h2 class="letter" id="k">K</h2>
+  <dl class="glossary">
+    <dt>KV cache</dt>
+    <dd>Key/Value cache — the intermediate attention state a transformer builds while reading the prompt. Provider prompt caches expose this internal optimization as a billable, reusable resource. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="l">L</h2>
+  <dl class="glossary">
+    <dt>LangFuse</dt>
+    <dd>An open-source LLM observability platform. Traces, evals, prompt management, dataset curation. Not a gateway. See <a href="/research/litellm-vs-helicone-vs-langfuse">the comparison</a>.</dd>
+    <dt>LiteLLM</dt>
+    <dd>An open-source multi-provider gateway / SDK that unifies ~100 providers under the OpenAI Chat Completions schema. Routing, fallback, virtual keys, budgets. See <a href="/research/litellm-vs-helicone-vs-langfuse">the comparison</a>.</dd>
+    <dt>LLM-as-judge</dt>
+    <dd>Using one LLM to score the outputs of another, typically against a rubric. The default eval methodology when there's no exact-match ground truth. Cheap, noisy, and reasonable when the judge model is stronger than the candidate.</dd>
+    <dt>Logprobs</dt>
+    <dd>Log-probabilities the model assigned to each generated token. Useful for confidence-based routing, classification thresholds, and debugging structured-output failures.</dd>
+  </dl>
+
+  <h2 class="letter" id="m">M</h2>
+  <dl class="glossary">
+    <dt>Model router</dt>
+    <dd>A component that decides which model handles each request, usually based on task type, expected difficulty, or a confidence signal. The biggest single cost lever after caching. See <a href="/research/model-routing">model routing</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="o">O</h2>
+  <dl class="glossary">
+    <dt>OpenAI</dt>
+    <dd>Maker of the GPT family. First-party API; also resold as Azure OpenAI. Cache-read tokens reported under <code>prompt_tokens_details.cached_tokens</code>; ~50% discount on cached input.</dd>
+    <dt>OpenRouter</dt>
+    <dd>A meta-router and price-discovery layer in front of dozens of model hosts. Useful for benchmarking the going rate on any given open-weights model. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="p">P</h2>
+  <dl class="glossary">
+    <dt>Prefill</dt>
+    <dd>The first phase of inference: reading the prompt and computing its KV cache. Fast and parallel. The phase prompt caching short-circuits.</dd>
+    <dt>Prompt cache</dt>
+    <dd>Provider-native reuse of the KV cache for shared prompt prefixes. Highest-ROI optimization in the playbook. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
+    <dt>Prompt compression</dt>
+    <dd>Shrinking a prompt without changing its meaning — trimming few-shot examples, summarizing retrieved context, replacing verbose instructions. Real savings, but eval before shipping; small wording changes can move quality.</dd>
+    <dt>Provider arbitrage</dt>
+    <dd>Buying the same (or quality-equivalent) model from a cheaper host. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="r">R</h2>
+  <dl class="glossary">
+    <dt>RAG</dt>
+    <dd>Retrieval-Augmented Generation. Fetch relevant passages from a corpus, stuff them in the prompt, generate an answer grounded in the retrieved context. The dominant pattern for knowledge-base assistants.</dd>
+    <dt>Reasoning tokens</dt>
+    <dd>Internal chain-of-thought tokens that some "reasoning" models (o-series, thinking-mode Claude) produce before the visible answer. Billed at the output rate. Easy to triple your bill if reasoning effort is set too high.</dd>
+    <dt>Retrieval-augmented generation</dt>
+    <dd>See <a href="#r">RAG</a>.</dd>
+  </dl>
+
+  <h2 class="letter" id="s">S</h2>
+  <dl class="glossary">
+    <dt>Semantic cache</dt>
+    <dd>A cache keyed on embedding similarity rather than byte-equality. Returns a prior answer when a new request is "close enough" to a stored one. Real savings on stable RAG / classification workloads, real risk on generative ones. See <a href="/research/semantic-caching">semantic caching</a>.</dd>
+    <dt>Speculative decoding</dt>
+    <dd>An inference-time speedup where a small draft model proposes tokens that a larger model verifies in parallel. Reduces latency more than cost on managed APIs; mostly relevant if you self-host.</dd>
+    <dt>System prompt</dt>
+    <dd>The instruction block that frames the model's role and rules. The largest cacheable static chunk in most production prompts — keep it stable to keep cache hits.</dd>
+  </dl>
+
+  <h2 class="letter" id="t">T</h2>
+  <dl class="glossary">
+    <dt>Token</dt>
+    <dd>The unit of billing. Roughly 0.75 words for English, but varies by tokenizer. Input tokens, output tokens, cache-read tokens, cache-write tokens, and reasoning tokens are all priced differently.</dd>
+    <dt>Token leak</dt>
+    <dd>Spend on tokens that aren't producing user value: oversized retrieved context, runaway reasoning, repeated system prompts that should be cached, debug prints in production prompts. The unglamorous half of every audit.</dd>
+    <dt>Tool calls</dt>
+    <dd>Structured function-invocation messages a model emits to call external systems. Each round-trip is billed; agent loops with poor termination logic are a classic source of token leak.</dd>
+  </dl>
+
+  <h2 class="letter" id="v">V</h2>
+  <dl class="glossary">
+    <dt>Vertex AI</dt>
+    <dd>Google Cloud's managed inference platform. Hosts Gemini, Claude (via partnership), Llama, Mistral, and others. Different pricing tier and quota model than AI Studio. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</dd>
+    <dt>vLLM</dt>
+    <dd>An open-source high-throughput inference server. Relevant if you're self-hosting open-weights models on your own GPUs; not relevant for pure managed-API users.</dd>
+  </dl>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-optimization">Full LLM cost optimization guide</a></li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching</a> · <a href="/research/semantic-caching">Semantic caching</a> · <a href="/research/model-routing">Model routing</a></li>
+    <li><a href="/research/batch-api-routing">Batch API routing</a> · <a href="/research/provider-arbitrage">Provider arbitrage</a> · <a href="/research/cache-read-tokens-baseline-trap">Cache-read baseline trap</a></li>
+    <li><a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM vs Helicone vs LangFuse</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

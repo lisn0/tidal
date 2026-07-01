@@ -1,0 +1,100 @@
+---
+layout: "research.njk"
+permalink: "research/llm-usage-metering-billing.html"
+titleCore: "LLM usage metering for customer billing"
+description: "How SaaS platforms meter LLM usage per customer for billing: metering points, billing units, token type handling, provider discount math, and reconciliation against provider invoices."
+slug: "llm-usage-metering-billing"
+schemaHeadline: "LLM usage metering for customer billing · LLM CFO"
+schemaDescription: "How SaaS platforms meter LLM usage per customer for billing: metering points, billing units, token type handling, provider discount math, and reconciliation against provider invoices."
+breadcrumbName: "LLM usage metering for customer billing"
+datePublished: "2026-07-01"
+dateModified: "2026-07-01"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is LLM usage metering for customer billing?","acceptedAnswer":{"@type":"Answer","text":"Usage metering is the process of tracking and measuring LLM consumption per customer to bill them. For SaaS platforms that resell LLM functionality, metering captures every token, request, or outcome flowing through each customer's account and translates it into a charge on their invoice. Unlike internal chargeback, metering is customer-facing and contractual."}},{"@type":"Question","name":"Where should I install metering: gateway, SDK, or provider invoice?","acceptedAnswer":{"@type":"Answer","text":"The best metering point depends on your architecture. API gateway metering captures all requests at the boundary (simplest, low latency impact). SDK/client-side metering is easier if you control the SDKs but harder to validate (customers can see code). Provider invoice metering is the reconciliation source of truth but arrives weeks late. Most platforms combine all three: gateway for real-time customer dashboards, SDK events for fine-grain tagging, and provider invoice for monthly reconciliation."}},{"@type":"Question","name":"What is the difference between token-based and request-based billing?","acceptedAnswer":{"@type":"Answer","text":"Token-based billing charges by the token consumed (input, output, cache-read, reasoning). This matches how providers price and gives the highest precision for cost recovery. Request-based billing charges a flat fee per API call regardless of token count. Token-based is more complex to implement but fairer when request sizes vary; request-based is simpler but can incentivize longer prompts that inflate costs."}},{"@type":"Question","name":"How do I handle cached and batch tokens in customer bills?","acceptedAnswer":{"@type":"Answer","text":"Cache-read tokens are discounted by the provider (OpenAI ~50% of input, Anthropic ~90%). If you charge customers the full input rate for cached tokens, you keep the margin. If you pass the discount through, customers get the benefit but your margin shrinks when cache hit rates grow. Batch API tokens are discounted ~50% by the provider; again, you must decide whether to pass the discount to customers or keep it. Document your policy explicitly in your pricing terms—margin math depends on it."}},{"@type":"Question","name":"How do I reconcile metered usage against the provider invoice?","acceptedAnswer":{"@type":"Answer","text":"Every month, sum your metered usage events (tokens, requests, or outcomes by customer) and compare the total cost against the provider invoice. Variance over 2–3% usually signals missing events (retries, tool calls, fallback paths) or timestamp misalignment (requests logged in one month but invoiced in another). Document recurring deltas and fix the root cause—incomplete metering, clock drift, or provider bugs. Reconciliation builds customer trust and prevents margin leaks."}},{"@type":"Question","name":"Why is metering different from observability or logging?","acceptedAnswer":{"@type":"Answer","text":"Observability logs every detail for debugging. Metering logs only the signal needed for billing: customer ID, token count, model, timestamp, cost. Metering must be idempotent (replayed events do not double-charge), exactly-once delivery is hard at scale, and the events themselves are the contractual record. If your observability system loses an event, that is a bug. If your metering system loses an event, that is lost revenue."}}]}
+---
+  <div class="eye">MONETIZATION · BILLING</div>
+  <h1 class="page-title">LLM usage <em>metering for customer billing.</em></h1>
+  <p class="updated">Operations guide · 1 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Usage metering is how SaaS platforms that resell LLM functionality track consumption per customer and translate it into a charge. Unlike internal chargeback, metering is customer-facing and contractual—it defines who owes what, when, and for how much. Getting metering right means choosing the right measurement points, handling provider discounts, and reconciling against the actual provider invoice.</p>
+
+  <h2>Where metering lives in your architecture</h2>
+  <p>Every LLM API call flowing through your platform passes through multiple layers. You can capture metering at any of them:</p>
+  <ul>
+    <li><strong>API gateway.</strong> Your front door to the provider. Captures all requests with low latency overhead, works regardless of language or SDK, and is hardest to spoof. Best for real-time dashboards and per-customer quotas. Downside: unless you control the provider integration, you may see calls but not the full token count until the response arrives.</li>
+    <li><strong>SDK or client library.</strong> Metering at the point the customer calls you. Easiest to tag by customer, feature, or account, but requires you to ship and maintain SDKs and opens the surface for customer manipulation (if they control the client code).</li>
+    <li><strong>Provider invoice or usage API.</strong> The provider's authoritative record. Arrives days or weeks later, complete with all retries, timeouts, and edge cases the gateway missed. Use this for reconciliation only—never bill customers off the invoice without a lag.</li>
+  </ul>
+  <p>The right approach uses all three: gateway for real-time rate limiting and customer visibility, SDKs for enriched tagging, and provider invoices for monthly reconciliation.</p>
+
+  <h2>Billing units: tokens, requests, or outcomes</h2>
+  <p>You must choose what unit you charge customers by:</p>
+  <ul>
+    <li><strong>Token-based billing.</strong> Charge per token consumed (input + output). Mirrors how providers price, gives you maximum cost recovery, and is fairest when request sizes vary wildly. Downside: complex to explain to non-technical customers, requires accurate token counting, and exposes you to customer confusion over input vs. output vs. cached tokens.</li>
+    <li><strong>Request-based billing.</strong> Charge a flat fee per API call. Simpler to understand and calculate, works well if request sizes are similar, reduces customer surprise. Downside: does not recover cost when requests are large, incentivizes long prompts, and does not scale if output length varies.</li>
+    <li><strong>Outcome-based billing.</strong> Charge per completed task, translation, classification, or search result—the business value delivered, not the LLM cost. Hardest to implement, but aligns pricing with customer value instead of your infrastructure cost. Most SaaS companies move here eventually.</li>
+  </ul>
+  <p>Most platforms start with token-based (cost recovery is clear) and gradually move to outcome-based (better positioning).</p>
+
+  <h2>The discount math: cache-read, batch, and reasoning tokens</h2>
+  <p>Providers discount certain token types dramatically:</p>
+  <ul>
+    <li><strong>Cache-read tokens.</strong> OpenAI charges ~50% of input rate; Anthropic charges ~10%. If you bill customers at the full input rate for cached tokens, you keep the margin. If you pass the discount through, customers benefit when cache hit rates improve but you lose revenue. <strong>Your decision here is a pricing choice, not a technical detail—document it in the contract.</strong></li>
+    <li><strong>Batch API tokens.</strong> Most providers discount batch ~50% off standard rates. Again, you can retain the margin or pass the savings to customers. If you pass it through, your revenue shrinks on batch work even though your infrastructure cost is the same.</li>
+    <li><strong>Reasoning tokens.</strong> Output-like tokens that the model consumes for extended thinking (OpenAI o1, Claude Opus with thinking). They are invisible to the application but visible on your bill. If customers use reasoning and you do not bill for it, you absorb the cost. If you bill for it, you must explain it clearly.</li>
+  </ul>
+  <p>The key: if the provider gives you a discount, you must decide whether to keep it or pass it through. Do not leave this ambiguous—it will become a contract dispute.</p>
+
+  <h2>Handling retries, tool calls, and fallback paths</h2>
+  <p>One user action often triggers multiple LLM requests:</p>
+  <ul>
+    <li><strong>Retries.</strong> A transient error triggers a retry. Charge once? Charge both? If you only bill on success, you undercount costs during outages. If you bill on all attempts, you charge customers for failures. Common practice: charge on all attempts, but document the policy.</li>
+    <li><strong>Tool calls and function invocation.</strong> An agent makes a request, gets a tool decision, calls the tool, and then makes a follow-up request. Metering must count both. If your metering only counts the first request, you are missing the full cost.</li>
+    <li><strong>Fallback chains.</strong> Customer request → try expensive model → hit budget or error → fall back to cheaper model. Did the customer get two charges or one? Document the rule: metering usually counts every request.</li>
+  </ul>
+  <p>Every alternate path in your application is a metering edge case. Build a decision tree early.</p>
+
+  <h2>Idempotency and deduplication</h2>
+  <p>Your metering system must be idempotent: the same request replayed twice should not produce two charges. This is hard at scale:</p>
+  <ul>
+    <li><strong>Request IDs.</strong> Tag every LLM request with a unique, customer-controlled ID (idempotency key). If you see the same ID twice, it is a retry; count it once.</li>
+    <li><strong>Event deduplication.</strong> Your metering pipeline must deduplicate events within a time window (usually one invoice period). Use the request ID + timestamp to detect and skip duplicates.</li>
+    <li><strong>Retry safety.</strong> If a metering event fails to reach your database, the system must be able to safely retry without double-charging. Use database insert-or-update semantics keyed on (request_id, timestamp).</li>
+  </ul>
+  <p>Without idempotency, every network hiccup becomes revenue loss (double charges that customers contest) or hidden cost (charges you ignore to avoid disputes).</p>
+
+  <h2>Monthly reconciliation and variance investigation</h2>
+  <p>At month close, reconcile your metered usage against the provider invoice:</p>
+  <ol>
+    <li><strong>Sum your metered usage.</strong> All events for the month, converted to cost using your pricing table.</li>
+    <li><strong>Compare to the provider invoice.</strong> The numbers rarely match exactly. Variance under 2% is acceptable; variance over 3% means something is wrong.</li>
+    <li><strong>Investigate the delta.</strong> Common causes: (a) missing metering events (retries, tool calls, fallback paths you forgot to tag), (b) timestamp misalignment (requests in one month, invoiced in the next), (c) wrong pricing (you used last month's rates but the provider updated them), (d) provider bugs or adjustments.</li>
+    <li><strong>Fix the root cause.</strong> Do not manually adjust. If you are consistently short, fix your metering. If you are consistently over, fix your pricing table.</li>
+  </ol>
+  <p>Reconciliation is also your audit trail. If a customer disputes a charge, you rebuild the bill from metered events and compare to your cost.</p>
+
+  <h2>What to meter: the minimal set</h2>
+  <p>Do not meter everything. Focus on the contractual signal:</p>
+  <ul>
+    <li>Customer ID or account ID</li>
+    <li>Model and provider (pricing varies by both)</li>
+    <li>Token counts: input, output, cache-read, reasoning (separately)</li>
+    <li>Timestamp (to the second; you will need this for reconciliation)</li>
+    <li>Request ID (for idempotency)</li>
+    <li>Estimated cost (compute it immediately using your pricing table, not the provider response)</li>
+  </ul>
+  <p>Everything else (feature, endpoint, user, duration) is operational telemetry, not metering.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-token-usage-tracking">How to track AI token usage</a> — the foundations for accurate token counting.</li>
+    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens and the baseline trap</a> — why cache discounts corrupt your cost model if not handled separately.</li>
+    <li><a href="/research/ai-chargeback-showback">AI chargeback and showback</a> — internal allocation (different from customer billing).</li>
+    <li><a href="/research/batch-api-routing">Batch API routing: 50% off for the work that can wait</a> — understanding batch discounts you must price for.</li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a> — the observability foundation for metering.</li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

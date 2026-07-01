@@ -1,0 +1,81 @@
+---
+layout: "research.njk"
+permalink: "research/how-to-build-an-llm-cfo-function.html"
+titleCore: "How to build an LLM CFO function"
+description: "A practical blueprint for standing up the function that owns your AI bill: the responsibilities, who runs it, the metrics it lives by, and a first-90-days plan."
+slug: "how-to-build-an-llm-cfo-function"
+schemaHeadline: "How to build an LLM CFO function · LLM CFO"
+schemaDescription: "A practical blueprint for standing up the function that owns your AI bill: the responsibilities, who runs it, the metrics it lives by, and a first-90-days plan."
+breadcrumbName: "How to build an LLM CFO function"
+datePublished: "2026-06-20"
+dateModified: "2026-06-20"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · OPERATING MODEL</div>
+  <h1 class="page-title">How to build an <em>LLM CFO function.</em></h1>
+  <p class="updated">20 June 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Someone has to own the AI bill — not just watch it. Owning it means setting budgets, attributing spend to teams, approving the model changes that move cost, and reconciling the dashboard against the invoice. This is the blueprint for standing that function up, whether it ends up being a person, a virtual team, or an outside service.</p>
+
+  <h2>What an "LLM CFO function" actually is</h2>
+  <p>It is the standing responsibility for the economics of your LLM usage: a named owner, a recurring cadence, and a small set of metrics that decisions are made against. It is the AI-spend analogue of what cloud FinOps became for infrastructure — except token pricing, cache discounts, and reasoning costs make the unit economics stranger, so the function needs its own playbook rather than a re-used cloud one. We lay out the discipline itself in <a href="/research/ai-finops">AI FinOps</a>; this page is about turning that discipline into an org function.</p>
+
+  <h2>A dashboard is not a function</h2>
+  <p>Most teams start with visibility — a cost dashboard wired up from gateway logs. Visibility is necessary and not sufficient. A dashboard shows the number; a function changes it. The gap is ownership: who is accountable when spend per request creeps up 30% after a model swap, who signs off on routing changes, who tells a team its feature is now the most expensive surface in the product. Without that owner, the dashboard becomes wallpaper everyone has stopped looking at.</p>
+
+  <h2>The four responsibilities</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Responsibility</th><th scope="col">What it means in practice</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Attribute</strong></td><td>Every dollar of spend maps to a team, product surface, environment, and model. Below ~90% attribution coverage, every other number is suspect.</td></tr>
+      <tr><td><strong>Optimize</strong></td><td>Own the levers — <a href="/research/model-routing">routing</a>, <a href="/research/prompt-caching-explained">caching</a>, <a href="/research/batch-api-routing">batch</a> — and the decision to pull them, with quality regression checks attached.</td></tr>
+      <tr><td><strong>Govern</strong></td><td>Set budgets and <a href="/research/agent-spend-guardrails">guardrails</a>, approve model and prompt changes that move cost, and define escalation policy.</td></tr>
+      <tr><td><strong>Reconcile</strong></td><td>Compare derived spend (token counts &times; price table) against the provider invoice monthly, with a documented tolerance.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Who runs it</h2>
+  <p>The function lives at the seam between platform engineering and finance, and it fails when it sits entirely on one side. Engineering owns the instrumentation, the gateway, and the levers. Finance owns the budgets, the allocation model, and the reconciliation against the real bill. In a small org this is one engineer with a finance partner and an hour a week; in a larger one it is a virtual team with a clear RACI. What matters is that one named person is <em>accountable</em> for the number, even if many are responsible for moving it. Allocation mechanics — when showback becomes chargeback — are covered in <a href="/research/ai-chargeback-showback">AI chargeback and showback</a>.</p>
+
+  <h2>The metrics it lives by</h2>
+  <ul>
+    <li><strong>Cost per successful task.</strong> Total spend over completed units of work — retries and failures in the numerator. The headline unit-economics number.</li>
+    <li><strong>Cache-read ratio.</strong> Cache-read tokens as a share of input tokens; the single biggest input-cost lever and invisible if you only watch totals.</li>
+    <li><strong>Model mix.</strong> Share of spend by model tier, so a drift toward the most expensive model is caught in days, not at invoice time.</li>
+    <li><strong>Attribution coverage.</strong> Percentage of spend mapped to a known owner. The credibility gate for everything else.</li>
+    <li><strong>Forecast accuracy.</strong> Predicted vs. actual monthly spend. A function that cannot forecast cannot budget.</li>
+  </ul>
+  <p>The mechanics of capturing these live in <a href="/research/llm-cost-monitoring">LLM cost monitoring</a> and <a href="/research/llm-token-usage-tracking">token usage tracking</a>.</p>
+
+  <h2>The operating cadence</h2>
+  <ul>
+    <li><strong>Weekly:</strong> scan cost per task and model mix for anomalies; flag any surface trending up.</li>
+    <li><strong>Monthly:</strong> reconcile against the invoice; review budgets vs. actuals with each team; ship one optimization.</li>
+    <li><strong>Quarterly:</strong> re-forecast, revisit budgets, and review whether the price table and routing policy still reflect reality.</li>
+  </ul>
+
+  <h2>The first 90 days</h2>
+  <ol>
+    <li><strong>Weeks 1–2 — Instrument and attribute.</strong> Get per-request token data tagged by team, product, environment, and model. Drive attribution coverage above 90% before optimizing anything.</li>
+    <li><strong>Weeks 3–4 — Baseline and reconcile.</strong> Establish cost per successful task and cache-read ratio, then reconcile the derived total against last month's invoice so the numbers are trusted.</li>
+    <li><strong>Weeks 5–8 — Set budgets and guardrails.</strong> Give each team a budget and an alert; add per-request and per-agent ceilings so runaway loops can't surprise you.</li>
+    <li><strong>Weeks 9–12 — Optimize and institutionalize.</strong> Pull the first high-confidence lever (usually caching or routing), measure it against quality, and lock in the weekly/monthly cadence with a named owner.</li>
+  </ol>
+
+  <h2>Build, or buy the function</h2>
+  <p>Standing this up in-house is the right call when LLM spend is large enough to justify a dedicated owner and the expertise exists internally. When it isn't — spend is real but nobody has the bandwidth, or the team would rather not build the instrumentation and reconciliation muscle from scratch — the function can be run as a managed service. That is precisely what <a href="/">LLM CFO</a> does: the attribution, optimization, governance, and reconciliation, run for you. Either way, the test is the same: is there a named owner, a cadence, and a number that decisions are made against?</p>
+
+  <div class="callout"><strong>The one-line test:</strong> if no single person can tell you your cost per successful task this week — and what they are doing to move it — you have a dashboard, not an LLM CFO function.</div>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-finops">AI FinOps</a> — the operating model this function runs</li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring</a> — what to track and how</li>
+    <li><a href="/research/ai-chargeback-showback">AI chargeback and showback</a> — the allocation mechanics</li>
+    <li><a href="/research/ai-governance">AI governance for finance leaders</a> — policy and accountability</li>
+    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails</a> — the budgets and loop controls</li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>
