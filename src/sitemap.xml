@@ -13,6 +13,24 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://llmcfo.com/research/llm-usage-metering-billing</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://llmcfo.com/research/ai-agent-spending-limits</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://llmcfo.com/research/coding-agent-cost-control</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit</loc>
     <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
