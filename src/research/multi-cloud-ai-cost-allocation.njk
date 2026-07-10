@@ -1,0 +1,73 @@
+---
+layout: "research.njk"
+permalink: "research/multi-cloud-ai-cost-allocation.html"
+titleCore: "Multi-cloud AI cost allocation"
+description: "Normalizing token cost across providers, tagging strategy, and the reconciliation headache when you run on Bedrock, Azure OpenAI, Vertex, and self-hosted open-weight simultaneously."
+slug: "multi-cloud-ai-cost-allocation"
+schemaHeadline: "Multi-cloud AI cost allocation · LLM CFO"
+schemaDescription: "Normalizing token cost across providers, tagging strategy, and the reconciliation headache when you run on Bedrock, Azure OpenAI, Vertex, and self-hosted open-weight simultaneously."
+breadcrumbName: "Multi-cloud AI cost allocation"
+datePublished: "2026-07-10"
+dateModified: "2026-07-10"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">Multi-cloud AI cost <em>allocation.</em></h1>
+  <p class="updated">10 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">No team is single-provider anymore. Bedrock holds Claude + regional data gravity. Azure OpenAI holds GPT-4 + procurement lock-in. Vertex holds Gemini + BigQuery integration. A self-hosted GPU cluster runs the cheapest open-weight models for high-volume, low-latency workloads. The problem: a single feature may route across three of these, costs are embedded in separate billing systems, and your CFO's dashboard shows "AI spend" as an opaque number because you've never reconciled what "one inference call" costs across all four providers.</p>
+
+  <h2>The reconciliation problem</h2>
+  <p>AWS bills Bedrock in tokens. Azure reports OpenAI spend in actual API calls. Vertex uses "1K predictions" as the unit. A self-hosted GPU cluster has no per-request cost at all—only monthly amortization over utilization. Reconciling one month's routing means querying four different dashboards, normalizing to a common currency (usually cost or token equivalents), and explaining variance to your exec team.</p>
+  <p>The friction is highest when:</p>
+  <ul>
+    <li><strong>Pricing changes mid-month.</strong> Bedrock dropped Claude prices 10% on July 1. Your old forecast is wrong. Did traffic shift to cheaper endpoints, or did pricing actually help?</li>
+    <li><strong>Data gravity pulls toward one provider but cost pulls toward another.</strong> BigQuery data is in Google Cloud ; Vertex uses Gemini. But Bedrock's Claude often outperforms on the task. Do you move data, stay on Bedrock, or replicate to both clouds?</li>
+    <li><strong>Batch jobs and on-demand routes have different economics.</strong> A 100-day job on Bedrock Batch costs half the on-demand rate. Azure OpenAI Flex costs 30% off-peak. But Flex has latency SLAs, so some traffic can't use it. Measuring the true cost for "did batch routing save us money" requires linking cost to execution mode, which your telemetry schema may not capture.</li>
+    <li><strong>List price is not final price.</strong> AWS committed spend discounts are common ; Azure has volume-based tiers (higher volume = better per-token rate) ; Vertex and Bedrock rarely offer hidden discounts. Your "true" per-token cost for GPT-4 on Azure may be 20% lower than list price, but you'd only know that by auditing your Azure bill.</li>
+  </ul>
+
+  <h2>How to normalize costs across providers</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Provider</th><th scope="col">Cost unit</th><th scope="col">Normalization strategy</th></tr></thead>
+    <tbody>
+      <tr><td>Bedrock</td><td>Tokens (input/output)</td><td>Direct ; use Bedrock's reported token counts.</td></tr>
+      <tr><td>Azure OpenAI</td><td>API calls + token tiers</td><td>Pull from usage logs, apply per-token rates from billing portal.</td></tr>
+      <tr><td>Vertex</td><td>"1K predictions"</td><td>Convert to approximate token count via model card ; accept ~10% error.</td></tr>
+      <tr><td>Self-hosted GPU</td><td>GPU-hours (amortized)</td><td>Cost = (GPU $/hour) × hours ; allocate to requests by throughput.</td></tr>
+    </tbody>
+  </table>
+  <p>The fastest path: ingest raw spend from each provider monthly, map each transaction to a model + token volume, compute effective $/1M input tokens and $/1M output tokens for each, store in a central fact table keyed by (provider, model, month). Then your routing logic can compare `Bedrock Claude 3.5: $3.00 / 1M input` to `Azure GPT-4: $2.80 / 1M input` and pick the cheaper path for non-sensitive workloads.</p>
+
+  <h2>Tagging strategy for multi-cloud</h2>
+  <p>Your routing gateway (LiteLLM, OpenRouter, or custom) must emit telemetry that captures three things:</p>
+  <ul>
+    <li><strong>Who paid.</strong> Tag: `cost_owner` = team, product, customer, or business unit. Required for showback.</li>
+    <li><strong>Which provider handled it.</strong> Tag: `ai_provider` = "bedrock" | "azure" | "vertex" | "self_hosted". Required for cost allocation.</li>
+    <li><strong>Which model and model variant.</strong> Tag: `ai_model` = "claude-3.5-sonnet", `ai_model_size` = "large", `ai_instance` = "self_hosted" | "api". Used for cost trending and routing analysis.</li>
+  </ul>
+  <p>Optional tags that unlock deeper analysis: `batch_mode` (on-demand vs batch vs flex), `latency_slo` (milliseconds), `fallback_attempts` (how many times did routing retry), `cost_bucket` (cheap vs premium). If you omit these, you can still do showback ; if you include them, you can measure whether batch routing actually saved money or just moved cost to a different line item.</p>
+
+  <h2>Reconciliation and variance analysis</h2>
+  <p>Every month, your telemetry should predict an AI bill within 5–10%. If it's off, investigate before the bill arrives. Common culprits:</p>
+  <ul>
+    <li><strong>Gateway outages.</strong> Traffic spilled over to fallback endpoints (probably more expensive). Check logs for circuit-breaker activations.</li>
+    <li><strong>Model version drift.</strong> Azure or Bedrock rolled out a new model or variant, and older code paths still reference the old name. Your telemetry tags the old model ; the bill charges the new one.</li>
+    <li><strong>Batch job runs that didn't complete.</strong> A Bedrock Batch job crashed mid-way. AWS still charged 30% of the submitted tokens. Your event stream never saw the completion, so your forecast is low.</li>
+    <li><strong>Egress and data transfer.</strong> Moving data across AWS / Azure / Google Cloud regions for replication or model serving costs money outside the per-token API charge. Most teams forget to include this until the bill lands.</li>
+  </ul>
+  <p>Build a monthly reconciliation checklist: (1) Export raw usage from each provider. (2) Normalize to common schema. (3) Compare to telemetry forecast. (4) Investigate >5% variance. (5) Publish corrected forecast for next month. This usually takes 4–8 hours if your tagging is clean, or 2–3 days if it isn't.</p>
+
+  <h2>Avoiding the "one true price" trap</h2>
+  <p>Don't create a single exchange rate (e.g., "1 Vertex prediction = 1.2 Bedrock tokens"). Vendors will change rates, features drift, and your mental model breaks. Instead, track <strong>three things separately:</strong> tokens (for routing logic), cost (for showback), and utilization (for optimization). Reconcile monthly. The three numbers should track, but they're not the same number.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/provider-arbitrage">Provider arbitrage: same model, different price</a></li>
+    <li><a href="/research/ai-chargeback-showback">AI chargeback and showback are becoming real in 2026</a></li>
+    <li><a href="/research/scale-tier-decision">Scale Tier vs Flex vs Batch vs Standard</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

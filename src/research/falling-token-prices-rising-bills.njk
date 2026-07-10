@@ -1,0 +1,76 @@
+---
+layout: "research.njk"
+permalink: "research/falling-token-prices-rising-bills.html"
+titleCore: "Token prices fell 80% and your bill still went up"
+description: "Per-token prices dropped 30–50% per year. Yet reported AI bills keep rising because usage, agents, and reasoning tokens grew faster. Jevons paradox in action."
+slug: "falling-token-prices-rising-bills"
+schemaHeadline: "Token prices fell 80% and your bill still went up · LLM CFO"
+schemaDescription: "Per-token prices dropped 30–50% per year. Yet reported AI bills keep rising because usage, agents, and reasoning tokens grew faster. Jevons paradox in action."
+breadcrumbName: "Token prices fell 80% and your bill still went up"
+datePublished: "2026-07-10"
+dateModified: "2026-07-10"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · TIMELY</div>
+  <h1 class="page-title">Token prices fell 80% and your bill still went <em>up.</em></h1>
+  <p class="updated">10 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">OpenAI dropped GPT-4 Turbo prices ~60% in November 2024. Anthropic dropped Claude 3.5 Sonnet prices ~50% in July 2025 and again in Q2 2026. Industry surveys report per-token prices falling 30–50% per year, averaging ~80% decline since 2023. Yet most teams report their AI bills grew 40–100% year-over-year in 2025. Something doesn't add up. That something is Jevons paradox: when the unit price of a resource falls, consumption rises faster than the price fell, and total spend increases. In LLM economics, it's not a hypothetical anymore.</p>
+
+  <h2>The numbers that don't add up</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Metric</th><th scope="col">2024 → 2026 change</th><th scope="col">Implication</th></tr></thead>
+    <tbody>
+      <tr><td>Per-token pricing (GPT-4, Claude)</td><td>-70% to -80%</td><td>Cheaper to run every model at every scale.</td></tr>
+      <tr><td>Total LLM tokens consumed (industry)</td><td>+200% to +300%</td><td>More requests, longer contexts, agents, reasoning.</td></tr>
+      <tr><td>Reported enterprise AI spend</td><td>+40% to +100%</td><td>Bills went up even though unit cost crashed.</td></tr>
+      <tr><td>Reasoning tokens as % of bill</td><td>0% (2024) → 10–25% (2026)</td><td>o1 / o3 changed the cost structure overnight. 10x more expensive per token but high-value problems justify it.</td></tr>
+    </tbody>
+  </table>
+  <p>The math: if token prices fell 80% and your bill went up 60%, consumption grew 8x. Survey data confirms this. Reported adoption of AI agents, autonomous systems, and reasoning models is accelerating, not plateauing.</p>
+
+  <h2>Why consumption exploded</h2>
+  <ul>
+    <li><strong>Agents stopped being experiments.</strong> In 2024, agent loops were risky—they would spiral into expensive token consumption. In 2025, teams deployed agent workflows to production: ticket triage, code review, report generation. Every agent invocation runs dozens of model calls. An agent that handles 100 tickets / day is 1000+ model calls / day. Across the org, this is millions of new tokens / week.</li>
+    <li><strong>Context windows got longer, so did the requests.</strong> Claude 200K window means people now paste full documents instead of summarizing first. Llama 128K enables retrieving bigger chunks of your knowledge base. The cost per call rose even as the per-token price fell.</li>
+    <li><strong>Reasoning tokens became the default for hard problems.</strong> OpenAI o1 and Anthropic extended thinking (o3, later models) cost 10–20x more per token but solve previously-unsolvable problems (competitive math, deep reasoning). Teams started routing hard questions to reasoning models, accepting the cost spike.</li>
+    <li><strong>Quality evals became routine infrastructure.</strong> Nobody runs 1000 token generations for testing anymore. Teams generate 10k variants, score them with LLM-as-judge, and iterate. The eval loop itself is now 100x the cost of the original feature.</li>
+    <li><strong>Cheaper pricing meant more use cases suddenly became viable.</strong> Classifying every incoming customer email, auto-tagging support tickets, generating fallback responses for every API endpoint—these didn't happen in 2024 because the math was brutal at 2024 prices. At 2026 prices, they're cheap enough to run 24/7.</li>
+  </ul>
+
+  <h2>The trap for finance teams</h2>
+  <p>Finance sees "per-token costs down 80%" and projects AI spend going down. Engineering ships agents, reasoning, and longer contexts. The bill arrives at +60% year-over-year. Finance blames engineering for waste. Engineering says "It was cheaper per token, we thought it was fine." Nobody was wrong, but nobody measured total consumption.</p>
+  <p>This is the definition of Jevons paradox: the more efficient the input, the more we consume it. Coal became cheaper when steam engines improved ; consumption skyrocketed. Antibiotics became cheaper after Fleming's discovery ; doctors prescribed them for everything, including viral infections. LLM tokens are following the same curve.</p>
+
+  <h2>How to actually control the bill</h2>
+  <ul>
+    <li><strong>Track total tokens consumed, not just per-token price.</strong> Weekly. By model, by feature, by team. If total tokens are up 50% month-over-month, the bill will follow. Price drops won't save you.</li>
+    <li><strong>Budget consumption, not cost.</strong> "We will not exceed 100B tokens / month" is a real constraint. "We will not exceed $50k / month" is false—prices will drop and you'll burn it all.</li>
+    <li><strong>Reason-type accounting.</strong> Separate reasoning token spend (expected to grow, high ROI) from base inference (target flat or declining). Reasoning is an investment; base inference is a cost center.</li>
+    <li><strong>Agent lifecycle cost.</strong> When you ship an agent, calculate its annual token cost. If it handles 1000 tasks / day, it's 365M invocations / year. At $1 / 1K invocations in token cost, that's $365k / year. Budget it like any other infrastructure cost.</li>
+    <li><strong>Forecast consumption growth independently from price drops.</strong> Separate your price forecast (get it from provider pricing pages) from your consumption forecast (measure trends, growth targets, new features). The two move differently.</li>
+  </ul>
+
+  <h2>What to actually track</h2>
+  <p>Your dashboard should show:</p>
+  <ul>
+    <li><strong>Total tokens consumed this month, YoY change.</strong> This is your leading indicator. If tokens are up, bill will be up.</li>
+    <li><strong>Tokens by model.</strong> If GPT-4 tokens are flat but o3 tokens are up 300%, you're shifting to higher-quality reasoning. Expected and good. If Llama tokens dropped because you migrated to a frontier model, that's cost creep—investigate why.</li>
+    <li><strong>Tokens by feature / team / use-case.</strong> Which agent is burning the most? Which team? This drives optimization priority.</li>
+    <li><strong>Price per token (list vs actual).</strong> Track provider list prices so you can see the effect of price drops on your bill net of consumption growth.</li>
+    <li><strong>Reasoning token %, growing or flat?</strong> If reasoning climbs from 5% to 20% of tokens, that's a major spend shift. Make sure it's intentional.</li>
+  </ul>
+
+  <h2>The hard truth</h2>
+  <p>Falling prices are not a win for your CFO; they're a trap. They make bad decisions cheap. They expand consumption. They hide waste. Your CFO's job is to make sure that expansion is intentional and ROI-positive, not accidental. You can't do that without separating price from consumption and tracking both ruthlessly.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/ai-finops-2026">AI FinOps in 2026</a></li>
+    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

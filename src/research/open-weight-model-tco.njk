@@ -1,0 +1,81 @@
+---
+layout: "research.njk"
+permalink: "research/open-weight-model-tco.html"
+titleCore: "Open-weight model total cost of ownership"
+description: "Self-hosting an open-weight model is only cheaper than a frontier API above a utilization threshold. Below it you pay for idle GPUs."
+slug: "open-weight-model-tco"
+schemaHeadline: "Open-weight model total cost of ownership · LLM CFO"
+schemaDescription: "Self-hosting an open-weight model is only cheaper than a frontier API above a utilization threshold. Below it you pay for idle GPUs."
+breadcrumbName: "Open-weight model total cost of ownership"
+datePublished: "2026-07-10"
+dateModified: "2026-07-10"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Open-weight model total cost of <em>ownership.</em></h1>
+  <p class="updated">10 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Llama 8B is free. Running Llama 8B on an H100 is not. The calculation looks simple—an H100 rents for ~$2 / hour on Lambda Labs or RunPod, Llama 8B serves ~500 requests/second, so your cost per request is $2 / 1800 = $0.0011. But the real math is messier. You pay for idle time when traffic dips. You pay for quantization, optimizations, and eval runs that don't generate revenue. You pay for tail latency and retry loops. Self-hosting an open-weight model is cheaper than a frontier API only above a specific utilization threshold; below it, you're paying rent on unused GPUs.</p>
+
+  <h2>The break-even calculation</h2>
+  <p>Start with your hourly GPU cost and your expected throughput. On Lambda Labs, an H100 costs $2 / hour. Llama 8B with vLLM reaches 200–400 req/s, depending on batch size and token length. Let's assume 300 req/s as a realistic middle ground, averaging 100 tokens per request, so 30k tokens / sec.</p>
+  <p>At that throughput, your <strong>per-1M-token cost is</strong>:</p>
+  <ul>
+    <li>GPU cost: $2 / hour ÷ 3600 sec = $0.00056 / sec</li>
+    <li>30k tokens / sec means $0.00056 / 30k = $0.0000187 / token, or $18.70 / 1M tokens</li>
+  </ul>
+  <p>Claude 3.5 Sonnet on Bedrock costs $3.00 / 1M input tokens, $15.00 / 1M output. If your workload is mostly input (e.g., classification, retrieval), you're paying $3.00 / 1M and your self-hosted cost is $18.70. <strong>Bedrock wins by 6x.</strong> If your workload is mostly output (e.g., generation), you're paying $15.00 / 1M and your self-hosted cost is $18.70. <strong>They're comparable</strong>, but you haven't included ops yet.</p>
+
+  <h2>Hidden costs of self-hosting</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Cost category</th><th scope="col">Typical range</th><th scope="col">Impact</th></tr></thead>
+    <tbody>
+      <tr><td>Idle GPU time (traffic variance)</td><td>20–40% of GPU cost</td><td>If you average 300 req/s but peak at 100 and trough at 50, you over-provision and pay for empty capacity.</td></tr>
+      <tr><td>Model quantization and tuning</td><td>$2k–$10k one-time</td><td>Amortize over expected lifetime; adds setup delay.</td></tr>
+      <tr><td>Eval and monitoring</td><td>10–15% of GPU cost</td><td>Running test suites, LLM-as-judge scoring, latency tracking.</td></tr>
+      <tr><td>DevOps and incident response</td><td>0.5–1.0 FTE per cluster</td><td>Assumes <5 H100s. Larger clusters need more; smaller might share ops with other workloads.</td></tr>
+      <tr><td>Egress and data transfer</td><td>$0.10 per GB (cloud to cloud)</td><td>Pulling training data, syncing checkpoints, logs. Often overlooked.</td></tr>
+      <tr><td>Quantization decode overhead</td><td>2–5% latency tax</td><td>4-bit quantization saves GPU memory but adds decode latency. Some requests may timeout.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Real-world break-even points</h2>
+  <p>The math changes based on model size and utilization:</p>
+  <ul>
+    <li><strong>Llama 8B on 1 H100:</strong> Break-even vs Claude Bedrock is ~500k–1M requests / month (at 100 tokens/req). Below that, use the API. Above that, self-host wins if you can maintain 70%+ utilization.</li>
+    <li><strong>Llama 70B on 4 H100s ($8/hr):</strong> Break-even is ~4M–6M requests / month. The unit economics are worse (larger model = lower throughput per GPU) unless your workload requires 70B's quality.</li>
+    <li><strong>Mixtral 8x7B on 2 H100s ($4/hr):</strong> Middle ground. ~2M–3M requests / month to break even. Better throughput-to-quality ratio than pure Llama.</li>
+  </ul>
+  <p>Note: these assume 100 average tokens per request. High-volume, low-context workloads (classification, tagging, retrieval) push the break-even point much higher. Long-context workloads (summarization, reasoning) favor self-hosting earlier.</p>
+
+  <h2>When to self-host</h2>
+  <ul>
+    <li><strong>You have >5M requests / month of stable, predictable traffic.</strong> Enough scale to justify ops overhead and smooth out traffic dips.</li>
+    <li><strong>You need model-specific customization (fine-tuning, system prompts, safety tuning).</strong> APIs are generic. If you need "our 8B is trained on our docs," self-hosting is the only option.</li>
+    <li><strong>Data residency or compliance forces it.</strong> Can't send data to Bedrock or Azure because of data sovereignty rules.</li>
+    <li><strong>You have spare GPU capacity already (e.g., training cluster during off-hours).</strong> Marginal cost is low.</li>
+    <li><strong>Frontier models are too expensive for your use case but you need better quality than 8B.</strong> Example: You're spending $50k / month on GPT-4 for a task that Claude 3.5 Sonnet can do at 1/5 the cost, but Claude isn't available in your region. Self-host Llama 70B, validate quality, migrate, and save $40k/month.</li>
+  </ul>
+
+  <h2>When NOT to self-host</h2>
+  <ul>
+    <li>Traffic is bursty, spiky, or seasonal. You can't keep GPUs busy.</li>
+    <li>You don't have ops expertise in-house. Hiring or outsourcing the headcount is expensive.</li>
+    <li>You need multiple models (classification, retrieval, generation) running simultaneously. Multi-model serving on GPUs is hard.</li>
+    <li>Latency is critical and your cloud infra is far from users. Inference latency matters for real-time UX ; hosting remote on a cheapskate cloud provider will feel slow.</li>
+    <li>You're evaluating a new feature and aren't sure if it'll stick around. Temporary workloads should always use APIs.</li>
+  </ul>
+
+  <h2>The hybrid approach</h2>
+  <p>Most scaled teams don't pick one or the other. They run low-cost, high-volume workloads on self-hosted Llama (e.g., 1M+ requests/month of classification or retrieval), route high-quality or bursty workloads to Bedrock / Azure OpenAI, and use fine-tuned models on APIs (e.g., Azure OpenAI fine-tuned GPT-4) for ultra-sensitive tasks. This requires a routing gateway (LiteLLM, custom logic) that picks the right model based on cost targets, quality requirements, and current load. The operational overhead is real, but the cost efficiency is usually 30–50% better than staying on a single provider.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/inference-vs-training-spend">Inference vs training: where the AI GPU bill actually goes</a></li>
+    <li><a href="/research/model-routing">Model routing without quality regressions</a></li>
+    <li><a href="/research/provider-arbitrage">Provider arbitrage: same model, different price</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

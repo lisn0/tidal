@@ -1,0 +1,67 @@
+---
+layout: "research.njk"
+permalink: "research/inference-vs-training-spend.html"
+titleCore: "Inference vs training: where the AI GPU bill actually goes"
+description: "Why ~55–80% of enterprise AI GPU spend is now inference, not training. The cost lever is how you serve, not how you train."
+slug: "inference-vs-training-spend"
+schemaHeadline: "Inference vs training: where the AI GPU bill actually goes · LLM CFO"
+schemaDescription: "Why ~55–80% of enterprise AI GPU spend is now inference, not training. The cost lever is how you serve, not how you train."
+breadcrumbName: "Inference vs training: where the AI GPU bill actually goes"
+datePublished: "2026-07-10"
+dateModified: "2026-07-10"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · INFRASTRUCTURE</div>
+  <h1 class="page-title">Inference vs training: where the GPU <em>bill actually goes.</em></h1>
+  <p class="updated">10 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">For most of 2024, teams asked "Should we fine-tune or use an API?" The honest answer was always "use the API unless you've proven fine-tuning pays for itself." In 2025, the economics flipped. Industry surveys now report that ~55–80% of enterprise AI GPU spend flows to inference, not training. That shift changes the game entirely. The lever is no longer "how we train" — it's "how we serve."</p>
+
+  <h2>Why the ratio flipped</h2>
+  <ul>
+    <li><strong>Training happened once.</strong> A five-month engagement to fine-tune a 70B model on your proprietary corpus was a one-time cost spike. Quarterly retrains added a fraction of that back.</li>
+    <li><strong>Inference runs forever.</strong> Every chat, every agent step, every classification call hits the model once per execution. If you serve 10M daily requests at 2B tokens per request, you're computing 20T tokens / day, every single day. At 2026 pricing, even at `$0.01 / 1M output tokens`, that's $200 / day just to run.</li>
+    <li><strong>The frontier models got cheaper.</strong> OpenAI, Anthropic, and others dropped list prices 30–50% per year. Many teams stopped fighting API costs and started renting instead. That cut training budgets but didn't touch inference demand.</li>
+    <li><strong>Agents and reasoning tokens scaled faster than optimization.</strong> Task-level AI adoption exploded (intake, classification, summary, generation). Reasoning models like `o1` and `o3` added complexity that eats compute. The denominator (request volume) grew faster than the numerator (tokens-per-request) fell.</li>
+  </ul>
+
+  <h2>What the spend breakdown actually looks like</h2>
+  <p>Reported ranges by team size and deployment model:</p>
+  <table class="kv">
+    <thead><tr><th scope="col">Scenario</th><th scope="col">Inference %</th><th scope="col">Training %</th><th scope="col">Notes</th></tr></thead>
+    <tbody>
+      <tr><td>API-first SaaS (no self-host)</td><td>95–100%</td><td>0–5%</td><td>Fine-tuning via API only; rare adoption.</td></tr>
+      <tr><td>Hybrid (API + self-hosted open-weight)</td><td>60–75%</td><td>25–40%</td><td>Serving open models for cost-sensitive paths; occasional retrains on new data.</td></tr>
+      <tr><td>Heavy self-host (Llama on GPU cluster)</td><td>55–70%</td><td>30–45%</td><td>Monthly / quarterly retrains; daily inference volume still dominates.</td></tr>
+      <tr><td>Research / benchmark-heavy teams</td><td>30–45%</td><td>55–70%</td><td>Continuous ablation, architecture search, evals. Rare in production.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Why inference is the real cost lever now</h2>
+  <p><strong>Batching.</strong> Training batches are huge and run once. Inference batches are small, distributed, and continuous. A 10% improvement to batch throughput (via quantization, pipelining, or speculative decoding) runs 24/7 across your entire workload. It compounds. Training improvements help only when you retrain.</p>
+  <p><strong>Utilization vs idle.</strong> A GPU training a model runs hot. A GPU serving inference sits idle between requests unless you aggregate load or use continuous-batch mode. Most inference deployments waste 60–80% of GPU capacity waiting. Training rarely does.</p>
+  <p><strong>Model size, not accuracy.</strong> For inference, smaller models (Llama 8B vs 70B, `text-embedding-3-small` vs `text-embedding-3-large`) have linear cost benefits. For training, they have sub-linear accuracy losses. Serving 100 requests on an 8B model costs less than 100 on a 70B, no tradeoffs. The incentive to compress is relentless.</p>
+  <p><strong>Routing and triage.</strong> You can't skip training on hard examples, but you can route cheap answers to a weaker model (classification, summaries, retrieval) and send only ambiguous cases to a frontier model. That scales inference efficiency across your entire stack. Training doesn't have an equivalent lever.</p>
+
+  <h2>The implications for cost control</h2>
+  <ul>
+    <li><strong>Invest in serving infrastructure, not model training.</strong> Your money is in request volume, token volumes, and model parallelism. Deploy a vLLM cluster, not a FSDP training script.</li>
+    <li><strong>Quantization and pruning matter now.</strong> A 2-bit quantized Llama 70B fits on one H100 and runs 4x faster than the base model. Training impact is unproven. Serving impact is immediate and measurable.</li>
+    <li><strong>API routing is not a compromise.</strong> Bedrock, Azure OpenAI, and Vertex are often cheaper than self-hosting below a throughput threshold. The old "API vs self-host" binary is obsolete. Multi-cloud serving with dynamic routing is now table stakes for cost-serious teams.</li>
+    <li><strong>Evals are now infrastructure cost.</strong> If 80% of your bill is inference, 20% of that is probably evaluation (LLM-as-judge, synthetic data generation, test coverage). Instrument evals as carefully as you instrument production serving.</li>
+  </ul>
+
+  <h2>Aligning incentives across engineering and finance</h2>
+  <p>Training spend is easy to measure and blame: "We spent $500k on a fine-tuning run that performed 2% better." Inference spend is invisible: "We didn't optimize the batch size and lost $2M to idle GPU."</p>
+  <p>The fix is tagging. Every request needs metadata: model size, batch size, latency, user ID, cost tag. Aggregate by model, feature, and team. Report weekly. Inference cost should be as visible as training spend. Without that visibility, engineering optimizes for latency, finance asks "why is the bill up 40%?", and no one changes behavior.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/open-weight-model-tco">Open-weight model total cost of ownership</a></li>
+    <li><a href="/research/model-routing">Model routing without quality regressions</a></li>
+    <li><a href="/research/llm-cost-optimization">LLM cost optimization: a practical guide</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

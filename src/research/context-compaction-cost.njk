@@ -1,0 +1,74 @@
+---
+layout: "research.njk"
+permalink: "research/context-compaction-cost.html"
+titleCore: "Context compaction is a cost lever"
+description: "Trimming and compressing context cuts input tokens 50–70% on long-running chats and agents. Where it helps, where it silently degrades quality, and how to measure the tradeoff."
+slug: "context-compaction-cost"
+schemaHeadline: "Context compaction is a cost lever · LLM CFO"
+schemaDescription: "Trimming and compressing context cuts input tokens 50–70% on long-running chats and agents. Where it helps, where it silently degrades quality, and how to measure the tradeoff."
+breadcrumbName: "Context compaction is a cost lever"
+datePublished: "2026-07-10"
+dateModified: "2026-07-10"
+copyrightSymbol: "©"
+footerSeparator: "·"
+---
+  <div class="eye">RESEARCH · TECHNIQUE</div>
+  <h1 class="page-title">Context compaction is a <em>cost lever.</em></h1>
+  <p class="updated">10 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A customer support chatbot that remembers 50 turns of conversation with a user pays for all 50 turns as input tokens on every subsequent request. An autonomous agent running for 10 steps accumulates a full transcript that it reads before taking step 11. Both cases can reduce input tokens 50–70% by trimming or compressing the context window—dropping old turns, summarizing history, or replacing raw logs with structured memory. The cost savings are real, but so are the failure modes. Context compaction is a lever, not a free lunch.</p>
+
+  <h2>Where context compaction wins</h2>
+  <ul>
+    <li><strong>Long-running customer support chats.</strong> After 30 turns, most users are asking follow-ups on the same problem or problem variants. Summarizing the first 20 turns into a 3-sentence executive summary cuts context 70% with minimal signal loss.</li>
+    <li><strong>Multi-turn agents.</strong> A procurement agent that gathers requirements, checks inventory, and books delivery can distill each step's reasoning into 2–3 key facts for the next step, then discard the full log. Reduces per-step cost as the agent runs longer.</li>
+    <li><strong>Retrieval-based workflows.</strong> Instead of passing raw search results + full chat, extract salient facts, deduplicate, rank, and pass only the top 3 results. Cuts context while preserving signal.</li>
+    <li><strong>Bulk processing with repeated context.</strong> A batch job that analyzes 1000 documents with the same instructions can embed the instructions once (prompt caching) and reference it 1000 times, rather than re-encoding them each time.</li>
+  </ul>
+
+  <h2>Where it breaks</h2>
+  <ul>
+    <li><strong>Fact-dependent workflows.</strong> "Have I already told you I'm diabetic?" An agent that forgets a critical detail buried in turn 3 may contradict it in turn 12. Medical, financial, and legal uses are high-risk. You need retrieval, not trimming.</li>
+    <li><strong>Dependency chains.</strong> A conversation where later turns directly reference details from turn 2. Summarization breaks the chain. Example: "As I mentioned earlier, I need X. Can you also deliver Y?" If the summary doesn't include "I need X," the model has no context for "also".</li>
+    <li><strong>Reasoning transparency.</strong> For audit and debugging, you need the full trace. A customer disputes a recommendation; you pull the chat log to understand the reasoning. A trimmed log is useless for this.</li>
+    <li><strong>Rare-but-important context.</strong> "I'm allergic to peanuts." Buried in turn 5. If your summary strategy is "keep only the last 5 turns," you lose it. Structured memory helps here, but adds infrastructure.</li>
+  </ul>
+
+  <h2>Compaction strategies and their tradeoffs</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Strategy</th><th scope="col">Cost savings</th><th scope="col">Risk</th></tr></thead>
+    <tbody>
+      <tr><td>Drop turns older than N steps</td><td>20–40%</td><td>Loses history ; good for simple chats, bad for reasoning.</td></tr>
+      <tr><td>Summarize old turns into 1–2 sentences</td><td>40–60%</td><td>Lossy ; depends on summarization quality.</td></tr>
+      <tr><td>Extract facts into structured memory (JSON)</td><td>50–70%</td><td>Requires schema design ; hallucination risk if memory is incomplete.</td></tr>
+      <tr><td>Retrieval instead of full context</td><td>60–80%</td><td>High latency ; misses context if retrieval query is weak.</td></tr>
+      <tr><td>Prompt caching (OpenAI / Anthropic)</td><td>90% on cached tokens</td><td>Only helps if context repeats ; cache invalidation is a new cost.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How to measure the tradeoff</h2>
+  <p><strong>Offline eval.</strong> Take 100 real conversations, apply your compaction strategy, and re-run the model with the compacted context. Have an LLM-as-judge score whether the response quality changed (no change, degraded, or better). Sample 20 for human review. If <5% show degradation, the strategy is safe to deploy.</p>
+  <p><strong>Production canary.</strong> Route 5% of traffic to the compacted path. Track latency, error rate, and user satisfaction metrics (thumbs-up/down, conversation completion rate). If no difference over 1 week, expand to 50%. If worse, rollback.</p>
+  <p><strong>Cost accounting.</strong> Track input tokens, output tokens, and cost separately for both paths. A 50% reduction in input tokens might save $100 / day but cost $5 / day in extra summarization calls. The net is still positive, but the real savings is lower than the token count suggests.</p>
+
+  <h2>Combining with prompt caching</h2>
+  <p>Prompt caching (OpenAI `$0.90 / 1M` for cached input vs `$3.00 / 1M` for regular input; Anthropic ~90% discount on cache-read tokens) is context compaction for the static parts. If your agent always starts with the same system prompt + 50 KB of operational guidelines, cache those. Then use live context compaction for the conversation history that's unique to each request.</p>
+  <p>The combination is powerful: cache the steady-state context (system prompt, retrieval docs, business rules) at 90% discount, then trim the conversation history aggressively. You end up with 80–95% savings on input tokens for multi-turn flows.</p>
+
+  <h2>Common implementation mistakes</h2>
+  <ul>
+    <li><strong>Forgetting to measure baseline quality.</strong> You optimized for cost and now you don't know if the 30% quality drop you're seeing was already there. Always measure before and after.</li>
+    <li><strong>Over-trimming on the first deploy.</strong> Start with a small compaction (drop turns >100 steps old). Measure. Then get more aggressive. You can't undo silent failures.</li>
+    <li><strong>Assuming all turns are equal.</strong> Dropping the most recent turn is worse than dropping turn 1. Recency matters. Structure your trimming to preserve recent context.</li>
+    <li><strong>Not including compaction cost in the savings calculation.</strong> Summarization calls cost tokens too. If you save 1000 input tokens by summarizing but spend 100 tokens on the summarization itself, your net savings is 900 tokens, not 1000.</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/conversation-state-costs">Conversation state is a cost lever now</a></li>
+    <li><a href="/research/prompt-caching-2026">Prompt caching in 2026</a></li>
+    <li><a href="/research/llm-cost-optimization">LLM cost optimization: a practical guide</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
