@@ -1,5 +1,5 @@
 /* TEAM */
-LLM CFO — managed AI cost optimization platform.
+LLM CFO: managed AI cost optimization platform.
 Site: https://llmcfo.com
 Contact: hello@llmcfo.com
 Twitter: @llmcfo
@@ -7,5 +7,5 @@ Twitter: @llmcfo
 /* SITE */
 Last update: 2026/04/24
 Standards: HTML5, CSS, JSON-LD
-Components: Geist, Instrument Serif, Geist Mono
+Components: Geist, Geist Mono
 Software: Hand-written HTML. No bundler. No framework. Consent-gated GA4 only.

@@ -19,7 +19,7 @@ faqJsonLd: >-
   <p class="updated">Operations guide · 11 June 2026</p>
   <p class="byline">By the LLM CFO team</p>
 
-  <p class="lede">LLM cost per request is the unit economics metric that measures the total cost to serve one API call. It is the atomic unit of LLM profitability. If you only know total spend and total requests, you cannot distinguish between a cheap mass-market feature and an expensive specialist workflow—yet they require opposite optimization strategies.</p>
+  <p class="lede">LLM cost per request is the unit economics metric that measures the total cost to serve one API call. It is the atomic unit of LLM profitability. If you only know total spend and total requests, you cannot distinguish between a cheap mass-market feature and an expensive specialist workflow;yet they require opposite optimization strategies.</p>
 
   <h2>The formula</h2>
   <p>Cost per request is deceptively simple to state and challenging to compute correctly. The formula is:</p>
@@ -35,7 +35,7 @@ faqJsonLd: >-
   <ul>
     <li><strong>Mean hides the long tail.</strong> If one customer submits 100k-token prompts and the rest submit 1k tokens, the mean cost per request is misleading. The p95 cost per request matters more for margin planning.</li>
     <li><strong>Model mix shift is invisible at the aggregate.</strong> Switching one endpoint from GPT-3.5 to GPT-4 doubles cost per request for that endpoint. If it is 5% of your traffic, the overall cost per request rise is barely visible until the bill arrives.</li>
-    <li><strong>Feature profitability inverts with scale.</strong> A feature that costs $0.001 per request and generates $0.002 revenue is profitable at 100k users. At 1M users, if operational costs are fixed, it becomes a loss leader—but only if you segment by feature.</li>
+    <li><strong>Feature profitability inverts with scale.</strong> A feature that costs $0.001 per request and generates $0.002 revenue is profitable at 100k users. At 1M users, if operational costs are fixed, it becomes a loss leader;but only if you segment by feature.</li>
     <li><strong>Caching returns are invisible to the aggregate.</strong> Implementing prompt caching on one endpoint might reduce its cost per request by 60%, but if that endpoint is only 3% of your traffic, you will not see it in the company-wide metric.</li>
   </ul>
 

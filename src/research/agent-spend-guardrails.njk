@@ -27,7 +27,7 @@ faqJsonLd: |-
   <p>Agent spend guardrails are hardcoded, non-overrideable caps on the cost and complexity of a single agent execution. They are policies like "max $0.50 per user request," "max 10 model calls per task," or "retry failed tool calls at most twice." Unlike observability dashboards that show you the cost after the fact, guardrails stop runaway spending before the agent escalates or loops indefinitely.</p>
 
   <h2>Why agents cost differently</h2>
-  <p>A normal chat request has one cost surface: request in, answer out. Agents create stacked surfaces. One user task can trigger planning, tool selection, web retrieval, function calls, retries on failure, and a final synthesis step. Each piece can be individually reasonable—a small model call, a cheap API lookup, a single retry—while the total path becomes wildly uneconomic. Without explicit guardrails, an agent can silently explode from a $0.01 request into a $5 multi-step loop.</p>
+  <p>A normal chat request has one cost surface: request in, answer out. Agents create stacked surfaces. One user task can trigger planning, tool selection, web retrieval, function calls, retries on failure, and a final synthesis step. Each piece can be individually reasonable;a small model call, a cheap API lookup, a single retry;while the total path becomes wildly uneconomic. Without explicit guardrails, an agent can silently explode from a $0.01 request into a $5 multi-step loop.</p>
 
   <h2>Common failure modes</h2>
   <ul>
@@ -43,7 +43,7 @@ faqJsonLd: |-
     <li><strong>Per-request budget.</strong> Set an absolute cost ceiling (e.g., $0.25) for a single user job, regardless of how many retries or tool calls happen.</li>
     <li><strong>Step or iteration limit.</strong> Cap the number of model-to-tool-call cycles (e.g., max 8 steps per task) to prevent infinite loops.</li>
     <li><strong>Retry limit.</strong> Set distinct transient-error retry budgets (e.g., 2 retries) separate from logic-loop detection.</li>
-    <li><strong>Escalation policy.</strong> Define precisely when a larger, more expensive model is allowed—usually only after cheap models have exhausted their allocated steps.</li>
+    <li><strong>Escalation policy.</strong> Define precisely when a larger, more expensive model is allowed;usually only after cheap models have exhausted their allocated steps.</li>
     <li><strong>Tool allowlist per workflow.</strong> Not every agent needs every tool; restrict available functions by task type to reduce decision branching.</li>
   </ol>
 

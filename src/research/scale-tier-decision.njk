@@ -2,7 +2,7 @@
 layout: "research.njk"
 permalink: "research/scale-tier-decision.html"
 titleCore: "Scale Tier vs Flex vs Batch vs Standard: a decision matrix"
-description: "When to use OpenAI Scale Tier, Flex, Batch, or Standard processing — a decision matrix by latency tolerance, traffic shape, and committed-spend posture."
+description: "When to use OpenAI Scale Tier, Flex, Batch, or Standard processing ; a decision matrix by latency tolerance, traffic shape, and committed-spend posture."
 slug: "scale-tier-decision"
 schemaHeadline: "Scale Tier vs Flex vs Batch vs Standard: a decision matrix · LLM CFO"
 schemaDescription: "A decision matrix for OpenAI processing tiers."
@@ -19,7 +19,7 @@ footerSeparator: "&middot;"
   <p class="lede">Most teams default every call to standard processing. That is rarely the right answer. OpenAI now ships four processing paths with materially different price and latency profiles, and the cost gap between "all standard" and "the right tier per workload" is usually the biggest line item we touch in a first engagement. This is the decision matrix we use.</p>
 
   <h2>The four paths, in one sentence each</h2>
-  <p><strong>Standard</strong> is the default synchronous path — pay list price per token, get normal latency, no capacity commitments either direction. Good for interactive traffic you cannot predict.</p>
+  <p><strong>Standard</strong> is the default synchronous path ; pay list price per token, get normal latency, no capacity commitments either direction. Good for interactive traffic you cannot predict.</p>
   <p><strong>Scale Tier</strong> is committed throughput at a premium. You reserve units of capacity for a term; in return you get latency and capacity guarantees that standard does not promise. Cheaper than standard only at the high end of utilization, and only if the commitment matches actual traffic.</p>
   <p><strong>Flex</strong> is the same synchronous request shape as standard, at a lower per-token price, with the explicit trade that the provider can deprioritize, slow, or briefly refuse your traffic when overall demand is high. The request returns; it just may return slower, or with a retry-after.</p>
   <p><strong>Batch</strong> is offline. You submit a JSONL file of requests, the provider processes them within a documented window (commonly up to 24 hours), and you collect results. The list-price posture is roughly half of standard. Wrong tool for anything a human is waiting on; right tool for anything a job scheduler is waiting on.</p>
@@ -27,8 +27,8 @@ footerSeparator: "&middot;"
   <h2>The three variables that decide</h2>
   <p>Every workload picks a tier on three axes, in this order:</p>
   <p><strong>1. Latency tolerance.</strong> If a user is staring at a spinner, you are in the standard or Scale Tier conversation. If a queue is staring at a spinner, Flex is on the table. If a dashboard refreshes in the morning, Batch is on the table.</p>
-  <p><strong>2. Traffic shape.</strong> Smooth and predictable favors Scale Tier — you can size the commitment honestly. Spiky and unpredictable favors standard plus Flex overflow — you pay list for the peaks you actually use, and run cheaper paths for everything that can wait. Pure offline favors Batch.</p>
-  <p><strong>3. Committed-spend posture.</strong> Can finance commit to a 6 or 12 month throughput line and defend it? Scale Tier becomes interesting. If next quarter's volume is a guess, do not lock anything in — standard plus Flex is cheaper in expectation than an over-committed reservation.</p>
+  <p><strong>2. Traffic shape.</strong> Smooth and predictable favors Scale Tier ; you can size the commitment honestly. Spiky and unpredictable favors standard plus Flex overflow ; you pay list for the peaks you actually use, and run cheaper paths for everything that can wait. Pure offline favors Batch.</p>
+  <p><strong>3. Committed-spend posture.</strong> Can finance commit to a 6 or 12 month throughput line and defend it? Scale Tier becomes interesting. If next quarter's volume is a guess, do not lock anything in ; standard plus Flex is cheaper in expectation than an over-committed reservation.</p>
   <p>Get those three answers before you look at price. Picking a tier on price first is how teams end up paying for capacity they do not use.</p>
 
   <h2>A decision matrix</h2>
@@ -60,7 +60,7 @@ footerSeparator: "&middot;"
       <tr>
         <td>Eval runs / regression suites</td>
         <td>Batch, Flex if you are iterating live</td>
-        <td>Most evals can wait. The exception is the engineer debugging an eval at 2pm — Flex keeps the same request shape and is cheaper than standard.</td>
+        <td>Most evals can wait. The exception is the engineer debugging an eval at 2pm ; Flex keeps the same request shape and is cheaper than standard.</td>
       </tr>
       <tr>
         <td>Content backfill / corpus rewrite</td>
@@ -99,14 +99,14 @@ footerSeparator: "&middot;"
   <p>Scale Tier is the tier most teams pick wrong. The case for it is narrow:</p>
   <ul>
     <li><strong>Smooth, high-volume traffic.</strong> A daily curve you can draw from memory. If the variance band on your hourly request rate is wider than the commitment unit, you will over-buy.</li>
-    <li><strong>Capacity matters more than price.</strong> When a missed capacity SLA hurts revenue — checkout assistants, paid-tier chat, anything where degraded latency is a customer-facing incident — the premium buys insurance, not throughput per dollar.</li>
+    <li><strong>Capacity matters more than price.</strong> When a missed capacity SLA hurts revenue ; checkout assistants, paid-tier chat, anything where degraded latency is a customer-facing incident ; the premium buys insurance, not throughput per dollar.</li>
     <li><strong>The business can predict 12 months out.</strong> If finance signs the commit and product cannot defend the volume assumption, you have just turned a variable cost into a fixed cost on bad terms.</li>
   </ul>
   <p>Outside those three conditions, standard plus Flex usually wins on total cost, and Batch usually wins on the offline portion. We have moved more workloads off Scale Tier than onto it.</p>
 
   <h2>When Flex wins over Batch</h2>
   <p>Flex and Batch are both "cheaper than standard," but they fit different shapes.</p>
-  <p>Flex wins when the workload still wants the synchronous request shape — request in, response out, same code path — but is happy to retry or wait a little longer. Internal tooling, second-pass enrichment that fires from a web request, agent steps that are not on the user's critical path, regenerations after a user clicks "try again." None of those want a batch job orchestrator. They want the same SDK call, with a cheaper bill and a tolerance for the occasional retry-after.</p>
+  <p>Flex wins when the workload still wants the synchronous request shape ; request in, response out, same code path ; but is happy to retry or wait a little longer. Internal tooling, second-pass enrichment that fires from a web request, agent steps that are not on the user's critical path, regenerations after a user clicks "try again." None of those want a batch job orchestrator. They want the same SDK call, with a cheaper bill and a tolerance for the occasional retry-after.</p>
   <p>Batch wins when you can rephrase the workload as a file. If you are already writing rows to a queue or table, you can already write JSONL. If you are already triggering work on a schedule, you can already wait on a job ID. The orchestration overhead is the price of admission; the discount pays it back fast at volume.</p>
 
   <h2>When Batch is the right answer even at the cost of latency</h2>
@@ -114,7 +114,7 @@ footerSeparator: "&middot;"
   <ul>
     <li>The output is consumed by another system, not a person.</li>
     <li>The volume is large enough that the discount shows up as a real line item, not a rounding error.</li>
-    <li>The work is naturally idempotent — re-running a chunk costs nothing the business cares about.</li>
+    <li>The work is naturally idempotent ; re-running a chunk costs nothing the business cares about.</li>
     <li>The downstream system can wait until tomorrow morning for last night's data.</li>
   </ul>
   <p>Most enrichment, classification, summarization-of-corpora, eval, and content-rewrite workloads check all four boxes. Putting any of them on standard is a posture mistake, not a performance choice.</p>
@@ -131,14 +131,14 @@ footerSeparator: "&middot;"
 
   <h2>The pricing posture that ties it together</h2>
   <p>The pattern that holds up across engagements: most teams should be on a mix, not a single tier.</p>
-  <p>Standard carries the interactive customer path — chat, search, checkout, anything where a slow response is a product defect. Flex covers internal tools and non-blocking customer features — the workloads that benefit from the synchronous shape but do not need the capacity guarantee. Batch handles offline work — enrichment, evals, embeddings, content rewrites, anything a scheduler can consume. Scale Tier is reserved, narrowly, for the workloads where a missed capacity SLA would visibly hurt revenue.</p>
+  <p>Standard carries the interactive customer path ; chat, search, checkout, anything where a slow response is a product defect. Flex covers internal tools and non-blocking customer features ; the workloads that benefit from the synchronous shape but do not need the capacity guarantee. Batch handles offline work ; enrichment, evals, embeddings, content rewrites, anything a scheduler can consume. Scale Tier is reserved, narrowly, for the workloads where a missed capacity SLA would visibly hurt revenue.</p>
   <p>The mistake we see most often is the inverse: everything on standard "to keep it simple," with the Batch and Flex savings left on the table for a year, and a Scale Tier commitment bolted on top because someone in finance asked for predictable pricing. That stack is the most expensive way to run any of these workloads.</p>
 
   <h2>How to evaluate this in a week</h2>
   <p>You do not need a quarter to get the first cut right.</p>
-  <p><strong>Day 1.</strong> Pull a week of usage. Tag every workload as interactive, internal, or offline. Note traffic shape — smooth or spiky.</p>
+  <p><strong>Day 1.</strong> Pull a week of usage. Tag every workload as interactive, internal, or offline. Note traffic shape ; smooth or spiky.</p>
   <p><strong>Day 2.</strong> For each workload, write the latency budget in plain language. "User waits" / "queue waits" / "scheduler waits." That sentence picks the tier.</p>
-  <p><strong>Day 3.</strong> Move the clearest Batch candidates first — nightly enrichment, eval runs, embeddings refresh. These are the safest moves and usually the largest dollar wins.</p>
+  <p><strong>Day 3.</strong> Move the clearest Batch candidates first ; nightly enrichment, eval runs, embeddings refresh. These are the safest moves and usually the largest dollar wins.</p>
   <p><strong>Day 4.</strong> Move internal-tool traffic to Flex behind a gateway or feature flag. Watch retry rates. If they stay reasonable, leave it there.</p>
   <p><strong>Day 5.</strong> Re-examine any existing Scale Tier commitment against the last 30 days of actual hourly usage. If utilization is below the breakeven, do not renew at that size.</p>
   <p>That sequence usually lands the bulk of the savings before anyone has to argue about a commit. Scale Tier is a conversation you have later, once the mix is honest.</p>

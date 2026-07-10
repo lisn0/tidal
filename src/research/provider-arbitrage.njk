@@ -17,13 +17,13 @@ footerSeparator: "·"
   <p class="updated">25 April 2026</p>
   <p class="byline">By the LLM CFO team</p>
 
-  <p class="lede">A surprising amount of LLM spend is paying retail when wholesale is on the next shelf. The same open-weights model — Llama, Mistral, DeepSeek, Qwen — is hosted on a dozen providers at meaningfully different prices. Even closed models (Claude on Bedrock, Gemini on Vertex) sit on different pricing curves than their first-party endpoints when you factor in committed-use discounts and reserved capacity.</p>
+  <p class="lede">A surprising amount of LLM spend is paying retail when wholesale is on the next shelf. The same open-weights model ; Llama, Mistral, DeepSeek, Qwen ; is hosted on a dozen providers at meaningfully different prices. Even closed models (Claude on Bedrock, Gemini on Vertex) sit on different pricing curves than their first-party endpoints when you factor in committed-use discounts and reserved capacity.</p>
 
   <h2>Where the price gaps actually live</h2>
   <ul>
     <li><strong>Open-weights on managed clouds vs. specialty hosts.</strong> Llama 3.1 70B on Together or Fireworks is typically 30–60% cheaper per million tokens than Bedrock's on-demand list. Bedrock pays back via reserved capacity and same-VPC inference.</li>
     <li><strong>OpenRouter as a price-discovery layer.</strong> Same model, multiple backends, real-time routing to the cheapest healthy one. Useful for benchmarking what a fair price actually is.</li>
-    <li><strong>Claude on Bedrock vs. Anthropic direct.</strong> List prices are usually identical, but EDP / committed-use discounts on AWS materially change the effective rate. Anthropic also offers committed pricing — get both quotes.</li>
+    <li><strong>Claude on Bedrock vs. Anthropic direct.</strong> List prices are usually identical, but EDP / committed-use discounts on AWS materially change the effective rate. Anthropic also offers committed pricing ; get both quotes.</li>
     <li><strong>Gemini on Vertex vs. AI Studio.</strong> Same model name, different pricing tiers, different rate limits, and different region/quota governance.</li>
     <li><strong>DeepSeek, Qwen, Mistral hosted variants.</strong> Often a 5–10× spread between the cheapest and most expensive host of the exact same checkpoint.</li>
   </ul>
@@ -34,7 +34,7 @@ footerSeparator: "·"
     <li><strong>Egress and routing cost.</strong> If your app runs in AWS us-east-1 and you call a provider in GCP europe-west, NAT and egress can swallow 5–15% of the savings. Co-locate or accept the tax explicitly.</li>
     <li><strong>Regional availability.</strong> Bedrock and Vertex roll out models region-by-region. The model you want at the price you want may not be in the region your data residency policy allows.</li>
     <li><strong>Rate limits and tail latency.</strong> Specialty hosts can have lower base rate limits and noisier p99 latency than the hyperscalers. Run a real load test, not a single-shot curl.</li>
-    <li><strong>Tool-calling and structured-output fidelity.</strong> Open-weights hosts implement function calling differently. The schema-conformance rate often degrades versus the source provider — your downstream JSON parser will tell you.</li>
+    <li><strong>Tool-calling and structured-output fidelity.</strong> Open-weights hosts implement function calling differently. The schema-conformance rate often degrades versus the source provider ; your downstream JSON parser will tell you.</li>
     <li><strong>Compliance.</strong> SOC 2 / HIPAA / data-processing terms vary by host. The legal review on a new provider can take longer than the savings are worth for a small endpoint.</li>
   </ol>
 
@@ -42,7 +42,7 @@ footerSeparator: "·"
   <ol>
     <li><strong>Build a representative eval set</strong> from your own logs (anonymized). 200–500 examples across the distribution of real traffic. Include the long tail.</li>
     <li><strong>Run both providers head-to-head</strong> on the same prompts, same temperature, same seed where supported. Capture full output, latency, error rate, and cost per request.</li>
-    <li><strong>Score with your existing quality metric</strong> — LLM-as-judge against a stronger model, exact-match on structured tasks, or a rubric the product owner trusts.</li>
+    <li><strong>Score with your existing quality metric</strong> ; LLM-as-judge against a stronger model, exact-match on structured tasks, or a rubric the product owner trusts.</li>
     <li><strong>Decide on a quality floor, not a target.</strong> "We accept any provider whose pass rate is within 1 percentage point of incumbent." Then take the cheapest qualifying option.</li>
     <li><strong>Re-run the eval monthly.</strong> Hosts silently swap quants. Your pass rate is not a one-time measurement.</li>
   </ol>
@@ -50,17 +50,17 @@ footerSeparator: "·"
   <h2>Cross-vendor swaps where quality genuinely matches</h2>
   <p>Some swaps are durable because the underlying weights are identical and the host is just renting hardware:</p>
   <ul>
-    <li><strong>Claude Sonnet on Bedrock vs. Anthropic</strong> — same weights, often a wash on price, sometimes a meaningful win on AWS commits.</li>
-    <li><strong>GPT-4o on Azure OpenAI vs. OpenAI</strong> — same weights, Azure adds enterprise terms; pricing is parity-ish, EA discounts can swing it.</li>
-    <li><strong>Llama 3.1 across Bedrock, Vertex, Together, Fireworks, Groq</strong> — same checkpoint family, but quantization and serving stack vary; eval before swapping.</li>
+    <li><strong>Claude Sonnet on Bedrock vs. Anthropic</strong> ; same weights, often a wash on price, sometimes a meaningful win on AWS commits.</li>
+    <li><strong>GPT-4o on Azure OpenAI vs. OpenAI</strong> ; same weights, Azure adds enterprise terms; pricing is parity-ish, EA discounts can swing it.</li>
+    <li><strong>Llama 3.1 across Bedrock, Vertex, Together, Fireworks, Groq</strong> ; same checkpoint family, but quantization and serving stack vary; eval before swapping.</li>
   </ul>
-  <p>Closed-model swaps across vendors (GPT to Claude to Gemini) are not arbitrage — that's <a href="/research/model-routing">model routing</a>, and it requires a real eval because the answers will differ.</p>
+  <p>Closed-model swaps across vendors (GPT to Claude to Gemini) are not arbitrage ; that's <a href="/research/model-routing">model routing</a>, and it requires a real eval because the answers will differ.</p>
 
   <h2>When arbitrage is and isn't worth pursuing</h2>
   <ul>
     <li><strong>Worth it:</strong> a single high-volume endpoint &gt;$5k/mo, stable prompts, eval-able outputs.</li>
     <li><strong>Not worth it:</strong> long tail of small endpoints with bespoke prompts and no shared quality metric. The eval cost dominates.</li>
-    <li><strong>Worth it:</strong> moving from on-demand to a committed/reserved tier with the incumbent — same provider, lower price, no eval needed.</li>
+    <li><strong>Worth it:</strong> moving from on-demand to a committed/reserved tier with the incumbent ; same provider, lower price, no eval needed.</li>
     <li><strong>Maybe worth it:</strong> using a router (LiteLLM, OpenRouter) as a price-discovery and failover layer even if you don't switch primary provider.</li>
   </ul>
 

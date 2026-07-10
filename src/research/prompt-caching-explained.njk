@@ -22,7 +22,7 @@ faqJsonLd: >-
   <p class="lede">Prompt caching is the highest-ROI optimization in the playbook because it's <strong>provider-native</strong>, requires almost no code change, and discounts the most expensive token type on your bill: long, repeated input. Done right, you cut 30–60% off cache-eligible endpoints in a week.</p>
 
   <h2>How it works (in one paragraph)</h2>
-  <p>The model's KV cache — the intermediate state computed when reading your prompt — is normally thrown away after each request. With prompt caching, the provider keeps that state for a few minutes and reuses it when your next request shares an identical prefix. You pay a small write fee the first time and a steeply discounted read fee on every subsequent hit. The output is identical to an uncached call.</p>
+  <p>The model's KV cache ; the intermediate state computed when reading your prompt ; is normally thrown away after each request. With prompt caching, the provider keeps that state for a few minutes and reuses it when your next request shares an identical prefix. You pay a small write fee the first time and a steeply discounted read fee on every subsequent hit. The output is identical to an uncached call.</p>
 
   <h2>What each provider charges</h2>
   <table class="kv">
@@ -48,14 +48,14 @@ faqJsonLd: >-
   <h2>Common mistakes that silently disable caching</h2>
   <ul>
     <li><strong>Trailing whitespace</strong> from a templating engine breaking byte-equality.</li>
-    <li><strong>Random tool order</strong> when serializing a `tools` array — sort it.</li>
+    <li><strong>Random tool order</strong> when serializing a `tools` array ; sort it.</li>
     <li><strong>JSON key order drift</strong> from a non-deterministic serializer.</li>
     <li><strong>User ID or session ID</strong> embedded in the system prompt for "personalization." Move it to the user message.</li>
     <li><strong>Streaming tools that re-issue the full conversation</strong> instead of reusing the conversation prefix. Check your SDK.</li>
   </ul>
 
   <h2>The cache-read token baseline trap</h2>
-  <p>Cache-read tokens are <strong>billed and reported separately</strong> from input tokens on Anthropic. Many teams set their pre-engagement baseline by summing all input-tokens lines and miss the cache-read line entirely — then "savings" mysteriously appear that are really just a column shift. Always reconcile against the raw provider invoice with cache-read as a distinct line item. We wrote up the trap in detail: <a href="/research/cache-read-tokens-baseline-trap">cache-read tokens: the baseline trap</a>.</p>
+  <p>Cache-read tokens are <strong>billed and reported separately</strong> from input tokens on Anthropic. Many teams set their pre-engagement baseline by summing all input-tokens lines and miss the cache-read line entirely ; then "savings" mysteriously appear that are really just a column shift. Always reconcile against the raw provider invoice with cache-read as a distinct line item. We wrote up the trap in detail: <a href="/research/cache-read-tokens-baseline-trap">cache-read tokens: the baseline trap</a>.</p>
 
   <h2>When prompt caching doesn't help</h2>
   <ul>

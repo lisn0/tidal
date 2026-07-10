@@ -5,25 +5,25 @@ footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</
 pageHead: |-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glossary — LLM cost &amp; AI FinOps terms · LLM CFO</title>
+  <title>Glossary ; LLM cost &amp; AI FinOps terms · LLM CFO</title>
   <meta name="description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://llmcfo.com/glossary" />
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://llmcfo.com/glossary" />
-  <meta property="og:title" content="Glossary — LLM cost &amp; AI FinOps terms · LLM CFO" />
+  <meta property="og:title" content="Glossary ; LLM cost &amp; AI FinOps terms · LLM CFO" />
   <meta property="og:description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
   <meta property="og:image" content="https://llmcfo.com/og.png" />
   <meta property="og:site_name" content="LLM CFO" />
   <meta property="og:locale" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@llmcfo" />
-  <meta name="twitter:title" content="Glossary — LLM cost &amp; AI FinOps terms · LLM CFO" />
+  <meta name="twitter:title" content="Glossary ; LLM cost &amp; AI FinOps terms · LLM CFO" />
   <meta name="twitter:description" content="Plain-English definitions for AI billing and LLM cost optimization terms: cache-read tokens, batch API, model routing, provider arbitrage, and semantic cache." />
   <meta name="twitter:image" content="https://llmcfo.com/og.png" />
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Glossary — LLM cost & AI FinOps terms · LLM CFO","description":"Plain-English definitions of the terms that show up on AI bills and in cost-optimization conversations. Cache-read tokens, batch API, model routing, provider arbitrage, semantic cache, and the rest.","url":"https://llmcfo.com/glossary","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Glossary ; LLM cost & AI FinOps terms · LLM CFO","description":"Plain-English definitions of the terms that show up on AI bills and in cost-optimization conversations. Cache-read tokens, batch API, model routing, provider arbitrage, semantic cache, and the rest.","url":"https://llmcfo.com/glossary","datePublished":"2026-04-25","dateModified":"2026-04-25","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llmcfo.com/glossary"}]}
@@ -62,7 +62,7 @@ pageHead: |-
     <dt>AI FinOps</dt>
     <dd>The practice of governing AI / LLM spend the way cloud FinOps governs cloud spend: visibility, attribution, baselines, optimization, and accountability. See the <a href="/research/llm-cost-optimization">cost optimization guide</a>.</dd>
     <dt>Anthropic</dt>
-    <dd>Maker of the Claude family of models (Haiku, Sonnet, Opus). First-party API and also resold via AWS Bedrock and Google Vertex AI. Bills cache writes, cache reads, input, and output as separate line items — see <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
+    <dd>Maker of the Claude family of models (Haiku, Sonnet, Opus). First-party API and also resold via AWS Bedrock and Google Vertex AI. Bills cache writes, cache reads, input, and output as separate line items ; see <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
     <dt>Azure OpenAI</dt>
     <dd>Microsoft's enterprise reseller of OpenAI models. Same weights as the OpenAI API, but with EA pricing, regional residency, and Microsoft commercial terms. Sometimes a meaningful price win versus OpenAI direct depending on your Microsoft EA.</dd>
   </dl>
@@ -78,23 +78,23 @@ pageHead: |-
   <h2 class="letter" id="c">C</h2>
   <dl class="glossary">
     <dt>Cache-read tokens</dt>
-    <dd>Input tokens served from a prompt cache hit. Discounted ~50% (OpenAI) or ~90% (Anthropic) versus full-price input. Reported as a separate invoice line — easy to miscount when setting a baseline. See <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
+    <dd>Input tokens served from a prompt cache hit. Discounted ~50% (OpenAI) or ~90% (Anthropic) versus full-price input. Reported as a separate invoice line ; easy to miscount when setting a baseline. See <a href="/research/cache-read-tokens-baseline-trap">the baseline trap</a>.</dd>
     <dt>Cache-write tokens</dt>
     <dd>Input tokens that populated a cache entry on the first request. On Anthropic, billed at 1.25× (5-min ephemeral) or 2× (1-hour extended) the input rate. The premium pays back fast on any reused prefix. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
     <dt>Cascade routing</dt>
     <dd>A model-routing pattern: try a cheap model first; only escalate to an expensive model if a cheap classifier or self-confidence check says the cheap answer is unreliable. See <a href="/research/model-routing">model routing</a>.</dd>
     <dt>Context caching (Vertex)</dt>
-    <dd>Google's prompt-cache equivalent on Vertex Gemini. Charges a per-token-per-hour storage fee plus a discounted read rate. Slightly different mental model than OpenAI/Anthropic — you provision a cache resource explicitly.</dd>
+    <dd>Google's prompt-cache equivalent on Vertex Gemini. Charges a per-token-per-hour storage fee plus a discounted read rate. Slightly different mental model than OpenAI/Anthropic ; you provision a cache resource explicitly.</dd>
     <dt>Cosine similarity</dt>
     <dd>A measure of how close two embedding vectors are, in the range -1 to 1. The standard threshold knob in semantic caching: hits above the threshold reuse a prior response. See <a href="/research/semantic-caching">semantic caching</a>.</dd>
     <dt>Cost per task</dt>
-    <dd>Spend divided by a business-meaningful unit (per ticket resolved, per row enriched, per query answered). The only KPI worth reporting up — invariant to traffic and aligned to value.</dd>
+    <dd>Spend divided by a business-meaningful unit (per ticket resolved, per row enriched, per query answered). The only KPI worth reporting up ; invariant to traffic and aligned to value.</dd>
   </dl>
 
   <h2 class="letter" id="d">D</h2>
   <dl class="glossary">
     <dt>Distillation</dt>
-    <dd>Training a smaller "student" model to mimic a larger "teacher" model on a specific task. Done well, you get most of the quality at a fraction of the inference cost. The cost of training and eval is non-trivial — only worth it for high-volume, narrow tasks.</dd>
+    <dd>Training a smaller "student" model to mimic a larger "teacher" model on a specific task. Done well, you get most of the quality at a fraction of the inference cost. The cost of training and eval is non-trivial ; only worth it for high-volume, narrow tasks.</dd>
   </dl>
 
   <h2 class="letter" id="e">E</h2>
@@ -128,7 +128,7 @@ pageHead: |-
   <h2 class="letter" id="k">K</h2>
   <dl class="glossary">
     <dt>KV cache</dt>
-    <dd>Key/Value cache — the intermediate attention state a transformer builds while reading the prompt. Provider prompt caches expose this internal optimization as a billable, reusable resource. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
+    <dd>Key/Value cache ; the intermediate attention state a transformer builds while reading the prompt. Provider prompt caches expose this internal optimization as a billable, reusable resource. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
   </dl>
 
   <h2 class="letter" id="l">L</h2>
@@ -164,7 +164,7 @@ pageHead: |-
     <dt>Prompt cache</dt>
     <dd>Provider-native reuse of the KV cache for shared prompt prefixes. Highest-ROI optimization in the playbook. See <a href="/research/prompt-caching-explained">prompt caching</a>.</dd>
     <dt>Prompt compression</dt>
-    <dd>Shrinking a prompt without changing its meaning — trimming few-shot examples, summarizing retrieved context, replacing verbose instructions. Real savings, but eval before shipping; small wording changes can move quality.</dd>
+    <dd>Shrinking a prompt without changing its meaning ; trimming few-shot examples, summarizing retrieved context, replacing verbose instructions. Real savings, but eval before shipping; small wording changes can move quality.</dd>
     <dt>Provider arbitrage</dt>
     <dd>Buying the same (or quality-equivalent) model from a cheaper host. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</dd>
   </dl>
@@ -186,7 +186,7 @@ pageHead: |-
     <dt>Speculative decoding</dt>
     <dd>An inference-time speedup where a small draft model proposes tokens that a larger model verifies in parallel. Reduces latency more than cost on managed APIs; mostly relevant if you self-host.</dd>
     <dt>System prompt</dt>
-    <dd>The instruction block that frames the model's role and rules. The largest cacheable static chunk in most production prompts — keep it stable to keep cache hits.</dd>
+    <dd>The instruction block that frames the model's role and rules. The largest cacheable static chunk in most production prompts ; keep it stable to keep cache hits.</dd>
   </dl>
 
   <h2 class="letter" id="t">T</h2>

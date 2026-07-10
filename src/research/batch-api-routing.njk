@@ -31,11 +31,11 @@ footerSeparator: "·"
   </table>
 
   <h2>How it actually works</h2>
-  <p>You upload a file of requests; the provider runs them when capacity is available; you poll or webhook for the result file. Caching, function calling, and structured outputs are typically supported. Streaming is not — by definition, batch is async. Failed individual requests come back in an error file alongside the success file.</p>
+  <p>You upload a file of requests; the provider runs them when capacity is available; you poll or webhook for the result file. Caching, function calling, and structured outputs are typically supported. Streaming is not ; by definition, batch is async. Failed individual requests come back in an error file alongside the success file.</p>
 
   <h2>Workloads that should be on batch today</h2>
   <ol>
-    <li><strong>Eval pipelines.</strong> Regression tests, LLM-as-judge runs, golden-set scoring. These are the canonical batch case — you don't care if results land in 3 minutes or 3 hours, you care about the bill.</li>
+    <li><strong>Eval pipelines.</strong> Regression tests, LLM-as-judge runs, golden-set scoring. These are the canonical batch case ; you don't care if results land in 3 minutes or 3 hours, you care about the bill.</li>
     <li><strong>Data enrichment.</strong> Tagging, classification, entity extraction over a backlog of records. If it's a one-time job over a million rows, it belongs in batch.</li>
     <li><strong>Content generation at scale.</strong> Bulk product descriptions, alt text, translations, marketing variants. Anything where a human reviews the output later anyway.</li>
     <li><strong>Nightly summarization.</strong> Daily digests, account-level recaps, weekly reports. Schedule the batch to start at 22:00; results are ready before the morning email goes out.</li>
@@ -46,10 +46,10 @@ footerSeparator: "·"
   <h2>Anti-patterns: do not route to batch</h2>
   <ul>
     <li><strong>User-facing endpoints.</strong> Anything where a human is waiting on a screen.</li>
-    <li><strong>Interactive agents and chat.</strong> The 24-hour SLA is a contract, not a soft target — your batch could land in 8 minutes or 22 hours.</li>
+    <li><strong>Interactive agents and chat.</strong> The 24-hour SLA is a contract, not a soft target ; your batch could land in 8 minutes or 22 hours.</li>
     <li><strong>Tool-calling loops</strong> where one call's output feeds the next call's input. Batch can't do multi-step within a single batch.</li>
     <li><strong>Anything tied to a webhook fan-out</strong> with a tight timeout (Stripe, GitHub, etc.).</li>
-    <li><strong>"Nice to have" real-time UX.</strong> If a PM can't articulate why the user needs it in 2 seconds, ask — but don't assume.</li>
+    <li><strong>"Nice to have" real-time UX.</strong> If a PM can't articulate why the user needs it in 2 seconds, ask ; but don't assume.</li>
   </ul>
 
   <h2>Practical migration order</h2>
@@ -64,7 +64,7 @@ footerSeparator: "·"
   <ul>
     <li><strong>Rate limits are separate</strong> from sync. You can typically queue more, but the per-batch token caps still apply.</li>
     <li><strong>Cost reports don't auto-attribute</strong> batch lines to the right cost center unless you tag them in metadata.</li>
-    <li><strong>Cache hits don't compound with batch discounts</strong> on every provider — read the small print before modeling savings.</li>
+    <li><strong>Cache hits don't compound with batch discounts</strong> on every provider ; read the small print before modeling savings.</li>
     <li><strong>Output token estimates are best-guess.</strong> Set a reasonable `max_tokens` ceiling; batch failures from one runaway request can hold up the whole file.</li>
   </ul>
 

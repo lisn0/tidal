@@ -39,52 +39,52 @@ pageHead: |-
 ---
   <div class="eye">METHODOLOGY</div>
   <h1 class="page-title">How we estimate <em>savings.</em></h1>
-  <p class="lede">Most vendors in this space lead with logos. We don't have logos to lead with yet, and we'd rather show the work than borrow someone else's. This page is the audit math, written out — what we measure during a baseline, the five levers we evaluate, the guardrails we hold quality to, how we reconcile the invoice each month, and the things we explicitly refuse to claim.</p>
+  <p class="lede">Most vendors in this space lead with logos. We don't have logos to lead with yet, and we'd rather show the work than borrow someone else's. This page is the audit math, written out ; what we measure during a baseline, the five levers we evaluate, the guardrails we hold quality to, how we reconcile the invoice each month, and the things we explicitly refuse to claim.</p>
 
   <h2>Baselining</h2>
   <p>The first two weeks of any engagement are read-only. We pull 30 days of provider invoices and 30 days of per-endpoint request logs, and we don't touch a single config until both sets agree with each other. Invoice totals have to reconcile to the request-log totals within a few percent, or we go find the gap before we go any further. A baseline you can't reconcile is a baseline that will haunt every monthly statement after it.</p>
-  <p>We traffic-normalize before drawing any conclusions. Costs per day are noisy — a marketing push, a holiday week, a flaky retry loop, all of these distort the picture. We bucket spend per 1,000 sessions or per 1,000 paid actions (whatever the business actually cares about) so that the "before" and "after" comparisons are like-for-like instead of comparing a quiet week against a peak.</p>
+  <p>We traffic-normalize before drawing any conclusions. Costs per day are noisy ; a marketing push, a holiday week, a flaky retry loop, all of these distort the picture. We bucket spend per 1,000 sessions or per 1,000 paid actions (whatever the business actually cares about) so that the "before" and "after" comparisons are like-for-like instead of comparing a quiet week against a peak.</p>
   <p>What we actually measure, per provider, per model, per endpoint:</p>
   <ul>
     <li>Input tokens (the prompt and any tool definitions sent).</li>
     <li>Output tokens (what the model generated).</li>
-    <li>Cache-read tokens — billed at a steep discount and tracked on a separate line.</li>
-    <li>Cache-write tokens — usually billed at a small premium over normal input.</li>
+    <li>Cache-read tokens ; billed at a steep discount and tracked on a separate line.</li>
+    <li>Cache-write tokens ; usually billed at a small premium over normal input.</li>
   </ul>
-  <p>Cache-read tokens are the easiest place to corrupt a baseline. They show up in usage exports next to input tokens, but they are not priced the same — depending on the provider they cost a fraction of normal input, and lumping them together either flatters your "before" (making the savings look smaller than they are) or flatters your "after" (making them look larger). We track them separately. If your current dashboard rolls everything into a single "input" number, that's the first thing we untangle.</p>
+  <p>Cache-read tokens are the easiest place to corrupt a baseline. They show up in usage exports next to input tokens, but they are not priced the same ; depending on the provider they cost a fraction of normal input, and lumping them together either flatters your "before" (making the savings look smaller than they are) or flatters your "after" (making them look larger). We track them separately. If your current dashboard rolls everything into a single "input" number, that's the first thing we untangle.</p>
   <p>The deliverable at the end of baselining is a single document: per-endpoint spend, per-model spend, percentage of traffic that is cacheable, percentage that is latency-sensitive, percentage that is batchable, and a ranked list of where the dollars actually live. We do not start changing anything until the client signs off on this picture.</p>
 
   <h2>What we change</h2>
-  <p>There are roughly five levers worth pulling. Most engagements use two or three; very few use all five. Each is its own write-up — we won't repeat the long version here.</p>
-  <p><strong>Model routing.</strong> Send each request to the cheapest model that can actually handle it. The trick is the classifier, not the routing — getting the decision right per request, per endpoint, without quietly downgrading the experience. See <a href="/research/model-routing">model routing</a>.</p>
+  <p>There are roughly five levers worth pulling. Most engagements use two or three; very few use all five. Each is its own write-up ; we won't repeat the long version here.</p>
+  <p><strong>Model routing.</strong> Send each request to the cheapest model that can actually handle it. The trick is the classifier, not the routing ; getting the decision right per request, per endpoint, without quietly downgrading the experience. See <a href="/research/model-routing">model routing</a>.</p>
   <p><strong>Semantic caching.</strong> Reuse answers across requests when two prompts mean the same thing. Useful for support, search, FAQ, and any read-heavy surface; useless and dangerous for personalized or stateful flows. See <a href="/research/semantic-caching">semantic caching</a>.</p>
   <p><strong>Prompt caching.</strong> Cache the static prefix of long prompts (system prompts, tool definitions, retrieval context) so you pay full input price once and the cache-read price thereafter. Easy win where prompts have long, stable prefixes. See <a href="/research/prompt-caching-explained">prompt caching</a>.</p>
-  <p><strong>Batch API routing.</strong> Anything that doesn't need to answer the user in real time — overnight summarization, evals, backfills, embeddings, classification jobs — moves to a batch tier at a steep discount. See <a href="/research/batch-api-routing">batch API routing</a>.</p>
+  <p><strong>Batch API routing.</strong> Anything that doesn't need to answer the user in real time ; overnight summarization, evals, backfills, embeddings, classification jobs ; moves to a batch tier at a steep discount. See <a href="/research/batch-api-routing">batch API routing</a>.</p>
   <p><strong>Provider arbitrage.</strong> The same model, or a comparable one, often costs meaningfully different amounts on different providers. We evaluate whether a portion of traffic can move without quality loss. See <a href="/research/provider-arbitrage">provider arbitrage</a>.</p>
 
   <h2>Quality guardrails</h2>
-  <p>Every change ships behind an A/B for a minimum of seven days, and longer if the endpoint is low-traffic or business-critical. Seven days isn't magic — it's the floor below which day-of-week effects haven't averaged out. For checkout, billing, or anything customer-facing during a launch window, we run longer.</p>
-  <p>Per endpoint, we hold three numbers. Latency at p95, eval pass rate against a frozen test set we agreed to at baseline, and refusal/abandonment rate. Anything that moves outside its agreed band triggers an alert; anything that crosses the rollback threshold triggers an automatic revert. The point of automation here is not speed, it's discipline — if a human has to decide whether to roll back at 2am, they'll usually wait, and waiting is how silent quality drift compounds for a quarter before anyone notices.</p>
-  <p>The guardrails are written into the engagement document, in plain numbers, before any change ships. If we can't agree on what "good enough" looks like up front, we don't have a project — we have a future argument.</p>
+  <p>Every change ships behind an A/B for a minimum of seven days, and longer if the endpoint is low-traffic or business-critical. Seven days isn't magic ; it's the floor below which day-of-week effects haven't averaged out. For checkout, billing, or anything customer-facing during a launch window, we run longer.</p>
+  <p>Per endpoint, we hold three numbers. Latency at p95, eval pass rate against a frozen test set we agreed to at baseline, and refusal/abandonment rate. Anything that moves outside its agreed band triggers an alert; anything that crosses the rollback threshold triggers an automatic revert. The point of automation here is not speed, it's discipline ; if a human has to decide whether to roll back at 2am, they'll usually wait, and waiting is how silent quality drift compounds for a quarter before anyone notices.</p>
+  <p>The guardrails are written into the engagement document, in plain numbers, before any change ships. If we can't agree on what "good enough" looks like up front, we don't have a project ; we have a future argument.</p>
 
   <h2>Reconciliation</h2>
-  <p>Once a month we produce a single one-page statement. Baseline cost (what the traffic-normalized spend would have been at pre-engagement rates), observed cost (what was actually billed), the delta, and the share that goes to the client versus the share that goes to us. Provider invoices are attached as the source of truth — the math has to tie out to a real receipt, not a dashboard.</p>
+  <p>Once a month we produce a single one-page statement. Baseline cost (what the traffic-normalized spend would have been at pre-engagement rates), observed cost (what was actually billed), the delta, and the share that goes to the client versus the share that goes to us. Provider invoices are attached as the source of truth ; the math has to tie out to a real receipt, not a dashboard.</p>
   <p>A worked example, with deliberately round and entirely <em>hypothetical</em> numbers (no real client is described here):</p>
   <ul>
     <li>Baseline: <strong>$100,000 / month</strong> (traffic-normalized from the 30-day baseline).</li>
     <li>Observed: <strong>$78,000 / month</strong> (this month's actual provider invoices).</li>
     <li>Delivered savings: <strong>$22,000 / month</strong>.</li>
-    <li>Fee at 20% of delivered savings: <strong>$4,400</strong> — that's the only line item on the invoice.</li>
+    <li>Fee at 20% of delivered savings: <strong>$4,400</strong> ; that's the only line item on the invoice.</li>
   </ul>
-  <p>If the observed cost in any given month is higher than the baseline (it happens — traffic spikes, a new feature launches, a model gets more expensive), there is no fee that month. We do not invoice against a model where the bill went up.</p>
+  <p>If the observed cost in any given month is higher than the baseline (it happens ; traffic spikes, a new feature launches, a model gets more expensive), there is no fee that month. We do not invoice against a model where the bill went up.</p>
 
   <h2>Pricing</h2>
   <p>Fees are 15–25% of delivered savings, depending on engagement size and complexity. There is no retainer and no setup fee. If we don't reduce your bill, you don't pay us. NDA and DPA are available before any data changes hands; if your data-handling rules require either to come first, that's the normal path.</p>
 
   <h2>What we don't claim</h2>
   <p>We don't have a SOC 2 report yet. If your procurement process requires one today, we are honest about that and we'd rather you go elsewhere than have us promise something we can't show.</p>
-  <p>We don't publish customer logos or counts. When clients are ready to be referenced, we'll add them with their explicit written consent — and not before. A logo wall built without permission is a liability, not a credential.</p>
-  <p>We don't make specific dollar promises before an audit. Anyone who quotes you a percentage of savings before reading your invoices is guessing. We give a range after baselining, not before, and we keep the range conservative — it's easier to over-deliver than to explain a miss.</p>
-  <p>We also don't claim our model is the only one that works. Some teams run this in-house, and they should; some teams use a gateway and a few dashboards and that's enough. The reason we exist is that, for a lot of companies, the work above is exactly the sort of work that never gets prioritized — important, unglamorous, and easy to defer for another quarter. We pick it up, do it on a fee that's tied to outcomes, and put the math on the table every month.</p>
+  <p>We don't publish customer logos or counts. When clients are ready to be referenced, we'll add them with their explicit written consent ; and not before. A logo wall built without permission is a liability, not a credential.</p>
+  <p>We don't make specific dollar promises before an audit. Anyone who quotes you a percentage of savings before reading your invoices is guessing. We give a range after baselining, not before, and we keep the range conservative ; it's easier to over-deliver than to explain a miss.</p>
+  <p>We also don't claim our model is the only one that works. Some teams run this in-house, and they should; some teams use a gateway and a few dashboards and that's enough. The reason we exist is that, for a lot of companies, the work above is exactly the sort of work that never gets prioritized ; important, unglamorous, and easy to defer for another quarter. We pick it up, do it on a fee that's tied to outcomes, and put the math on the table every month.</p>
 
   <a class="back" href="/">&larr; Back to llmcfo.com</a>

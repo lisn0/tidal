@@ -2,17 +2,17 @@
 layout: "research.njk"
 permalink: "research/llm-cost-optimization.html"
 titleCore: "LLM cost optimization: a practical guide"
-description: "A practical guide to LLM cost optimization — model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage."
+description: "A practical guide to LLM cost optimization ; model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage."
 slug: "llm-cost-optimization"
 schemaHeadline: "LLM cost optimization: a practical guide · LLM CFO"
-schemaDescription: "A practical guide to LLM cost optimization — model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage."
+schemaDescription: "A practical guide to LLM cost optimization ; model routing, prompt caching, semantic caching, prompt compression, batch routing, and provider arbitrage."
 breadcrumbName: "LLM cost optimization: a practical guide"
 datePublished: "2026-04-25"
 dateModified: "2026-06-11"
 copyrightSymbol: "©"
 footerSeparator: "·"
 faqJsonLd: |-
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the right order to apply cost optimization techniques?","acceptedAnswer":{"@type":"Answer","text":"Apply in this order: prompt caching (provider-native, 50–90% off cached tokens), model routing (easy to hard queries to cheap/frontier models, 30–50% reduction), semantic caching (RAG and support flows, 20–40% reduction), prompt compression (strip redundancy, 10–25% reduction), batch routing (non-realtime work at 50% off), and provider arbitrage (equivalent quality models priced lower elsewhere)."}},{"@type":"Question","name":"Where should I look first to find savings in my LLM bill?","acceptedAnswer":{"@type":"Answer","text":"Sort spend by endpoint and focus on the top five. Almost every engagement shows ~80% of spend on 3–5 endpoints. Optimizing the long tail is a waste of time. Pick the top five and ignore everything else for the first six weeks."}},{"@type":"Question","name":"What baseline reconciliation mistakes do teams make?","acceptedAnswer":{"@type":"Answer","text":"The most common mistake is reconciling to gateway logs instead of raw provider invoices. Gateway logs systematically under-count because they miss retries, fallback calls, and model-side reasoning tokens. Always reconcile to the invoice and track cache-read tokens separately—conflating them is the single most common baseline error."}},{"@type":"Question","name":"How much savings can I expect from these optimization techniques?","acceptedAnswer":{"@type":"Answer","text":"If your LLM bill is over $20K/month, there is almost certainly 30–60% of waste in it. Prompt caching alone can deliver 50–90% off cache-read tokens. Model routing typically saves 30–50%. The combination of these techniques, when applied to your top 5 endpoints with an A/B test against production baseline, usually unlocks measurable savings."}}]}
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the right order to apply cost optimization techniques?","acceptedAnswer":{"@type":"Answer","text":"Apply in this order: prompt caching (provider-native, 50–90% off cached tokens), model routing (easy to hard queries to cheap/frontier models, 30–50% reduction), semantic caching (RAG and support flows, 20–40% reduction), prompt compression (strip redundancy, 10–25% reduction), batch routing (non-realtime work at 50% off), and provider arbitrage (equivalent quality models priced lower elsewhere)."}},{"@type":"Question","name":"Where should I look first to find savings in my LLM bill?","acceptedAnswer":{"@type":"Answer","text":"Sort spend by endpoint and focus on the top five. Almost every engagement shows ~80% of spend on 3–5 endpoints. Optimizing the long tail is a waste of time. Pick the top five and ignore everything else for the first six weeks."}},{"@type":"Question","name":"What baseline reconciliation mistakes do teams make?","acceptedAnswer":{"@type":"Answer","text":"The most common mistake is reconciling to gateway logs instead of raw provider invoices. Gateway logs systematically under-count because they miss retries, fallback calls, and model-side reasoning tokens. Always reconcile to the invoice and track cache-read tokens separately;conflating them is the single most common baseline error."}},{"@type":"Question","name":"How much savings can I expect from these optimization techniques?","acceptedAnswer":{"@type":"Answer","text":"If your LLM bill is over $20K/month, there is almost certainly 30–60% of waste in it. Prompt caching alone can deliver 50–90% off cache-read tokens. Model routing typically saves 30–50%. The combination of these techniques, when applied to your top 5 endpoints with an A/B test against production baseline, usually unlocks measurable savings."}}]}
 ---
   <div class="eye">RESEARCH · GUIDE</div>
   <h1 class="page-title">LLM cost <em>optimization.</em></h1>
@@ -22,7 +22,7 @@ faqJsonLd: |-
   <p class="lede">If your LLM bill is north of $20K/month, there is almost certainly 30–60% of waste in it. This guide is the order in which we look for that waste during a Tidal/LLM CFO engagement, and the techniques we apply once we find it.</p>
 
   <h2>1. Get the baseline right</h2>
-  <p>Before touching anything, reconcile to <strong>raw provider invoices</strong> — not gateway logs, not internal dashboards. Gateway logs systematically under-count because they miss retries, fallback calls, and model-side reasoning tokens. The invoice is the ground truth.</p>
+  <p>Before touching anything, reconcile to <strong>raw provider invoices</strong> ; not gateway logs, not internal dashboards. Gateway logs systematically under-count because they miss retries, fallback calls, and model-side reasoning tokens. The invoice is the ground truth.</p>
   <p>Track these axes separately: provider, model, token type (input / output / cache-read / cache-write), endpoint or feature, environment (prod / staging / batch). Conflating cache-read tokens with input tokens is the single most common baseline error we see.</p>
 
   <h2>2. Find the spend concentration</h2>
@@ -30,16 +30,16 @@ faqJsonLd: |-
 
   <h2>3. Apply the playbook in this order</h2>
   <ol>
-    <li><strong>Prompt caching</strong> — provider-native, lowest implementation cost, 50–90% off cache-read tokens. Always do this first.</li>
-    <li><strong>Model routing</strong> — route easy queries to a smaller/cheaper model, hard queries to the frontier model. Often 30–50% reduction with no quality regression.</li>
-    <li><strong>Semantic caching</strong> — embed the request, look up similar prior responses. Effective on RAG, classification, and high-volume customer-support flows. 20–40% reduction on cache-friendly endpoints.</li>
-    <li><strong>Prompt compression</strong> — strip redundancy, move static context to system prompts (where it caches), tighten few-shot examples. 10–25% reduction on token-heavy endpoints.</li>
-    <li><strong>Batch routing</strong> — non-realtime workloads (eval pipelines, content generation, data enrichment) move to the Batch API. Flat 50% off on eligible volume.</li>
-    <li><strong>Provider arbitrage</strong> — equivalent-quality models priced lower on Bedrock / Vertex / OpenRouter / Together. 30–60% reduction when quality A/Bs pass.</li>
+    <li><strong>Prompt caching</strong> ; provider-native, lowest implementation cost, 50–90% off cache-read tokens. Always do this first.</li>
+    <li><strong>Model routing</strong> ; route easy queries to a smaller/cheaper model, hard queries to the frontier model. Often 30–50% reduction with no quality regression.</li>
+    <li><strong>Semantic caching</strong> ; embed the request, look up similar prior responses. Effective on RAG, classification, and high-volume customer-support flows. 20–40% reduction on cache-friendly endpoints.</li>
+    <li><strong>Prompt compression</strong> ; strip redundancy, move static context to system prompts (where it caches), tighten few-shot examples. 10–25% reduction on token-heavy endpoints.</li>
+    <li><strong>Batch routing</strong> ; non-realtime workloads (eval pipelines, content generation, data enrichment) move to the Batch API. Flat 50% off on eligible volume.</li>
+    <li><strong>Provider arbitrage</strong> ; equivalent-quality models priced lower on Bedrock / Vertex / OpenRouter / Together. 30–60% reduction when quality A/Bs pass.</li>
   </ol>
 
   <h2>4. A/B before you ship</h2>
-  <p>Every optimization gets a 7-day A/B against the production baseline. Quality SLOs are agreed up front. Regressions auto-rollback. "Savings" that come with a quality regression aren't savings — they're a refund waiting to happen.</p>
+  <p>Every optimization gets a 7-day A/B against the production baseline. Quality SLOs are agreed up front. Regressions auto-rollback. "Savings" that come with a quality regression aren't savings ; they're a refund waiting to happen.</p>
 
   <h2>5. Reconcile monthly</h2>
   <p>Delivered savings = locked baseline − reconciled actuals against raw provider invoices, normalized for traffic growth. Anything else is marketing.</p>

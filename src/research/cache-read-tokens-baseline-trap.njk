@@ -17,17 +17,17 @@ footerSeparator: "·"
   <p class="updated">25 April 2026</p>
   <p class="byline">By the LLM CFO team</p>
 
-  <p class="lede">Cache-read tokens are billed separately from input tokens on Anthropic — and reported separately on the invoice, the API response, and most third-party dashboards. If you set a pre-engagement baseline by summing only the input-token line, you will appear to "save" 30–60% the moment caching turns on. Those savings are not real. They are a column shift. This is the single most common audit mistake we see.</p>
+  <p class="lede">Cache-read tokens are billed separately from input tokens on Anthropic ; and reported separately on the invoice, the API response, and most third-party dashboards. If you set a pre-engagement baseline by summing only the input-token line, you will appear to "save" 30–60% the moment caching turns on. Those savings are not real. They are a column shift. This is the single most common audit mistake we see.</p>
 
   <h2>How the line items lay out</h2>
   <p>An Anthropic invoice (and the `usage` block on each API response) breaks token consumption into four kinds:</p>
   <table class="kv">
     <thead><tr><th scope="col">Counter</th><th scope="col">Billing meaning</th></tr></thead>
     <tbody>
-      <tr><td>input_tokens</td><td>uncached input — full price</td></tr>
-      <tr><td>cache_creation_input_tokens</td><td>cache writes — 1.25× input price (5-min) or 2× (1-hour)</td></tr>
-      <tr><td>cache_read_input_tokens</td><td>cache hits — ~0.1× input price</td></tr>
-      <tr><td>output_tokens</td><td>generated output — full output price</td></tr>
+      <tr><td>input_tokens</td><td>uncached input ; full price</td></tr>
+      <tr><td>cache_creation_input_tokens</td><td>cache writes ; 1.25× input price (5-min) or 2× (1-hour)</td></tr>
+      <tr><td>cache_read_input_tokens</td><td>cache hits ; ~0.1× input price</td></tr>
+      <tr><td>output_tokens</td><td>generated output ; full output price</td></tr>
     </tbody>
   </table>
   <p>Before caching is enabled, `cache_read_input_tokens` is zero and every input token is in the `input_tokens` bucket. After caching is enabled, the same prompt traffic is split: the static prefix shows up under `cache_read_input_tokens` (or `cache_creation_input_tokens` on first hit), and only the dynamic suffix is in `input_tokens`.</p>
@@ -35,12 +35,12 @@ footerSeparator: "·"
   <h2>The trap</h2>
   <p>Pre-engagement, an analyst exports usage and writes:</p>
   <p><code class="mono">baseline_spend = input_tokens × input_price + output_tokens × output_price</code></p>
-  <p>That formula is correct <em>only</em> when caching is off. The moment caching is enabled — by anyone, including a default in the SDK or a colleague's experiment — `input_tokens` drops, the formula returns a smaller number, and the dashboard reports "savings." The actual cash going to Anthropic may be unchanged or even higher (cache writes carry a premium).</p>
+  <p>That formula is correct <em>only</em> when caching is off. The moment caching is enabled ; by anyone, including a default in the SDK or a colleague's experiment ; `input_tokens` drops, the formula returns a smaller number, and the dashboard reports "savings." The actual cash going to Anthropic may be unchanged or even higher (cache writes carry a premium).</p>
 
   <h2>Concrete example</h2>
   <p>Endpoint: a support bot, 10,000 requests/day, 8,000-token system+tools prefix, ~500-token user message. Output ~300 tokens. Sonnet 3.5 list price: $3 / M input, $15 / M output.</p>
 
-  <p><strong>Day 1 — caching off:</strong></p>
+  <p><strong>Day 1 ; caching off:</strong></p>
   <table class="kv">
     <thead><tr><th scope="col">Uncached line item</th><th scope="col">Cost</th></tr></thead>
     <tbody>
@@ -50,7 +50,7 @@ footerSeparator: "·"
     </tbody>
   </table>
 
-  <p><strong>Day 2 — caching on, 95% cache-read hit on the 8,000-token prefix:</strong></p>
+  <p><strong>Day 2 ; caching on, 95% cache-read hit on the 8,000-token prefix:</strong></p>
   <table class="kv">
     <thead><tr><th scope="col">Cached line item</th><th scope="col">Cost</th></tr></thead>
     <tbody>
@@ -68,13 +68,13 @@ footerSeparator: "·"
   <ol>
     <li><strong>Pull from the provider invoice or Cost Console</strong>, not from a derived table. Anthropic's console shows all four line items.</li>
     <li><strong>Sum every token bucket × its own price.</strong> Not just input + output.</li>
-    <li><strong>Pin the baseline to a fixed time window</strong> before caching was enabled anywhere in the codebase. Audit the SDK initialization across all services — `cache_control` blocks may be live in code you didn't write.</li>
+    <li><strong>Pin the baseline to a fixed time window</strong> before caching was enabled anywhere in the codebase. Audit the SDK initialization across all services ; `cache_control` blocks may be live in code you didn't write.</li>
     <li><strong>Recompute the baseline cost-per-task</strong> (cost ÷ business-meaningful unit: per ticket, per query, per generated row). Cost-per-task is invariant to traffic and the only number worth reporting up.</li>
     <li><strong>Snapshot the four-bucket breakdown weekly</strong> during the engagement. Movement between buckets is the audit trail for why the bill changed.</li>
   </ol>
 
   <h2>OpenAI's version is subtler</h2>
-  <p>OpenAI also reports cached input separately (`prompt_tokens_details.cached_tokens` on the API; a "cached input" line on the bill). The discount is ~50%, not ~90%, and the trap is smaller — but the same arithmetic applies. If your dashboard sums `prompt_tokens × input_price`, you are <em>over</em>-counting cost when caching is on, because `prompt_tokens` includes the cached portion at full price. Subtract `cached_tokens × input_price × 0.5` to get the real number.</p>
+  <p>OpenAI also reports cached input separately (`prompt_tokens_details.cached_tokens` on the API; a "cached input" line on the bill). The discount is ~50%, not ~90%, and the trap is smaller ; but the same arithmetic applies. If your dashboard sums `prompt_tokens × input_price`, you are <em>over</em>-counting cost when caching is on, because `prompt_tokens` includes the cached portion at full price. Subtract `cached_tokens × input_price × 0.5` to get the real number.</p>
 
   <h2>Related</h2>
   <ul>
