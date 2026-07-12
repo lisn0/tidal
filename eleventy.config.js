@@ -1,6 +1,33 @@
 // Eleventy config for llmcfo.com.
 // Shared layouts rebuild HTML pages while Cloudflare edge/static files pass through verbatim.
 module.exports = function (eleventyConfig) {
+  // Format date as "D Month YYYY" (e.g., "29 April 2026")
+  eleventyConfig.addFilter("formatDate", (dateStr) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  });
+
+  // Update visible date in content: replace the date part of "<p class="updated">Label · OldDate</p>"
+  // or just "<p class="updated">OldDate</p>" with dateModified. Preserves any label.
+  eleventyConfig.addFilter("updateVisibleDate", (content, dateModified, datePublished) => {
+    if (!content || !dateModified) return content;
+    const displayDate = new Date(dateModified + "T00:00:00Z").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    // First try pattern with label and separator: "Label · OldDate"
+    let result = content.replace(
+      /<p class="updated">([^·]*·\s*)[^<]*(<\/p>)/,
+      `<p class="updated">$1${displayDate}$2`
+    );
+    // If that didn't match, try just the date: "OldDate" (no label)
+    if (result === content) {
+      result = content.replace(
+        /<p class="updated">[^<]*(<\/p>)/,
+        `<p class="updated">${displayDate}$1`
+      );
+    }
+    return result;
+  });
+
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy("src/.well-known");
   eleventyConfig.addPassthroughCopy({ "src/.assetsignore": ".assetsignore" });

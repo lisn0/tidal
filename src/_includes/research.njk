@@ -32,7 +32,7 @@
 
 <main class="wrap">
 <aside class="callout"><strong>Auditing your own LLM spend?</strong> LLM CFO runs a free audit of your AI costs and shows which workloads are driving the bill. <a href="/book">Book a free audit &rarr;</a></aside>
-{{ content | safe }}
+{{ content | updateVisibleDate(dateModified, datePublished) | safe }}
 <aside class="callout"><strong>Want this applied to your stack?</strong> Bring the provider bills, gateway logs, and top workflows; we will map the cost drivers and savings path. <a href="/book">Book a free audit &rarr;</a></aside>
 </main>
 
