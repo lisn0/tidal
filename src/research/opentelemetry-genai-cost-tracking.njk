@@ -11,6 +11,8 @@ datePublished: "2026-06-11"
 dateModified: "2026-06-11"
 copyrightSymbol: "©"
 footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What the GenAI conventions are","acceptedAnswer":{"@type":"Answer","text":"OpenTelemetry's GenAI conventions are a published schema for instrumenting generative AI workloads. They define which span and event attributes to record so that LLM requests are observable across observability backends. Using them eliminates the need to invent your own token-tracking fields; instead, you write once to a standard and then export to any backend that understands the schema."}},{"@type":"Question","name":"Deriving cost from attributes","acceptedAnswer":{"@type":"Answer","text":"Once you have these attributes in your spans, calculating cost becomes a lookup join:"}},{"@type":"Question","name":"Integration with observability stacks","acceptedAnswer":{"@type":"Answer","text":"Most observability platforms (Datadog, New Relic, OpenTelemetry Protocol exporters) understand the GenAI conventions or have published mappings. Start by instrumenting your LLM client library to emit the attributes to an OpenTelemetry API collector, then export via OTLP to your chosen backend. If your backend does not natively understand the GenAI schema, define a simple transformation rule that maps the attributes to your internal cost model."}}]}
 ---
   <div class="eye">RESEARCH · OPERATIONS</div>
   <h1 class="page-title">OpenTelemetry GenAI <em>cost tracking.</em></h1>

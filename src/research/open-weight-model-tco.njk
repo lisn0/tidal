@@ -11,6 +11,8 @@ datePublished: "2026-07-10"
 dateModified: "2026-07-10"
 copyrightSymbol: "©"
 footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"The break-even calculation","acceptedAnswer":{"@type":"Answer","text":"Start with your hourly GPU cost and your expected throughput. On Lambda Labs, an H100 costs $2 / hour. Llama 8B with vLLM reaches 200–400 req/s, depending on batch size and token length. Let's assume 300 req/s as a realistic middle ground, averaging 100 tokens per request, so 30k tokens / sec."}},{"@type":"Question","name":"Real-world break-even points","acceptedAnswer":{"@type":"Answer","text":"The math changes based on model size and utilization:"}},{"@type":"Question","name":"The hybrid approach","acceptedAnswer":{"@type":"Answer","text":"Most scaled teams don't pick one or the other. They run low-cost, high-volume workloads on self-hosted Llama (e.g., 1M+ requests/month of classification or retrieval), route high-quality or bursty workloads to Bedrock / Azure OpenAI, and use fine-tuned models on APIs (e.g., Azure OpenAI fine-tuned GPT-4) for ultra-sensitive tasks. This requires a routing gateway (LiteLLM, custom logic) that picks the right model based on cost targets, quality requirements, and current load. The operational overhead is real, but the cost efficiency is usually 30–50% better than staying on a single provider."}}]}
 ---
   <div class="eye">RESEARCH · TECHNIQUE</div>
   <h1 class="page-title">Open-weight model total cost of <em>ownership.</em></h1>
