@@ -8,9 +8,11 @@ schemaHeadline: "Scale Tier vs Flex vs Batch vs Standard: a decision matrix · L
 schemaDescription: "A decision matrix for OpenAI processing tiers."
 breadcrumbName: "Scale Tier vs Flex vs Batch vs Standard"
 datePublished: "2026-05-21"
-dateModified: "2026-05-21"
+dateModified: "2026-07-12"
 copyrightSymbol: "&copy;"
 footerSeparator: "&middot;"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are the four OpenAI processing paths?","acceptedAnswer":{"@type":"Answer","text":"Standard is the default synchronous path at list price per token. Scale Tier is committed throughput at a premium with latency guarantees. Flex is synchronous at lower per-token price but provider can deprioritize when demand is high. Batch is offline processing with ~50% of standard pricing."}},{"@type":"Question","name":"What three variables decide which processing tier to use?","acceptedAnswer":{"@type":"Answer","text":"Latency tolerance: users waiting favor Standard or Scale Tier; queues favor Flex; dashboards refreshing daily favor Batch. Traffic shape: smooth and predictable favors Scale Tier; spiky and unpredictable favor Standard plus Flex; pure offline favors Batch. Committed-spend posture: can finance commit 6–12 months? Scale Tier becomes interesting. If unsure, Standard plus Flex is cheaper in expectation."}},{"@type":"Question","name":"Which tier should I use for customer-facing workloads?","acceptedAnswer":{"@type":"Answer","text":"Use Standard for interactive traffic you cannot predict, or Scale Tier if volume is large and smooth. User is waiting; capacity SLA matters more than per-token price. Move to Scale Tier only once the daily curve is predictable and boring."}},{"@type":"Question","name":"Which tier should I use for batch and background workloads?","acceptedAnswer":{"@type":"Answer","text":"Use Batch for nightly enrichment, classification, eval runs, and content backfill. Async by design; hours of wall time are fine. The discount is the entire reason these workloads exist at scale."}}]}
 ---
   <div class="eye">RESEARCH · PROVIDER POSTURE</div>
   <h1 class="page-title">Scale Tier vs Flex vs Batch vs <em>Standard.</em></h1>
