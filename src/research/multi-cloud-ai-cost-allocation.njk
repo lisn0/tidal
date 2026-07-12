@@ -8,7 +8,7 @@ schemaHeadline: "Multi-cloud AI cost allocation · LLM CFO"
 schemaDescription: "Normalizing token cost across providers, tagging strategy, and the reconciliation headache when you run on Bedrock, Azure OpenAI, Vertex, and self-hosted open-weight simultaneously."
 breadcrumbName: "Multi-cloud AI cost allocation"
 datePublished: "2026-07-10"
-dateModified: "2026-07-10"
+dateModified: "2026-07-12"
 copyrightSymbol: "©"
 footerSeparator: "·"
 faqJsonLd: |-
@@ -41,7 +41,7 @@ faqJsonLd: |-
       <tr><td>Self-hosted GPU</td><td>GPU-hours (amortized)</td><td>Cost = (GPU $/hour) × hours ; allocate to requests by throughput.</td></tr>
     </tbody>
   </table>
-  <p>The fastest path: ingest raw spend from each provider monthly, map each transaction to a model + token volume, compute effective $/1M input tokens and $/1M output tokens for each, store in a central fact table keyed by (provider, model, month). Then your routing logic can compare `Bedrock Claude 3.5: $3.00 / 1M input` to `Azure GPT-4: $2.80 / 1M input` and pick the cheaper path for non-sensitive workloads.</p>
+  <p>The fastest path: ingest raw spend from each provider monthly, map each transaction to a model + token volume, compute effective $/1M input tokens and $/1M output tokens for each, store in a central fact table keyed by (provider, model, month). Then your routing logic can compare `Bedrock Claude Sonnet 5: $2.00 / 1M input` to `Azure GPT-5.4: $2.50 / 1M input` and pick the cheaper path for non-sensitive workloads.</p>
 
   <h2>Tagging strategy for multi-cloud</h2>
   <p>Your routing gateway (LiteLLM, OpenRouter, or custom) must emit telemetry that captures three things:</p>
