@@ -38,6 +38,8 @@ LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with 
 - https://llmcfo.com/research/batch-api-routing
 - https://llmcfo.com/research/how-to-build-an-llm-cfo-function
 - https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit
+- https://llmcfo.com/research/model-concentration-risk
+- https://llmcfo.com/research/state-of-finops-2026-for-cfos
 
 ## Usage Preference
 
