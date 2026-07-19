@@ -1,0 +1,32 @@
+name: search-ping
+
+# After every push to main (which triggers the Cloudflare Workers build),
+# wait for the deploy, then ping IndexNow (Bing/Yandex/etc.) and resubmit
+# the sitemap to Google Search Console.
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Cloudflare deploy
+        run: sleep 180
+
+      # IndexNow key is public by design (ownership = hosting /<key>.txt)
+      - name: IndexNow (Bing, Yandex, Naver, Seznam)
+        env:
+          INDEXNOW_HOST: llmcfo.com
+          INDEXNOW_KEY: 9f7a91c496064b7e96137c3326d9b895
+          INDEXNOW_SITEMAP: https://llmcfo.com/sitemap.xml
+        run: node scripts/indexnow-submit.mjs
+
+      - name: Google Search Console sitemap resubmit
+        env:
+          GSC_SA_KEY: ${{ secrets.GSC_SA_KEY }}
+          GSC_SITE: sc-domain:llmcfo.com
+          GSC_SITEMAPS: https://llmcfo.com/sitemap.xml
+        run: node scripts/gsc-sitemap-submit.mjs
