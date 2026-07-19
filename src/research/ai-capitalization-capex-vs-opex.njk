@@ -1,0 +1,132 @@
+---
+layout: "research.njk"
+permalink: "research/ai-capitalization-capex-vs-opex.html"
+titleCore: "Is your AI spend capex or opex? A capitalization decision tree for CFOs"
+description: "No AI-specific accounting standard exists. CFOs classify AI costs by reasoning from internal-use software (ASC 350-40), R&D (ASC 730), and sold software (ASC 985-20) guidance. A practical decision tree for inference, APIs, training data, infrastructure, and the ambiguous cases."
+slug: "ai-capitalization-capex-vs-opex"
+schemaHeadline: "Is your AI spend capex or opex? A capitalization decision tree for CFOs · LLM CFO"
+schemaDescription: "No AI-specific accounting standard exists. CFOs classify AI costs by reasoning from internal-use software (ASC 350-40), R&D (ASC 730), and sold software (ASC 985-20) guidance. A practical decision tree for inference, APIs, training data, infrastructure, and the ambiguous cases."
+breadcrumbName: "AI capitalization: capex vs opex decision tree"
+datePublished: "2026-07-19"
+dateModified: "2026-07-19"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there a US GAAP standard specifically for AI costs?","acceptedAnswer":{"@type":"Answer","text":"No. There is no AI-specific standard. Teams apply three existing standards by analogy: ASC 350-40 (internal-use software), ASC 730 (research and development), and ASC 985-20 (software sold or leased). The treatment depends entirely on what you're paying for and how the underlying technology is used."}},{"@type":"Question","name":"When is AI API spend capitalized?","acceptedAnswer":{"@type":"Answer","text":"Rarely. Third-party API consumption (OpenAI, Anthropic, Bedrock) is almost always opex—it's a service purchased on demand with no future economic benefit beyond the current period. Capitalize it only if you can argue a specific integration or custom model meets the internal-use software development criteria, which is difficult to support."}},{"@type":"Question","name":"Can you capitalize internal model development?","acceptedAnswer":{"@type":"Answer","text":"Possibly. Internal-use software development (including AI models built for internal use) may be capitalizable in the application development stage under ASC 350-40, provided management authorizes the project and completion is probable. Training and experimentation typically expense; coded application logic and production deployment infrastructure may capitalize. The distinction turns on facts and circumstances."}},{"@type":"Question","name":"What about fine-tuning and training data costs?","acceptedAnswer":{"@type":"Answer","text":"Genuinely ambiguous. Fine-tuning applied to build a deployed application asset may capitalize under ASC 350-40 if it's clearly development work on that specific application. Fine-tuning for experimentation or research falls under ASC 730 and expenses. Training data acquisition similarly depends on whether it's consumable (expense) or directly required to build the asset (capitalize). Document the position and discuss with your auditor."}},{"@type":"Question","name":"What happens when a frontier model is superseded in 18 months?","acceptedAnswer":{"@type":"Answer","text":"Useful life becomes a real problem. ASC 350 requires you to assess and amortize capitalized software over its useful life. If the underlying model is deprecated, your 5-year amortization schedule breaks down. You face impairment testing, potentially accelerated writedowns, and harder-to-defend useful-life assumptions. This pushes some teams toward expensing even capitalizable costs to avoid the uncertainty."}}]}
+---
+  <div class="eye">RESEARCH · ACCOUNTING</div>
+  <h1 class="page-title">Is your AI spend capex <em>or opex?</em></h1>
+  <p class="updated">19 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">There is no AI-specific standard in US GAAP. Your auditors will ask you to apply three existing standards by analogy: <em>ASC 350-40</em> (internal-use software), <em>ASC 730</em> (research and development), and <em>ASC 985-20</em> (software sold or leased). The treatment depends entirely on what you're paying for and how you use the underlying technology. This leaves CFOs to reason through ambiguous cases—fine-tuning, prompt engineering, eval infrastructure, training data—with limited precedent. This article walks the decision tree, names the clearest cases and the genuinely ambiguous ones, and shows what documentation auditors will demand.</p>
+
+  <div class="callout"><strong>Disclaimer:</strong> This article is general information only and is not accounting, tax, or legal advice. AI accounting treatment depends on facts and circumstances specific to your situation. You should confirm your accounting treatment with your company&rsquo;s auditors before finalizing your financial statements. Nothing here constitutes a definitive answer to your capitalization question.</div>
+
+  <h2>Why this problem is unsettled</h2>
+  <p>AI hit mainstream adoption before accounting guidance caught up. The Financial Accounting Standards Board (FASB) issued Accounting Standards Update 2025-06 in September 2025, modernizing internal-use software guidance with an effective date in 2028 reporting. But even that update was neutral to development method and did not address AI-specific concerns like model depreciation, training data, or third-party infrastructure.</p>
+  <p>What that means on the ground: your finance and engineering teams are probably not aligned on what to capitalize. Engineering sees a 12-month project to deploy an internal model—sounds like software, should be capitalized. Finance sees frontier models becoming obsolete in 18 months and concludes the whole thing should expense. Legal wants clear documentation before opining. Your auditors want to see facts, not hope.</p>
+  <p>The unsettled state is not temporary. Until the SEC issues explicit AI guidance or the FASB writes a dedicated standard, teams will continue reasoning by analogy and documenting their position.</p>
+
+  <h2>The clearest cases: capitalize or expense with confidence</h2>
+
+  <h3>Clearly opex: Third-party API consumption</h3>
+  <p>OpenAI, Anthropic, Bedrock, Gemini—any model you rent and invoke on demand is operating expense. You're not acquiring or building an asset. You're paying for a service in the current period. The API token never creates a future economic benefit beyond that request. Your internal documentation should read "service consumption" or "software license" (not capitalization as internal-use software).</p>
+  <p>This is true even if you spend millions on API calls. The economic substance is the same: money out the door today for value realized today. Some teams mistakenly capitalize the integration work (custom SDKs, orchestration code), but that's separate from the API spend itself. The integration might qualify as internal-use software development; the API consumption never does.</p>
+
+  <h3>Clearly opex: Research, experimentation, and pilot projects</h3>
+  <p>ASC 730-10-25 requires all research and development costs to be recognized as expense as incurred. This applies to AI research and experimentation broadly: trying new model architectures, ablation studies, evals, benchmark runs, toy fine-tunes to test a hypothesis. If you cannot point to a specific application that will be deployed to production and used to perform a function, you're in R&D, and the costs expense.</p>
+  <p>The key distinction: <em>Is this work aimed at creating a deployed application asset, or are you exploring whether something is possible?</em> Exploration expenses. Application development may capitalize.</p>
+
+  <h3>Clearly capitalizable: Internal-use software development, application stage</h3>
+  <p>If your team is building internal-use software that happens to use AI—an internal productivity copilot, an in-house AI-powered analytics engine, a customer support AI agent—the <em>application development work</em> may be capitalized under ASC 350-40. The software you're building to coordinate, integrate, and serve the model (not the model itself) is the intangible asset. The useful-life assessment becomes complex if the underlying model is deprecated, but the principle is sound: an internal-use software asset developed over multiple months, authorized by management, with probable completion, can be capitalized in the application development stage.</p>
+  <p>Under ASU 2025-06, the criteria are: (1) Management has authorized and committed to funding the software project, and (2) it is probable that the project will be completed and the software will be used to perform the function intended.</p>
+
+  <h2>The decision tree</h2>
+  <p>Start at the top and work down to find the category that matches your cost.</p>
+
+  <h3>Is this third-party API spend?</h3>
+  <p><strong>Yes → Opex (service consumption).</strong> You are renting a model, not acquiring an asset. Document as "software licensing" or "cloud services." Do not capitalize.</p>
+
+  <h3>Is this internal R&D or experimentation?</h3>
+  <p><strong>Yes → Opex (R&D expense).</strong> ASC 730 requires expensing as incurred. No capitalization path exists, no matter how large the bill. Document the business purpose and link it to failed pilots, ablations, or learning that did not result in deployed production software.</p>
+
+  <h3>Are you developing internal-use application software that happens to use AI?</h3>
+  <p><strong>Yes, application development stage → Possibly capitalize (ASC 350-40).</strong> The application development work (integration, testing, deployment logic, orchestration code) may qualify. The model itself is trickier—see below. Management must have authorized the project and completion must be probable. Document both. Discuss with your auditor before committing to capitalize.</p>
+
+  <h3>Is this internal model development (model architecture, training, fine-tuning the base model itself)?</h3>
+  <p><strong>Depends on facts and circumstances (see ambiguous cases below).</strong> This is where uncertainty lives. Training a model from scratch for internal use is not clearly research (it's not exploratory in the sense of "will this idea work?") but it's also not clearly an application asset (models deprecate faster than software). Some teams argue that model development work (selecting data, training runs, evaluation) is development work on an internal-use software asset and capitalize it. Others argue that it's sufficiently novel or uncertain to fall under the "significant development uncertainty" language introduced in ASU 2025-06 and therefore expenses until the model is proven.</p>
+
+  <h3>Is this infrastructure, compute, or data acquisition?</h3>
+  <p><strong>Depends on the context and nature of the cost (see below).</strong></p>
+
+  <h2>The genuinely ambiguous cases: how to document a defensible position</h2>
+
+  <h3>Fine-tuning labor and cost</h3>
+  <p>When a team fine-tunes a frontier model on proprietary data to build a production application, is that capitalizable application development work or research/development expense?</p>
+  <p><strong>Arguments to capitalize:</strong> Fine-tuning is targeted work on a specific deployed system. It's similar to customizing purchased software. It creates an asset (the tuned model) with expected future economic benefit. You can link it to the specific application.</p>
+  <p><strong>Arguments to expense:</strong> Fine-tuning is exploratory; you don't know if the tuning will work until you try it. The underlying base model will be deprecated or superseded in 12–18 months, making the tuning asset worthless. This uncertainty resembles R&D more than production development.</p>
+  <p><strong>How to document a position:</strong> If you capitalize, document the scope (the specific model, the training data, the target performance metrics), management authorization (a ticket, a planning doc, a sign-off), the completion criteria (performance on a test set, deployment to production), and the useful life assessment (how long before the base model is deprecated?). Get your auditors to weigh in before you finalize the capitalization decision. If you expense, document the business rationale (this was an experiment to see if tuning would improve X, and we have decided to keep the costs as R&D rather than capitalize them due to model deprecation risk). Both positions are defensible if documented.</p>
+
+  <h3>Prompt engineering and in-context learning labor</h3>
+  <p>If a team spends engineering time writing prompts, building prompt templates, and tuning in-context examples to make a deployed application work better, is that capitalizable?</p>
+  <p><strong>Short answer: almost certainly expense.</strong> Prompts and in-context learning are not assets in the sense ASC 350-40 requires. They're configuration, not software. The only exception: if you have built a prompt-engineering framework or tool that is itself capitalizable software, the labor to build that framework (not the prompts inside it) may capitalize. The prompts themselves expense as incurred.</p>
+  <p>Document the distinction: labor to build capital-Y tools is different from labor to write configuration for those tools.</p>
+
+  <h3>Training data acquisition and preparation</h3>
+  <p>You spend $500k licensing proprietary data or engineering labor to clean and structure data for model training. Is that capitalizable?</p>
+  <p><strong>The honest answer: it depends on whether the data is consumed in training (opex) or constitutes a direct cost of the internal-use software asset (capitalizable).</strong></p>
+  <p>Arguments for capitalization: The data is a direct, incremental cost of building the model asset. Without it, the model would not exist or perform its intended function. It's similar to capitalizing the cost of purchased software.</p>
+  <p>Arguments for expensing: Data is consumable; it's used up in training and has no residual value. The cost structure resembles R&D (you consume data to explore if the model concept works) more than asset development.</p>
+  <p><strong>How to document a position:</strong> If you capitalize data costs, document which costs (licensing fees, engineering labor to structure it), which model they were used for, and the useful life assumption (if the model is deprecated, so is the value of having trained on that specific data). If you expense, document whether the data was acquired for exploration or for a production model that you've committed to deploy. ASC 730 v. ASC 350-40 hinges on whether the work is exploratory or aimed at a known application, and data cost treatment should follow the same logic.</p>
+
+  <h3>Evaluation and benchmarking infrastructure</h3>
+  <p>A team builds an evaluation harness—a system to run evals on model outputs, compare performance across versions, and track metrics. Is that capitalizable?</p>
+  <p><strong>Probably yes, if it's software you'll continue to use in production.</strong> The eval harness itself is internal-use software, and ASC 350-40 applies. If you're building a reusable framework for evaluating any model and you'll use it continuously, capitalize the development phase. If you're writing one-off eval scripts for a specific model and throwing them away after tuning, expense them as development costs of that specific model (which may themselves expense as R&D or capitalize as application development, depending on context).</p>
+
+  <h2>What auditors will ask for, and what to document now</h2>
+
+  <h3>Authorization and commitment</h3>
+  <p>Is the project formally authorized? Is there a ticket, a planning doc, or a sign-off from the executive sponsor? Without this, expensing is safer. If you're capitalizing, have something in writing that management committed funding and endorsed the project's business case.</p>
+
+  <h3>Probable completion</h3>
+  <p>Can you point to a deployment plan and a go-live date? Or at least a specific application that will use the asset? If you're training a model but haven't decided how to deploy it, expensing is safer.</p>
+
+  <h3>Useful-life assessment</h3>
+  <p>Here is where AI breaks traditional capitalization. For software, useful life is typically 3–5 years. For AI-model-based software, the useful life depends on when the underlying base model is deprecated. If OpenAI releases GPT-5 next quarter and your fine-tuned GPT-4 model is obsolete, your 5-year amortization schedule doesn't match reality. Auditors will ask: <em>How did you estimate useful life? Did you account for model deprecation? What's your impairment testing plan?</em> Document your assumptions. If they're weak, consider expensing to avoid the fight.</p>
+
+  <h3>Separation of capitalizable and non-capitalizable work</h3>
+  <p>If you're building an application, separate the costs: (1) infrastructure and tooling (may capitalize), (2) model training and fine-tuning (ambiguous—document your position), (3) prompt engineering and experimentation (almost always expense), (4) integration and application development (likely capitalize). Do not bucket everything under "AI development." Auditors need to see that you're applying different accounting treatment to different work.</p>
+
+  <h3>Cost tracking and allocation</h3>
+  <p>If you're capitalizing, document which labor hours, compute costs, and data fees went into the capitalizable work. Timesheets or task-level project tracking are your friends. If you can't separate capitalizable from non-capitalizable costs, safer to expense everything and move on.</p>
+
+  <h2>The amortization and impairment problem</h2>
+  <p>If you capitalize an internal-use AI application, you must amortize it over its useful life (typically 3–5 years under ASC 350-40). But the underlying model may be deprecated in 18 months. At that point, you face impairment testing: <em>Does the asset still have the economic life we assumed?</em> If not, you record an impairment charge and accelerate the writedown.</p>
+  <p>This problem is not theoretical. Many companies that capitalized AI spending in 2024 are now facing impairment charges in 2026 because the models they invested in have been superseded. Some teams are responding by expensing AI costs wholesale, treating the entire category as too uncertain for capitalization. That's a defensible position.</p>
+  <p>If you do capitalize, you need a process for continuous useful-life reassessment. Build it into your quarterly close. Talk to your auditors about materiality thresholds for impairment triggers. Document what events (new frontier model, breakthrough in a competing approach) would trigger a review. Do not discover impairment risk at year-end close.</p>
+
+  <h2>COGS vs OpEx for AI-heavy SaaS</h2>
+  <p>One more wrinkle: if you're a SaaS company where AI is core to the product, some of your AI spend belongs in cost of revenue (COGS), not operating expense. This is separate from the capex/opex distinction but equally important to gross margin.</p>
+  <p>API spend for generating customer output (summaries, analyses, recommendations) should flow through COGS. Infrastructure and compute for production serving should flow through COGS. Development and R&D should flow through OpEx. Your accounting team should have a clear policy on allocation, and finance should model it in headroom for gross margin discussions with investors or the board.</p>
+  <p>The risk: if you treat all AI spend as OpEx, you understate COGS, overstate gross margin, and set impossible expectations when you eventually restate it. Get this right early.</p>
+
+  <h2>The pragmatic approach: what winning finance teams do</h2>
+  <p>The strongest finance teams we've seen take this approach:</p>
+  <ol>
+    <li><strong>Default to opex.</strong> API spend, R&D, experimentation, all expense. It's defensible and requires the least documentation.</li>
+    <li><strong>Capitalize only the clearest cases.</strong> Application development work on a specific internal-use software asset with formal authorization, a deployment plan, and probable completion. Even then, do not capitalize the model training; capitalize the application wrapper (integration code, infrastructure, orchestration).</li>
+    <li><strong>Document assumptions and run impairment tests quarterly.</strong> Useful-life assessment is required. Build it into your close processes. If your team notices that the underlying models are depreciating faster than you assumed, correct course immediately rather than hoping to get past audit.</li>
+    <li><strong>Talk to your auditors early, not late.</strong> Bring your CFO and controller into the room with the audit partner in Q1 or Q2, not in September when you're trying to close the books. Show them your capitalization policy, your assumptions, and ask them what they'd challenge. Fix disagreements before they blow up in the comfort-letter review.</li>
+    <li><strong>Separate R&D from application development clearly.</strong> Use different cost centers, different tracking, different language in your internal reports. When auditors ask "Is this opex or capex?", you should be able to point to how the work was classified at the time, not retroactively argue about it.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-governance">AI governance for finance leaders: policy, allocation, accountability</a></li>
+    <li><a href="/research/inference-vs-training-spend">Inference vs training: where the AI GPU bill actually goes</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring</a></li>
+    <li><a href="/research/ai-finops">AI FinOps: the operating model for LLM spend</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

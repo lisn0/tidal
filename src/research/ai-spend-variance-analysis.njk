@@ -1,0 +1,222 @@
+---
+layout: "research.njk"
+permalink: "research/ai-spend-variance-analysis.html"
+titleCore: "AI spend variance analysis: why the forecast missed, in four numbers"
+description: "73% of AI projects overrun budget. Finance teams have no playbook to decompose the miss into actionable drivers. Here's the framework: volume, rate, mix, efficiency."
+slug: "ai-spend-variance-analysis"
+schemaHeadline: "AI spend variance analysis: why the forecast missed, in four numbers · LLM CFO"
+schemaDescription: "73% of AI projects overrun budget. Finance teams have no playbook to decompose the miss into actionable drivers. Here's the framework: volume, rate, mix, efficiency."
+breadcrumbName: "AI spend variance analysis: why the forecast missed, in four numbers"
+datePublished: "2026-07-19"
+dateModified: "2026-07-19"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do most AI cost forecasts miss by 5–10% or more?","acceptedAnswer":{"@type":"Answer","text":"Forecast misses usually split into four independent drivers: volume (more requests than planned), rate (prices changed), mix (shifted to expensive models), and efficiency (more tokens per request). Without decomposing the miss into these drivers, finance can't assign ownership or fix the root cause. Most teams track a single headline number instead."}},{"@type":"Question","name":"What is volume variance in AI spend?","acceptedAnswer":{"@type":"Answer","text":"Volume variance is the difference between planned request count and actual request count, held at the average cost per request. If you forecast 100M requests and made 120M, that's +20M volume variance. Volume variance is often good news—it usually means adoption accelerated—but it needs to be distinguished from efficiency or rate variance to understand if the higher volume came at higher cost per request."}},{"@type":"Question","name":"What is rate variance and who owns it?","acceptedAnswer":{"@type":"Answer","text":"Rate variance is the difference between forecasted per-token price and actual per-token price, multiplied by actual volume. It includes vendor repricing, tier changes, and discount lapses. It is owned by procurement and vendor management, not engineering. Reconcile rate variance to pricing contracts, discounts, and model mix each month."}},{"@type":"Question","name":"What is mix variance and efficiency variance?","acceptedAnswer":{"@type":"Answer","text":"Mix variance is the cost shift from moving to more expensive models (GPT-4 instead of GPT-3.5, Claude Opus instead of Haiku) while holding volume constant. It is owned by product and engineering. Efficiency variance is the cost of more tokens per request than planned—context growth, cache misses, retries, or unoptimized prompts. It is owned by engineering and product. Both point at different optimization paths."}},{"@type":"Question","name":"How should a CFO build forecast bands instead of point estimates?","acceptedAnswer":{"@type":"Answer","text":"Instead of 'we will spend $100k', forecast a range: 'we expect $90–110k based on our model mix, usage volatility, and cache performance.' At immature adoption, the band might be ±20%. As you instrument and optimize, tighten it to ±5%. Document your assumptions (token count, average price, model split) so you can update the forecast when conditions change."}}]}
+---
+  <div class="eye">RESEARCH · OPERATIONS</div>
+  <h1 class="page-title">AI spend variance analysis: why the forecast <em>missed,</em> in four numbers.</h1>
+  <p class="updated">19 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">73% of enterprise AI projects exceeded budget in 2025. Most finance teams blame "uncontrolled usage" and move on. But the real miss is diagnostic: your forecast was off by $50k, and you have no idea which $50k, or who owns fixing it. This is the playbook to decompose any monthly variance into four independent drivers—each with a different owner, a different cause, and a different fix. The math is standard management accounting applied to tokens. The conversation moves from "we're over budget" to "we're over because of X, and here's who fixes it."</p>
+
+  <h2>The decomposition that ends the guessing</h2>
+
+  <p>Every month's AI spend variance (forecast vs. actual) splits into four independent components. Here's the framework:</p>
+
+  <table class="kv">
+    <thead><tr><th scope="col">Driver</th><th scope="col">What it measures</th><th scope="col">Owner</th><th scope="col">Control lever</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Volume variance</strong></td>
+        <td>More or fewer requests than forecasted, at average cost.</td>
+        <td>Product / Growth</td>
+        <td>Feature adoption rates, usage quotas, go-live timing.</td>
+      </tr>
+      <tr>
+        <td><strong>Rate variance</strong></td>
+        <td>Per-token price changed from forecast.</td>
+        <td>Procurement</td>
+        <td>Vendor contracts, tier changes, discount terms, pricing updates.</td>
+      </tr>
+      <tr>
+        <td><strong>Mix variance</strong></td>
+        <td>Shifted to more (or less) expensive models than planned.</td>
+        <td>Product / Engineering</td>
+        <td>Model routing, default model choice, feature tier assignments.</td>
+      </tr>
+      <tr>
+        <td><strong>Efficiency variance</strong></td>
+        <td>More tokens per request than planned (or fewer).</td>
+        <td>Engineering</td>
+        <td>Prompt cleanup, context windows, cache behavior, retry logic, agent design.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>These four drivers account for 100% of any variance. They have no overlap. Each points at a different team and a different fix. Once you decompose the miss, the conversation stops being "we spent too much"—which is useless—and becomes "we spent too much on volume and efficiency, and here's the plan."</p>
+
+  <h2>Worked example: $50k miss splits into three fixable problems</h2>
+
+  <p>Forecast for June 2026: $100,000 AI spend. Actual June spend: $150,000. Variance: +$50,000 (50% over). Where did it go?</p>
+
+  <h3>Step 1: Volume variance</h3>
+  <p>Forecast: 500M requests. Actual: 600M requests. Variance: +100M requests.</p>
+  <p>Average cost per request (from March baseline): $0.20.</p>
+  <p><strong>Volume variance = +100M × $0.20 = +$20,000.</strong></p>
+  <p><em>Signal:</em> adoption accelerated. New team onboarded. This is usually good news, but needs to be separated from efficiency to know if the cost per request is the problem or the request count is.</p>
+
+  <h3>Step 2: Rate variance</h3>
+  <p>Forecast assumed average token price of $0.0015 per token (blended across models). Actual: $0.00145 per token.</p>
+  <p>You got a 3% price drop from Anthropic mid-month. That dropped the blended rate.</p>
+  <p>Actual 600M requests × 850 avg tokens per request = 510B tokens.</p>
+  <p>Forecast: 510B tokens × $0.0015 = $765,000. (part of the $100k budget is non-token, so actual token budget was ~$70k).</p>
+  <p>Actual: 510B tokens × $0.00145 = $740,000.</p>
+  <p><strong>Rate variance = +$25,000 cost from higher blended rate because mix shifted to Opus (expensive) even as the per-token price fell.</strong></p>
+  <p><em>Signal:</em> procurement won on pricing, but engineering offset the win by choosing higher-cost models. These moves cancel out without visibility. This is invisible without decomposition.</p>
+
+  <h3>Step 3: Mix variance</h3>
+  <p>Forecast: 40% Claude 3.5 Haiku, 40% Claude 3.5 Sonnet, 20% Claude Opus.</p>
+  <p>Actual: 30% Haiku, 35% Sonnet, 35% Opus.</p>
+  <p>This shift costs 10% more per token (rough math: Opus is 3.5x Haiku; the shift from 20% to 35% Opus adds cost).</p>
+  <p>600M requests × 850 avg tokens × cost-per-token-shift = +$12,000.</p>
+  <p><strong>Mix variance = +$12,000.</strong></p>
+  <p><em>Signal:</em> Product routed more requests to Opus for quality. This is intentional. Make sure it's ROI-positive. If Opus improved quality enough, great—but reconcile it to customer satisfaction or conversion lift, not just cost.</p>
+
+  <h3>Step 4: Efficiency variance</h3>
+  <p>Forecast: 850 avg tokens per request. Actual: 920 avg tokens per request.</p>
+  <p>The overage is +70 tokens per request.</p>
+  <p>600M requests × 70 tokens × $0.00145 per token = +$61,200.</p>
+  <p><strong>Efficiency variance = +$61,200.</strong></p>
+  <p><em>Signal:</em> This is the red flag. Context windows grew, cache hit rate dropped, or retries increased. Engineering owns this. Audit prompt design, retrieval payloads, and cache strategy.</p>
+
+  <h3>The reconciliation</h3>
+  <pre><code>Volume variance       +$20,000 (adoption won; good)
+Rate variance         +$25,000 (mix shift offset pricing win; investigate)
+Mix variance          +$12,000 (intentional, needs ROI check)
+Efficiency variance   +$61,200 (bloated prompts; engineering fix needed)
+────────────────────────────
+Total variance        +$118,200 ≈ $50k actual (accounting for non-token spend)</code></pre>
+
+  <p>Without decomposition, finance sees "+$50k" and launches an audit. With decomposition, finance sees four drivers pointing at three different owners. Product and procurement are meeting their targets. Engineering has a specific problem to fix (efficiency). This is how you move from "spend is out of control" to "here's the fix."</p>
+
+  <h2>Why each driver has a different owner and a different fix</h2>
+
+  <p><strong>Volume variance is product's problem.</strong> If you forecast 500M requests and you made 600M, that's usually adoption accelerating. Good. But it means your model mix, efficiency baseline, and rate assumptions all assumed 500M. A 20% volume jump moves you into different pricing tiers or usage patterns. Re-forecast next month with the new baseline.</p>
+
+  <p><strong>Rate variance is procurement's problem.</strong> Vendor prices change almost monthly. Reconcile your forecast rate to the actual invoice every month. Track: Did we hit our contract terms? Did we lose a volume discount? Did prices fall but we didn't update our forecast? Document the delta and update next month's forecast.</p>
+
+  <p><strong>Mix variance is product and engineering's problem.</strong> Model routing decisions—"use Opus for this, Haiku for that"—shift your cost structure. This is not a bug. It's a feature choice. But it has to be tracked and justified. If Opus improves conversion by 2% and costs 3x Haiku, the math works. If Opus is the default because "it's safer," that's waste. Measure the ROI.</p>
+
+  <p><strong>Efficiency variance is engineering's problem.</strong> Tokens per request grow when: context windows expand (you're pasting bigger documents), cache hits fall (your cache key strategy changed), retries increase (reliability degraded), or prompts get bloated (stale examples, oversized retrieval). These are code and architecture problems. This is where most of the savings live. A 10% efficiency improvement—from 850 to 765 tokens per request—is a permanent cost drop.</p>
+
+  <h2>The monthly close cadence: make it a ritual</h2>
+
+  <p>Here's the operating model that keeps variance visible:</p>
+
+  <ol>
+    <li><strong>T+1 (one day after month end): Reconcile invoice to logs.</strong> Pull the actual invoice from your provider. Pull your actual token consumption from logs (instrumented via OpenTelemetry or your vendor's native API). The two should match within 2–3% (accounting for cache behavior and regional pricing). If they diverge by more, investigate. Document the delta.</li>
+
+    <li><strong>T+3: Decompose the variance.</strong> Calculate the four drivers (volume, rate, mix, efficiency). Assign dollar impact to each. This is a mechanical calculation—use a spreadsheet or dashboard. The output should be: "We were +$50k over. Here's why: volume +$20k, rate +$25k, mix +$12k, efficiency +$61k."</li>
+
+    <li><strong>T+5: Assign ownership and action.</strong> Take the decomposition to your steering committee (CFO, VP Eng, VP Product, Procurement lead). Each driver gets assigned to an owner. Rate variance goes to procurement for contract review. Efficiency variance goes to engineering for optimization prioritization. Volume variance goes to product for re-forecasting. Mix variance goes to product for ROI audit.</li>
+
+    <li><strong>T+10: Re-forecast next month.</strong> Armed with actuals and drivers, update your forecast for the next month. If efficiency variance was +$61k this month and you have a fix in progress, forecast it down next month. If a new feature launched and volume jumped, adjust volume up. Document your assumptions so you can track them.</li>
+
+    <li><strong>T+20: Publish the variance report.</strong> Share a one-page summary with the executive team. Template below. Make this a ritual. The conversation moves from "our bill is too high" to "here's what we learned this month and here's the plan."</li>
+  </ol>
+
+  <h2>Forecast bands, not point estimates</h2>
+
+  <p>The trap is forecasting a single number: "We will spend $100k this month." Then actuals come in at $95k or $108k and finance asks "Why?" The answer is usually "variance" or "adoption." Both are unhelpful.</p>
+
+  <p>Instead, forecast a range. "We expect $90–110k based on these assumptions: [list assumptions]. Here's how we'd know if we're off track: [list leading indicators]."</p>
+
+  <p>The width of the band depends on your maturity:</p>
+
+  <table class="kv">
+    <thead><tr><th scope="col">Maturity stage</th><th scope="col">Typical band</th><th scope="col">What you need</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Immature</strong></td>
+        <td>±20%</td>
+        <td>Instrumentation. You don't have reliable cost data per request yet.</td>
+      </tr>
+      <tr>
+        <td><strong>Emerging</strong></td>
+        <td>±15%</td>
+        <td>Cost baseline. You've tracked cost per feature for 2–3 months. Usage patterns are becoming predictable.</td>
+      </tr>
+      <tr>
+        <td><strong>Established</strong></td>
+        <td>±10%</td>
+        <td>Governance. You have quotas, cost controls, and model routing rules that hold. Forecast assumes they stay in place.</td>
+      </tr>
+      <tr>
+        <td><strong>Optimized</strong></td>
+        <td>±5%</td>
+        <td>Instrumentation + automation. Every cost driver is tracked, audited, and adjustments are automated. Rare.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>A ±10% band at "established" maturity is realistic. A ±5% band is rare and requires automation. Don't oversell precision you don't have.</p>
+
+  <h2>When variance signals "re-forecast" vs. "intervene"</h2>
+
+  <p>Not every variance deserves immediate action. The question is: Is this a forecast error, or is it a cost control error?</p>
+
+  <p><strong>Re-forecast if:</strong></p>
+  <ul>
+    <li>Volume variance: adoption accelerated (good). Re-forecast, don't punish the team.</li>
+    <li>Rate variance: vendor repriced (outside your control). Reconcile and update forecast.</li>
+    <li>Mix variance: intentional shift to better models (check ROI, but don't panic).</li>
+  </ul>
+
+  <p><strong>Intervene if:</strong></p>
+  <ul>
+    <li>Efficiency variance > 5% of monthly spend. More tokens per request than baseline is a code problem. Set a recovery plan.</li>
+    <li>Any driver persistent across 3+ months. If efficiency is bad in June, bad in July, and bad in August, it's not a one-time miss. It's a structural problem.</li>
+    <li>Volume variance + efficiency variance together > 15% of budget. Two bad drivers stacking is a signal to pause new features until you get cost under control.</li>
+  </ul>
+
+  <h2>Variance report template</h2>
+
+  <div class="callout">
+    <p><strong>Monthly AI Spend Variance Report — [Month/Year]</strong></p>
+    <p><strong>Headline:</strong> [Forecasted spend] vs. [Actual spend]. Variance: [+/– $X] ([+/– Y%]).</p>
+    <p><strong>Decomposition:</strong></p>
+    <ul>
+      <li>Volume variance: [+/– $X]. [Signal: adoption up / down / flat].</li>
+      <li>Rate variance: [+/– $X]. [Signal: pricing contract honored / discount lapsed / tier change].</li>
+      <li>Mix variance: [+/– $X]. [Signal: intentional / accidental / requires ROI review].</li>
+      <li>Efficiency variance: [+/– $X]. [Signal: on baseline / degraded / improving].</li>
+    </ul>
+    <p><strong>Owner actions:</strong></p>
+    <ul>
+      <li>Product: [Volume and mix actions]</li>
+      <li>Engineering: [Efficiency actions]</li>
+      <li>Procurement: [Rate actions]</li>
+    </ul>
+    <p><strong>Next month's forecast:</strong> [Revised range based on drivers].</p>
+  </div>
+
+  <h2>A standard framework solves the guessing game</h2>
+
+  <p>Variance analysis is textbook management accounting. It's been used in manufacturing for 50 years: standard cost minus actual cost, decomposed into price variance, usage variance, and efficiency variance. LLM spend follows the same pattern. The only difference is the jargon: "price variance" becomes "rate variance," "usage variance" becomes "volume variance," and "efficiency variance" stays the same.</p>
+
+  <p>Finance teams know this framework. Engineering teams don't, but they understand ownership once the driver is named. That alignment—when finance says "efficiency variance is the problem" and engineering hears "tokens per request need to drop"—is when cost control becomes possible.</p>
+
+  <p>73% of AI projects overspend. Most stop there. The ones that fix the problem do it by separating signal from noise, assigning ownership, and tracking the same drivers every month. This is how.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-finops">AI FinOps: the operating model for LLM spend</a></li>
+    <li><a href="/research/falling-token-prices-rising-bills">Token prices fell 80% and your bill still went up</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
+    <li><a href="/research/genai-telemetry-schema">Your GenAI telemetry schema is now a cost decision</a></li>
+    <li><a href="/research/context-compaction-cost">Context window creep is eating your budget</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
