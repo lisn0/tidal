@@ -14,15 +14,28 @@ Vendor-neutral research on LLM cost and observability:
 
 Discovery: [sitemap.xml](https://llmcfo.com/sitemap.xml) · [llms.txt](https://llmcfo.com/llms.txt)
 
-## Stack
+## Stack — Eleventy
 
-Single-file static HTML. No build step. No dependencies.
+**Eleventy 3.1.6** (`@11ty/eleventy`, the only dependency). Input `src/`, output
+`_site/`. 58 source templates build 56 HTML pages.
 
-- `index.html` — full page (inline CSS, vanilla JS for the code-panel tabs)
-- `robots.txt` — allows all crawlers + AI bots, points to sitemap
-- `sitemap.xml` — root + section anchors
-- `_headers` — Cloudflare Pages: HSTS, CSP, security headers, cache policy
-- `_redirects` — Cloudflare Pages: www → apex 301
+```bash
+npm install
+npm run build     # eleventy  -> _site/
+npm run serve     # eleventy --serve (local dev)
+```
+
+- `src/index.html` — landing page
+- `src/*.njk` — about, research, benchmarks, glossary, methodology, case-studies,
+  changelog, careers, security, terms
+- `src/research/*.njk` — the research articles
+- `src/_includes/` — shared layouts/partials
+- `eleventy.config.js` — build config; every static file (`robots.txt`,
+  `sitemap.xml`, `_headers`, `_redirects`, `worker.js`, icons, …) is an explicit
+  `addPassthroughCopy` entry. **A new static file is not copied unless you add it there.**
+
+`_site/` is committed build output — regenerate it with `npm run build`, don't
+hand-edit it.
 
 ## Analytics
 
@@ -36,35 +49,26 @@ break bookings down by source.
 
 ## SEO
 
-Baked into `index.html`:
+Baked into the landing page:
 - Full meta stack (title, description, keywords, canonical, hreflang, OG, Twitter)
 - 3 JSON-LD blocks: `Organization`, `SoftwareApplication`, `FAQPage`
 - Semantic HTML (`<main>`, `<article>` via `<aside>`, `<section aria-labelledby>`, skip link)
 - Single H1, keyword-rich H2s
 
-## Deploy — Cloudflare Pages
+## Deploy — Cloudflare Workers
 
-```bash
-# 1. Push to GitHub (one-time)
-gh repo create llmcfo --public --source=. --push --description "llmcfo.com — managed AI cost optimization"
+Not Pages. `wrangler.jsonc` deploys a **Worker** named `tidal`, serving `_site/`
+as static assets with `src/worker.js` in front (`run_worker_first: true`).
 
-# 2. Connect to Cloudflare Pages
-#    Dashboard → Workers & Pages → Create → Pages → Connect to Git
-#    - Repository: <your-org>/llmcfo
-#    - Production branch: main
-#    - Build command: (leave empty)
-#    - Build output directory: /
-#    - Root directory: /
+- Repo: `git@github.com:lisn0/tidal.git`, branch `main`
+- Build runs from the wrangler config (`build.command: npm run build`, watching `src`)
+- Verify: `curl -I https://llmcfo.com` · `/robots.txt` · `/sitemap.xml`
 
-# 3. Custom domain
-#    Pages project → Custom domains → Set up a custom domain → llmcfo.com
-#    (Cloudflare auto-creates the CNAME if the domain is on Cloudflare DNS)
+## IndexNow
 
-# 4. Verify
-#    curl -I https://llmcfo.com
-#    curl https://llmcfo.com/robots.txt
-#    curl https://llmcfo.com/sitemap.xml
-```
+Key file `src/9f7a91c496064b7e96137c3326d9b895.txt` is copied to the site root —
+that key must stay served for submissions to be accepted. Submit with
+`scripts/indexnow-submit.mjs`.
 
 ## Submit to Google
 
@@ -73,8 +77,8 @@ gh repo create llmcfo --public --source=. --push --description "llmcfo.com — m
 3. Submit `https://llmcfo.com/sitemap.xml`
 4. Request indexing for `https://llmcfo.com/`
 
-## Required assets (todo)
+## Required assets
 
-- [ ] `og.png` — 1200×630 social card (referenced by OG/Twitter meta)
-- [ ] `logo.png` — referenced by Organization JSON-LD
-- [ ] `favicon.ico` / `favicon.svg`
+- [x] `og.png` — 1200×630 social card (referenced by OG/Twitter meta)
+- [x] `favicon.ico` / `favicon.svg`
+- [ ] `logo.png` — referenced by `Organization` JSON-LD, still missing

@@ -6,6 +6,14 @@
   "observability": {
     "enabled": true
   },
+  // AI crawler hits (GEO analytics). Free tier: 10M writes/mo, 90-day retention.
+  // Separate dataset from finops-llm so the two brands report independently.
+  "analytics_engine_datasets": [
+    {
+      "binding": "AI_HITS",
+      "dataset": "llmcfo_ai_crawler_hits"
+    }
+  ],
   "build": {
     "command": "npm run build",
     "cwd": ".",

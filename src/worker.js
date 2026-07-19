@@ -18,9 +18,82 @@ const APEX = 'llmcfo.com';
 const DEFAULT_TITLE = 'LLM CFO';
 const CONTENT_SIGNAL = 'search=yes, ai-input=yes, ai-train=no';
 
+/* ------------------------------------------------------------------ */
+/* AI crawler logging (GEO analytics)                                  */
+/* ------------------------------------------------------------------ */
+
+// AI crawlers self-identify in the User-Agent — they WANT to be found — so
+// detection is a lookup table, not bot-scoring. Cloudflare's botScore is for
+// catching bots that lie; it costs money and answers a question we don't have.
+//
+// `kind` is the part that matters commercially:
+//   live  — a human asked the assistant something and it fetched this page NOW.
+//           The strongest available evidence of an actual citation.
+//   search— indexing for the assistant's answer engine (citation-eligible).
+//   train — corpus collection for model training. No citation value.
+//
+// Longest/most specific token first: 'chatgpt-user' must win before any
+// substring of it could match something broader.
+//
+// Deliberately duplicated from the finops-llm worker: the two sites share no
+// code by design (see ../../CLAUDE.md). Keep the two tables in sync by hand.
+const AI_CRAWLERS = [
+	{ token: 'chatgpt-user', name: 'ChatGPT-User', kind: 'live' },
+	{ token: 'oai-searchbot', name: 'OAI-SearchBot', kind: 'search' },
+	{ token: 'gptbot', name: 'GPTBot', kind: 'train' },
+	{ token: 'claude-searchbot', name: 'Claude-SearchBot', kind: 'search' },
+	{ token: 'claude-user', name: 'Claude-User', kind: 'live' },
+	{ token: 'claudebot', name: 'ClaudeBot', kind: 'train' },
+	{ token: 'perplexity-user', name: 'Perplexity-User', kind: 'live' },
+	{ token: 'perplexitybot', name: 'PerplexityBot', kind: 'search' },
+	{ token: 'google-extended', name: 'Google-Extended', kind: 'train' },
+	{ token: 'bingbot', name: 'Bingbot', kind: 'search' },
+	{ token: 'duckassistbot', name: 'DuckAssistBot', kind: 'search' },
+	{ token: 'meta-externalagent', name: 'Meta-ExternalAgent', kind: 'train' },
+	{ token: 'mistralai-user', name: 'MistralAI-User', kind: 'live' },
+	{ token: 'bytespider', name: 'Bytespider', kind: 'train' },
+	{ token: 'amazonbot', name: 'Amazonbot', kind: 'search' },
+	{ token: 'applebot-extended', name: 'Applebot-Extended', kind: 'train' },
+	{ token: 'youbot', name: 'YouBot', kind: 'search' },
+	{ token: 'ccbot', name: 'CCBot', kind: 'train' },
+	{ token: 'cohere-ai', name: 'Cohere', kind: 'train' },
+];
+
+// Returns the matching crawler descriptor, or null for humans and non-AI bots.
+export function detectAiCrawler(userAgent) {
+	const ua = (userAgent || '').toLowerCase();
+	if (!ua) return null;
+	return AI_CRAWLERS.find((c) => ua.includes(c.token)) || null;
+}
+
+// Fire-and-forget write to Workers Analytics Engine. Deliberately never throws:
+// a logging fault must not take down page serving. Note AE itself also fails
+// SILENTLY on malformed data — `npx wrangler tail` is the only way to see that,
+// so detectAiCrawler carries a self-check (scripts/worker-crawlers.test.mjs).
+function logAiCrawler(request, env, url) {
+	if (!env || !env.AI_HITS) return; // binding absent in local dev — fine.
+	const hit = detectAiCrawler(request.headers.get('User-Agent'));
+	if (!hit) return;
+	try {
+		env.AI_HITS.writeDataPoint({
+			// Path is attacker-controlled and unbounded; AE drops the whole data
+			// point (silently) past ~5KB, so cap it. Real paths are well under 200.
+			blobs: [hit.name, hit.kind, url.pathname.slice(0, 200), url.hostname],
+			doubles: [1],
+			indexes: [hit.name],
+		});
+	} catch (e) {
+		// Swallowed on purpose: analytics must never break the response.
+	}
+}
+
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
+
+		// 0. Record AI crawler hits before any redirect, so a bot that lands on
+		//    www is still counted against the URL it asked for. Never throws.
+		logAiCrawler(request, env, url);
 
 		// 1. www -> apex (301).
 		if (url.hostname === 'www.' + APEX) {
