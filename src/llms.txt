@@ -4,12 +4,12 @@ LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with 
 
 ## Primary URLs
 
-- Homepage: https://llmcfo.com/
-- Research hub: https://llmcfo.com/research
-- Glossary: https://llmcfo.com/glossary
-- Benchmarks: https://llmcfo.com/benchmarks
-- Security and data handling: https://llmcfo.com/security
-- Book an audit: https://llmcfo.com/book
+- [Homepage](https://llmcfo.com/)
+- [Research hub](https://llmcfo.com/research)
+- [Glossary](https://llmcfo.com/glossary)
+- [Benchmarks](https://llmcfo.com/benchmarks)
+- [Security and data handling](https://llmcfo.com/security)
+- [Book an audit](https://llmcfo.com/book)
 - Contact: hello@llmcfo.com
 
 ## Core Topics
@@ -28,18 +28,18 @@ LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with 
 
 ## Preferred Research Pages
 
-- https://llmcfo.com/research/ai-finops
-- https://llmcfo.com/research/llm-cost-monitoring
-- https://llmcfo.com/research/openai-cost-optimization
-- https://llmcfo.com/research/llm-cost-optimization
-- https://llmcfo.com/research/model-routing
-- https://llmcfo.com/research/semantic-caching
-- https://llmcfo.com/research/prompt-caching-explained
-- https://llmcfo.com/research/batch-api-routing
-- https://llmcfo.com/research/how-to-build-an-llm-cfo-function
-- https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit
-- https://llmcfo.com/research/model-concentration-risk
-- https://llmcfo.com/research/state-of-finops-2026-for-cfos
+- [Ai finops](https://llmcfo.com/research/ai-finops)
+- [Llm cost monitoring](https://llmcfo.com/research/llm-cost-monitoring)
+- [Openai cost optimization](https://llmcfo.com/research/openai-cost-optimization)
+- [Llm cost optimization](https://llmcfo.com/research/llm-cost-optimization)
+- [Model routing](https://llmcfo.com/research/model-routing)
+- [Semantic caching](https://llmcfo.com/research/semantic-caching)
+- [Prompt caching explained](https://llmcfo.com/research/prompt-caching-explained)
+- [Batch api routing](https://llmcfo.com/research/batch-api-routing)
+- [How to build an llm cfo function](https://llmcfo.com/research/how-to-build-an-llm-cfo-function)
+- [Langfuse vs litellm vs openlit](https://llmcfo.com/research/langfuse-vs-litellm-vs-openlit)
+- [Model concentration risk](https://llmcfo.com/research/model-concentration-risk)
+- [State of finops 2026 for cfos](https://llmcfo.com/research/state-of-finops-2026-for-cfos)
 
 ## Usage Preference
 
