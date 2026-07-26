@@ -1,0 +1,58 @@
+---
+layout: "research.njk"
+permalink: "research/llm-purchasing-guide.html"
+titleCore: "LLM purchasing guide for CFOs"
+description: "A CFO's checklist for purchasing LLM capacity: model selection, provider contracts, pricing models, and the guardrails that protect the budget."
+slug: "llm-purchasing-guide"
+schemaHeadline: "LLM purchasing guide for CFOs · LLM CFO"
+schemaDescription: "A CFO's checklist for purchasing LLM capacity: model selection, provider contracts, pricing models, and the guardrails that protect the budget."
+breadcrumbName: "LLM purchasing guide for CFOs"
+datePublished: "2026-07-26"
+dateModified: "2026-07-26"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How should a CFO approach LLM purchasing?","acceptedAnswer":{"@type":"Answer","text":"A CFO should approach LLM purchasing by matching the pricing model to workload patterns, negotiating commitments only after usage is predictable, and requiring attribution and guardrails before scale."}},{"@type":"Question","name":"What LLM pricing models exist?","acceptedAnswer":{"@type":"Answer","text":"The main models are pay-per-token, volume discounts, committed use discounts, batch API pricing, and enterprise agreements. Each suits different workload patterns."}},{"@type":"Question","name":"What should be in an LLM procurement checklist?","acceptedAnswer":{"@type":"Answer","text":"The checklist should cover usage attribution, cost caps, fallback providers, data residency, rate limits, billing granularity, and contract flexibility."}}]}
+---
+  <div class="eye">RESEARCH · GUIDE</div>
+  <h1 class="page-title">LLM purchasing <em>for CFOs.</em></h1>
+  <p class="updated">A procurement guide · 26 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Buying LLM capacity is not like buying traditional software. Usage is variable, pricing changes frequently, and the cheapest list price is rarely the best deal. This checklist helps CFOs buy AI capacity without committing to waste.</p>
+
+  <h2>1. Match the pricing model to the workload</h2>
+  <p>Before negotiating, understand what you are buying. Real-time customer-facing features need on-demand or reserved throughput. Batch workloads can use batch APIs at steep discounts. Experimental or internal tools may not need an enterprise agreement at all.</p>
+
+  <h2>2. Do not commit before you know your pattern</h2>
+  <p>Committed use discounts look attractive, but they lock you into a forecast. Most teams overestimate stable usage because growth and model switching are hard to predict. Start with pay-per-token, build three months of data, then negotiate.</p>
+
+  <h2>3. Require attribution and guardrails</h2>
+  <p>No procurement deal should close without a plan for tagging, dashboards, and spend limits. If you cannot attribute usage to a team or feature, you cannot manage it. If you cannot cap spend, you cannot protect the budget.</p>
+
+  <h2>4. Keep fallback providers</h2>
+  <p>Single-provider dependency is a pricing and availability risk. The contract should allow, and the architecture should support, fallback to at least one alternative provider. This also gives you leverage in renewal conversations.</p>
+
+  <h2>5. Check the fine print</h2>
+  <p>Look for: data residency commitments, audit rights, rate-limit terms, overage pricing, and notice periods for price changes. Billing granularity matters too — daily is far better than monthly when you are trying to catch a spike.</p>
+
+  <h2>CFO checklist</h2>
+  <ul>
+    <li>Workload mapped to pricing model</li>
+    <li>Three months of usage data before commitments</li>
+    <li>Attribution tags defined and enforced</li>
+    <li>Cost caps and alerts configured</li>
+    <li>Fallback provider tested</li>
+    <li>Data residency and security terms confirmed</li>
+    <li>Overage and price-change clauses reviewed</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-management-cfo">LLM cost management for CFOs</a></li>
+    <li><a href="/research/llm-cost-tracking-cfo">LLM cost tracking for CFOs</a></li>
+    <li><a href="/research/ai-vendor-negotiation">AI vendor negotiation</a></li>
+    <li><a href="https://finopsllm.com/research/provider-arbitrage" target="_blank" rel="noopener">Engineering guide: provider arbitrage</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

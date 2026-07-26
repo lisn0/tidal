@@ -1,0 +1,54 @@
+---
+layout: "research.njk"
+permalink: "research/llm-cost-management-cfo.html"
+titleCore: "LLM cost management for CFOs"
+description: "A CFO's guide to LLM cost management: how to make AI spend visible, accountable, and controllable without slowing down product teams."
+slug: "llm-cost-management-cfo"
+schemaHeadline: "LLM cost management for CFOs · LLM CFO"
+schemaDescription: "A CFO's guide to LLM cost management: how to make AI spend visible, accountable, and controllable without slowing down product teams."
+breadcrumbName: "LLM cost management for CFOs"
+datePublished: "2026-07-26"
+dateModified: "2026-07-26"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How should a CFO manage LLM costs?","acceptedAnswer":{"@type":"Answer","text":"A CFO should manage LLM costs by first making spend visible and attributable, then setting budgets and guardrails, and finally optimizing the top cost drivers through routing, caching, and batching."}},{"@type":"Question","name":"What metrics matter most for LLM cost management?","acceptedAnswer":{"@type":"Answer","text":"The most useful metrics are cost per task, spend by team or feature, variance to budget, and the concentration of spend across the top five endpoints."}},{"@type":"Question","name":"How do you stop LLM costs from spiraling?","acceptedAnswer":{"@type":"Answer","text":"Use per-request cost caps, per-user or per-team budgets, rate limits on expensive models, and weekly spend reviews. Combine guardrails with clear attribution so teams see the impact of their choices."}}]}
+---
+  <div class="eye">RESEARCH · GUIDE</div>
+  <h1 class="page-title">LLM cost management <em>for CFOs.</em></h1>
+  <p class="updated">A finance guide · 26 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">AI spend is no longer an experiment line item. For many companies it is becoming one of the fastest-growing operating costs. The CFO's job is to give product teams the freedom to ship while making sure that freedom is visible, budgeted, and controlled.</p>
+
+  <h2>1. Make spend visible first</h2>
+  <p>Before you set rules, you need data. That means every LLM request must be tagged with: team, project, feature, model, provider, and environment. Without this, the monthly cloud invoice is just a number. With it, you can ask which product drove the spike and why.</p>
+  <p>Finance should own the reconciliation to the provider invoice. Gateway logs are useful, but they miss retries, fallback calls, and reasoning tokens. The invoice is the ground truth.</p>
+
+  <h2>2. Choose the right metrics</h2>
+  <p>Total spend tells you little. The metrics that matter are:</p>
+  <ul>
+    <li><strong>Cost per successful task</strong> — resolved ticket, accepted suggestion, completed workflow.</li>
+    <li><strong>Spend concentration</strong> — the top five endpoints usually drive most of the cost.</li>
+    <li><strong>Budget variance</strong> — actual vs. forecast by team or feature.</li>
+    <li><strong>Cost per user</strong> — especially important for product-led growth businesses.</li>
+  </ul>
+
+  <h2>3. Set budgets and guardrails</h2>
+  <p>Give teams a monthly AI budget and the tools to stay inside it. Useful guardrails include per-request cost caps, daily user limits, and alerts when a feature's spend exceeds a threshold. The goal is not zero cost; it is predictable cost.</p>
+
+  <h2>4. Optimize with product, not against it</h2>
+  <p>Cost optimization should never damage the user experience. The safest levers — model routing, prompt caching, batch routing — usually save 30–50% with no quality regression if tested against a stable baseline. For the engineering playbook, see <a href="https://finopsllm.com/research/llm-cost-management" target="_blank" rel="noopener">FinOps LLM's guide to LLM cost management</a>.</p>
+
+  <h2>5. Run a weekly operating rhythm</h2>
+  <p>Strong AI cost programs review the largest drivers weekly, not monthly. Finance and product together pick one or two optimization candidates, test them behind flags, and reconcile savings against the invoice. This turns cost control from a one-off project into a habit.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-tracking-cfo">LLM cost tracking: what CFOs need to watch</a></li>
+    <li><a href="/research/llm-cost-optimization">LLM cost optimization: a practical guide</a></li>
+    <li><a href="/research/ai-chargeback-showback">AI chargeback and showback</a></li>
+    <li><a href="https://finopsllm.com/research/llm-cost-management" target="_blank" rel="noopener">Engineering guide: LLM cost management</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

@@ -1,0 +1,53 @@
+---
+layout: "research.njk"
+permalink: "research/llm-cost-tracking-cfo.html"
+titleCore: "LLM cost tracking for CFOs"
+description: "What CFOs need to track to keep AI spend under control: dashboards, metrics, tags, and the weekly review cadence that catches spikes early."
+slug: "llm-cost-tracking-cfo"
+schemaHeadline: "LLM cost tracking for CFOs · LLM CFO"
+schemaDescription: "What CFOs need to track to keep AI spend under control: dashboards, metrics, tags, and the weekly review cadence that catches spikes early."
+breadcrumbName: "LLM cost tracking for CFOs"
+datePublished: "2026-07-26"
+dateModified: "2026-07-26"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What should a CFO track for LLM costs?","acceptedAnswer":{"@type":"Answer","text":"A CFO should track cost per task, spend by team and feature, variance to budget, top endpoints, token volume, and cost per user."}},{"@type":"Question","name":"How often should LLM costs be reviewed?","acceptedAnswer":{"@type":"Answer","text":"Review LLM costs weekly at the team level and monthly at the board level. Weekly reviews catch spikes and experiments before they become budget problems."}},{"@type":"Question","name":"What is cost visibility for LLMs?","acceptedAnswer":{"@type":"Answer","text":"Cost visibility means every stakeholder can see who is spending what, on which model, for which feature, and how that compares to budget and prior periods."}}]}
+---
+  <div class="eye">RESEARCH · GUIDE</div>
+  <h1 class="page-title">LLM cost tracking <em>for CFOs.</em></h1>
+  <p class="updated">A finance guide · 26 July 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Tracking LLM costs is not about adding another dashboard. It is about giving finance and product a shared source of truth so they can decide together what is worth spending on.</p>
+
+  <h2>1. Tag everything from day one</h2>
+  <p>The foundation of tracking is attribution. Every request should carry at least: team, project, feature, model, provider, and environment. Without tags, the provider invoice is a black box. With tags, you can slice spend by product line, customer segment, or experiment.</p>
+
+  <h2>2. Build the right dashboard</h2>
+  <p>A useful LLM cost dashboard answers four questions at a glance:</p>
+  <ul>
+    <li><strong>What are we spending?</strong> — total and by period.</li>
+    <li><strong>Who is driving it?</strong> — team, feature, and model breakdown.</li>
+    <li><strong>Is it getting more or less efficient?</strong> — cost per task over time.</li>
+    <li><strong>Where are the outliers?</strong> — spikes, anomalies, and new endpoints.</li>
+  </ul>
+
+  <h2>3. Track the metrics that matter</h2>
+  <p>Volume metrics such as tokens and requests are useful, but outcome metrics are better. Cost per resolved ticket, cost per accepted code suggestion, and cost per completed workflow tell you whether the spend is productive.</p>
+
+  <h2>4. Reconcile to the invoice</h2>
+  <p>Internal dashboards drift. Reconcile them to the provider invoice monthly. Pay special attention to cache-read tokens, retries, and fallback calls, which dashboards often under-count.</p>
+
+  <h2>5. Review weekly, forecast monthly</h2>
+  <p>Weekly reviews catch spikes and experiments early. Monthly forecasts keep the board informed. The best teams combine both: weekly operational reviews for action, monthly summaries for planning.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-cost-management-cfo">LLM cost management for CFOs</a></li>
+    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring</a></li>
+    <li><a href="/research/llm-cost-dashboards">LLM cost dashboards</a></li>
+    <li><a href="https://finopsllm.com/research/llm-cost-monitoring" target="_blank" rel="noopener">Engineering guide: LLM cost monitoring</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
