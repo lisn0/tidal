@@ -1,0 +1,568 @@
+---
+permalink: "index-v2.html"
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM CFO — Cut your AI cost in half</title>
+<meta name="description" content="Design concept: LLM CFO — managed AI cost optimization. Pay on results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F8F3EA;
+  --paper-2:#F0E9DA;
+  --paper-3:#EAE2D0;
+  --ink:#17130B;
+  --ink-2:#3E382B;
+  --muted:#7A7160;
+  --green:#155231;
+  --green-2:#1C6B41;
+  --red:#A63B2A;
+  --hair:#D9CFBA;
+  --hair-2:#C9BEA5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--green);color:var(--paper)}
+.serif{font-family:'Fraunces',serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+@media(max-width:720px){.wrap{padding:0 22px}}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:9px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.ticker-track{display:inline-block;animation:tick 38s linear infinite}
+.ticker span{margin:0 26px;font-family:'IBM Plex Mono',monospace}
+.ticker .dot{color:var(--green-2)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--ink);position:sticky;top:0;background:var(--paper);z-index:50}
+.masthead-in{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:24px}
+.brand{display:flex;align-items:baseline;gap:12px;text-decoration:none;color:var(--ink)}
+.brand .mark{display:grid;place-items:center}
+.brand .name{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:-.01em}
+.brand .est{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+nav.main{display:flex;gap:26px;align-items:center}
+nav.main a{color:var(--ink-2);text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:.01em}
+nav.main a:hover{color:var(--green)}
+nav.main a.btn-ink{color:var(--paper)}
+nav.main a.btn-ink:hover{color:var(--paper)}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:14px;padding:13px 26px;border:1.5px solid var(--ink);transition:all .18s ease;cursor:pointer;letter-spacing:.01em}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{background:var(--green);border-color:var(--green)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn-sm{padding:9px 18px;font-size:13px}
+@media(max-width:900px){nav.main a:not(.btn){display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:88px 0 72px;border-bottom:1px solid var(--hair-2)}
+.hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;align-items:start}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:7px 14px;border-radius:999px;margin-bottom:34px}
+.kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1.display{font-family:'Fraunces',serif;font-weight:560;font-size:clamp(52px,7.2vw,104px);line-height:.98;letter-spacing:-.028em;margin-bottom:30px}
+h1.display em{font-style:italic;font-weight:480;color:var(--green);position:relative}
+h1.display .strike{position:relative;white-space:nowrap}
+h1.display .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:54%;height:.09em;background:var(--red);transform:rotate(-2deg);opacity:.85}
+.lede{font-size:18px;line-height:1.7;color:var(--ink-2);max-width:560px;margin-bottom:38px}
+.lede strong{color:var(--ink);font-weight:600}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+.hero-facts{display:flex;gap:26px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.04em}
+.hero-facts span::before{content:"·";color:var(--green);margin-right:10px}
+
+/* statement card */
+.statement{background:#FFFDF7;border:1px solid var(--ink);box-shadow:6px 6px 0 var(--paper-3),6px 6px 0 1px var(--ink);padding:0;position:relative}
+.statement-head{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.statement-head .no{color:var(--muted)}
+.statement-body{padding:26px 24px 10px}
+.s-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px dashed var(--hair-2);font-size:14.5px}
+.s-row:last-child{border-bottom:none}
+.s-row .lbl{color:var(--ink-2)}
+.s-row .amt{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px}
+.s-row .old{color:var(--red);text-decoration:line-through;text-decoration-thickness:1.5px}
+.s-row .new{color:var(--green);font-size:19px}
+.s-row .save{color:var(--green)}
+.s-row .fee{color:var(--muted)}
+.s-total{display:flex;justify-content:space-between;align-items:baseline;padding:18px 24px;background:var(--ink);color:var(--paper);margin:14px -24px 0}
+.s-total .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#CFC7B2}
+.s-total .amt{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#8FCFA8}
+.statement-foot{padding:12px 24px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+.stamp{position:absolute;top:-24px;right:-18px;transform:rotate(8deg);z-index:3;border:2px solid var(--green);color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:8px 14px;background:var(--paper)}
+
+/* ---------- provider strip ---------- */
+.providers{border-bottom:1px solid var(--hair-2);padding:30px 0;overflow:hidden}
+.providers .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.prov-row{display:flex;gap:0;flex-wrap:wrap}
+.prov-row span{font-family:'Fraunces',serif;font-size:26px;font-weight:520;color:var(--ink-2);padding:4px 22px;border-right:1px solid var(--hair)}
+.prov-row span:last-child{border-right:none}
+@media(max-width:720px){.prov-row span{font-size:20px;padding:4px 14px}}
+
+/* ---------- section shell ---------- */
+section{padding:84px 0;border-bottom:1px solid var(--hair-2)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:30px;margin-bottom:56px;flex-wrap:wrap}
+.sec-no{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:14px}
+h2.sec-title{font-family:'Fraunces',serif;font-weight:560;font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em;max-width:640px}
+h2.sec-title em{font-style:italic;color:var(--green);font-weight:480}
+.sec-note{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);max-width:300px;line-height:1.7;letter-spacing:.02em}
+
+/* ---------- stats ---------- */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink);background:#FFFDF7}
+.stat{padding:38px 30px 34px;border-right:1px solid var(--hair);position:relative}
+.stat:last-child{border-right:none}
+.stat .fig{font-family:'Fraunces',serif;font-size:clamp(44px,4.6vw,64px);font-weight:580;letter-spacing:-.02em;line-height:1;margin-bottom:14px}
+.stat .fig em{font-style:italic;color:var(--green)}
+.stat .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+.stat p{font-size:13.5px;color:var(--muted);line-height:1.6}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:none}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--hair)}}
+@media(max-width:520px){.stats-grid{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--hair)}.stat:last-child{border-bottom:none}}
+
+/* ---------- ledger (six levers) ---------- */
+.ledger{border-top:1px solid var(--ink)}
+.ledger-row{display:grid;grid-template-columns:90px 1fr 1.1fr 170px;gap:28px;align-items:baseline;padding:30px 8px;border-bottom:1px solid var(--hair);transition:background .15s ease}
+.ledger-row:hover{background:var(--paper-2)}
+.ledger-row .no{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted)}
+.ledger-row h3{font-family:'Fraunces',serif;font-size:27px;font-weight:560;letter-spacing:-.01em}
+.ledger-row .desc{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+.ledger-row .range{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--green);text-align:right;white-space:nowrap}
+.ledger-row .range small{display:block;font-size:10px;color:var(--muted);font-weight:400;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+@media(max-width:900px){.ledger-row{grid-template-columns:60px 1fr;gap:16px}.ledger-row .desc{grid-column:2}.ledger-row .range{grid-column:2;text-align:left}}
+
+/* ---------- process ---------- */
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--ink);background:#FFFDF7}
+.phase{padding:34px 28px 38px;border-right:1px solid var(--hair);position:relative}
+.phase:last-child{border-right:none}
+.phase .wk{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--paper);background:var(--green);display:inline-block;padding:5px 11px;margin-bottom:22px}
+.phase .ph-no{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--muted);margin-bottom:6px}
+.phase h3{font-family:'Fraunces',serif;font-size:25px;font-weight:580;margin-bottom:12px;letter-spacing:-.01em}
+.phase p{font-size:14px;color:var(--ink-2);line-height:1.65}
+.phase::after{content:"→";position:absolute;top:38px;right:-11px;z-index:2;background:var(--paper);border:1px solid var(--ink);width:22px;height:22px;display:grid;place-items:center;font-size:11px;border-radius:50%}
+.phase:last-child::after{display:none}
+@media(max-width:900px){.phases{grid-template-columns:1fr 1fr}.phase:nth-child(2){border-right:none}.phase:nth-child(1),.phase:nth-child(2){border-bottom:1px solid var(--hair)}.phase::after{display:none}}
+@media(max-width:520px){.phases{grid-template-columns:1fr}.phase{border-right:none;border-bottom:1px solid var(--hair)}.phase:last-child{border-bottom:none}}
+
+/* ---------- pricing / receipt ---------- */
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.price-copy .big-price{font-family:'Fraunces',serif;font-size:clamp(44px,5vw,68px);font-weight:580;letter-spacing:-.02em;line-height:1.05;margin:18px 0 8px}
+.price-copy .big-price em{font-style:italic;color:var(--green)}
+.price-copy .per{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:30px}
+.check-list{list-style:none;margin-bottom:34px}
+.check-list li{padding:11px 0 11px 34px;position:relative;border-bottom:1px dashed var(--hair-2);font-size:15px;color:var(--ink-2)}
+.check-list li:last-child{border-bottom:none}
+.check-list li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+.check-list li strong{color:var(--ink)}
+.receipt{background:#FFFDF7;border:1px solid var(--ink);position:relative;padding:34px 34px 0;box-shadow:8px 8px 0 var(--paper-3)}
+.receipt::before,.receipt::after{content:"";position:absolute;left:0;right:0;height:10px;background-image:radial-gradient(circle at 8px -3px,transparent 7px,#FFFDF7 7px);background-size:16px 10px}
+.receipt::before{top:-10px;transform:scaleY(-1)}
+.receipt::after{bottom:-10px}
+.receipt .r-head{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:8px}
+.receipt .r-head .r-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:.01em}
+.receipt .r-head .r-sub{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.receipt .r-note{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.08em;padding:16px 0 22px}
+.r-annual{text-align:center;padding:24px 0 6px}
+.r-annual .fig{font-family:'Fraunces',serif;font-size:64px;font-weight:600;color:var(--green);letter-spacing:-.02em;line-height:1}
+.r-annual .cap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr;gap:50px}}
+
+/* ---------- FAQ ---------- */
+.faq-list{border-top:1px solid var(--ink);max-width:860px}
+details.faq{border-bottom:1px solid var(--hair)}
+details.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:26px 8px;font-family:'Fraunces',serif;font-size:21px;font-weight:560;letter-spacing:-.01em}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary .plus{font-family:'IBM Plex Mono',monospace;color:var(--green);font-size:20px;flex-shrink:0;transition:transform .2s}
+details.faq[open] summary .plus{transform:rotate(45deg)}
+details.faq .a{padding:0 8px 28px;font-size:15px;color:var(--ink-2);line-height:1.75;max-width:700px}
+details.faq .a strong{color:var(--ink)}
+
+/* ---------- CTA ---------- */
+.cta{background:var(--ink);color:var(--paper);border-bottom:none;padding:100px 0}
+.cta .sec-no{color:#8FCFA8}
+.cta h2{font-family:'Fraunces',serif;font-weight:560;font-size:clamp(44px,6vw,84px);line-height:1;letter-spacing:-.025em;max-width:800px;margin-bottom:26px}
+.cta h2 em{font-style:italic;color:#8FCFA8;font-weight:480}
+.cta p{color:#CFC7B2;font-size:17px;max-width:560px;margin-bottom:40px;line-height:1.7}
+.cta .btn-ink{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.cta .btn-ink:hover{background:#8FCFA8;border-color:#8FCFA8}
+.cta .btn-ghost{color:var(--paper);border-color:#4A4436}
+.cta .btn-ghost:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.cta .fine{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A8171;margin-top:30px}
+
+/* ---------- footer ---------- */
+footer{padding:56px 0 44px;background:var(--paper)}
+.foot-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap}
+.foot-name{font-family:'Fraunces',serif;font-size:34px;font-weight:600;letter-spacing:-.01em}
+.foot-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:8px}
+.foot-links{display:flex;gap:60px;flex-wrap:wrap}
+.foot-links h4{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.foot-links a{display:block;color:var(--ink-2);text-decoration:none;font-size:14px;padding:4px 0}
+.foot-links a:hover{color:var(--green)}
+.foot-base{border-top:1px solid var(--hair);margin-top:48px;padding-top:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em}
+</style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href="https://llmcfo.com/" />
+</head>
+<body>
+<!-- ticker -->
+<div class="ticker"><div class="ticker-track" id="tick">
+  <span><span class="dot">✦</span> Now taking the first cohort of audit engagements</span>
+  <span>Limited slots</span>
+  <span><span class="dot">✦</span> Free audit · No savings, no fee</span>
+  <span>Reconciled to raw provider invoices</span>
+  <span><span class="dot">✦</span> Targeting 40–60% reduction</span>
+</div></div>
+
+<!-- masthead -->
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <a class="brand" href="/">
+      <span class="mark"><svg width="30" height="30" viewBox="0 0 120 120" aria-hidden="true"><text x="60" y="92" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="104" fill="#17130B">$</text><rect x="8" y="62" width="104" height="9" fill="#A63B2A" transform="rotate(-7 60 66)"/></svg></span>
+      <span class="name">LLM CFO</span>
+      <span class="est">Est. 2026 · AI FinOps</span>
+    </a>
+    <nav class="main">
+      <a href="#levers">Techniques</a>
+      <a href="#process">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-ink btn-sm" href="#book">Book audit →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- hero -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker"><span class="pulse"></span> Managed AI cost optimization · Pay on results</span>
+      <h1 class="display">Your AI bill,<br><span class="strike">cut</span> <em>in half.</em></h1>
+      <p class="lede">LLM CFO is <strong>managed AI cost optimization</strong> for engineering teams spending $20K+/month on LLMs. We audit your OpenAI, Anthropic, Bedrock, Vertex AI, and Azure OpenAI spend, implement the fixes, and reconcile every dollar against your raw provider invoices. <strong>You only pay on the savings we deliver.</strong></p>
+      <div class="hero-ctas">
+        <a class="btn btn-ink" href="#book">Book a free audit →</a>
+        <a class="btn btn-ghost" href="#levers">See the six levers</a>
+      </div>
+      <div class="hero-facts">
+        <span>Targeting 40–60% reduction</span>
+        <span>3–5 week kickoff</span>
+        <span>No savings, no fee</span>
+      </div>
+    </div>
+    <aside class="statement">
+      <span class="stamp">Paid on results</span>
+      <div class="statement-head"><span>Statement of Savings</span><span class="no">№ 0042 · Illustrative</span></div>
+      <div class="statement-body">
+        <div class="s-row"><span class="lbl">Baseline AI spend</span><span class="amt old">$165,000 /mo</span></div>
+        <div class="s-row"><span class="lbl">After optimization (≈50%)</span><span class="amt new">$82,500 /mo</span></div>
+        <div class="s-row"><span class="lbl">Monthly savings</span><span class="amt save">$82,500</span></div>
+        <div class="s-row"><span class="lbl">LLM CFO fee (20%)</span><span class="amt fee">− $16,500</span></div>
+      </div>
+      <div class="s-total"><span class="lbl">You keep</span><span class="amt">$66,000 /mo</span></div>
+      <div class="statement-foot">Reconciled to raw provider invoices · mid-range example; your audit produces a real number.</div>
+    </aside>
+  </div>
+</div>
+
+<!-- providers -->
+<div class="providers">
+  <div class="wrap">
+    <div class="lbl">// Reconciled against every major provider &amp; gateway</div>
+    <div class="prov-row">
+      <span>OpenAI</span><span>Anthropic</span><span>Gemini</span><span>Bedrock</span><span>Azure</span><span>Groq</span><span>Together</span><span>Mistral</span>
+    </div>
+  </div>
+</div>
+
+<!-- targets -->
+<section id="targets">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 01 — What we target</span>
+        <h2 class="sec-title">Targets we commit to <em>at kickoff.</em></h2>
+      </div>
+      <p class="sec-note">We're an early-stage service taking our first cohort. These are targets sourced from public benchmarks and our own engineering work — not customer claims.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="fig">40<em>–</em>60%</div>
+        <div class="cap">Reduction range</div>
+        <p>Architecture-dependent. Confirmed against your invoices at audit.</p>
+      </div>
+      <div class="stat">
+        <div class="fig">3<em>–</em>5 <span style="font-size:.5em">wks</span></div>
+        <div class="cap">Time to savings</div>
+        <p>Kickoff → first reconciled provider invoice.</p>
+      </div>
+      <div class="stat">
+        <div class="fig">7<em>-day</em></div>
+        <div class="cap">Quality SLO</div>
+        <p>Every change A/B tested 7 days minimum. Auto-rollback on regression.</p>
+      </div>
+      <div class="stat">
+        <div class="fig">$0</div>
+        <div class="cap">Audit fee</div>
+        <p>Free. No savings, no fee — performance pricing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- six levers -->
+<section id="levers">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 02 — The levers</span>
+        <h2 class="sec-title">Six levers we pull, <em>every</em> engagement.</h2>
+      </div>
+      <p class="sec-note">Most engagements combine three or four of these. The audit tells us which dominate your spend surface.</p>
+    </div>
+    <div class="ledger">
+      <div class="ledger-row">
+        <span class="no">01</span>
+        <h3>Model routing</h3>
+        <p class="desc">Classify each request and route to the cheapest model that passes your quality bar. Reasoning goes to flagships; extraction and classification go to small fast models.</p>
+        <span class="range">30–50%<small>of lever scope</small></span>
+      </div>
+      <div class="ledger-row">
+        <span class="no">02</span>
+        <h3>Semantic cache</h3>
+        <p class="desc">Fingerprint prompts with embeddings and serve identical answers from sub-10ms cache. Similarity thresholds and invalidation tuned per feature.</p>
+        <span class="range">20–40%<small>of lever scope</small></span>
+      </div>
+      <div class="ledger-row">
+        <span class="no">03</span>
+        <h3>Prompt compression</h3>
+        <p class="desc">Audit system prompts for redundancy. Deduplicate examples. Compress retrieved context with LLMLingua-style techniques. Every change A/B tested.</p>
+        <span class="range">15–30%<small>of lever scope</small></span>
+      </div>
+      <div class="ledger-row">
+        <span class="no">04</span>
+        <h3>Batch &amp; async</h3>
+        <p class="desc">Route background jobs to batch endpoints (up to 50% discount) with SLO-aware queueing for anything time-sensitive.</p>
+        <span class="range">10–50%<small>of lever scope</small></span>
+      </div>
+      <div class="ledger-row">
+        <span class="no">05</span>
+        <h3>Provider arbitrage</h3>
+        <p class="desc">Identical tasks often cost 2–3× more at one provider. We route by capability-per-dollar, not by the SDK your team happened to start with.</p>
+        <span class="range">20–35%<small>of lever scope</small></span>
+      </div>
+      <div class="ledger-row">
+        <span class="no">06</span>
+        <h3>Fallback chains</h3>
+        <p class="desc">Smart retries and tiered fallbacks beat worst-case over-provisioning. Maintain SLO without paying flagship prices on every call.</p>
+        <span class="range">5–15%<small>of lever scope</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- process -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 03 — The engagement</span>
+        <h2 class="sec-title">Audit. Implement. <em>Reconcile.</em> Repeat.</h2>
+      </div>
+      <p class="sec-note">Every engagement follows the same four-phase shape. Most customers are on month-end reconciliation by week five.</p>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <span class="wk">Week 01</span>
+        <div class="ph-no">Phase i — Audit</div>
+        <h3>Map every dollar.</h3>
+        <p>Ingest invoices and gateway logs. Baseline locked and countersigned.</p>
+      </div>
+      <div class="phase">
+        <span class="wk">Week 02</span>
+        <div class="ph-no">Phase ii — Plan</div>
+        <h3>Rank by waste.</h3>
+        <p>Optimizations ranked by dollar impact. Quality SLOs agreed per endpoint.</p>
+      </div>
+      <div class="phase">
+        <span class="wk">Weeks 03–05</span>
+        <div class="ph-no">Phase iii — Ship</div>
+        <h3>Ship &amp; A/B.</h3>
+        <p>Feature-flagged, tested 7 days vs. baseline, graduated to 100%.</p>
+      </div>
+      <div class="phase">
+        <span class="wk">Ongoing</span>
+        <div class="ph-no">Phase iv — Reconcile</div>
+        <h3>Signed, monthly.</h3>
+        <p>Statement of Savings reconciled to raw provider invoices. Every month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pricing -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 04 — Pricing</span>
+        <h2 class="sec-title">We only get paid <em>when you save.</em></h2>
+      </div>
+      <p class="sec-note">Performance pricing, tied to your provider invoices. No savings, no fee. No multi-year lock-ins.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-copy">
+        <span class="sec-no" style="color:var(--muted)">Free audit, then</span>
+        <div class="big-price">15–25<em>%</em></div>
+        <div class="per">of verified savings · measured vs. locked baseline</div>
+        <ul class="check-list">
+          <li>Audit is <strong>free</strong> and credited against implementation.</li>
+          <li>Savings measured vs. <strong>locked pre-engagement baseline</strong>, reconciled to raw provider invoices.</li>
+          <li>Quality SLOs enforced; regressions <strong>auto-rollback</strong>.</li>
+          <li>Minimum engagement: <strong>$20K/month</strong> LLM spend.</li>
+          <li>Cancel for any reason; <strong>no multi-year lock-ins</strong>.</li>
+        </ul>
+        <a class="btn btn-ink" href="#book">Book free audit →</a>
+      </div>
+      <div class="receipt">
+        <div class="r-head">
+          <div class="r-title">Statement of Savings</div>
+          <div class="r-sub">Illustrative · $165K baseline · 50% reduction</div>
+        </div>
+        <div class="statement-body" style="padding-top:14px">
+          <div class="s-row"><span class="lbl">Baseline AI spend</span><span class="amt">$165,000</span></div>
+          <div class="s-row"><span class="lbl">After optimization (≈50%)</span><span class="amt">$82,500</span></div>
+          <div class="s-row"><span class="lbl">Monthly savings</span><span class="amt save">$82,500</span></div>
+          <div class="s-row"><span class="lbl">LLM CFO fee (20%)</span><span class="amt fee">− $16,500</span></div>
+          <div class="s-row"><span class="lbl"><strong>Customer keeps</strong></span><span class="amt save"><strong>$66,000 /mo</strong></span></div>
+        </div>
+        <div class="r-annual">
+          <div class="fig">$792,000</div>
+          <div class="cap">Illustrative annual net · not a customer figure</div>
+        </div>
+        <div class="r-note">*** Mid-range example only. Your audit produces a real number. ***</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- faq -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 05 — Questions</span>
+        <h2 class="sec-title">Common <em>questions.</em></h2>
+      </div>
+      <p class="sec-note">Missing something? Write to hello@llmcfo.com — we respond within one business day.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq" open>
+        <summary>How much can I reduce my OpenAI or Anthropic bill? <span class="plus">+</span></summary>
+        <div class="a">Published research and our engineering work suggests <strong>40–60% reduction</strong> is achievable for most production workloads. The biggest savings usually come from semantic caching (20–40%), model routing (30–50%), and prompt compression (15–30%). We commit to a target after the audit. <strong>If we don't deliver savings, you don't pay.</strong></div>
+      </details>
+      <details class="faq">
+        <summary>How are savings verified? <span class="plus">+</span></summary>
+        <div class="a">We lock a pre-engagement baseline from your provider invoices. Each month, our reconciliation report compares optimized spend to that baseline — traffic-adjusted, reconciled to raw billing. <strong>Your finance team can audit the math.</strong></div>
+      </details>
+      <details class="faq">
+        <summary>Will optimization hurt output quality? <span class="plus">+</span></summary>
+        <div class="a">Every change is A/B tested against your production baseline for <strong>seven days minimum</strong>. Regressions roll back automatically. Quality SLOs are agreed per endpoint and monitored continuously alongside cost.</div>
+      </details>
+      <details class="faq">
+        <summary>What's the minimum monthly spend? <span class="plus">+</span></summary>
+        <div class="a"><strong>$20K+/month</strong> on LLM APIs, or teams projected to cross that within a quarter. Below that, self-serve observability tooling (Helicone, Langfuse) is a better fit.</div>
+      </details>
+      <details class="faq">
+        <summary>Are you SOC 2, GDPR, or HIPAA certified? <span class="plus">+</span></summary>
+        <div class="a"><strong>Not yet — we're being honest.</strong> We're an early-stage service and don't claim certification. We follow read-only-by-default access for billing and gateway data, and can sign a mutual NDA and DPA before any engagement.</div>
+      </details>
+      <details class="faq">
+        <summary>Which providers do you support? <span class="plus">+</span></summary>
+        <div class="a">OpenAI, Anthropic, Gemini &amp; Vertex AI, AWS Bedrock, Azure OpenAI, Groq, Together AI, Mistral, Cohere, Fireworks, OpenRouter, and most OSS endpoints — plus LiteLLM, Helicone, and Langfuse gateways. <strong>Multi-provider setups typically have the largest savings surface.</strong></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- cta -->
+<section class="cta" id="book">
+  <div class="wrap">
+    <span class="sec-no">№ 06 — Start here</span>
+    <h2>Book the audit.<br><em>Keep the savings.</em></h2>
+    <p>Two weeks. Read-only access. We return with a full map of your spend, ranked by waste, and a baseline our platform can track against. Free. No implementation commitment.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-ink" href="#">Book a free audit →</a>
+      <a class="btn btn-ghost" href="mailto:hello@llmcfo.com">hello@llmcfo.com</a>
+    </div>
+    <div class="fine">30-min discovery · read-only by default · NDA + DPA on request · no commitment</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-name">LLM CFO</div>
+        <div class="foot-tag">Managed AI cost optimization · Pay on results</div>
+      </div>
+      <div class="foot-links">
+        <div>
+          <h4>Service</h4>
+          <a href="#levers">Techniques</a>
+          <a href="#process">How it works</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="/methodology">Methodology</a>
+          <a href="/research">Research</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="mailto:hello@llmcfo.com">hello@llmcfo.com</a>
+          <a href="#book">Book an audit</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 LLM CFO — Design concept mockup</span>
+      <span>No savings, no fee ✦</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// seamless ticker: duplicate track content
+(function(){
+  var t = document.getElementById('tick');
+  t.innerHTML += t.innerHTML;
+})();
+</script>
+<script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+<script>
+(function(){
+  function getCookie(n){var m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):null;}
+  var variant = getCookie('ab_test') || 'control';
+  window.ab_test_variant = variant;
+  function send(){
+    if (typeof gtag === 'function') {
+      gtag('event', 'ab_test_variant', { variant: variant, page: 'homepage', test_name: 'july_2026_redesign' });
+    }
+    if (typeof clarity === 'function') {
+      clarity('set', 'ab_test_variant', variant);
+    }
+  }
+  if (document.readyState === 'complete' || document.readyState === 'interactive') { setTimeout(send, 100); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(send, 100); }); }
+})();
+</script>
+</body>
+</html>

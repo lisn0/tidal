@@ -19,6 +19,46 @@ const DEFAULT_TITLE = 'LLM CFO';
 const CONTENT_SIGNAL = 'search=yes, ai-input=yes, ai-train=no';
 
 /* ------------------------------------------------------------------ */
+/* A/B test: homepage variant (control vs v2 mockup)                  */
+/* ------------------------------------------------------------------ */
+
+const AB_COOKIE = 'ab_test';
+const AB_PATHS = new Set(['/', '/index.html']);
+
+// UA strings we never experiment on: crawlers, AI agents, preview tools.
+const BOT_RE = /bot|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly|quora|pinterest|whatsapp|googlebot|bingbot|duckduckbot|yandex|baidu|applebot|amazonbot|gptbot|claudebot|claude-|oai-searchbot|chatgpt-user|perplexity|mistralai|meta-externalagent|google-extended|preview|lighthouse/i;
+
+function isBot(request) {
+	return BOT_RE.test(request.headers.get('User-Agent') || '');
+}
+
+function abCookieValue(request) {
+	const c = request.headers.get('Cookie') || '';
+	const m = c.match(new RegExp(`(?:^|;\\s*)${AB_COOKIE}=(control|v2)\\b`));
+	return m ? m[1] : null;
+}
+
+function pickVariant(request) {
+	const existing = abCookieValue(request);
+	if (existing) return existing;
+	return Math.random() < 0.5 ? 'control' : 'v2';
+}
+
+function abTargetUrl(url, variant) {
+	if (variant === 'v2') {
+		const u = new URL(url.toString());
+		u.pathname = '/index-v2.html';
+		return u;
+	}
+	return url;
+}
+
+function abCookieHeader(variant) {
+	const maxAge = 60 * 60 * 24 * 30; // 30 days
+	return `${AB_COOKIE}=${variant}; Max-Age=${maxAge}; Path=/; SameSite=Lax; Secure`;
+}
+
+/* ------------------------------------------------------------------ */
 /* AI crawler logging (GEO analytics)                                  */
 /* ------------------------------------------------------------------ */
 
@@ -101,19 +141,45 @@ export default {
 			return Response.redirect(url.toString(), 301);
 		}
 
-		// 2. Fetch whatever the static host would serve (also applies _redirects/_headers).
-		const assetResponse = await env.ASSETS.fetch(request);
-
-		// 3. Only transform GET requests that explicitly negotiate markdown.
-		const accept = request.headers.get('Accept') || '';
-		if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
-			return assetResponse;
+		// 2. Homepage A/B test: humans only, crawlers always see control.
+		let abVariant = null;
+		let abRequest = request;
+		if (!isBot(request) && request.method === 'GET' && AB_PATHS.has(url.pathname)) {
+			abVariant = pickVariant(request);
+			const targetUrl = abTargetUrl(url, abVariant);
+			if (targetUrl.toString() !== url.toString()) {
+				abRequest = new Request(targetUrl, request);
+			}
 		}
 
-		// 4. Only transform real HTML pages.
+		// 3. Fetch whatever the static host would serve (also applies _redirects/_headers).
+		const assetResponse = await env.ASSETS.fetch(abRequest);
+
+		// 4. Attach A/B cookie/headers if we ran the experiment on this request.
+		let response = assetResponse;
+		if (abVariant) {
+			const headers = new Headers(assetResponse.headers);
+			headers.set('X-AB-Variant', abVariant);
+			if (!abCookieValue(request)) {
+				headers.append('Set-Cookie', abCookieHeader(abVariant));
+			}
+			response = new Response(assetResponse.body, {
+				status: assetResponse.status,
+				statusText: assetResponse.statusText,
+				headers,
+			});
+		}
+
+		// 5. Only transform GET requests that explicitly negotiate markdown.
+		const accept = request.headers.get('Accept') || '';
+		if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
+			return response;
+		}
+
+		// 6. Only transform real HTML pages.
 		const contentType = assetResponse.headers.get('Content-Type') || '';
 		if (assetResponse.status !== 200 || !contentType.includes('text/html')) {
-			return assetResponse;
+			return response;
 		}
 
 		const html = await assetResponse.text();
