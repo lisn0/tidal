@@ -2,6 +2,7 @@
   "name": "llmcfo",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-llms-full.js && node scripts/content-gap-analyzer.js",
     "build": "eleventy",
     "serve": "eleventy --serve",
     "test": "node scripts/worker-crawlers.test.mjs"
