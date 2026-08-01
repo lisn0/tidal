@@ -1,0 +1,39 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "LLM CFO Public API",
+    "description": "Public endpoints for AI agents and integrations.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "hello@llmcfo.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://llmcfo.com"
+    }
+  ],
+  "paths": {
+    "/health.json": {
+      "get": {
+        "summary": "Health check",
+        "description": "Returns the service status.",
+        "responses": {
+          "200": {
+            "description": "Service is healthy.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

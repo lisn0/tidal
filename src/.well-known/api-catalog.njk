@@ -1,0 +1,31 @@
+---
+permalink: "/.well-known/api-catalog"
+layout: false
+eleventyExcludeFromCollections: true
+eleventyAllowMissingExtension: true
+---
+{
+  "linkset": [
+    {
+      "anchor": "https://llmcfo.com/api",
+      "service-desc": [
+        {
+          "href": "https://llmcfo.com/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://llmcfo.com/auth.md",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://llmcfo.com/health.json",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

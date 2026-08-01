@@ -51,3 +51,6 @@ Allow: /
 # Mistral (Le Chat retrieval)
 User-agent: MistralAI-User
 Allow: /
+
+# Content Signals (contentsignals.org): how our content may be used by AI.
+Content-Signal: search=yes, ai-input=yes, ai-train=no

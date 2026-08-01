@@ -256,6 +256,17 @@ details.faq[open] summary .plus{transform:rotate(45deg)}
 details.faq .a{padding:0 8px 28px;font-size:15px;color:var(--ink-2);line-height:1.75;max-width:700px}
 details.faq .a strong{color:var(--ink)}
 
+/* ---------- research ---------- */
+.research-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:10px}
+.research-card{display:block;text-decoration:none;background:var(--paper);border:1px solid var(--hair);padding:28px;transition:border-color .15s,transform .15s}
+.research-card:hover{border-color:var(--green);transform:translateY(-3px)}
+.research-card .fig{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:flex;justify-content:space-between}
+.research-card h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px;color:var(--ink)}
+.research-card p{font-size:14px;color:var(--ink-2);line-height:1.6;margin-bottom:16px}
+.research-card .meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+@media(max-width:980px){.research-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.research-grid{grid-template-columns:1fr}}
+
 /* ---------- CTA ---------- */
 .cta{background:var(--ink);color:var(--paper);border-bottom:none;padding:100px 0}
 .cta .sec-no{color:#8FCFA8}
@@ -293,7 +304,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
 <!-- masthead -->
 <header class="masthead">
   <div class="wrap masthead-in">
-    <a class="brand" href="#">
+    <a class="brand" href="/">
       <span class="mark">$</span>
       <span class="name">LLM CFO</span>
       <span class="est">Est. 2026 · AI FinOps</span>
@@ -302,6 +313,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
       <a href="#levers">Techniques</a>
       <a href="#process">How it works</a>
       <a href="#pricing">Pricing</a>
+      <a href="/research">Research</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn-ink btn-sm" href="#book">Book audit →</a>
     </nav>
@@ -559,14 +571,66 @@ footer{padding:56px 0 44px;background:var(--paper)}
   </div>
 </section>
 
+<!-- research -->
+<section id="research">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-no">№ 06 — Research</span>
+        <h2 class="sec-title">Guides cited by <em>Microsoft Copilot.</em></h2>
+      </div>
+      <p class="sec-note">Practical deep dives on AI cost monitoring, chargeback, governance, and agent spend control — written for finance and engineering leaders.</p>
+    </div>
+    <div class="research-grid">
+      <a class="research-card" href="/research/llm-usage-metering-billing">
+        <div class="fig"><span>GUIDE</span><span>333</span></div>
+        <h3>LLM usage metering &amp; billing</h3>
+        <p>How to meter token usage accurately, allocate costs to customers, and invoice multi-tenant AI products.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+      <a class="research-card" href="/research/ai-chargeback-showback">
+        <div class="fig"><span>GUIDE</span><span>272</span></div>
+        <h3>AI chargeback &amp; showback</h3>
+        <p>Internal cost allocation methods, attribution dimensions, and how finance teams close the books on AI spend.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+      <a class="research-card" href="/research/ai-finops">
+        <div class="fig"><span>GUIDE</span><span>254</span></div>
+        <h3>AI FinOps</h3>
+        <p>The FinOps Foundation framework adapted for LLMs: visibility, attribution, optimization, and accountability.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+      <a class="research-card" href="/research/llm-token-usage-tracking">
+        <div class="fig"><span>GUIDE</span><span>229</span></div>
+        <h3>LLM token usage tracking</h3>
+        <p>Per-feature, per-team, and per-customer token attribution across OpenAI, Anthropic, and Bedrock.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+      <a class="research-card" href="/research/llm-cost-monitoring">
+        <div class="fig"><span>GUIDE</span><span>170</span></div>
+        <h3>LLM cost monitoring</h3>
+        <p>Real-time dashboards, anomaly detection, and alerting for production LLM spend.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+      <a class="research-card" href="/research/agent-spend-guardrails">
+        <div class="fig"><span>GUIDE</span><span>143</span></div>
+        <h3>Agent spend guardrails</h3>
+        <p>Budgets, rate limits, and circuit breakers for autonomous agents that can loop and retry.</p>
+        <div class="meta">Copilot citations</div>
+      </a>
+    </div>
+    <p style="margin-top:32px"><a class="btn btn-ghost" href="/research">Browse all research →</a></p>
+  </div>
+</section>
+
 <!-- cta -->
 <section class="cta" id="book">
   <div class="wrap">
-    <span class="sec-no">№ 06 — Start here</span>
+    <span class="sec-no">№ 07 — Start here</span>
     <h2>Book the audit.<br><em>Keep the savings.</em></h2>
     <p>Two weeks. Read-only access. We return with a full map of your spend, ranked by waste, and a baseline our platform can track against. Free. No implementation commitment.</p>
     <div class="hero-ctas">
-      <a class="btn btn-ink" href="#">Book a free audit →</a>
+      <a class="btn btn-ink" href="mailto:hello@llmcfo.com">Book a free audit →</a>
       <a class="btn btn-ghost" href="mailto:hello@llmcfo.com">hello@llmcfo.com</a>
     </div>
     <div class="fine">30-min discovery · read-only by default · NDA + DPA on request · no commitment</div>
@@ -589,8 +653,10 @@ footer{padding:56px 0 44px;background:var(--paper)}
         </div>
         <div>
           <h4>Company</h4>
-          <a href="#">Methodology</a>
-          <a href="#">Research</a>
+          <a href="/methodology">Methodology</a>
+          <a href="/research">Research</a>
+          <a href="/benchmarks">Benchmarks</a>
+          <a href="/case-studies">Case studies</a>
           <a href="#faq">FAQ</a>
         </div>
         <div>

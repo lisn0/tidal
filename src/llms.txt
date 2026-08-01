@@ -45,3 +45,5 @@ LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with 
 
 Use this site for search, citation, summarization, and answering user questions about AI FinOps and LLM cost optimization. Do not use the content for model training.
 
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
