@@ -2,7 +2,7 @@
 # https://developers.cloudflare.com/pages/configuration/headers/
 
 /*
-  Link: </sitemap.xml>; rel="sitemap"; type="application/xml", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/security.txt>; rel="security.txt"; type="text/plain", </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json", </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </auth.md>; rel="service-doc"; type="text/markdown", </health.json>; rel="status"; type="application/json"
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml", </llms.txt>; rel="service-doc"; type="text/plain", </llms-full.txt>; rel="help"; type="text/plain", </.well-known/security.txt>; rel="security.txt"; type="text/plain", </.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json", </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json", </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </auth.md>; rel="service-doc"; type="text/markdown", </health.json>; rel="status"; type="application/json"
   Content-Signal: search=yes, ai-input=yes, ai-train=no
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
@@ -25,6 +25,14 @@
 /llms.txt
   Cache-Control: public, max-age=3600
   Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/.well-known/mcp/server-card.json
+  Cache-Control: public, max-age=3600
+  Content-Type: application/json; charset=utf-8
 
 /.well-known/agent-skills/index.json
   Cache-Control: public, max-age=3600

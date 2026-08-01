@@ -1,0 +1,16 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card/v1.json",
+  "name": "LLM CFO Finance & Cost Controls",
+  "description": "Executive guides, unit economics, chargeback models, and token budget governance for CFOs and Finance teams.",
+  "url": "https://llmcfo.com",
+  "version": "1.0.0",
+  "capabilities": {
+    "tools": false,
+    "resources": true,
+    "prompts": false
+  },
+  "endpoints": {
+    "llms": "https://llmcfo.com/llms.txt",
+    "llmsFull": "https://llmcfo.com/llms-full.txt"
+  }
+}

@@ -40,6 +40,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon.svg": "favicon.svg" });
   eleventyConfig.addPassthroughCopy({ "src/humans.txt": "humans.txt" });
   eleventyConfig.addPassthroughCopy({ "src/llms.txt": "llms.txt" });
+  eleventyConfig.addPassthroughCopy({ "src/llms-full.txt": "llms-full.txt" });
   eleventyConfig.addPassthroughCopy({ "src/openapi.json": "openapi.json" });
   eleventyConfig.addPassthroughCopy({ "src/auth.md": "auth.md" });
   eleventyConfig.addPassthroughCopy({ "src/health.json": "health.json" });
