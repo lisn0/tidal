@@ -1,0 +1,313 @@
+---
+permalink: "tools/cache-savings-calculator.html"
+layout: "page.njk"
+title: "Prompt Cache Savings Calculator — Is Caching Worth It?"
+description: "Calculate whether prompt caching will save you money. Input your workload, see real savings across providers."
+---
+
+<div class="eye">FREE TOOL</div>
+<h1 class="page-title">Cache Savings <em>Calculator.</em></h1>
+<p class="lede">Should you enable prompt caching? Input your prompt stats and daily volume. See real savings — not the inflated numbers vendors show.</p>
+
+<div class="tool-container">
+  <div class="input-section">
+    <h2>Your workload</h2>
+    
+    <div class="input-group">
+      <label for="systemPromptTokens">System prompt tokens</label>
+      <input type="number" id="systemPromptTokens" value="3000" min="0">
+      <span class="hint">The repeated prefix (instructions, examples, context)</span>
+    </div>
+    
+    <div class="input-group">
+      <label for="userTokens">User message tokens</label>
+      <input type="number" id="userTokens" value="1000" min="0">
+      <span class="hint">The unique part of each request</span>
+    </div>
+    
+    <div class="input-group">
+      <label for="requestsPerDay">Requests per day</label>
+      <input type="number" id="requestsPerDay" value="1000" min="1">
+      <span class="hint">Daily volume</span>
+    </div>
+    
+    <div class="input-group">
+      <label for="cacheHitRate">Expected cache hit rate (%)</label>
+      <input type="number" id="cacheHitRate" value="70" min="0" max="100">
+      <span class="hint">% of requests sharing the same prefix within TTL</span>
+    </div>
+  </div>
+  
+  <div class="results-section">
+    <h2>Savings by provider</h2>
+    <div class="results-grid" id="resultsGrid">
+      <!-- Populated by JS -->
+    </div>
+    
+    <div class="verdict" id="verdict">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<div class="methodology">
+  <h2>How we calculate</h2>
+  <p>Most calculators overstate caching savings. We use the real formula:</p>
+  <pre>Savings = (input_without_cache × input_price) - (cache_write × cache_write_price) - (cache_read × cache_read_price) - (output × output_price)</pre>
+  <p>Cache writes still cost money. Anthropic charges a premium. OpenAI and Google charge full price. The discount only applies to the cache-read portion.</p>
+</div>
+
+<style>
+.tool-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin: 40px 0;
+}
+
+@media (max-width: 900px) {
+  .tool-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-section {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 24px;
+  height: fit-content;
+}
+
+.input-section h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #e6edf3;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b949e;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  font-size: 16px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #5eead4;
+}
+
+.hint {
+  display: block;
+  font-size: 12px;
+  color: #6e7681;
+  margin-top: 4px;
+}
+
+.results-section h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #e6edf3;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.result-card {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #e6edf3;
+}
+
+.result-card .metric {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #8b949e;
+}
+
+.result-card .metric strong {
+  color: #e6edf3;
+}
+
+.result-card .savings {
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.result-card .warning {
+  color: #f85149;
+  font-weight: 600;
+}
+
+.verdict {
+  padding: 24px;
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #8b949e;
+  line-height: 1.6;
+}
+
+.verdict strong {
+  color: #e6edf3;
+}
+
+.verdict .go {
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.verdict .no-go {
+  color: #f85149;
+  font-weight: 600;
+}
+
+.methodology {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid #21262d;
+  color: #8b949e;
+  font-size: 14px;
+}
+
+.methodology h2 {
+  color: #e6edf3;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.methodology pre {
+  background: #0d1117;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  color: #e6edf3;
+  margin: 16px 0;
+}
+</style>
+
+<script>
+const PROVIDERS = [
+  { name: "OpenAI", inputPrice: 2.50, cacheReadPrice: 1.25, cacheWritePrice: 2.50, color: "#00A67E" },
+  { name: "Anthropic", inputPrice: 3.00, cacheReadPrice: 0.30, cacheWritePrice: 3.75, color: "#D97757" },
+  { name: "Google", inputPrice: 1.25, cacheReadPrice: 0.31, cacheWritePrice: 1.25, color: "#4285F4" },
+];
+
+function calculate() {
+  const systemTokens = parseInt(document.getElementById('systemPromptTokens').value) || 0;
+  const userTokens = parseInt(document.getElementById('userTokens').value) || 0;
+  const requestsPerDay = parseInt(document.getElementById('requestsPerDay').value) || 0;
+  const hitRate = parseInt(document.getElementById('cacheHitRate').value) || 0;
+  
+  const totalInput = systemTokens + userTokens;
+  const hits = Math.round(requestsPerDay * (hitRate / 100));
+  const misses = requestsPerDay - hits;
+  
+  const results = PROVIDERS.map(p => {
+    // Without caching
+    const dailyWithoutCache = requestsPerDay * (totalInput * p.inputPrice / 1000000);
+    
+    // With caching
+    const cacheWriteTokens = misses * totalInput + hits * systemTokens;
+    const cacheReadTokens = hits * systemTokens;
+    const dailyWithCache = (cacheWriteTokens * p.cacheWritePrice / 1000000) + 
+                           (cacheReadTokens * p.cacheReadPrice / 1000000) +
+                           (requestsPerDay * userTokens * p.inputPrice / 1000000);
+    
+    const dailySavings = dailyWithoutCache - dailyWithCache;
+    const monthlySavings = dailySavings * 30;
+    const savingsPct = (dailySavings / dailyWithoutCache) * 100;
+    
+    return {
+      ...p,
+      dailyWithoutCache,
+      dailyWithCache,
+      dailySavings,
+      monthlySavings,
+      savingsPct,
+      worthwhile: monthlySavings > 10 && savingsPct > 5
+    };
+  });
+  
+  // Render cards
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = results.map(r => `
+    <div class="result-card">
+      <h3 style="color:${r.color}">${r.name}</h3>
+      <div class="metric"><span>Without cache</span><strong>$${r.dailyWithoutCache.toFixed(2)}/day</strong></div>
+      <div class="metric"><span>With cache</span><strong>$${r.dailyWithCache.toFixed(2)}/day</strong></div>
+      <div class="metric"><span>Daily savings</span><strong class="${r.dailySavings > 0 ? 'savings' : 'warning'}">$${r.dailySavings.toFixed(2)}</strong></div>
+      <div class="metric"><span>Monthly savings</span><strong class="${r.monthlySavings > 0 ? 'savings' : 'warning'}">$${r.monthlySavings.toFixed(0)}</strong></div>
+      <div class="metric"><span>Savings %</span><strong class="${r.savingsPct > 0 ? 'savings' : 'warning'}">${r.savingsPct.toFixed(1)}%</strong></div>
+    </div>
+  `).join('');
+  
+  // Render verdict
+  const best = results.reduce((a, b) => a.monthlySavings > b.monthlySavings ? a : b);
+  const verdict = document.getElementById('verdict');
+  
+  if (best.worthwhile) {
+    verdict.innerHTML = `
+      <span class="go">✓ Enable caching.</span><br><br>
+      <strong>${best.name}</strong> offers the best savings: <strong>$${best.monthlySavings.toFixed(0)}/month</strong> (${best.savingsPct.toFixed(1)}% reduction).<br><br>
+      Your ${hitRate}% hit rate and ${systemTokens.toLocaleString()}-token system prompt make caching worthwhile. 
+      ${best.name === 'Anthropic' ? 'Note: Anthropic charges a 25% premium on cache writes, so your hit rate needs to stay above 55% to break even.' : ''}
+    `;
+  } else {
+    verdict.innerHTML = `
+      <span class="no-go">✗ Skip caching for now.</span><br><br>
+      Savings are too small to justify complexity. Best case: <strong>$${best.monthlySavings.toFixed(0)}/month</strong> on ${best.name}.<br><br>
+      To make caching worthwhile, increase your hit rate above 70% or your system prompt above 2,000 tokens. 
+      ${hitRate < 50 ? 'Your low hit rate is the main blocker — prompts need to share prefixes within the TTL window.' : ''}
+    `;
+  }
+}
+
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', calculate);
+});
+
+calculate();
+</script>
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/research/prompt-caching-explained">Prompt caching explained</a> — how providers cache prefixes</li>
+  <li><a href="/research/prompt-caching-economics">Prompt caching economics</a> — the real ROI formula</li>
+  <li><a href="/research/semantic-caching">Semantic caching</a> — caching similar prompts, not just exact matches</li>
+  <li><a href="/research/llm-cost-monitoring">LLM cost monitoring</a> — track cache hit rates in production</li>
+</ul>
+
+<a class="back" href="/">&larr; Back to llmcfo.com</a>
