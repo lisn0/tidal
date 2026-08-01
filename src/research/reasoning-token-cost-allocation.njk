@@ -1,0 +1,100 @@
+---
+layout: "research.njk"
+permalink: "research/reasoning-token-cost-allocation.html"
+titleCore: "Reasoning token cost allocation: tracking the hidden cost of thinking"
+description: "How to track, allocate, and control reasoning token costs — the hidden line item that can double your LLM bill."
+slug: "reasoning-token-cost-allocation"
+schemaHeadline: "Reasoning Token Cost Allocation · LLM CFO"
+schemaDescription: "How to track, allocate, and control reasoning token costs — the hidden line item that can double your LLM bill."
+breadcrumbName: "Reasoning Token Cost Allocation"
+datePublished: "2026-08-01"
+dateModified: "2026-08-01"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faqJsonLd: |-
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are reasoning tokens?","acceptedAnswer":{"@type":"Answer","text":"Reasoning tokens are the intermediate thinking steps that models like OpenAI o1, o3, and Claude with extended thinking generate before producing a final answer. They are billed separately from input and output tokens, often at a higher rate, and can account for 30-70% of total request cost."}},{"@type":"Question","name":"How do I track reasoning token costs?","acceptedAnswer":{"@type":"Answer","text":"Meter reasoning_tokens separately from input_tokens and output_tokens in your telemetry. Most providers return this in the usage object. Track it per feature, per model, and per request type — reasoning-heavy endpoints like code generation or complex analysis have fundamentally different cost profiles than simple Q&A."}},{"@type":"Question","name":"Are reasoning tokens worth the cost?","acceptedAnswer":{"@type":"Answer","text":"For tasks requiring multi-step logic, math, or code debugging, reasoning tokens typically improve output quality enough to justify 2-5x cost. For simple extraction, classification, or short answers, they are pure waste. Route simple tasks to non-reasoning models and reserve reasoning for tasks that need it."}}]}
+---
+  <div class="eye">RESEARCH · COST MANAGEMENT</div>
+  <h1 class="page-title">Reasoning token <em>cost allocation.</em></h1>
+  <p class="updated">Cost guide · 1 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Reasoning tokens are the fastest-growing line item on modern LLM bills. Models that "think" before answering generate intermediate reasoning steps billed separately from input and output. For complex workloads, reasoning tokens can exceed the cost of the final answer by 3-5x. Most teams do not meter them separately and miss the real cost driver.</p>
+
+  <h2>What reasoning tokens are</h2>
+  <p>Reasoning tokens are the model's internal monologue: the chain-of-thought, planning, and self-correction that happens before the final output. Providers bill them differently:</p>
+  <table>
+    <thead><tr><th>Provider / Model</th><th>Reasoning token price</th><th>Visibility</th></tr></thead>
+    <tbody>
+      <tr><td>OpenAI o1, o3</td><td>~2-4x output token price</td><td>usage.completion_tokens_details.reasoning_tokens</td></tr>
+      <tr><td>Claude extended thinking</td><td>Same as output tokens</td><td>usage.output_tokens (includes thinking)</td></tr>
+      <tr><td>Gemini thinking mode</td><td>Same as output tokens</td><td>usage.output_tokens (includes thinking)</td></tr>
+    </tbody>
+  </table>
+  <p>The key insight: reasoning tokens are not free "thinking time." They are billed compute. A request that generates 1,000 output tokens after 8,000 reasoning tokens costs 9x the output-only price for OpenAI reasoning models.</p>
+
+  <h2>Why teams miss this cost</h2>
+  <p>Three reasons reasoning costs hide:</p>
+  <ul>
+    <li><strong>Aggregation.</strong> Daily or monthly aggregates mix reasoning and non-reasoning requests. A support endpoint with 10% reasoning models looks like a modest increase, not a 3x cost spike on specific requests.</li>
+    <li><strong>No per-request metering.</strong> Without per-request records, you cannot see that the code-debugging endpoint uses 10x more reasoning tokens than the summarization endpoint.</li>
+    <li><strong>Quality assumption.</strong> Teams assume reasoning = better. For simple tasks, reasoning tokens add cost without improving output. A classification task does not need 5,000 tokens of deliberation.</li>
+  </ul>
+
+  <h2>How to meter reasoning tokens</h2>
+  <p>Add reasoning_tokens to your metering schema alongside input_tokens and output_tokens:</p>
+  <pre style="background:#E8F2ED;padding:16px;border-radius:8px;overflow-x:auto;font-size:14px">{
+  "provider": "openai",
+  "model": "o3",
+  "input_tokens": 1200,
+  "output_tokens": 450,
+  "reasoning_tokens": 3200,
+  "feature": "code-review",
+  "team": "platform",
+  "cost_estimate": 0.028
+}</pre>
+  <p>From this you can calculate the reasoning overhead ratio:</p>
+  <pre style="background:#E8F2ED;padding:16px;border-radius:8px;overflow-x:auto;font-size:14px">reasoning_overhead = reasoning_tokens / (input_tokens + output_tokens)</pre>
+  <p>A ratio above 2.0 means the model spends more time thinking than reading and writing combined. Ratios above 5.0 are common for math, code, and multi-step analysis. Ratios below 0.5 mean the task probably does not need a reasoning model.</p>
+
+  <h2>Allocating costs to features</h2>
+  <p>Reasoning costs belong to the feature that requested them. A customer-facing code assistant and an internal document summarizer should not share the same cost bucket.</p>
+  <p>Minimum allocation dimensions:</p>
+  <ul>
+    <li>feature / endpoint</li>
+    <li>model (reasoning vs non-reasoning)</li>
+    <li>reasoning_overhead_bucket (low, medium, high)</li>
+    <li>customer / tenant (for external products)</li>
+  </ul>
+  <p>From this you can answer: "Which features are paying for thinking they do not need?" The answer is usually surprising. Simple Q&A, extraction, and classification endpoints often show high reasoning overhead because they were routed to a reasoning model by default.</p>
+
+  <h2>Controlling reasoning costs</h2>
+  <p>Four levers, in order of impact:</p>
+  <p><strong>1. Model routing.</strong> Route simple tasks to non-reasoning models. A support ticket classifier does not need o3. Route it to GPT-4o-mini or Claude Haiku. Reserve reasoning models for tasks that fail without them: multi-step math, code debugging, complex analysis.</p>
+  <p><strong>2. Reasoning effort caps.</strong> OpenAI supports <code>reasoning_effort: low|medium|high</code>. Set it explicitly per endpoint. Low effort reduces reasoning tokens by 50-80% for tasks that need some thinking but not exhaustive deliberation.</p>
+  <p><strong>3. Prompt design.</strong> Tell the model when to think. "Think step by step" invites long reasoning. "Answer directly" suppresses it. For tasks where you want brevity, say so.</p>
+  <p><strong>4. Fallback chains.</strong> Try a non-reasoning model first. If confidence is low or the task is flagged complex, escalate to reasoning. This keeps simple tasks cheap and only pays for thinking when needed.</p>
+
+  <h2>When reasoning is worth it</h2>
+  <p>Reasoning tokens pay for themselves when they prevent errors that cost more than the tokens. A code review that misses a bug costs engineering time. A financial analysis that makes a math error costs credibility. A legal document that misreads a clause costs risk.</p>
+  <p>The test is not "did output quality improve?" The test is "did the improvement prevent a downstream cost?" For customer-facing products, that cost might be churn. For internal tools, it might be engineering time. For regulated industries, it might be compliance.</p>
+
+  <h2>Decision framework</h2>
+  <p>Before enabling reasoning for an endpoint:</p>
+  <ol>
+    <li>Does the task require multi-step logic, math, or code? If no, use a non-reasoning model.</li>
+    <li>Is the output high-stakes (customer-facing, financial, legal)? If no, use a non-reasoning model.</li>
+    <li>Can you measure reasoning_tokens separately? If no, implement metering first.</li>
+    <li>Is the reasoning overhead ratio >2.0 for this endpoint? If yes, test with reasoning_effort=low or a non-reasoning model.</li>
+  </ol>
+  <p>Reasoning is a scalpel, not a hammer. Use it where thinking prevents expensive mistakes, not where it makes answers sound more thorough.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/llm-usage-metering-billing">LLM usage metering and billing</a> - how to meter reasoning tokens alongside input and output.</li>
+    <li><a href="/research/ai-cost-optimization">AI cost optimization</a> - the broader optimization framework.</li>
+    <li><a href="/research/model-routing">Model routing</a> - routing simple tasks to cheaper models.</li>
+    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails</a> - preventing runaway reasoning loops in agents.</li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

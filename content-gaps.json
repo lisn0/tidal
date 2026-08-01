@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-08-01T19:07:57.825Z",
+  "totalTargetTopics": 7,
+  "coveredCount": 7,
+  "gapCount": 0,
+  "gapAnalysis": [
+    {
+      "topic": "AI Agent Spend Guardrails",
+      "targetQuery": "ai agent spending limits and budget caps",
+      "covered": true,
+      "suggestedSlug": "research/agent-spend-guardrails",
+      "priority": "Covered"
+    },
+    {
+      "topic": "AI Chargeback and Showback",
+      "targetQuery": "how to chargeback llm costs by team",
+      "covered": true,
+      "suggestedSlug": "research/ai-chargeback-showback",
+      "priority": "Covered"
+    },
+    {
+      "topic": "LLM Usage Metering & Billing",
+      "targetQuery": "metering and billing internal llm usage",
+      "covered": true,
+      "suggestedSlug": "research/llm-usage-metering-billing",
+      "priority": "Covered"
+    },
+    {
+      "topic": "LLM Cost Monitoring",
+      "targetQuery": "realtime llm cost monitoring",
+      "covered": true,
+      "suggestedSlug": "research/llm-cost-monitoring",
+      "priority": "Covered"
+    },
+    {
+      "topic": "AI FinOps for CFOs",
+      "targetQuery": "cfo guide to ai spend governance",
+      "covered": true,
+      "suggestedSlug": "research/ai-finops-cfo",
+      "priority": "Covered"
+    },
+    {
+      "topic": "Prompt Caching ROI",
+      "targetQuery": "prompt cache cost savings",
+      "covered": true,
+      "suggestedSlug": "research/prompt-caching-explained",
+      "priority": "Covered"
+    },
+    {
+      "topic": "Dynamic Model Routing",
+      "targetQuery": "model routing cost optimization",
+      "covered": true,
+      "suggestedSlug": "research/model-routing",
+      "priority": "Covered"
+    }
+  ]
+}
