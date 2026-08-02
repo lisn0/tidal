@@ -62,6 +62,13 @@ CHANGELOG What's new. Service updates, new optimization techniques we've added t
 
 ---
 
+# es/research/ai-finops-cfo-v2.njk
+URL path: /es/research/ai-finops-cfo-v2
+
+
+
+---
+
 # glossary.njk
 URL path: /glossary
 
@@ -136,6 +143,13 @@ RESEARCH · FINOPS AI chargeback and showback. FinOps note · 7 May 2026 By the 
 URL path: /research/ai-finops-2026
 
 RESEARCH · TREND AI FinOps in 2026. Trend note · 1 May 2026 By the LLM CFO team The big shift in 2026 is that AI cost optimization is no longer being treated as a collection of prompt hacks. It is being pulled into a broader operating model: measurement, allocation, policy, forecasting, and reconciliation. In other words, AI FinOps is becoming a real category, not just an engineering side quest. Why this is happening now Through 2024 and much of 2025, most teams were still in experimentation mode. The fastest path was to ship, watch usage grow, and worry about the bill later. That worked while AI spend was small. It breaks when LLM usage becomes one of the top budget lines in the product. By 2026, the problem is wider than prompt design. AI spend now cuts across first-party cloud usage, provider APIs, gateways, retrieval systems, agent tools, and enterprise contracts. Finance wants predictability. Engineering wants visibility. Product wants to know which features are actually worth their unit economics. Why "just optimize the prompt" is not enough anymore Prompt trimming still matters, but it does not answer the bigger operating questions: Which team owns the expensive traffic? Which customers are margin-negative at current model mix? How do forecasts change when traffic doubles? What controls stop experimental agent loops from becoming permanent line items? Can finance reconcile internal dashboards to actual vendor billing? What AI FinOps looks like in practice The emerging 2026 pattern is straightforward. Provider or cloud billing is the source of financial truth. Application telemetry carries business context. A gateway centralizes routing and guardrails. A warehouse or BI layer joins the two. Then teams make optimization and governance decisions from one consistent model. That is why the discipline is expanding beyond cost cutting. It is also about policy. Budgets by team. Quotas by customer. Forecasting by product line. Thresholds for when premium models are allowed. Rules for when offline work must move to cheaper asynchronous paths. The new center of gravity: allocation and accountability The hardest part of AI cost management is not usually finding theoretical optimizations. It is assigning accountability. Once usage is tagged by feature, environment, and customer, cost stops being a mysterious shared bill and becomes an engineering and product decision with owners. The 2026 pattern: the winners are not just the teams with the best prompts. They are the teams that can explain every major line item, predict it, and decide who owns changing it. What this means for engineering leaders If you are still treating AI spend as a specialized prompt-engineering problem, you are likely underestimating the management problem. The teams doing this well are building AI FinOps into normal operations: instrumentation, budget reviews, anomaly checks, optimization backlogs, and monthly reconciliations. Where to start Instrument every request with feature, user or workspace, provider, model, and estimated cost. Reconcile internal estimates back to provider truth monthly. Put spend reviews on the same cadence as reliability or capacity reviews. Rank optimization work by total spend concentration, not by technical novelty. Related AI FinOps: the operating model for LLM spend LLM cost monitoring: what to track and how to control it Your GenAI telemetry schema is now a cost decision LLM cost optimization: a practical guide &larr; Back to llmcfo.com
+
+---
+
+# research/ai-finops-cfo-v2.njk
+URL path: /research/ai-finops-cfo-v2
+
+
 
 ---
 

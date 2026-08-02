@@ -1,0 +1,42 @@
+{
+  "slug": "ai-finops-cfo-v2",
+  "tags": ["cfo", "governance", "finops"],
+  "datePublished": "2026-07-26",
+  "dateModified": "2026-08-01",
+  "image": "https://llmcfo.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "AI FinOps for CFOs",
+      "titleCore": "AI FinOps for CFOs",
+      "description": "A CFO's guide to AI FinOps: how to govern AI spend, set budgets, allocate costs, and partner with engineering to control the AI bill.",
+      "body": "<div class=\"eye\">RESEARCH · GUIDE</div><p class=\"lede\">AI is moving from the lab to the operating budget. CFOs who treat it as just another software cost will be surprised. AI FinOps is the discipline that keeps AI spend predictable without slowing down the teams that use it.</p><h2>1. AI spend is different</h2><p>Traditional software costs are fixed or per-seat. AI costs are variable and tied to usage. A new feature, a model upgrade, or a change in user behavior can double the bill. That means the old controls — annual budgets and quarterly reviews — are too slow.</p><h2>2. The CFO's role</h2><p>Finance should provide the framework: budgets, attribution, guardrails, and reporting. Engineering owns the technical decisions: which model, which caching strategy, which routing rules. The CFO's job is to make sure those decisions are visible and accountable, not to make them.</p><h2>3. Build the governance layer</h2><ul><li><strong>Budgets by team and feature.</strong> Give owners a number they can plan against.</li><li><strong>Attribution tags.</strong> Every request must be traceable to a cost center.</li><li><strong>Spend limits and alerts.</strong> Catch runaway costs before they hit the invoice.</li><li><strong>Monthly reconciliation.</strong> Compare internal metrics to the provider invoice.</li><li><strong>Quarterly business reviews.</strong> Review efficiency, forecast, and pipeline.</li></ul><h2>4. Partner with engineering</h2><p>The best AI FinOps programs have a weekly standing meeting between finance and engineering. Finance brings the budget and variance. Engineering brings the technical drivers. Together they pick the next optimization candidate.</p>",
+      "faq": [
+        { "question": "What is AI FinOps from a CFO's perspective?", "answer": "AI FinOps is the set of finance processes that make AI spend visible, attributable, budgeted, and controlled while preserving the product team's ability to innovate." },
+        { "question": "How should a CFO govern AI spend?", "answer": "Govern AI spend through clear budgets, attribution tags, spend limits, monthly reviews, and a partnership with engineering that focuses on cost per outcome." },
+        { "question": "Who owns AI cost optimization?", "answer": "Finance owns the budget and governance; engineering owns the technical optimization. The best programs have both teams reviewing the same metrics weekly." }
+      ],
+      "related": [
+        { "slug": "/research/llm-cost-management-cfo", "label": "LLM cost management for CFOs" },
+        { "slug": "/research/llm-cost-tracking-cfo", "label": "LLM cost tracking for CFOs" },
+        { "slug": "/research/how-to-build-an-llm-cfo-function", "label": "How to build an LLM CFO function" },
+        { "slug": "https://finopsllm.com/research/ai-finops", "label": "Engineering guide: AI FinOps" }
+      ]
+    },
+    "es": {
+      "title": "AI FinOps para CFOs",
+      "titleCore": "AI FinOps para CFOs",
+      "description": "Guía para CFOs sobre AI FinOps: cómo gobernar el gasto en IA, establecer presupuestos, asignar costos y asociarse con ingeniería para controlar la factura de IA.",
+      "body": "<div class=\"eye\">INVESTIGACIÓN · GUÍA</div><p class=\"lede\">La IA está pasando del laboratorio al presupuesto operativo. Los CFOs que la traten como solo otro costo de software se llevarán sorpresas. AI FinOps es la disciplina que mantiene el gasto en IA predecible sin frenar a los equipos que la usan.</p><h2>1. El gasto en IA es diferente</h2><p>Los costos tradicionales de software son fijos o por asiento. Los costos de IA son variables y ligados al uso. Una nueva funcionalidad, una actualización de modelo o un cambio en el comportamiento del usuario pueden duplicar la factura.</p><h2>2. El rol del CFO</h2><p>Finanzas debe proporcionar el marco: presupuestos, atribución, guardarraíles e informes. Ingeniería toma las decisiones técnicas. El trabajo del CFO es asegurar que esas decisiones sean visibles y responsables.</p><h2>3. Construir la capa de gobernanza</h2><ul><li><strong>Presupuestos por equipo y funcionalidad.</strong></li><li><strong>Etiquetas de atribución.</strong></li><li><strong>Límites de gasto y alertas.</strong></li><li><strong>Conciliación mensual.</strong></li><li><strong>Revisiones trimestrales de negocio.</strong></li></ul><h2>4. Asociarse con ingeniería</h2><p>Los mejores programas de AI FinOps tienen una reunión semanal entre finanzas e ingeniería. Finanzas trae el presupuesto y la variación. Ingeniería trae los drivers técnicos.</p>",
+      "faq": [
+        { "question": "¿Qué es AI FinOps desde la perspectiva de un CFO?", "answer": "AI FinOps es el conjunto de procesos de finanzas que hacen que el gasto en IA sea visible, atribuible, presupuestado y controlado." },
+        { "question": "¿Cómo debe gobernar un CFO el gasto en IA?", "answer": "A través de presupuestos claros, etiquetas de atribución, límites de gasto, revisiones mensuales y una asociación con ingeniería enfocada en costo por resultado." },
+        { "question": "¿Quién es dueño de la optimización de costos de IA?", "answer": "Finanzas es dueña del presupuesto y gobernanza; ingeniería es dueña de la optimización técnica. Los mejores programas tienen ambos equipos revisando las mismas métricas semanalmente." }
+      ],
+      "related": [
+        { "slug": "/es/research/llm-cost-management-cfo", "label": "Gestión de costos LLM para CFOs" },
+        { "slug": "/es/research/llm-cost-tracking-cfo", "label": "Seguimiento de costos LLM para CFOs" }
+      ]
+    }
+  }
+}

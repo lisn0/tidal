@@ -8,6 +8,9 @@ module.exports = function (eleventyConfig) {
     return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   });
 
+  // Return the keys of an object as an array.
+  eleventyConfig.addFilter("keys", (obj) => Object.keys(obj || {}));
+
   // Update visible date in content: replace the date part of "<p class="updated">Label · OldDate</p>"
   // or just "<p class="updated">OldDate</p>" with dateModified. Preserves any label.
   eleventyConfig.addFilter("updateVisibleDate", (content, dateModified, datePublished) => {
