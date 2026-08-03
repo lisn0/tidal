@@ -47,6 +47,17 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
   }
 }
 
+// Bing flags any <title> over 70 characters as a High-severity issue, and long
+// titles get truncated in results. Hand-written per-page titles drift over the
+// limit one article at a time, so assert it here instead of finding out in
+// Webmaster Tools weeks later.
+for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
+  const m = fs.readFileSync(f, "utf8").match(/<title>([\s\S]*?)<\/title>/i);
+  if (!m) continue;
+  const t = m[1].trim().replace(/&amp;/g, "&").replace(/&middot;/g, "\u00b7").replace(/&mdash;/g, "\u2014");
+  if (t.length > 70) errors.push(`/${require("path").relative(site, f)}: title is ${t.length} chars (max 70) — "${t}"`);
+}
+
 if (errors.length) {
   console.error(`\n[check-links] ${errors.length} broken internal link(s):`);
   for (const e of [...new Set(errors)]) console.error("  " + e);

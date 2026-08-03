@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /cdn-cgi/
+# Content Signals (contentsignals.org): how our content may be used by AI.
+# Bing's robots.txt linter flags this as unknown; per RFC 9309 crawlers ignore
+# directives they do not recognize, so it is a linter warning, not a crawl error.
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Sitemap
 Sitemap: https://llmcfo.com/sitemap.xml
@@ -52,5 +56,3 @@ Allow: /
 User-agent: MistralAI-User
 Allow: /
 
-# Content Signals (contentsignals.org): how our content may be used by AI.
-Content-Signal: search=yes, ai-input=yes, ai-train=no
