@@ -13,6 +13,8 @@ copyrightSymbol: "©"
 footerSeparator: "·"
 faqJsonLd: |-
   {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How the line items lay out","acceptedAnswer":{"@type":"Answer","text":"An Anthropic invoice (and the `usage` block on each API response) breaks token consumption into four kinds:"}},{"@type":"Question","name":"The trap","acceptedAnswer":{"@type":"Answer","text":"Pre-engagement, an analyst exports usage and writes:"}},{"@type":"Question","name":"Concrete example","acceptedAnswer":{"@type":"Answer","text":"Endpoint: a support bot, 10,000 requests/day, 8,000-token system+tools prefix, ~500-token user message. Output ~300 tokens. Sonnet 3.5 list price: $3 / M input, $15 / M output."}},{"@type":"Question","name":"OpenAI's version is subtler","acceptedAnswer":{"@type":"Answer","text":"OpenAI also reports cached input separately (`prompt_tokens_details.cached_tokens` on the API; a \"cached input\" line on the bill). The discount is ~50%, not ~90%, and the trap is smaller ; but the same arithmetic applies. If your dashboard sums `prompt_tokens × input_price`, you are over-counting cost when caching is on, because `prompt_tokens` includes the cached portion at full price. Subtract `cached_tokens × input_price × 0.5` to get the real number."}}]}
+section: "Accounting and tooling"
+blurb: ""
 ---
   <div class="eye">RESEARCH · ACCOUNTING</div>
   <h1 class="page-title">Cache-read tokens: the <em>baseline trap.</em></h1>

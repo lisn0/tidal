@@ -1,76 +1,50 @@
-const fs = require('fs');
-const path = require('path');
+// Generates llms-full.txt from the BUILT site, not from src/.
+// Reading src/ meant the file leaked non-pages (README, og-template, the
+// llms.njk template itself), lost every templated page's body to the {{ }}
+// stripper, and missed data-driven articles entirely. The sitemap is the
+// definition of "public page", so use it.
+const fs = require("fs");
+const path = require("path");
 
-const srcDir = path.join(__dirname, '..', 'src');
-const outputFile = path.join(srcDir, 'llms-full.txt');
+const siteDir = path.join(__dirname, "..", "_site");
+const outputFile = path.join(siteDir, "llms-full.txt");
 
-function getFiles(dir, fileList = []) {
-  const files = fs.readdirSync(dir);
-  for (const file of files) {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat.isDirectory()) {
-      if (file !== '_includes' && file !== 'assets' && file !== '.well-known') {
-        getFiles(filePath, fileList);
-      }
-    } else {
-      if (file.endsWith('.njk') || file.endsWith('.html') || file.endsWith('.md')) {
-        if (!file.startsWith('_') && file !== '404.njk') {
-          fileList.push(filePath);
-        }
-      }
-    }
-  }
-  return fileList;
+const sitemaps = fs.readdirSync(siteDir).filter((f) => /^sitemap.*\.xml$/.test(f) && !f.includes("index"));
+if (!sitemaps.length) throw new Error("no sitemap in _site — run eleventy first");
+
+const urls = [...new Set(sitemaps.flatMap((f) =>
+  [...fs.readFileSync(path.join(siteDir, f), "utf8").matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+))].sort();
+
+const fileFor = (u) => {
+  const p = path.join(siteDir, new URL(u).pathname);
+  for (const c of [p, p + ".html", path.join(p, "index.html")]) if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
+  return null;
+};
+
+const textOf = (html) => {
+  const main = html.match(/<main[\s\S]*?<\/main>/i);
+  return (main ? main[0] : html)
+    .replace(/<(script|style|nav|footer|svg)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&mdash;/g, "—").replace(/&ndash;/g, "–").replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'").replace(/&nbsp;/g, " ").replace(/&middot;/g, "·")
+    .replace(/\s+/g, " ").trim();
+};
+
+const pages = [];
+for (const u of urls) {
+  const f = fileFor(u);
+  if (!f) { console.warn(`[llms-full] sitemap URL has no file: ${u}`); continue; }
+  const html = fs.readFileSync(f, "utf8");
+  const title = (html.match(/<title>([^<]*)<\/title>/i) || [, new URL(u).pathname])[1].trim();
+  pages.push(`# ${title}\nURL: ${u}\n\n${textOf(html)}\n\n---\n\n`);
 }
 
-function cleanContent(raw, filePath) {
-  const relPath = path.relative(srcDir, filePath);
-  let title = relPath;
-  let text = raw;
+const out = `# LLM CFO — Complete Executive Guides & Financial Models (llms-full.txt)\n\nContent-Signal: ai-train=no, search=yes, ai-input=yes\n\n` +
+  `This document contains the complete text of all ${pages.length} public pages on llmcfo.com.\n\n` +
+  "=".repeat(80) + "\n\n" + pages.join("");
 
-  const fmMatch = raw.match(/^---\s*[\s\S]*?title:\s*["']?([^"'\r\n]+)["']?[\s\S]*?---/i);
-  if (fmMatch && fmMatch[1]) {
-    title = fmMatch[1].trim();
-  }
-
-  text = text.replace(/^---\s*[\s\S]*?---\s*/, '');
-
-  text = text
-    .replace(/{%[\s\S]*?%}/g, '')
-    .replace(/{{[\s\S]*?}}/g, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&mdash;/g, '—')
-    .replace(/&ndash;/g, '–')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  return `# ${title}\nURL path: /${relPath.replace(/\.(njk|html|md)$/, '')}\n\n${text}\n\n---\n\n`;
-}
-
-function generate() {
-  const files = getFiles(srcDir);
-  console.log(`Processing ${files.length} pages for llms-full.txt in llmcfo...`);
-  
-  let fullText = `# LLM CFO — Complete Executive Guides & Financial Models (llms-full.txt)\n\n`;
-  fullText += `Content-Signal: ai-train=no, search=yes, ai-input=yes\n\n`;
-  fullText += `This document contains the complete text of all 73 public pages on llmcfo.com.\n\n`;
-  fullText += `=`.repeat(80) + `\n\n`;
-
-  for (const file of files) {
-    const raw = fs.readFileSync(file, 'utf8');
-    fullText += cleanContent(raw, file);
-  }
-
-  fs.writeFileSync(outputFile, fullText, 'utf8');
-  console.log(`Successfully generated ${outputFile} (${fullText.length} bytes, ${files.length} pages).`);
-}
-
-generate();
+fs.writeFileSync(outputFile, out, "utf8");
+console.log(`Generated ${outputFile} (${out.length} bytes, ${pages.length} pages).`);

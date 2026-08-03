@@ -1,0 +1,9 @@
+---json
+{
+  "pagination": { "data": "articlePages", "size": 1, "alias": "entry" },
+  "permalink": "{{ entry.permalink }}"
+}
+---
+{%- set slug = entry.key -%}
+{%- set lang = entry.lang -%}
+{% include "article.njk" %}

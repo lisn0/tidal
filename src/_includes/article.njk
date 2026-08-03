@@ -8,15 +8,23 @@
   {{ throw("Missing language " + lang + " for article: " + slug) }}
 {%- endif -%}
 {%- set siteUrl = 'https://llmcfo.com' -%}
-{%- set canonicalPath = ('/' + lang + '/research/' + article.slug.replace('-v2', '')) if lang != 'en' else ('/research/' + article.slug.replace('-v2', '')) -%}
+{#- A "-v2" article is an A/B variant that canonicals to its control — but only
+    the English control is actually published. Stripping "-v2" for a translated
+    variant pointed the canonical and hreflangs at a 404, which de-indexes the
+    page entirely. Non-English variants stay self-canonical. -#}
+{%- set enSlug = article.slug.replace('-v2', '') -%}
+{%- set canonicalPath = ('/' + lang + '/research/' + article.slug) if lang != 'en' else ('/research/' + enSlug) -%}
 {%- set canonicalUrl = siteUrl + canonicalPath -%}
 
 {%- set hreflangs = [] -%}
 {%- for code in article.languages | keys -%}
-  {%- set prefix = '/' + code if code != 'en' else '' -%}
-  {%- set _ = hreflangs.push({ lang: code, href: siteUrl + prefix + '/research/' + article.slug.replace('-v2', '') }) -%}
+  {%- if code == 'en' -%}
+    {%- set _ = hreflangs.push({ lang: code, href: siteUrl + '/research/' + enSlug }) -%}
+  {%- else -%}
+    {%- set _ = hreflangs.push({ lang: code, href: siteUrl + '/' + code + '/research/' + article.slug }) -%}
+  {%- endif -%}
 {%- endfor -%}
-{%- set _ = hreflangs.push({ lang: 'x-default', href: siteUrl + '/research/' + article.slug.replace('-v2', '') }) -%}
+{%- set _ = hreflangs.push({ lang: 'x-default', href: siteUrl + '/research/' + enSlug }) -%}
 
 {%- set faqJsonLd = {
   "@context": "https://schema.org",

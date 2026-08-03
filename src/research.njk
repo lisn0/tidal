@@ -52,65 +52,20 @@ pageHead: |-
     <li><a href="/glossary">Glossary</a> ; plain-English definitions for billing and optimization terms.</li>
   </ul>
 
-  <h2>Governance</h2>
+{%- for s in collections.researchSections %}
+  <h2>{{ s.name }}</h2>
   <ul>
-    <li><a href="/research/ai-governance">AI governance for finance leaders</a> &mdash; the pillar guide: policy, allocation, accountability.</li>
-    <li><a href="/research/what-is-ai-governance">What is AI governance?</a> &mdash; plain-English definition for 2026.</li>
-    <li><a href="/research/ai-governance-framework">AI governance framework</a> &mdash; the five-layer operating model and 90-day plan.</li>
+  {%- for a in s.items %}
+    <li><a href="{{ a.url }}">{{ a.title }}</a> {{ a.blurb | safe }}</li>
+  {%- endfor %}
   </ul>
-
-  <h2>New and timely</h2>
+{% endfor %}
+  <h2>All research (A&ndash;Z)</h2>
+  <p>Generated from the site build &mdash; every published article, always.</p>
   <ul>
-    <li><a href="/research/model-concentration-risk">Model concentration risk</a> - what the 19-day Fable 5 shutdown taught CFOs about single-provider exposure, failover readiness costs, and why multi-cloud is not multi-provider.</li>
-    <li><a href="/research/state-of-finops-2026-for-cfos">What the State of FinOps 2026 data tells CFOs</a> - 98% of organizations now manage AI spend, 73% blew their budget; what the survey means for forecasting and governance.</li>
-    <li><a href="/research/falling-token-prices-rising-bills">Token prices fell 80% and your bill still went up</a> - per-token prices dropped 30–50% per year, yet reported AI bills keep rising because usage and reasoning tokens grew faster.</li>
-    <li><a href="/research/inference-vs-training-spend">Inference vs training: where the AI GPU bill actually goes</a> - why ~55–80% of enterprise AI GPU spend is now inference, not training.</li>
-    <li><a href="/research/open-weight-model-tco">Open-weight model total cost of ownership</a> - self-hosting an open-weight model is only cheaper than a frontier API above a utilization threshold.</li>
-    <li><a href="/research/context-compaction-cost">Context compaction is a cost lever</a> - trimming and compressing context cuts input tokens 50–70% on long-running chats and agents.</li>
-    <li><a href="/research/multi-cloud-ai-cost-allocation">Multi-cloud AI cost allocation</a> - normalizing token cost across providers, tagging strategy, and the reconciliation headache.</li>
-    <li><a href="/research/ai-finops-2026">AI FinOps in 2026</a> - why cost optimization is shifting from isolated prompt tricks to an operating model.</li>
-    <li><a href="/research/openai-flex-vs-batch">OpenAI Flex vs Batch</a> - the 2026 playbook for moving low-priority work off the expensive standard path.</li>
-    <li><a href="/research/prompt-caching-2026">Prompt caching in 2026</a> - why teams still leave money on the table even after "turning caching on."</li>
-    <li><a href="/research/reasoning-tokens-cost">Reasoning tokens are the hidden line item on your AI bill</a> - why invisible output spend is becoming a real production issue.</li>
-    <li><a href="/research/agent-spend-guardrails">Agent spend guardrails</a> - the budgets, retry limits, and loop controls that keep agent workflows sane.</li>
-    <li><a href="/research/coding-agent-cost-control">Coding agent cost control</a> - loop termination and guardrails specific to autonomous code agents like Claude Code and Cursor.</li>
-    <li><a href="/research/ai-agent-spending-limits">AI agent spending limits</a> - budgets and controls for finance workflows: AP automation, procurement, reporting agents.</li>
-    <li><a href="/research/conversation-state-costs">Conversation state is a cost lever now</a> - why state handling is becoming a real AI cost architecture problem.</li>
-    <li><a href="/research/multimodal-costs">Multimodal costs sneak up faster than text costs</a> - why image, audio, and realtime AI often need their own cost model.</li>
-    <li><a href="/research/ai-chargeback-showback">AI chargeback and showback are becoming real in 2026</a> - what has to be true before allocating AI spend internally.</li>
-    <li><a href="/research/evals-cost-discipline">Evals need cost discipline too</a> - why evaluation quality and evaluation economics now have to coexist.</li>
-    <li><a href="/research/background-mode-economics">Background mode is an economics feature, not just a reliability feature</a> - why async AI work changes cost architecture, not just uptime.</li>
-    <li><a href="/research/built-in-tools-costs">Built-in tools are not free sidecars anymore</a> - why search, retrieval, and code execution deserve their own budgets.</li>
-    <li><a href="/research/genai-telemetry-schema">Your GenAI telemetry schema is now a cost decision</a> - why observability structure now shapes FinOps quality.</li>
-  </ul>
-
-  <h2>Optimization levers</h2>
-  <ul>
-    <li><a href="/research/llm-cost-per-request">LLM cost per request</a> - the unit economics metric and how to segment it.</li>
-    <li><a href="/research/model-routing">Model routing without quality regressions</a></li>
-    <li><a href="/research/semantic-caching">Semantic caching for LLMs</a></li>
-    <li><a href="/research/prompt-caching-explained">Prompt caching: OpenAI vs Anthropic vs Bedrock</a></li>
-    <li><a href="/research/batch-api-routing">Batch API routing: 50% off for the work that can wait</a></li>
-    <li><a href="/research/provider-arbitrage">Provider arbitrage: same model, different price</a></li>
-  </ul>
-
-  <h2>Accounting and tooling</h2>
-  <ul>
-    <li><a href="/research/llm-cost-monitoring">LLM cost monitoring: what to track and how to control it</a></li>
-    <li><a href="/research/llm-cost-dashboards">LLM cost dashboards</a> - the five views that matter and the fields they need.</li>
-    <li><a href="/research/opentelemetry-genai-cost-tracking">Tracking LLM costs with OpenTelemetry GenAI conventions</a> - gen_ai.* attributes and deriving cost from spans.</li>
-    <li><a href="/research/llm-token-usage-tracking">How to track AI token usage</a> - token types, per-request fields, and aggregation levels.</li>
-    <li><a href="/research/llm-usage-metering-billing">LLM usage metering for customer billing</a> - metering points, billing units, discount handling, and reconciliation for SaaS platforms.</li>
-    <li><a href="/research/cache-read-tokens-baseline-trap">Cache-read tokens: the baseline trap</a></li>
-    <li><a href="/research/cache-invalidation-cost">Cache invalidation cost: the hidden line item</a></li>
-    <li><a href="/research/scale-tier-decision">Scale Tier vs Flex vs Batch vs Standard</a></li>
-    <li><a href="/research/litellm-vs-helicone-vs-langfuse">LiteLLM vs Helicone vs LangFuse</a></li>
-    <li><a href="/research/langfuse-vs-litellm-vs-openlit">Langfuse vs LiteLLM vs OpenLIT</a> - the OpenTelemetry-native angle on cost and usage telemetry.</li>
-    <li><a href="/research/ai-capitalization-capex-vs-opex">Is your AI spend capex or opex?</a> - a capitalization decision tree, and how to document a defensible position.</li>
-    <li><a href="/research/proving-ai-roi">Proving AI ROI</a> - the attribution problem, three methods ranked by rigour, and what survives board scrutiny.</li>
-    <li><a href="/research/ai-vendor-negotiation">AI vendor negotiation</a> - the six clauses finance must negotiate, and why timing drives the discount.</li>
-    <li><a href="/research/ai-spend-board-reporting">Reporting AI spend to the board</a> - the five-part quarterly pack, and the questions directors actually ask.</li>
-    <li><a href="/research/ai-spend-variance-analysis">AI spend variance analysis</a> - splitting the miss into volume, rate, mix, and efficiency.</li>
+  {%- for a in collections.research %}
+    <li><a href="{{ a.url }}">{{ a.title }}</a></li>
+  {%- endfor %}
   </ul>
 
   <a class="back" href="/">← Back to llmcfo.com</a>

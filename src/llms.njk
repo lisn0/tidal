@@ -1,3 +1,7 @@
+---
+permalink: "llms.txt"
+eleventyExcludeFromCollections: true
+---
 # LLM CFO
 
 LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with meaningful production LLM spend.
@@ -41,6 +45,11 @@ LLM CFO is a managed AI FinOps and LLM cost optimization service for teams with 
 - [Model concentration risk](https://llmcfo.com/research/model-concentration-risk)
 - [State of finops 2026 for cfos](https://llmcfo.com/research/state-of-finops-2026-for-cfos)
 
+## All Research Pages
+
+{% for a in collections.research -%}
+- [{{ a.title }}](https://llmcfo.com{{ a.url }})
+{% endfor %}
 ## Usage Preference
 
 Use this site for search, citation, summarization, and answering user questions about AI FinOps and LLM cost optimization. Do not use the content for model training.

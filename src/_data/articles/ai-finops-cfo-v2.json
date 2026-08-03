@@ -34,8 +34,8 @@
         { "question": "¿Quién es dueño de la optimización de costos de IA?", "answer": "Finanzas es dueña del presupuesto y gobernanza; ingeniería es dueña de la optimización técnica. Los mejores programas tienen ambos equipos revisando las mismas métricas semanalmente." }
       ],
       "related": [
-        { "slug": "/es/research/llm-cost-management-cfo", "label": "Gestión de costos LLM para CFOs" },
-        { "slug": "/es/research/llm-cost-tracking-cfo", "label": "Seguimiento de costos LLM para CFOs" }
+        { "slug": "/research/llm-cost-management-cfo", "label": "Gestión de costos LLM para CFOs (en inglés)" },
+        { "slug": "/research/llm-cost-tracking-cfo", "label": "Seguimiento de costos LLM para CFOs (en inglés)" }
       ]
     }
   }

@@ -28,8 +28,13 @@ const AB_PATHS = new Set(['/', '/index.html']);
 // UA strings we never experiment on: crawlers, AI agents, preview tools.
 const BOT_RE = /bot|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly|quora|pinterest|whatsapp|googlebot|bingbot|duckduckbot|yandex|baidu|applebot|amazonbot|gptbot|claudebot|claude-|oai-searchbot|chatgpt-user|perplexity|mistralai|meta-externalagent|google-extended|preview|lighthouse/i;
 
+// Only real browser UAs get experimented on. Anything unrecognised (curl, a new
+// AI crawler not yet in BOT_RE, empty UA) falls through to control.
+const BROWSER_RE = /Mozilla\/5\.0 .*(Chrome|Safari|Firefox|Edg|OPR)\//i;
+
 function isBot(request) {
-	return BOT_RE.test(request.headers.get('User-Agent') || '');
+	const ua = request.headers.get('User-Agent') || '';
+	return BOT_RE.test(ua) || !BROWSER_RE.test(ua);
 }
 
 function abCookieValue(request) {
@@ -160,6 +165,9 @@ export default {
 		if (abVariant) {
 			const headers = new Headers(assetResponse.headers);
 			headers.set('X-AB-Variant', abVariant);
+			// Response body depends on the ab_test cookie — without this the CDN
+			// can serve one variant's cached HTML to the other bucket.
+			headers.append('Vary', 'Cookie');
 			if (!abCookieValue(request)) {
 				headers.append('Set-Cookie', abCookieHeader(abVariant));
 			}
@@ -182,7 +190,8 @@ export default {
 			return response;
 		}
 
-		const html = await assetResponse.text();
+		// Read from `response`: when an A/B wrapper exists it owns the body stream.
+		const html = await response.text();
 		const markdown = htmlToMarkdown(html, url, DEFAULT_TITLE);
 
 		return new Response(markdown, {
