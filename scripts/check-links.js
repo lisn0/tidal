@@ -95,6 +95,54 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
 }
 
 
+// Malformed JSON-LD is dropped entirely by every consumer — the page keeps
+// rendering, so nothing tells you the schema is gone. One stray quote in a
+// hand-copied FAQ blob is all it takes.
+for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
+  for (const m of fs.readFileSync(f, "utf8").matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { JSON.parse(m[1]); } catch (e) { errors.push(`/${path.relative(site, f)}: invalid JSON-LD (${e.message})`); }
+  }
+}
+
+// Orphans: a page can be in the sitemap, build fine, and still be uncitable
+// because nothing links to it. This is what killed /research/* in July and it
+// took two days of Webmaster Tools to notice.
+//
+// Only links FROM sitemap-listed pages count. A page reachable solely from
+// something no crawler visits is still an orphan, so harvesting hrefs out of
+// every built file would quietly pass the exact failure this exists to catch.
+const sitemapPaths = new Set();
+const collectSitemap = (file) => {
+  if (!fs.existsSync(file)) return;
+  const s = fs.readFileSync(file, "utf8");
+  const locs = [...s.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+  for (const loc of locs) {
+    if (/<sitemapindex/.test(s)) collectSitemap(path.join(site, new URL(loc).pathname));
+    else sitemapPaths.add(new URL(loc).pathname.replace(/\/$/, "") || "/");
+  }
+};
+for (const m of fs.readFileSync(path.join(site, "robots.txt"), "utf8").matchAll(/^Sitemap:\s*(\S+)/gim)) {
+  collectSitemap(path.join(site, new URL(m[1]).pathname));
+}
+
+const fileFor = (p) => [p + ".html", path.join(p, "index.html"), p].map((x) => path.join(site, x)).find((x) => fs.existsSync(x) && x.endsWith(".html"));
+const linked = new Set();
+for (const p of sitemapPaths) {
+  const f = fileFor(p === "/" ? "index.html" : p.replace(/^\//, ""));
+  if (!f) continue;
+  for (const m of fs.readFileSync(f, "utf8").matchAll(/<a[^>]+href="([^"#?]+)"/gi)) {
+    let u = m[1];
+    if (/^https?:/i.test(u)) { if (!u.includes(DOMAIN)) continue; u = new URL(u).pathname; }
+    else if (!u.startsWith("/")) continue;
+    linked.add(u.replace(/\/$/, "") || "/");
+  }
+}
+for (const p of sitemapPaths) {
+  if (p === "/") continue;
+  if (linked.has(p) || linked.has(p + ".html") || linked.has(p.replace(/\.html$/, ""))) continue;
+  errors.push(`orphan: ${p} is in the sitemap but no crawlable page links to it`);
+}
+
 if (errors.length) {
   console.error(`\n[check-links] ${errors.length} broken internal link(s):`);
   for (const e of [...new Set(errors)]) console.error("  " + e);
