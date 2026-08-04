@@ -1,0 +1,63 @@
+---
+layout: "page.njk"
+permalink: "telemetry.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tidal Telemetry · LLM observability, free in beta · LLM CFO</title>
+  <meta name="description" content="Tidal Telemetry is our LLM observability product: one line of code, standard OpenTelemetry, isolated per-project storage. Free during beta, no engagement needed." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/telemetry" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/telemetry" />
+  <meta property="og:title" content="Tidal Telemetry · LLM observability, free in beta · LLM CFO" />
+  <meta property="og:description" content="Tidal Telemetry is our LLM observability product: one line of code, standard OpenTelemetry, isolated per-project storage. Free during beta, no engagement needed." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Tidal Telemetry · LLM observability, free in beta · LLM CFO" />
+  <meta name="twitter:description" content="Tidal Telemetry is our LLM observability product: one line of code, standard OpenTelemetry, isolated per-project storage. Free during beta, no engagement needed." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">TIDAL TELEMETRY</div>
+  <h1 class="page-title">The one thing here that is <em>a product, not a service.</em></h1>
+
+  <p class="lede">Everything else on this site is people doing work on your bill. <a href="https://telemetry.llmcfo.com">Tidal Telemetry</a> is software you sign up for and run yourself. It is free during beta, it requires no engagement with us, and this page exists so the difference is not confusing.</p>
+
+  <h2>What it is</h2>
+  <p>Hosted LLM observability. You install the SDK, call <span class="mono">tidal.init()</span>, and every model call your application makes starts arriving as a trace: model, token counts in and out, an estimated cost per call, latency, errors.</p>
+  <ul>
+    <li><strong>One line, roughly 50 libraries.</strong> Auto-instrumentation covers OpenAI, Anthropic, Mistral, Bedrock, LangChain, LlamaIndex, vector databases and the common agent frameworks.</li>
+    <li><strong>Standard OpenTelemetry, so the SDK is optional.</strong> Ingest is plain OTLP over HTTPS with a bearer token. Point any OpenTelemetry exporter at your project endpoint and it behaves identically. The SDK is a thin wrapper over the Apache-licensed OpenLIT SDK.</li>
+    <li><strong>Isolated per-project storage.</strong> Each project gets its own database and its own ingest key, enforced at the storage layer rather than by a filter in a query.</li>
+    <li><strong>An MCP server.</strong> Claude and other agents can check your setup, send a test trace and pull usage reports, which is a faster debugging loop than reading a dashboard.</li>
+  </ul>
+  <p>Python and Node get the one-line install. Anything that speaks OpenTelemetry can export directly.</p>
+
+  <h2>What it costs</h2>
+  <p>Nothing, currently. It is in beta and everything is free, with paid tiers planned and a free plan kept for beta users. That is the actual state of it rather than a launch offer with a countdown attached.</p>
+
+  <h2>How it relates to the service</h2>
+  <p>Telemetry shows you what your LLMs spend. The <a href="/">managed service</a> is the engineering work that reduces it, priced on <a href="/pricing">verified savings</a>. They are cross-promoted and deliberately not bundled:</p>
+  <ul>
+    <li><strong>You can use Telemetry and never talk to us.</strong> There is no sales gate on it and no engagement prerequisite.</li>
+    <li><strong>You can hire us and never use Telemetry.</strong> Engagements work against your provider invoices and whatever tooling you already run. Nothing in our <a href="/pricing">pricing</a> licenses a dashboard to you, and we do not price one in.</li>
+    <li><strong>Below the $20k/month engagement minimum, this is the better answer.</strong> Instrument it yourself, read your own numbers, and use the <a href="/templates">free templates</a> to allocate them.</li>
+  </ul>
+  <p>Keeping these separate is a constraint we put on ourselves for a reason: a cost consultant who also owns the meter has an obvious problem, so the baselines behind every fee we charge come from raw provider invoices and not from our own product.</p>
+
+  <div class="callout"><strong>Where to go next.</strong> Product, docs and signup are at <a href="https://telemetry.llmcfo.com">telemetry.llmcfo.com</a>. If what you actually want is someone to read your invoice and tell you where the money went, that is the <a href="/book">free audit</a> instead.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

@@ -9,4 +9,8 @@
 # _redirects matches before static assets.
 /book/schedule  https://cal.eu/llmcfo  302
 
+# /compare/llm-gateways shipped briefly and duplicated an older, indexed
+# research article on the same three tools. Folded into that article instead.
+/compare/llm-gateways  /research/litellm-vs-helicone-vs-langfuse  301
+
 # Trailing-slash normalization handled by Cloudflare
