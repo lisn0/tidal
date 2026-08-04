@@ -1,0 +1,66 @@
+---
+layout: "page.njk"
+permalink: "audit/openai.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenAI cost audit · Where the bill actually goes · LLM CFO</title>
+  <meta name="description" content="What an OpenAI cost audit looks at: project-level attribution, the Costs API, cached input, reasoning tokens billed as output, and the Batch tier." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/audit/openai" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://llmcfo.com/audit/openai" />
+  <meta property="og:title" content="OpenAI cost audit · Where the bill actually goes · LLM CFO" />
+  <meta property="og:description" content="What an OpenAI cost audit looks at: project-level attribution, the Costs API, cached input, reasoning tokens billed as output, and the Batch tier." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="OpenAI cost audit · Where the bill actually goes · LLM CFO" />
+  <meta name="twitter:description" content="What an OpenAI cost audit looks at: project-level attribution, the Costs API, cached input, reasoning tokens billed as output, and the Batch tier." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">OPENAI</div>
+  <h1 class="page-title">An OpenAI bill hides its cost in <em>four specific places.</em></h1>
+
+  <p class="lede">This is the OpenAI-specific half of a cost audit. The generic advice &mdash; use a cheaper model, cache more &mdash; is worth roughly nothing until you know which of these four is actually driving your invoice.</p>
+
+  <h2>1. Attribution stops at the project boundary</h2>
+  <p>OpenAI's attribution unit is the project. Keys belong to projects, and the Costs and Usage endpoints under the organization admin API bucket spend by project and by model. That is the whole granularity you get from the platform.</p>
+  <p>If your teams share one project, or one key, the invoice is a single number and no amount of dashboard work will split it. The fix is boring and it is the first thing we do: one project per workload or per owning team, keys reissued accordingly, then the Costs API pulled on a schedule into whatever your finance team already reads. Anything finer than the project boundary &mdash; per customer, per feature, per endpoint &mdash; has to come from your own logging, because the platform does not carry it.</p>
+
+  <h2>2. Cached input is either 50-90% off or nothing</h2>
+  <p>Prompt caching applies automatically above a minimum prefix length and discounts the cached portion sharply, but only when the prefix is byte-identical and reused inside the cache window. Two habits destroy it: putting a timestamp, session id or retrieved chunk near the top of the prompt, and rotating system prompt variants per request.</p>
+  <p>Cached input tokens are reported separately, which makes the audit test trivial: pull the ratio of cached to uncached input tokens per workload. A high-volume workload with a stable system prompt and a near-zero cache ratio is usually the single largest recoverable line on an OpenAI bill, and the fix is prompt reordering rather than a migration.</p>
+
+  <h2>3. Reasoning tokens bill as output and never appear in the response</h2>
+  <p>On the reasoning models, tokens spent thinking are billed at the output rate and are not in the text you received. A team measuring cost per response length will read the invoice as inexplicable, because the expensive part is invisible by design.</p>
+  <p>The audit checks the reasoning token count per workload against the reasoning effort setting, because most workloads are running a higher effort than the task needs. Classification, extraction and routing rarely justify extended reasoning, and dropping the effort level on those is usually a same-day change with a measurable before and after.</p>
+
+  <h2>4. The Batch tier is unused on work that is already asynchronous</h2>
+  <p>Batch runs at roughly half price with a 24-hour completion window. The audit looks for workloads already tolerating minutes or hours of latency &mdash; nightly enrichment, backfills, evaluation runs, document processing queues &mdash; and still being sent through the synchronous endpoint because that is what the first prototype used.</p>
+  <p>This one is pure arithmetic. Either the workload has a documented latency requirement or it does not, and if it does not, half the cost is available for a queue change.</p>
+
+  <h2>What the audit needs from you</h2>
+  <ul>
+    <li>Organization-level read access, or an export from the Costs endpoint for the last 90 days.</li>
+    <li>The list of projects and roughly what each one serves.</li>
+    <li>For your top two or three workloads: a representative request, including the system prompt.</li>
+    <li>Your latency requirements, if they are written down anywhere.</li>
+  </ul>
+  <p>It takes about a week and ends in a written document with a ranked savings list and an effort cost against each item. It is free, it is not a slide deck, and you can implement all of it without us.</p>
+
+  <div class="callout">Also on <a href="/audit/bedrock">Amazon Bedrock</a> or <a href="/audit/vertex-ai">Google Vertex AI</a>? The multi-provider case is normal and the audit covers all of them together, since the interesting finding is usually the same workload costing different amounts in two places. <a href="/book">Book the audit</a>.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

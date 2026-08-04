@@ -1,0 +1,66 @@
+---
+layout: "page.njk"
+permalink: "audit/vertex-ai.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vertex AI cost audit · Where the bill goes · LLM CFO</title>
+  <meta name="description" content="What a Vertex AI cost audit looks at: BigQuery billing export as the only real granularity, request labels, provisioned throughput, and cache storage." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/audit/vertex-ai" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://llmcfo.com/audit/vertex-ai" />
+  <meta property="og:title" content="Vertex AI cost audit · Where the bill goes · LLM CFO" />
+  <meta property="og:description" content="What a Vertex AI cost audit looks at: BigQuery billing export as the only real granularity, request labels, provisioned throughput, and cache storage." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Vertex AI cost audit · Where the bill goes · LLM CFO" />
+  <meta name="twitter:description" content="What a Vertex AI cost audit looks at: BigQuery billing export as the only real granularity, request labels, provisioned throughput, and cache storage." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">GOOGLE VERTEX AI</div>
+  <h1 class="page-title">On Vertex, the console is not <em>where the answer is.</em></h1>
+
+  <p class="lede">Vertex AI spend is legible at SKU level, and the billing console will not show you that level. Almost every Vertex audit starts by getting the data somewhere it can actually be queried.</p>
+
+  <h2>1. The BigQuery billing export is the audit</h2>
+  <p>Detailed usage cost export into BigQuery is the only place model-level SKUs, request counts and label dimensions exist together. The console rolls Vertex up into a handful of lines that tell you a total and nothing else.</p>
+  <p>If the export is not enabled, enable it today and accept that history starts now &mdash; it is not backfilled. That single fact reorders the audit: on projects with no export, week one is standing it up and reconstructing an approximate baseline from invoices, rather than running queries. Enabling it costs almost nothing and every subsequent question depends on it.</p>
+
+  <h2>2. Labels are the attribution mechanism, and they must be set at request time</h2>
+  <p>Google's labels attach to requests and resources and flow into the billing export as queryable columns. Unlike a project split, they let you attribute the same model in the same project to different teams, features or customers &mdash; which is what most organisations actually need.</p>
+  <p>The catch is that labels must be attached when the call is made. Unlabelled traffic is unattributable forever, and the usual finding is that a large share of spend sits in exactly that bucket. The remedy is a small change in whatever client wrapper your services share, and it should land before anyone argues about chargeback.</p>
+
+  <h2>3. Provisioned throughput is bought in units and burns while idle</h2>
+  <p>Provisioned throughput reserves capacity in units on a term commitment and bills for the term regardless of use. The recurring pattern is a commitment sized for a forecast that did not arrive, or one carried across a model migration and left pointed at a version the traffic no longer uses.</p>
+  <p>The audit compares committed units against realised throughput in the export. Consistently low utilisation with non-spiky traffic means pay-as-you-go is cheaper, and mixed mode &mdash; commitment sized to the floor, overflow on demand &mdash; is usually the right shape rather than an all-or-nothing choice.</p>
+
+  <h2>4. Context caching bills for storage, not just for hits</h2>
+  <p>This is the Vertex-specific trap. Explicit context caching charges for the cached tokens held per hour, on top of the discounted read. Cache a large document set, let the traffic pattern change, and you are paying rent on tokens nobody reads.</p>
+  <p>The check is the ratio of cache storage cost to cache read savings per workload. It is one query against the export and it is negative more often than teams expect, particularly where a cache was sized during a launch and never revisited. Where it is positive, it is one of the largest levers available.</p>
+
+  <h2>What the audit needs from you</h2>
+  <ul>
+    <li>Read access to the detailed billing export in BigQuery, or an export of the last 90 days. If it is not enabled, say so &mdash; that changes the plan rather than blocking it.</li>
+    <li>Your current labelling convention, if one exists.</li>
+    <li>Provisioned throughput commitments: units, model, term, start date.</li>
+    <li>Any explicit caches you have created and roughly what they hold.</li>
+  </ul>
+  <p>About a week, ending in a written document with a ranked savings list and an effort cost against each item. Free, and yours to implement without us.</p>
+
+  <div class="callout">Also on <a href="/audit/openai">OpenAI</a> or <a href="/audit/bedrock">Amazon Bedrock</a>? Multi-provider is the normal case and the audit covers them together, because the same workload priced in two places is usually the most useful line in the document. <a href="/book">Book the audit</a>.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

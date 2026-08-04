@@ -1,0 +1,76 @@
+---
+layout: "page.njk"
+permalink: "compare/llm-gateways.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiteLLM vs Helicone vs Langfuse vs OpenRouter · LLM CFO</title>
+  <meta name="description" content="A neutral buyer's guide to four tools teams compare when they want LLM cost control: what each one actually is, what it does not do, and which problem it solves." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/compare/llm-gateways" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://llmcfo.com/compare/llm-gateways" />
+  <meta property="og:title" content="LiteLLM vs Helicone vs Langfuse vs OpenRouter · LLM CFO" />
+  <meta property="og:description" content="A neutral buyer's guide to four tools teams compare when they want LLM cost control: what each one actually is, what it does not do, and which problem it solves." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="LiteLLM vs Helicone vs Langfuse vs OpenRouter · LLM CFO" />
+  <meta name="twitter:description" content="A neutral buyer's guide to four tools teams compare when they want LLM cost control: what each one actually is, what it does not do, and which problem it solves." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">BUYER'S GUIDE</div>
+  <h1 class="page-title">LiteLLM vs Helicone vs Langfuse <em>vs OpenRouter.</em></h1>
+
+  <p class="lede">We do not sell any of these and we are not a reseller for any of them. We end up configuring one or more of them on most engagements, so this is the comparison we give on the call, written down.</p>
+
+  <div class="callout"><strong>The short version:</strong> these four are not really competitors. Three of them sit on the same wire and get compared for that reason alone. Pick by the problem you have, not by feature count.</div>
+
+  <h2>What each one actually is</h2>
+  <ul>
+    <li><strong>LiteLLM</strong> &mdash; a proxy and SDK that gives ~100 providers one OpenAI-shaped interface, plus virtual keys, per-key budgets, rate limits and fallback routing. Open source, self-hostable, with a paid enterprise tier. This is the piece that gives you a control point.</li>
+    <li><strong>Helicone</strong> &mdash; an observability layer, usually installed as a one-line proxy change. Logs every request with cost, latency and tokens attached, plus caching and user-level tracking. Open source core, hosted tier.</li>
+    <li><strong>Langfuse</strong> &mdash; tracing and evaluation for LLM applications. Its native shape is an SDK that captures nested traces of an agent or chain, with prompt management, datasets and eval runs on top. Cost is attached to traces, but cost control is not its subject.</li>
+    <li><strong>OpenRouter</strong> &mdash; not a tool you run. A hosted marketplace that resells hundreds of models behind one API and one bill, with automatic fallback between providers. You are buying inference, not infrastructure.</li>
+  </ul>
+
+  <h2>Which problem sends teams to each one</h2>
+  <ul>
+    <li><strong>"We cannot tell which team spent this."</strong> LiteLLM. Virtual keys per team or workload are the cheapest attribution mechanism that exists, and they turn budgets into something enforceable rather than something reported after the fact.</li>
+    <li><strong>"We can see the total, not the shape."</strong> Helicone. Request-level logs with cost attached answer the questions a dashboard aggregate cannot, and the caching is a real lever rather than a reporting feature.</li>
+    <li><strong>"Our agent burns tokens and we cannot see where."</strong> Langfuse. Nested traces are the only view that makes a 40-step loop legible, and step-level token counts are where agent cost problems are actually found.</li>
+    <li><strong>"We want to try twelve models without twelve contracts."</strong> OpenRouter. One integration, one invoice, immediate access. Excellent for evaluation, and a deliberate trade at production volume.</li>
+  </ul>
+
+  <h2>What each one will not do for you</h2>
+  <p>This is the part vendor comparison tables leave out, and it is the part that decides whether the tool solves your problem.</p>
+  <ul>
+    <li><strong>None of them will attribute your existing spend retroactively.</strong> They start measuring the day you install them. The invoice for the six months before that stays opaque, which is why a first pass usually happens in a spreadsheet.</li>
+    <li><strong>A gateway is a new dependency in the request path.</strong> Self-hosted LiteLLM in front of production traffic needs the availability treatment any critical proxy needs. Teams underestimate this and discover it during an incident.</li>
+    <li><strong>Observability is not optimisation.</strong> Helicone and Langfuse will show you an expensive workload with high confidence. Neither will route it to a cheaper model, cache its prefix, or defend the quality bar afterwards. That work is still yours.</li>
+    <li><strong>A marketplace adds a margin and a hop.</strong> OpenRouter's convenience is real and so is the pricing spread against going direct at volume, plus an extra network hop and a second vendor's uptime in your path.</li>
+    <li><strong>Cost is not the same field twice.</strong> Every one of these computes cost from its own price table. Reconcile against the provider invoice before you trust a number, especially across a price change or a cached-input discount.</li>
+  </ul>
+
+  <h2>The combination most teams land on</h2>
+  <p>The common production shape is a gateway for control plus a tracing tool for depth: LiteLLM holding the keys, budgets and routing, Langfuse or Helicone answering why a given workload costs what it does. That is two systems, not one, and the reason is that enforcement and explanation are genuinely different jobs.</p>
+  <p>The cheaper answer, if you are early: pick the one that matches the sentence you keep saying in meetings. A team that cannot attribute spend does not need traces yet, and a team drowning in agent loops does not need virtual keys yet.</p>
+
+  <h2>Where we sit</h2>
+  <p>We are a service, not a platform. We do not license a dashboard and we have no incentive to move you onto one, which is the only reason this page can be neutral. Our own <a href="https://telemetry.llmcfo.com">Tidal Telemetry</a> is a separate product built on OpenLIT, and it is not a prerequisite for anything on this page.</p>
+
+  <div class="callout"><strong>Verify before you commit.</strong> Every claim here is checkable against the vendors' own docs and pricing pages, and they change often. If you want a second opinion on which of these fits your stack, the <a href="/book">free audit</a> ends with that recommendation in writing, including the option of none of them.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

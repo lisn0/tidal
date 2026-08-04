@@ -1,0 +1,59 @@
+---
+layout: "page.njk"
+permalink: "templates.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free LLM cost templates · LLM CFO</title>
+  <meta name="description" content="Two free downloads: a cost allocation sheet that attributes LLM spend to workloads and teams, and an LLM spend policy template. No email required." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/templates" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/templates" />
+  <meta property="og:title" content="Free LLM cost templates · LLM CFO" />
+  <meta property="og:description" content="Two free downloads: a cost allocation sheet that attributes LLM spend to workloads and teams, and an LLM spend policy template. No email required." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Free LLM cost templates · LLM CFO" />
+  <meta name="twitter:description" content="Two free downloads: a cost allocation sheet that attributes LLM spend to workloads and teams, and an LLM spend policy template. No email required." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">TEMPLATES</div>
+  <h1 class="page-title">Two files we actually <em>use on engagements.</em></h1>
+
+  <p class="lede">No email gate, no form, no drip sequence. These are the working artefacts from the first week of a cost audit, published as-is. If they are enough on their own, that is a good outcome and you owe us nothing.</p>
+
+  <h2>1. LLM cost allocation sheet</h2>
+  <p><a href="/assets/templates/llm-cost-allocation.csv" download>Download the CSV &darr;</a> &middot; opens in Excel, Numbers, or Sheets</p>
+  <p>One row per month, provider, model and workload, with the columns that make an LLM invoice legible to someone outside the engineering team. The layout is opinionated in three ways that matter more than the file itself.</p>
+  <ul>
+    <li><strong>Cost per unit of work, not total spend.</strong> Total spend rises with growth and tells you nothing about efficiency. A cost-per-ticket or cost-per-document figure survives a growth month and is the only number worth trending.</li>
+    <li><strong>Units delivered is not requests.</strong> Retried calls, abandoned sessions and agent loops that hit their step cap all bill in full and deliver nothing. They belong in the cost column and not in the units column, which is what makes them visible.</li>
+    <li><strong>A quality column is mandatory.</strong> A cost per unit that fell alongside accuracy is not a saving, and a sheet that cannot express that will eventually be used to claim one.</li>
+  </ul>
+  <p>Reasoning tokens get their own column because they bill as output on most providers but scale with prompt design rather than response length. Merged into output tokens, the lever disappears.</p>
+
+  <h2>2. LLM spend policy</h2>
+  <p><a href="/assets/templates/llm-spend-policy.md" download>Download the Markdown &darr;</a> &middot; paste into Notion, Confluence, or a repo</p>
+  <p>A policy skeleton with every organisation-specific value left as a bracket to fill in: attribution requirements, budgets and thresholds, model selection rules, the mandatory cost controls, and a review cadence. It covers the five controls that come up in almost every audit &mdash; caching on stable prefixes, <span class="mono">max_tokens</span> on every call, a capped retry budget, a step cap on agent loops that emits a metric, and batch tiers for anything without a documented latency requirement.</p>
+  <p>The instruction at the top is the important part: delete any section you will not enforce. One decorative clause teaches the reader that the whole document is decorative, and after that the enforced sections stop working too.</p>
+
+  <h2>Why these are free</h2>
+  <p>Most teams who find this page are not going to hire anyone, and gating a spreadsheet behind an email address would mostly generate a list of people who wanted a spreadsheet. The teams who do eventually want help tend to arrive having already filled one of these in, which makes the first call substantially shorter for both sides.</p>
+
+  <div class="callout"><strong>Filled one in and the numbers look wrong?</strong> That is usually attribution rather than arithmetic. The <a href="/book">free audit</a> reconstructs the same sheet from your raw provider exports, or the <a href="/tools/cache-savings-calculator">cache savings calculator</a> will size one specific lever in about a minute.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

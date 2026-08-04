@@ -1,0 +1,65 @@
+---
+layout: "page.njk"
+permalink: "audit/bedrock.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Bedrock cost audit · Where the bill goes · LLM CFO</title>
+  <meta name="description" content="What a Bedrock cost audit looks at: inference profiles as the only tagging handle, idle provisioned throughput, cross-region billing, and the batch tier." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/audit/bedrock" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://llmcfo.com/audit/bedrock" />
+  <meta property="og:title" content="Amazon Bedrock cost audit · Where the bill goes · LLM CFO" />
+  <meta property="og:description" content="What a Bedrock cost audit looks at: inference profiles as the only tagging handle, idle provisioned throughput, cross-region billing, and the batch tier." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Amazon Bedrock cost audit · Where the bill goes · LLM CFO" />
+  <meta name="twitter:description" content="What a Bedrock cost audit looks at: inference profiles as the only tagging handle, idle provisioned throughput, cross-region billing, and the batch tier." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">AMAZON BEDROCK</div>
+  <h1 class="page-title">Bedrock spend looks like AWS spend, <em>and that is the problem.</em></h1>
+
+  <p class="lede">Bedrock lands in Cost Explorer with your other AWS costs, which makes it feel governable using habits your platform team already has. Those habits mostly do not transfer, and the gaps are specific.</p>
+
+  <h2>1. There is nothing to tag until you create something to tag</h2>
+  <p>Cost allocation tags are the standard AWS attribution mechanism, and on Bedrock a foundation model is not a resource you own, so there is nothing to attach them to. The handle is the application inference profile: you create one per workload or per team, tag that, and route invocations through it instead of calling the model id directly.</p>
+  <p>Teams that skipped this step have a single untagged Bedrock line in Cost Explorer and no way to split it after the fact, because the tag applies from creation forward and not retroactively. Reconstructing attribution for months already billed means going to CloudTrail or your own request logs, which is why we ask for the profile inventory first.</p>
+
+  <h2>2. Provisioned throughput bills whether or not you use it</h2>
+  <p>Provisioned throughput is bought in model units on an hourly commitment, and an idle unit costs exactly as much as a saturated one. Two failure modes recur: a unit bought for a launch that never reached its projected volume, and units left running on a superseded model version after a migration.</p>
+  <p>The audit compares committed capacity against actual token throughput per hour across a representative month. If utilisation sits low and the traffic is not spiky, on-demand is usually cheaper outright, and that comparison is a spreadsheet rather than an experiment.</p>
+
+  <h2>3. Cross-region inference moves where the tokens are billed</h2>
+  <p>Cross-region inference profiles improve availability by routing to whichever region has capacity, which is a good default and quietly changes your billing picture. Spend appears in regions no one on your team deployed to, per-region prices differ, and any data-residency assumption written into a compliance document needs to be re-read against what the profile actually does.</p>
+  <p>This rarely produces a large saving on its own. It produces a correct baseline, and without one the rest of the numbers are unreliable.</p>
+
+  <h2>4. Batch and caching are left on the table</h2>
+  <p>Bedrock's batch inference runs at a substantial discount for work that tolerates a completion window, and prompt caching is supported on a subset of models with the same rules as everywhere else: identical prefix, reused within the window. The audit looks for asynchronous workloads still on the synchronous path and for stable system prompts that never get cached, because the fix for both is configuration rather than architecture.</p>
+
+  <h2>What the audit needs from you</h2>
+  <ul>
+    <li>Cost Explorer access, or a Cost and Usage Report export for the last 90 days filtered to Bedrock.</li>
+    <li>Your inference profile inventory and current tagging scheme, whatever state it is in.</li>
+    <li>Provisioned throughput commitments: what is running, on which model, since when.</li>
+    <li>For your top workloads: a representative request and any documented latency requirement.</li>
+  </ul>
+  <p>About a week, ending in a written document with a ranked savings list and an effort cost against each item. Free, and implementable without us.</p>
+
+  <div class="callout">Running <a href="/audit/openai">OpenAI</a> or <a href="/audit/vertex-ai">Vertex AI</a> alongside Bedrock? That is the common case, and the audit covers them together &mdash; the same workload priced in two places is usually the most useful finding in the document. <a href="/book">Book the audit</a>.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

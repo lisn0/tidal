@@ -1,0 +1,14 @@
+month,provider,model,workload,owning_team,cost_center,requests,cached_input_tokens,input_tokens,output_tokens,reasoning_tokens,provider_cost_usd,unit_of_work,units_delivered,cost_per_unit_usd,quality_metric,quality_value,notes
+2026-07,openai,gpt-5,support-triage,support-eng,CC-4100,1284500,412000000,180000000,24000000,0,38420.15,ticket_triaged,1284500,0.0299,csat_proxy,0.91,"cache hit rate 69%; batch eligible"
+2026-07,anthropic,claude-sonnet-5,doc-extraction,platform,CC-2200,96400,0,880000000,44000000,0,21870.40,document_processed,96400,0.2269,field_accuracy,0.964,"no caching; prompt carries full schema each call"
+2026-07,anthropic,claude-opus-5,agent-runtime,ai-platform,CC-2200,18200,120000000,410000000,61000000,138000000,44905.88,task_completed,14980,2.9977,task_success_rate,0.82,"3240 tasks hit the step cap and were billed without completing"
+2026-07,bedrock,llama-3.3-70b,classification,platform,CC-2200,4210000,0,2105000000,42100000,0,9471.00,item_classified,4210000,0.0022,f1,0.89,"on-demand; provisioned throughput not evaluated"
+2026-07,vertex,gemini-2.5-flash,summarisation,product,CC-3000,742000,0,1113000000,74200000,0,4823.00,summary_generated,742000,0.0065,rouge_l,0.44,"context window oversized vs median input"
+,,,,,,,,,,,,,,,,,
+# HOW TO USE,,,,,,,,,,,,,,,,,
+# 1. One row per (month provider model workload) tuple. If you cannot split by workload yet leave it as 'unattributed' and treat the size of that row as finding #1.,,,,,,,,,,,,,,,,,
+# 2. cost_per_unit_usd = provider_cost_usd / units_delivered. This is the number to track over time. Total spend rises with growth and tells you nothing on its own.,,,,,,,,,,,,,,,,,
+# 3. units_delivered is deliberately not requests. Work that was billed but did not produce a result (capped agent loops retried calls abandoned sessions) belongs in the cost column and not in the units column.,,,,,,,,,,,,,,,,,
+# 4. quality_metric is mandatory. A cost_per_unit that fell while quality also fell is not a saving and the sheet must be able to show that.,,,,,,,,,,,,,,,,,
+# 5. Keep reasoning_tokens separate from output_tokens. They bill as output on most providers but they scale with prompt design rather than response length so mixing them hides the lever.,,,,,,,,,,,,,,,,,
+# 6. Rebuild from raw provider invoices not from a dashboard. A baseline you cannot reconcile to an invoice is not a baseline.,,,,,,,,,,,,,,,,,

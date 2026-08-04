@@ -1,0 +1,97 @@
+---
+layout: "page.njk"
+permalink: "pricing.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing · LLM CFO · Paid on delivered savings</title>
+  <meta name="description" content="What an LLM cost engagement costs: a free audit, then 15-25% of verified savings against a locked baseline. How the baseline is set and what stops the fee gaming." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/pricing" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/pricing" />
+  <meta property="og:title" content="Pricing · LLM CFO · Paid on delivered savings" />
+  <meta property="og:description" content="What an LLM cost engagement costs: a free audit, then 15-25% of verified savings against a locked baseline. How the baseline is set and what stops the fee gaming." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Pricing · LLM CFO · Paid on delivered savings" />
+  <meta name="twitter:description" content="What an LLM cost engagement costs: a free audit, then 15-25% of verified savings against a locked baseline. How the baseline is set and what stops the fee gaming." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">PRICING</div>
+  <h1 class="page-title">You pay a share of what <em>you actually save.</em></h1>
+
+  <p class="lede">There is no licence fee, no seat count, and no annual platform minimum, because there is no platform to sell you. This is people doing work on your bill, and the fee is a percentage of the reduction they produce, verified against the invoice your provider sends you.</p>
+
+  <div class="callout"><strong>The short version:</strong> free audit &middot; then 15&ndash;25% of verified monthly savings &middot; measured against a baseline locked before we touch anything &middot; no savings, no fee &middot; 30 days' notice. Minimum engagement is $20k/month of LLM spend. <a href="/book">Book the audit &rarr;</a></div>
+
+  <h2>1. The audit is free, and it is a real deliverable</h2>
+  <p>The first stage costs nothing and ends with a written document: where your spend goes broken down by model, workload and team, what is driving it, and a ranked list of savings with an effort cost against each one. It takes about a week from the point we have read-only exports.</p>
+  <p>You can take that document and implement all of it yourself. Plenty of teams do, and that is a legitimate outcome rather than a failure of the sales process. We do the audit free because a proposal written without seeing the invoice is guesswork, and because a team that reads their own numbers and decides they do not need us was never going to be a good engagement anyway.</p>
+
+  <h2>2. Then: 15&ndash;25% of verified savings</h2>
+  <p>If you engage us to implement, the fee is a share of the reduction, billed monthly, for as long as the reduction persists. The rate lands in the 15&ndash;25% band depending on how much of the implementation work sits with us versus your engineers, and on the length of the term.</p>
+  <ul>
+    <li><strong>Nearer 15%</strong> when your team implements against our specifications and we review, measure and verify.</li>
+    <li><strong>Nearer 25%</strong> when we write and operate the routing, caching and batching changes ourselves and carry the on-call for them.</li>
+  </ul>
+  <p>If the bill does not go down in a given month, the fee for that month is zero. That is not a guarantee in the marketing sense; it is simply what a percentage of zero is.</p>
+
+  <h2>3. What "verified" means, precisely</h2>
+  <p>The whole model collapses if the baseline is soft, so this is the part worth reading slowly.</p>
+  <ul>
+    <li><strong>The baseline is locked before any change ships</strong> and is countersigned by both sides. It is built from your raw provider invoices, not from a dashboard either of us controls.</li>
+    <li><strong>It is normalised for volume.</strong> Savings are measured as cost per unit of work &mdash; per request, per conversation, per document processed &mdash; so a quiet month does not get billed as an optimisation and a growth month does not erase one.</li>
+    <li><strong>Provider price cuts are excluded.</strong> When OpenAI or Anthropic drops a list price, your bill falls and our fee does not rise. We did not do that work.</li>
+    <li><strong>Reconciliation runs against the invoice</strong>, monthly, and the statement shows the arithmetic. If you disagree with a line, it comes out until it is resolved.</li>
+  </ul>
+
+  <h2>4. What is deliberately not in the price</h2>
+  <p>Some things get sold as line items elsewhere and are simply included here, because charging separately for them would create an incentive we do not want.</p>
+  <ul>
+    <li>The audit and the readout call.</li>
+    <li>Re-measurement after a provider price change or a model deprecation.</li>
+    <li>Handover: the configurations, the routing rules and the measurement setup are yours and stay yours when the engagement ends.</li>
+  </ul>
+  <p>And one thing genuinely is not included: we do not licence you a dashboard. If continuous cost observability is what you want to own, <a href="https://telemetry.llmcfo.com">Tidal Telemetry</a> is a separate product with its own pricing, and you do not need an engagement with us to use it.</p>
+
+  <h2>5. The incentive problems, stated plainly</h2>
+  <p>Performance pricing has two well-known failure modes and it is fairer to name them than to hope you do not.</p>
+  <ul>
+    <li><strong>It rewards cutting cost over protecting quality.</strong> The control is that quality SLOs are agreed per endpoint before anything ships, every change is A/B tested for at least seven days, and a regression rolls back automatically &mdash; taking the associated fee with it. A saving that degraded your product is not a saving and does not get billed as one.</li>
+    <li><strong>It rewards a high baseline.</strong> The control is that the baseline comes from invoices you already received before we arrived. There is no version of the number that we get to draw.</li>
+  </ul>
+
+  <h2>6. When a fixed fee makes more sense</h2>
+  <p>Performance pricing is wrong for some shapes of work, and we will say so rather than bend the engagement to fit it. A one-off migration, an architecture review, or a build-out of attribution and chargeback for a finance team is scoped work with a defined end, so it gets a fixed fee agreed up front. Ongoing optimisation of a live bill is what the percentage model is for.</p>
+
+  <h2>Questions people ask first</h2>
+
+  <h3>Why is there a $20k monthly minimum?</h3>
+  <p>Below roughly that level, a realistic percentage of a realistic saving does not cover the hours the work takes, so we would either do it badly or price it in a way you would resent. Under the minimum, the <a href="/research">research library</a> and the <a href="/tools/cache-savings-calculator">cache savings calculator</a> are free and cover most of the same ground.</p>
+
+  <h3>What happens if savings stop after we leave?</h3>
+  <p>The fee stops with them. It is tied to the measured reduction each month, not to a projection made at signing, so a saving that decays takes the fee down with it.</p>
+
+  <h3>Is there a lock-in period?</h3>
+  <p>Thirty days' notice, either side. Optimisation work that only survives because of a contract is not work worth keeping.</p>
+
+  <h3>Do you take equity or a success bonus instead?</h3>
+  <p>No. A cash percentage of a measured line item is the only version of this that stays honest, because it is the only one where you can check our arithmetic against a document we did not produce.</p>
+
+  <div class="callout"><strong>Next step:</strong> the audit costs nothing and ends with a number you can act on with or without us. <a href="/book">Book a call &rarr;</a> Or email <a href="mailto:hello@llmcfo.com">hello@llmcfo.com</a> with your monthly spend and provider mix.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
