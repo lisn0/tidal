@@ -17,6 +17,8 @@
  *   INDEXNOW_SITEMAP   sitemap URL (default https://<host>/sitemap.xml);
  *                      a <sitemapindex> is followed into its child sitemaps
  *   INDEXNOW_VERIFY    "0" to skip the live 200-check (default: verify)
+ *   INDEXNOW_MAX_AGE_DAYS  only submit URLs whose sitemap <lastmod> is within
+ *                      this many days (default 3, "0" = submit everything)
  *   INDEXNOW_DRY_RUN   "1" to print the payload and NOT POST
  *
  * Usage:
@@ -27,6 +29,7 @@ const HOST = (process.env.INDEXNOW_HOST || "").trim();
 const KEY = (process.env.INDEXNOW_KEY || "").trim();
 const SITEMAP = (process.env.INDEXNOW_SITEMAP || (HOST && `https://${HOST}/sitemap.xml`)).trim();
 const VERIFY = process.env.INDEXNOW_VERIFY !== "0";
+const MAX_AGE_DAYS = Number(process.env.INDEXNOW_MAX_AGE_DAYS ?? 3);
 const DRY_RUN = process.env.INDEXNOW_DRY_RUN === "1";
 const ENDPOINT = "https://api.indexnow.org/indexnow";
 const UA = "indexnow-submit/1.0 (+https://www.indexnow.org/)";
@@ -37,6 +40,13 @@ if (!HOST || !KEY) {
 }
 
 const locs = (xml) => [...xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/g)].map((m) => m[1]);
+
+// <loc> + its sibling <lastmod>, so we can submit only what actually changed.
+const entries = (xml) =>
+  [...xml.matchAll(/<url>[\s\S]*?<\/url>/g)].map((block) => ({
+    loc: (block[0].match(/<loc>\s*([^<\s]+)\s*<\/loc>/) || [])[1],
+    lastmod: (block[0].match(/<lastmod>\s*([^<\s]+)\s*<\/lastmod>/) || [])[1],
+  }));
 
 async function fetchText(url) {
   const res = await fetch(url, { headers: { "user-agent": UA } });
@@ -49,13 +59,12 @@ async function collectUrls(sitemapUrl, seen = new Set()) {
   if (seen.has(sitemapUrl)) return [];
   seen.add(sitemapUrl);
   const xml = await fetchText(sitemapUrl);
-  const found = locs(xml);
   if (/<sitemapindex[\s>]/i.test(xml)) {
     const nested = [];
-    for (const child of found) nested.push(...(await collectUrls(child, seen)));
+    for (const child of locs(xml)) nested.push(...(await collectUrls(child, seen)));
     return nested;
   }
-  return found;
+  return entries(xml).filter((e) => e.loc);
 }
 
 async function isLive(url) {
@@ -87,19 +96,31 @@ async function mapLimit(items, limit, fn) {
 (async () => {
   console.log(`IndexNow: host=${HOST} sitemap=${SITEMAP} verify=${VERIFY} dryRun=${DRY_RUN}`);
 
-  let urls = [...new Set(await collectUrls(SITEMAP))].filter((u) => {
+  const all = (await collectUrls(SITEMAP)).filter((e) => {
     try {
-      return new URL(u).host === HOST;
+      return new URL(e.loc).host === HOST;
     } catch {
       return false;
     }
   });
 
-  if (!urls.length) {
+  if (!all.length) {
     console.error("ERROR: no URLs found in sitemap.");
     process.exit(1);
   }
-  console.log(`Found ${urls.length} sitemap URL(s) on ${HOST}.`);
+
+  // Only submit pages whose <lastmod> is inside the window. Re-pinging an
+  // unchanged sitemap on every push is what search engines throttle you for.
+  const cutoff = MAX_AGE_DAYS
+    ? new Date(Date.now() - MAX_AGE_DAYS * 864e5).toISOString().slice(0, 10)
+    : ""; // 0 = no window, submit everything
+  let urls = [...new Set(all.filter((e) => (e.lastmod || "") >= cutoff).map((e) => e.loc))];
+  console.log(`Found ${all.length} sitemap URL(s) on ${HOST}; ${urls.length} changed since ${cutoff || "the beginning"}.`);
+
+  if (!urls.length) {
+    console.log("Nothing changed in the window — not submitting.");
+    return;
+  }
 
   if (VERIFY) {
     const checks = await mapLimit(urls, 8, async (u) => [u, await isLive(u)]);
@@ -109,8 +130,8 @@ async function mapLimit(items, limit, fn) {
   }
 
   if (!urls.length) {
-    console.error("ERROR: no live URLs to submit.");
-    process.exit(1);
+    console.log("No live URLs left after verification — not submitting.");
+    return;
   }
 
   const payload = {

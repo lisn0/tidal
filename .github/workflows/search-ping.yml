@@ -6,6 +6,10 @@ name: search-ping
 on:
   push:
     branches: [main]
+    # Content-only trigger: a push touching nothing under src/ ships no new or
+    # changed page, so there is nothing to tell a search engine about.
+    paths:
+      - "src/**"
 
 jobs:
   ping:
