@@ -1,0 +1,88 @@
+---
+layout: "page.njk"
+permalink: "book.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a free LLM cost audit · LLM CFO</title>
+  <meta name="description" content="A 30-minute call, then a free written audit of your AI spend. What we look at, what access we need, what you get back, and who it isn't for." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/book" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/book" />
+  <meta property="og:title" content="Book a free LLM cost audit · LLM CFO" />
+  <meta property="og:description" content="A 30-minute call, then a free written audit of your AI spend. What we look at, what access we need, what you get back, and who it isn't for." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Book a free LLM cost audit · LLM CFO" />
+  <meta name="twitter:description" content="A 30-minute call, then a free written audit of your AI spend. What we look at, what access we need, what you get back, and who it isn't for." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#FBFAF6" />
+  <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
+---
+  <div class="eye">BOOK A CALL</div>
+  <h1 class="page-title">Book a free <em>cost audit.</em></h1>
+
+  <p class="lede">Thirty minutes on a call, then a written audit of where your AI spend is actually going. No cost, no commitment, and no software to install. A person does the work and a person presents it back.</p>
+
+  <div class="callout"><strong>What you're booking:</strong> a 30-minute call &middot; free &middot; a written audit within 5 business days &middot; read-only access only &middot; nothing to install. <a href="/book/schedule">Pick a time &rarr;</a></div>
+
+  <h2>1. What happens</h2>
+  <ol>
+    <li><strong>The call (30 minutes).</strong> You describe the stack: which providers, roughly what you're spending, and what triggered the question. We tell you on the call whether there is anything worth finding. If there isn't, we say so and you've lost half an hour.</li>
+    <li><strong>The audit (about a week).</strong> We take read-only billing and usage exports and map the spend to the workloads producing it. This is the part almost nobody has done, because the invoice arrives as one line per provider.</li>
+    <li><strong>The readout (30 minutes).</strong> A written document plus a call to walk it through: where the money goes, which workloads drive it, what the realistic savings are, and what it would take to get them. It's yours whether or not you work with us after.</li>
+  </ol>
+
+  <h2>2. What we need from you</h2>
+  <ul>
+    <li><strong>Provider invoices or usage exports</strong> for the last 3 months, from whichever of OpenAI, Anthropic, AWS Bedrock, Google Vertex AI, or Azure OpenAI you use.</li>
+    <li><strong>Gateway or proxy logs</strong> if you have them (LiteLLM, Helicone, Langfuse, OpenRouter, or your own). Aggregated metadata only. If you don't have a gateway, that is itself part of the finding.</li>
+    <li><strong>A 10-minute description of your top workflows</strong> so token counts can be attributed to something a finance team recognizes.</li>
+  </ul>
+  <p>Read-only access, no prompt or output content, no production credentials. The full scope is on the <a href="/security">security page</a>, and we'll sign an NDA before anything is exchanged.</p>
+
+  <h2>3. What you get back</h2>
+  <ul>
+    <li>Spend broken down by model, workload, and team, rather than one line per provider.</li>
+    <li>The specific drivers: retries, oversized context, the wrong model on a cheap task, uncached repeats, agent loops nobody is watching.</li>
+    <li>A ranked savings list with an estimated figure and an effort cost against each item.</li>
+    <li>A baseline you can re-measure against later, so a future spike has something to be compared to.</li>
+  </ul>
+
+  <h2>4. Who this isn't for</h2>
+  <p>We'd rather say this before the call than during it.</p>
+  <ul>
+    <li><strong>Under roughly $2k a month in AI spend.</strong> The savings won't cover anyone's time, including yours. Our <a href="/research">research</a> and the <a href="/tools/cache-savings-calculator">cache savings calculator</a> are free and will get you most of the way.</li>
+    <li><strong>Looking for a dashboard to buy.</strong> This is an engagement, not a product signup. If self-serve monitoring is what you want, that's a different tool.</li>
+    <li><strong>Unable to share billing data.</strong> There is no version of this that works from a description of the problem alone.</li>
+  </ul>
+
+  <h2>Questions people ask first</h2>
+
+  <h3>Is the audit really free?</h3>
+  <p>Yes. It's how we qualify work, and it's cheaper for both of us than a proposal written blind. Most audits end with a specific list you could implement yourself. Some end with us doing it.</p>
+
+  <h3>How long until we see the savings?</h3>
+  <p>The audit takes about a week. The top one or two items on the list are usually configuration changes that land the same week you decide to make them. Anything requiring an architecture change is flagged as such.</p>
+
+  <h3>Do we have to give you production access?</h3>
+  <p>No. Read-only billing and usage exports are enough for the audit, and they're revocable by you at any time without asking us.</p>
+
+  <h3>Who is on the call?</h3>
+  <p>The person doing the audit. There is no separate sales stage to get past.</p>
+
+  <div class="callout"><strong>Ready?</strong> <a href="/book/schedule">Pick a time &rarr;</a> Or email <a href="mailto:hello@llmcfo.com">hello@llmcfo.com</a> with your monthly spend and providers and we'll tell you whether a call is worth it.</div>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
