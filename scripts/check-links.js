@@ -114,6 +114,19 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
   for (const m of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
     let node;
     try { node = JSON.parse(m[1]); } catch (e) { errors.push(`${rel}: invalid JSON-LD (${e.message})`); continue; }
+    // A FAQPage entry has to be a question and has to be on the page. 56 of
+    // these were H2 headings copied verbatim ("The five layers"), which is
+    // neither eligible for rich results nor a thing anyone would cite.
+    if (node["@type"] === "FAQPage") {
+      for (const q of node.mainEntity || []) {
+        // Japanese ends questions with the fullwidth ？ (U+FF1F); an ASCII-only
+        // test flags every JA page as broken.
+        if (!/[?？]$/.test((q.name || "").trim())) errors.push(`${rel}: FAQ entry is not a question — "${q.name}"`);
+        if (!decode(html).includes(q.name)) errors.push(`${rel}: FAQ question is not visible on the page — "${q.name}"`);
+        if (((q.acceptedAnswer || {}).text || "").length < 40) errors.push(`${rel}: FAQ answer is too thin for "${q.name}"`);
+      }
+      continue;
+    }
     if (!/Article/.test([].concat(node["@type"]).join(""))) continue;
     if (decode(node.headline) !== title) errors.push(`${rel}: JSON-LD headline "${node.headline}" does not match <title> "${title}"`);
     if (decode(node.description) !== desc) errors.push(`${rel}: JSON-LD description does not match meta description`);

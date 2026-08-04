@@ -13,9 +13,12 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"TechArticle","headline":{{ titleCore | dump | safe }},"description":{{ description | dump | safe }},"url":"https://llmcfo.com/research/{{ slug }}","datePublished":"{{ datePublished }}","dateModified":"{{ dateModified }}","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
-{%- if faqJsonLd %}
+{#- Built from the same `faq` entries the page renders below. It used to be a
+    hand-written JSON-LD blob per page, which is 54 copies of a shape nothing
+    checked and no way to keep the schema and the page saying the same thing. -#}
+{%- if faq and faq.length %}
 <script type="application/ld+json">
-{{ faqJsonLd | safe }}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for f in faq %}{% if not loop.first %},{% endif %}{"@type":"Question","name":{{ f.q | dump | safe }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | dump | safe }}}}{% endfor %}]}
 </script>
 {%- endif %}
 <script type="application/ld+json">
@@ -36,6 +39,15 @@
 <main class="wrap">
 <aside class="callout"><strong>Auditing your own LLM spend?</strong> LLM CFO runs a free audit of your AI costs and shows which workloads are driving the bill. <a href="/book">Book a free audit &rarr;</a></aside>
 {{ content | updateVisibleDate(dateModified, datePublished) | safe }}
+{%- if faq and faq.length %}
+<section class="faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+{%- for f in faq %}
+<h3>{{ f.q }}</h3>
+<p>{{ f.a }}</p>
+{%- endfor %}
+</section>
+{%- endif %}
 <aside class="callout"><strong>Want this applied to your stack?</strong> Bring the provider bills, gateway logs, and top workflows; we will map the cost drivers and savings path. <a href="/book">Book a free audit &rarr;</a></aside>
 </main>
 

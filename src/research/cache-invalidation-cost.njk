@@ -9,8 +9,13 @@ datePublished: "2026-05-21"
 dateModified: "2026-05-21"
 copyrightSymbol: "©"
 footerSeparator: "·"
-faqJsonLd: |-
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why invalidation cost is the missing line item","acceptedAnswer":{"@type":"Answer","text":"The standard way to report on a prompt cache is steady-state. You pick a 7-day or 30-day window, divide cache-read tokens by total input tokens, and call the resulting ratio the hit rate. It is a useful number. It is not the whole story."}},{"@type":"Question","name":"Three invalidation triggers that cost real money","acceptedAnswer":{"@type":"Answer","text":"Every major provider's prompt cache keys on the exact byte sequence of the prefix plus the model and a few request-level parameters. Change any of those and the cache turns over. In practice, three triggers do almost all the damage."}},{"@type":"Question","name":"The rebuild cost math","acceptedAnswer":{"@type":"Answer","text":"A small example makes the size of the bill concrete. Numbers are illustrative; plug in your own prefix size and traffic."}},{"@type":"Question","name":"How often this hits in practice","acceptedAnswer":{"@type":"Answer","text":"The rough cadence we see across engagements:"}},{"@type":"Question","name":"How to amortize the cost","acceptedAnswer":{"@type":"Answer","text":"You cannot eliminate invalidation ; change is the point of shipping software. You can make each event cheaper."}},{"@type":"Question","name":"What to put on the dashboard","acceptedAnswer":{"@type":"Answer","text":"If you measure only steady-state hit rate, you cannot see the rebuild cost. Two panels are worth adding."}}]}
+faq:
+  - {"q":"Why is invalidation the missing line item in cache reporting?","a":"The standard way to report on a prompt cache is steady-state. You pick a 7-day or 30-day window, divide cache-read tokens by total input tokens, and call the resulting ratio the hit rate. It is a useful number. It is not the whole story."}
+  - {"q":"What triggers a prompt cache invalidation?","a":"Every major provider's prompt cache keys on the exact byte sequence of the prefix plus the model and a few request-level parameters. Change any of those and the cache turns over. In practice, three triggers do almost all the damage."}
+  - {"q":"How do you calculate the cache rebuild cost?","a":"A small example makes the size of the bill concrete. Numbers are illustrative; plug in your own prefix size and traffic."}
+  - {"q":"How often does cache invalidation hit in practice?","a":"The rough cadence we see across engagements:"}
+  - {"q":"How do you amortize cache invalidation cost?","a":"You cannot eliminate invalidation ; change is the point of shipping software. You can make each event cheaper."}
+  - {"q":"Which cache panels belong on the dashboard?","a":"If you measure only steady-state hit rate, you cannot see the rebuild cost. Two panels are worth adding."}
 section: "Accounting and tooling"
 blurb: ""
 ---

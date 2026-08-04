@@ -9,8 +9,10 @@ datePublished: "2026-05-04"
 dateModified: "2026-05-04"
 copyrightSymbol: "©"
 footerSeparator: "·"
-faqJsonLd: |-
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why this matters more now","acceptedAnswer":{"@type":"Answer","text":"OpenAI's newer conversation-state and reasoning guidance makes the shift clear: context windows now include input, output, and reasoning tokens. Meanwhile, multi-step workflows increasingly depend on previous responses, tool outputs, and intermediate state. Once these flows get longer, how you carry state becomes an economic decision."}},{"@type":"Question","name":"The expensive mistake","acceptedAnswer":{"@type":"Answer","text":"The expensive pattern is simple: every turn replays too much history, too much tool output, and too much irrelevant context. The system feels stateless from an application perspective, but the model keeps paying to re-ingest what it already effectively knows."}},{"@type":"Question","name":"Why this pairs with prompt caching","acceptedAnswer":{"@type":"Answer","text":"Conversation-state discipline and prompt caching reinforce each other. Better state handling reduces unnecessary replay, while stable prompt structure increases the portion of that replay that becomes cheap. If your state is chaotic, your cache will be chaotic too."}}]}
+faq:
+  - {"q":"Why do conversation-state costs matter more now?","a":"OpenAI's newer conversation-state and reasoning guidance makes the shift clear: context windows now include input, output, and reasoning tokens. Meanwhile, multi-step workflows increasingly depend on previous responses, tool outputs, and intermediate state. Once these flows get longer, how you carry state becomes an economic decision."}
+  - {"q":"What is the expensive conversation-state mistake?","a":"The expensive pattern is simple: every turn replays too much history, too much tool output, and too much irrelevant context. The system feels stateless from an application perspective, but the model keeps paying to re-ingest what it already effectively knows."}
+  - {"q":"Why does conversation-state discipline pair with prompt caching?","a":"Conversation-state discipline and prompt caching reinforce each other. Better state handling reduces unnecessary replay, while stable prompt structure increases the portion of that replay that becomes cheap. If your state is chaotic, your cache will be chaotic too."}
 section: "New and timely"
 blurb: "- why state handling is becoming a real AI cost architecture problem."
 ---
