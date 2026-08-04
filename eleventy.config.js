@@ -28,6 +28,32 @@ const lastmodOf = (item) => {
 };
 
 module.exports = function (eleventyConfig) {
+  // Utility pages (about, terms, tools…) ship no schema and no date, so an AI
+  // answer engine has nothing to attribute and cites them without a link, if at
+  // all. Inject a WebPage node wherever the page carries no dateModified —
+  // valid alongside any existing block, and the date is the source file mtime
+  // so freshness is real rather than a hardcoded build stamp.
+  eleventyConfig.addTransform("webPageSchema", function (content) {
+    if (!this.page.outputPath?.endsWith(".html")) return content;
+    if (/dateModified/.test(content)) return content;
+    const url = "https://llmcfo.com" + this.page.url;
+    const node = {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": url + "#webpage",
+      url,
+      name: (content.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.trim(),
+      description: (content.match(/<meta name="description" content="([^"]*)"/i) || [])[1],
+      dateModified: require("fs").statSync(this.page.inputPath).mtime.toISOString().slice(0, 10),
+      isPartOf: { "@id": "https://llmcfo.com/#website" },
+      publisher: { "@id": "https://llmcfo.com/#org" },
+    };
+    if (!node.name) delete node.name;
+    if (!node.description) delete node.description;
+    const tag = `<script type="application/ld+json">${JSON.stringify(node)}</script>`;
+    return content.includes("</head>") ? content.replace("</head>", tag + "</head>") : content.replace("</body>", tag + "</body>");
+  });
+
   // The sitemap was a hand-maintained XML file, so every page added since drifted
   // out of it until someone noticed — which is what orphaned /research/* from
   // search. Derive it from the build instead.
