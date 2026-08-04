@@ -3,10 +3,13 @@
 const fs = require("fs");
 
 const SITE_URL = "https://llmcfo.com";
-// Pages that exist but must never be advertised: the error page, and the A/B
-// variants, which canonical to their control. Anything else opts out with
+// Pages that exist but must never be advertised. Anything else opts out with
 // `sitemap: false` in its frontmatter.
-const SITEMAP_SKIP = new Set(["/404.html", "/index-v2.html", "/research/ai-finops-cfo-v2.html"]);
+// -v2 pages are A/B variants canonicalized to their control, so none of them
+// belong in the sitemap. Listing them by hand missed /es/research/…-v2, which
+// then shipped as the only Spanish URL Google was told about.
+const SITEMAP_SKIP = new Set(["/404.html"]);
+const skipFromSitemap = (url) => SITEMAP_SKIP.has(url) || /-v2(\.html)?$/.test(url);
 
 const cleanUrl = (url) => url.replace(/index\.html$/, "").replace(/\.html$/, "");
 
@@ -60,7 +63,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("sitemap", (api) => {
     const seen = new Set();
     const fromData = articlePages
-      .filter((p) => !SITEMAP_SKIP.has("/" + p.permalink))
+      .filter((p) => !skipFromSitemap("/" + p.permalink))
       .map((p) => ({
         loc: SITE_URL + cleanUrl("/" + p.permalink),
         lastmod: articles[p.key].dateModified || articles[p.key].datePublished,
@@ -71,7 +74,7 @@ module.exports = function (eleventyConfig) {
       .filter((item) => {
         const url = item.url;
         if (!url || !(url.endsWith(".html") || url.endsWith("/"))) return false;
-        if (SITEMAP_SKIP.has(url)) return false;
+        if (skipFromSitemap(url)) return false;
         if (item.data.sitemap === false) return false;
         return true;
       })
