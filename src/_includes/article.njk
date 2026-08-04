@@ -48,7 +48,7 @@
 <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}" />
 {%- endfor -%}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"{{ locale.title | safe }} · LLM CFO","description":"{{ locale.description | safe }}","url":"{{ canonicalUrl }}","datePublished":"{{ article.datePublished }}","dateModified":"{{ article.dateModified }}","image":"{{ article.image }}","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":{{ locale.title | dump | safe }},"description":"{{ locale.description | safe }}","url":"{{ canonicalUrl }}","datePublished":"{{ article.datePublished }}","dateModified":"{{ article.dateModified }}","image":"{{ article.image }}","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
 {%- if locale.faq.length > 0 -%}
 <script type="application/ld+json">
