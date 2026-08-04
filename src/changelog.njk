@@ -65,4 +65,13 @@ pageHead: |-
   <h2>Older</h2>
   <p>Pre-2026 updates aren't published. <a href="mailto:hello@llmcfo.com?subject=Older%20changelog">Email us</a> if you want the full history.</p>
 
+  <h2>How to read this page</h2>
+  <p>Entries here are changes to the playbook we actually run on customer engagements, not product announcements. When a technique appears in this list it means it has been used on real traffic, measured against an invoice, and is now part of the default sequence — not that it looked promising in a provider's launch post. Techniques also get removed when they stop earning their place; provider pricing moves often enough that an optimization worth doing last year can become noise.</p>
+
+  <h2>Why the updates cluster around provider changes</h2>
+  <p>Most entries trace back to something a provider shipped: a new cache TTL, a batch endpoint, a cheaper model tier, or a billing line that changed shape. That is the nature of the work. The cost structure of an LLM workload is largely set by the provider's price list, and the job is to notice a change early and work out which customers it applies to before the next invoice closes. The cache-read tracking change in the Q2 refresh is the clearest example — nothing about the workloads changed, but the way the tokens were billed did, and baselines built before that point were quietly overstating input costs.</p>
+
+  <h2>What isn't published here</h2>
+  <p>Customer-specific findings, engagement outcomes, and anything that would identify a workload stay out of this list. Marketing-site copy changes and internal tooling are also omitted; if it did not change what we would recommend to a customer, it does not belong in a changelog. Research articles get their own dates on the research pages rather than an entry here.</p>
+
   <a class="back" href="/">← Back to llmcfo.com</a>

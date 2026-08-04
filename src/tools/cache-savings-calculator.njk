@@ -78,6 +78,21 @@ pageHead: |-
 </div>
 
 <div class="methodology">
+  <h2>When caching is worth enabling</h2>
+  <p>Prompt caching pays off when a large prefix repeats across requests inside the cache TTL. The three inputs that decide it are the size of the repeated prefix, the share of requests that hit it, and how tightly those requests cluster in time. A 3,000-token system prompt hit by steady traffic is close to a free win. The same prompt hit twice an hour will expire between calls, and you will pay the cache-write premium for nothing.</p>
+
+  <h2>Why real hit rates disappoint</h2>
+  <ul>
+    <li><strong>Retrieval breaks the prefix.</strong> If RAG chunks are injected before the shared instructions, nothing after the first differing token can be reused. Ordering the prompt so the fixed part comes first is often the whole fix.</li>
+    <li><strong>Prompt churn invalidates the cache.</strong> Every edit to the system prompt starts the cache cold, so frequent deploys during a prompt-tuning phase can keep the hit rate near zero for weeks.</li>
+    <li><strong>Traffic gaps.</strong> TTLs are short. Off-peak hours and low-volume tenants may never accumulate enough traffic to keep an entry warm.</li>
+    <li><strong>Per-tenant prefixes.</strong> Personalizing the system prompt per customer multiplies the number of distinct cache entries and divides the hit rate by roughly the same factor.</li>
+  </ul>
+
+  <h2>What to do with the result</h2>
+  <p>If the calculator shows a saving at a hit rate you can defend, enable caching — it is the lowest-risk lever available, because the cached tokens are byte-identical to what you were already sending and nothing about the output changes. If it shows a marginal result, restructure the prompt so the stable part sits at the front and measure again before deciding. If it shows a loss, the workload is not prefix-heavy and caching is the wrong lever; routing or batching will do more.</p>
+
+
   <h2>How we calculate</h2>
   <p>Most calculators overstate caching savings. We use the real formula:</p>
   <pre>Savings = (input_without_cache × input_price) - (cache_write × cache_write_price) - (cache_read × cache_read_price) - (output × output_price)</pre>
