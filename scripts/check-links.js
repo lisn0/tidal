@@ -15,6 +15,7 @@ const resolves = (p) => {
   return fs.existsSync(f) || fs.existsSync(f + ".html") || fs.existsSync(path.join(f, "index.html"));
 };
 
+const canonicalOf = (s) => ((s.match(/<link[^>]+rel="canonical"[^>]*>/) || [])[0]?.match(/href="([^"]+)"/) || [])[1]?.replace(/\/$/, "");
 const DOMAIN = "llmcfo.com";
 const errors = [];
 
@@ -57,6 +58,42 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
   const t = m[1].trim().replace(/&amp;/g, "&").replace(/&middot;/g, "\u00b7").replace(/&mdash;/g, "\u2014");
   if (t.length > 70) errors.push(`/${require("path").relative(site, f)}: title is ${t.length} chars (max 70) — "${t}"`);
 }
+
+// hreflang has to be reciprocal: if /de/x lists /fr/x as an alternate, /fr/x must
+// list /de/x back, or search engines discard the whole cluster. The links all
+// resolve individually, so the check above cannot see a one-way cluster.
+const alts = new Map();
+for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
+  const rel = "/" + require("path").relative(site, f);
+  const s = fs.readFileSync(f, "utf8");
+  const set = new Set();
+  for (const m of s.matchAll(/<link[^>]+rel="alternate"[^>]*>/g)) {
+    const href = (m[0].match(/href="([^"]+)"/) || [])[1];
+    const lang = (m[0].match(/hreflang="([^"]+)"/) || [])[1];
+    if (!href || !lang || lang === "x-default") continue;
+    set.add(href.replace(/\/$/, ""));
+  }
+  if (set.size) alts.set(canonicalOf(s) || rel, set);
+}
+for (const [self, set] of alts) {
+  for (const other of set) {
+    if (other === self) continue;
+    const back = alts.get(other);
+    if (!back) errors.push(`hreflang: ${self} -> ${other} (target declares no alternates)`);
+    else if (!back.has(self)) errors.push(`hreflang: ${self} -> ${other} (not reciprocal)`);
+  }
+}
+
+// Descriptions over ~165 chars get truncated in results. Same reason as the
+// title check: hand-written per-page descriptions drift over one article at a
+// time, so fail the build instead of discovering it in Webmaster Tools.
+for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
+  const m = fs.readFileSync(f, "utf8").match(/<meta name="description" content="([^"]*)"/i);
+  if (!m) continue;
+  const d = m[1].replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+  if (d.length > 165) errors.push(`/${require("path").relative(site, f)}: description is ${d.length} chars (max 165)`);
+}
+
 
 if (errors.length) {
   console.error(`\n[check-links] ${errors.length} broken internal link(s):`);
