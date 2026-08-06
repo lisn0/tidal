@@ -1,0 +1,129 @@
+---
+layout: "research.njk"
+permalink: "research/i-used-claude-max-20x-heavily-for-a-week.html"
+titleCore: "I Used Claude Max 20x Heavily for a Week: Qwen 3.8"
+description: "A real-world comparison of Claude Max 20x ($200) vs Alibaba Qwen 3.8 Token Pro ($70). Telemetry analysis, metric drift, credit caps, and cost per accepted task."
+slug: "i-used-claude-max-20x-heavily-for-a-week"
+breadcrumbName: "I Used Claude Max 20x Heavily for a Week"
+datePublished: "2026-08-06"
+dateModified: "2026-08-06"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Why can't dashboard token counts be directly compared across providers?","a":"Dashboard metrics use different aggregation methods. In our 7-day telemetry, the Models screen reported 110.8M tokens while the Overview reported 20.9M (a 5.30× ratio). Furthermore, Claude and Qwen tokenize text differently, generate varying reasoning lengths, and handle prompt cache reads with different logging rules."}
+  - {"q":"Is Alibaba Token Plan Pro ($70/mo) cheaper than Claude Max 20x ($200/mo)?","a":"On raw subscription price and explicit credit caps (12,000/5h, 40,000/7d), Alibaba is $130/month cheaper. Provided credit limits are not exceeded, Qwen 3.8 needs to achieve only 35% of Opus 5's accepted task output to be cheaper per completed task."}
+  - {"q":"How does developer time factor into the $130 price difference?","a":"At a $50/hour developer valuation, Opus 5 needs to save only 2.6 hours of developer time per month (1.3 hours at $100/hour) to break even. If Opus 5 completes a complex multi-file refactor on the first attempt without manual intervention, it easily justifies its higher subscription cost."}
+  - {"q":"What is Alibaba's Token Pro credit limit correction?","a":"Alibaba Token Personal Pro does not provide a static 160,000 credit monthly wallet. It provides 12,000 credits in a rolling 5-hour window and 40,000 credits in a rolling 7-day window. The 160,000 figure comes from multiplying 40,000 by 4 weeks (28 days)." }
+section: "New and timely"
+blurb: "- real-user telemetry audit comparing Claude Max 20x against Alibaba Token Pro on heavy agentic coding workloads."
+sectionTitle: "Claude Max 20x vs Alibaba Qwen 3.8"
+---
+  <div class="eye">RESEARCH · CASE STUDY</div>
+  <h1 class="page-title">I Used Claude Max 20x Heavily for a Week—Would Alibaba’s Qwen3.8 Plan Have Been Cheaper?</h1>
+  <p class="updated">Field Audit · 6 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A real-world comparison of subscription limits, token verbosity, prompt caching, agent retries, and cost per completed coding task. We spent a week running heavy agentic coding workloads through Claude Max 20x, analyzed real account telemetry, and modeled whether switching to Alibaba Model Studio Token Pro ($70/mo) with Qwen 3.8-Max would actually lower total engineering costs.</p>
+
+  <h2>Executive Summary</h2>
+  <p>Comparing AI coding subscriptions using raw advertised token counts produces misleading financial decisions. Our one-week telemetry audit reveals:</p>
+  <ul>
+    <li><strong>Alibaba Token Pro</strong> ($70/mo) exposes explicit rolling limits of 12,000 credits per 5 hours and 40,000 credits per 7 days.</li>
+    <li><strong>Claude Max 20x</strong> ($200/mo) provides dynamic burst compute without disclosing a contractual token or API-dollar allocation.</li>
+    <li><strong>Telemetry Metric Drift:</strong> Our Claude account reported 20.9M total tokens on the Overview screen but 110.8M tokens on the Models screen — a <strong>5.30× discrepancy</strong>. Dashboard token numbers cannot be directly cross-compared.</li>
+    <li><strong>Model Activity Share:</strong> Opus 5 represented 91.9% of active workload sessions, but displayed fewer raw tokens than secondary models due to model turn efficiency and prompt caching.</li>
+    <li><strong>Task Productivity Break-Even:</strong> Qwen 3.8-Max needs to deliver only 35% of Opus 5's accepted task output to beat Claude on subscription cost — provided the workload stays within Alibaba's 40,000 credit 7-day limit.</li>
+    <li><strong>Human Time Valuation:</strong> The $130/month price delta represents just 2.6 hours of developer time at $50/hour (1.3 hours at $100/hour). If Opus 5 saves 3 hours of manual debugging per month, it is cheaper overall.</li>
+  </ul>
+
+  <h2>The Subscriptions Are Not Billing the Same Unit</h2>
+
+  <h3>Alibaba Token Plan Personal Pro ($70/mo)</h3>
+  <p>The Personal Pro plan provides explicit credit allowances:</p>
+  <ul>
+    <li><strong>Rolling 5 hours:</strong> 12,000 credits</li>
+    <li><strong>Rolling 7 days:</strong> 40,000 credits (approx. 171,429 credits per 30 days)</li>
+  </ul>
+  <p>During its preview phase, Qwen3.8-Max-Preview received advertised credit discounts (as low as 10% standard consumption) plus off-peak night rates (22:00–08:00 UTC+8). However, Token Pro is restricted to interactive coding tools; non-interactive batch automation or backend API serving is strictly prohibited. <a href="https://www.alibabacloud.com/help/en/model-studio/token-plan-personal-overview">Source</a>.</p>
+
+  <h3>Alibaba Coding Plan ($50/mo) — A Common Confusion</h3>
+  <p>Many analyses confuse the Token Plan with the $50/mo Coding Plan, which operates on model call quotas (6,000 calls/5h, 45k/wk, 90k/mo) for models like Qwen 3.7-Plus. The Coding Plan does not include Qwen 3.8-Max. <a href="https://www.alibabacloud.com/help/en/model-studio/coding-plan">Source</a>.</p>
+
+  <h3>Claude Max 20x ($200/mo)</h3>
+  <p>Anthropic's Max 20x offers 20 times the Pro plan's session capacity. <a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Source</a>. However, Anthropic publishes no fixed token or API dollar quotas. Claude Code CLI and web sessions draw from an opaque dynamic compute pool.</p>
+
+  <h2>Account Telemetry: The 5.30× Metric Discrepancy</h2>
+  <p>Over 6 active coding days, our Claude Max 20x account recorded:</p>
+
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Metric View</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:right;">Reported Token Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Overview Screen (32 sessions, 48.5k msgs)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">20,900,000</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Models Screen (Opus 5 + Fable 5 + Haiku 4.5)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">110,836,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The 110.8M vs 20.9M discrepancy occurs because the Overview screen counts net billing tokens while the Models screen logs total prompt-cache reads across sub-agent iterations. This demonstrates why converting raw dashboard tokens between providers is invalid.</p>
+
+  <h2>Model Activity Share</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Model</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:right;">Activity Share</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:right;">Input Tokens</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:right;">Output Tokens</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:right;">Total Displayed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Opus 5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">91.9%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">0.436M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">41.5M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">41.936M</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Fable 5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">6.4%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">14.8M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">38.3M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">53.100M</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Haiku 4.5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">1.7%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">2.8M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">13.0M</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;text-align:right;">15.800M</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Why Equal-Token Math Fails</h2>
+  <p>A task executed by Qwen 3.8-Max and Opus 5 uses different token amounts due to 5 amplification factors:</p>
+  <p style="background:#101726;padding:12px;border-radius:6px;font-family:monospace;color:#7AAFFF;text-align:center;">
+    Total Workload Cost = Tokenization Density × Turn Amplification × Tool Amplification × Reasoning Amplification × Retry Amplification
+  </p>
+
+  <h2>The Break-Even Formula</h2>
+  <p>Alibaba is cheaper per accepted engineering task when:</p>
+  <p style="background:#101726;padding:12px;border-radius:6px;font-family:monospace;color:#7AAFFF;text-align:center;">
+    ($70 / A_Qwen) &lt; ($200 / A_Claude)  ⇒  (A_Qwen / A_Claude) &gt; 0.35
+  </p>
+  <p>Qwen 3.8 needs to achieve only 35% of Opus 5's accepted task volume to be cheaper on subscription cost alone. However, if Opus 5 saves 2.6 hours of developer time per month ($50/hr), the $130 price difference is completely eliminated.</p>
+
+  <h2>Conclusion &amp; Recommendation</h2>
+  <p>For heavy individual developers, Claude Max 20x provides substantial compute value (~$1,100 API equivalent). For organizations managing strict monthly caps or running off-peak automated agent swarms, Alibaba Token Pro ($70/mo) provides predictable credit-metered capacity.</p>

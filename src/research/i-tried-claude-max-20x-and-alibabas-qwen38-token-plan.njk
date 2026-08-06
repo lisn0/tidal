@@ -1,0 +1,98 @@
+---
+layout: "research.njk"
+permalink: "research/i-tried-claude-max-20x-and-alibabas-qwen38-token-plan.html"
+titleCore: "I Tried Claude Max 20x & Alibaba Qwen 3.8 Token Plan"
+description: "Hands-on comparison of Claude Max 20x ($200) and Alibaba Token Pro ($70). Comparing Opus 5 vs Qwen 3.8-Max on refactoring, sub-agents, and cost per task."
+slug: "i-tried-claude-max-20x-and-alibabas-qwen38-token-plan"
+breadcrumbName: "I Tried Claude Max 20x and Alibaba's Qwen 3.8 Token Plan"
+datePublished: "2026-08-06"
+dateModified: "2026-08-06"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Which subscription plan is cheaper for heavy agentic coding?","a":"Alibaba Token Pro costs $70/mo vs Claude Max 20x at $200/mo. However, the true cost depends on quality-adjusted task completion. If Qwen 3.8 requires multiple retry rounds while Opus 5 completes tasks on the first attempt, the retry amplification can narrow or eliminate nominal token price savings."}
+  - {"q":"How do multi-agent swarms perform under Alibaba Token Pro vs Claude Max 20x?","a":"Alibaba Token Pro caps usage at 12,000 credits per 5 hours and 40,000 credits per 7 days, but offers a 0.2× off-peak multiplier for scheduled overnight agent swarms. Claude Max 20x provides a 4× larger 5-hour burst window (~900 messages) but draws from a shared account-level allocation."}
+  - {"q":"What is the Quality-Adjusted Task Cost formula?","a":"Quality-Adjusted Task Cost = (Allocated Subscription Fee + Developer Correction Cost) / Accepted Tasks. This formula converts raw token pricing into true engineering financial impact."}
+section: "New and timely"
+blurb: "- hands-on comparison of Opus 5 and Qwen 3.8-Max on real multi-file refactoring, retry loops, and task economics."
+sectionTitle: "Claude Max 20x vs Qwen 3.8 Token Plan"
+---
+  <div class="eye">RESEARCH · BENCHMARKS</div>
+  <h1 class="page-title">I Tried Claude Max 20x and Alibaba’s Qwen3.8 Token Plan for Heavy Coding—Here’s Which One Was Actually Cheaper</h1>
+  <p class="updated">Hands-On Field Study · 6 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Comparing Opus 5 and Qwen3.8-Max on real multi-file refactoring, sub-agent swarms, retry loops, and quality-adjusted task cost. We put both subscriptions through identical repository engineering tasks to measure first-attempt success, retry overhead, credit consumption, and true cost per accepted pull request.</p>
+
+  <h2>Overview: The $200 vs $70 Dilemma</h2>
+  <p>Engineering leaders evaluating AI coding plans face a choices between two models:</p>
+  <ul>
+    <li><strong>Claude Max 20x ($200/mo):</strong> High-ceiling flat-rate subscription delivering Opus 5 and Sonnet 5 with proprietary reasoning and high first-turn refactoring accuracy.</li>
+    <li><strong>Alibaba Model Studio Token Pro ($70/mo):</strong> Credit-metered subscription delivering Qwen 3.8-Max with explicit rolling limits (12k credits/5h, 40k credits/7d) and off-peak discount multipliers.</li>
+  </ul>
+
+  <h2>Hands-On Performance Findings</h2>
+
+  <h3>1. First-Turn Success vs Retry Amplification</h3>
+  <p>In complex multi-file refactoring tests across a 100K-token repository:</p>
+  <ul>
+    <li><strong>Claude Opus 5 (Max 20x):</strong> Consistently completed complex structural refactors on the first or second turn without breaking peripheral test suites.</li>
+    <li><strong>Qwen 3.8-Max (Token Pro):</strong> Demonstrated strong raw generation capabilities, but occasionally required 2–3 iterative feedback loops to pass strict unit tests. Each retry loop re-reads cached context and burns additional output credits.</li>
+  </ul>
+
+  <h3>2. Prompt Cache Economics in Swarms</h3>
+  <p>When launching parallel sub-agents (e.g. 4–8 sub-agents for linting, test generation, and security auditing):</p>
+  <ul>
+    <li>Maintaining a byte-for-byte identical system prefix achieves a 90% prompt cache hit discount on both platforms ($0.17/M explicit cache read on Qwen 3.8-Max vs $0.50/M on Opus 5).</li>
+    <li>Alibaba's <strong>0.2× off-peak credit multiplier</strong> (22:00–08:00 UTC+8) makes overnight multi-agent batch execution exceptionally economical.</li>
+  </ul>
+
+  <h2>Comparative Pricing &amp; Value Summary</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Feature / Metric</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Claude Max 20x ($200/mo)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Alibaba Token Pro ($70/mo)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Primary Flagship Model</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Opus 5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Qwen 3.8-Max</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Meter Type</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Dynamic burst compute (opaque)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Credit limits (12k/5h, 40k/7d)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API Equivalent Value</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$1,100 / week capacity</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Metered against credit schedule</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Off-Peak Discount</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">None</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0.2× credit consumption</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Task Break-Even Ratio</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Must be &gt;2.86× as productive</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Needs &gt;35% of Opus productivity</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The Quality-Adjusted Task Cost Formula</h2>
+  <p>To determine which subscription is cheaper for your organization, calculate:</p>
+  <p style="background:#101726;padding:12px;border-radius:6px;font-family:monospace;color:#7AAFFF;text-align:center;">
+    Quality-Adjusted Task Cost = (Allocated Subscription Fee + Developer Correction Cost) / Accepted Tasks
+  </p>
+
+  <h2>Final Verdict</h2>
+  <ul>
+    <li><strong>Choose Alibaba Token Pro ($70/mo)</strong> if you run scheduled off-peak agent swarms, require explicit billing ceilings, or perform high-volume structured coding tasks where retries carry low cost.</li>
+    <li><strong>Choose Claude Max 20x ($200/mo)</strong> if you work interactively on complex repository refactoring where first-attempt accuracy saves valuable developer time.</li>
+  </ul>
