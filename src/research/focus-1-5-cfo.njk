@@ -1,0 +1,74 @@
+---
+layout: "research.njk"
+permalink: "research/focus-1-5-cfo.html"
+titleCore: "FOCUS 1.5 will make AI costs comparable"
+description: "FOCUS 1.5 lands December 2026 with AI token fields and a Price Sheet dataset. What comparable billing data changes for negotiation, audit, and capitalisation."
+slug: "focus-1-5-cfo"
+breadcrumbName: "FOCUS 1.5 will make AI costs comparable"
+datePublished: "2026-08-15"
+dateModified: "2026-08-15"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is FOCUS 1.5?","a":"FOCUS 1.5 is the next release of the FinOps Open Cost and Usage Specification, confirmed for December 2026. It adds AI model identity and input and output token consumption to the Cost and Usage dataset, and introduces a separate Price Sheet dataset carrying provider list pricing in a standard shape."}
+  - {"q":"Why does a billing schema matter to a CFO?","a":"Because comparability is the precondition for negotiation and for audit. Two providers priced in incompatible units cannot be scored against each other, and a cost figure with no documented derivation cannot be tested. A standard schema makes both possible for the first time."}
+  - {"q":"What is the Price Sheet dataset for?","a":"It separates list pricing from consumption. That separation lets you compute your effective rate against published rates directly - the number that shows whether a commitment or negotiated discount is actually earning its keep - without reverse-engineering it out of a blended invoice."}
+  - {"q":"Does FOCUS 1.5 mean we can stop tagging our own usage?","a":"No. FOCUS standardizes what providers emit, and providers never see which feature, team, or customer caused a request. Attribution remains your own responsibility, enforced at the gateway. An untagged request is unattributable no matter how good the billing schema becomes."}
+  - {"q":"When will this actually show up in our data?","a":"The specification is dated December 2026; provider exports follow separately. FOCUS 1.0 took well over a year to reach broad coverage across major clouds. Plan on a 2026 spec and usable AI exports through 2027, and do not defer decisions waiting for it."}
+  - {"q":"What should finance do before it ships?","a":"Keep token counts split by type rather than blended, retain model identity and provider list prices at time of use, and reconcile internal cost records to the invoice monthly. Each is useful now and each maps onto a 1.5 field later, so none of it is speculative work."}
+section: "New and timely"
+blurb: "- FOCUS 1.5 lands December 2026 with AI token fields and a Price Sheet dataset. Comparable billing data is negotiating leverage and audit evidence."
+---
+  <div class="eye">RESEARCH · TIMELY</div>
+  <h1 class="page-title">AI costs are about to become <em>comparable.</em></h1>
+  <p class="updated">15 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">FOCUS 1.5 is confirmed for December 2026. It adds AI model identity and input and output token consumption to the standard billing schema, and introduces a separate Price Sheet dataset for provider list pricing. For a finance function, the interesting part is not the fields. It is that AI spend stops being a number each vendor defines for itself.</p>
+
+  <h2>Why an accounting standard shows up as a schema</h2>
+  <p>Every AI provider meters differently. Input, output, cached, and reasoning tokens price on separate scales, the ratios move when a model changes underneath you, and no two invoices express the same unit. The practical result for finance has been a large and growing cost line that cannot be compared to anything - not to another vendor, not to a peer, not reliably to last quarter.</p>
+  <p>That is not a tooling gap. It is a missing unit of account, and the way units of account get fixed in practice is that somebody standardises the data format. FOCUS did this for cloud billing. 1.5 extends it to tokens.</p>
+
+  <h2>Three things comparability buys you</h2>
+  <table class="kv">
+    <thead><tr><th scope="col">Capability</th><th scope="col">Why it needs a standard schema</th></tr></thead>
+    <tbody>
+      <tr><td>Vendor comparison</td><td>Scoring two providers today means reverse-engineering effective rates out of invoices that blend discounts, tiers, and cached-token pricing. The Price Sheet dataset removes the archaeology.</td></tr>
+      <tr><td>Effective-rate tracking</td><td>List price separate from consumption means you can compute what you actually pay against what is published - the test of whether a commitment is earning its keep.</td></tr>
+      <tr><td>Audit and capitalisation</td><td>A capitalised AI cost needs a derivation an auditor can test. A vendor-specific invoice format is a weak basis; a standard one is a defensible one.</td></tr>
+    </tbody>
+  </table>
+  <p>The negotiation point deserves emphasis. Providers currently benefit from incomparability, and quotes are structurally hard to score against each other. Standard units are the whole basis of a renegotiation. See <a href="/research/ai-vendor-negotiation">AI vendor negotiation</a> and <a href="/research/provider-arbitrage">provider arbitrage</a>.</p>
+
+  <h2>What it will not do, so plan around it</h2>
+  <ul>
+    <li><strong>It will not give you attribution.</strong> FOCUS standardises what providers emit, and providers do not know which feature, team, or customer caused a request - that context never leaves your infrastructure. This is the part finance most often assumes a standard will solve. It will not. See <a href="/research/llm-cost-visibility-cfo">cost visibility</a>.</li>
+    <li><strong>It will not cover the unmetered layers.</strong> GPU reservations, evaluation harnesses, vector stores, and human review sit outside the token line and are where most budget overruns actually live.</li>
+    <li><strong>It will not arrive on the spec date.</strong> A December 2026 specification is not a December 2026 export. FOCUS 1.0 took well over a year to reach broad provider coverage. Nothing here justifies deferring a decision.</li>
+    <li><strong>It will not tell you whether the spend was worth it.</strong> That is the layer the <a href="/research/tokenomics-foundation-cfo">Tokenomics Foundation</a> was launched to define, and it is a separate multi-year effort.</li>
+  </ul>
+
+  <h2>What to have in place before it lands</h2>
+  <p>All of it pays for itself now, which is the only reason to do it on this timeline:</p>
+  <ol>
+    <li><strong>Token counts stored by type, never blended.</strong> Input and output are separate fields in 1.5, and a single blended total cannot be split back apart retrospectively.</li>
+    <li><strong>Model identity on every record.</strong> It is a first-class 1.5 field and the basis of every per-model comparison you will want to run.</li>
+    <li><strong>Provider list prices retained at time of use.</strong> The Price Sheet is a point-in-time view; historical list prices are not reliably recoverable afterwards.</li>
+    <li><strong>Monthly reconciliation to the provider invoice.</strong> Once the provider's version is standard and comparable, an unreconciled internal figure becomes visibly wrong rather than merely unverified.</li>
+    <li><strong>Gateway tagging - feature, environment, team, customer.</strong> The one thing FOCUS will never supply, and the input every future value framework will assume you already have. See <a href="/research/opentelemetry-genai-cost-tracking">OpenTelemetry GenAI cost tracking</a>.</li>
+  </ol>
+
+  <h2>The honest read</h2>
+  <p>A billing schema is not a strategy, and this one will land late and unevenly. But the direction is clear enough to plan against: AI cost is moving from a vendor-defined number to a buyer-defined one, alongside a new standards body and a conference renamed after the unit. Finance functions that already keep their own reconciled derivation will adopt the standard as a rename. Ones working from provider invoices alone will adopt it as a migration.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/tokenomics-foundation-cfo">A standards body for token costs</a></li>
+    <li><a href="/research/ai-vendor-negotiation">AI vendor negotiation</a></li>
+    <li><a href="/research/ai-capitalization-capex-vs-opex">AI capitalisation: capex vs opex</a></li>
+    <li><a href="/research/genai-telemetry-schema">GenAI telemetry schema</a></li>
+    <li><a href="/research/state-of-finops-2026-for-cfos">State of FinOps 2026 for CFOs</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

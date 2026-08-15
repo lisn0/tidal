@@ -1,0 +1,90 @@
+---
+layout: "research.njk"
+permalink: "research/ai-budget-overruns-2026.html"
+titleCore: "73% of agentic AI projects went over budget"
+description: "A review of 127 enterprise agentic AI implementations found 73% over budget, averaging $2.3M in unmodelled costs. Why, and how to forecast against it."
+slug: "ai-budget-overruns-2026"
+breadcrumbName: "73% of agentic AI projects went over budget"
+datePublished: "2026-08-15"
+dateModified: "2026-08-15"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"How many enterprise agentic AI projects go over budget?","a":"A review of 127 enterprise agentic AI implementations found 73% ran over budget, with some exceeding forecast by more than 2.4x and an average of $2.3M in costs that were never modelled. The overruns cluster in orchestration, evaluation, integration, and human review rather than in the token price itself."}
+  - {"q":"Why do agentic AI projects blow their budgets?","a":"Because the pilot is forecast linearly and agents do not scale linearly. One user request becomes dozens of model calls, retries and tool loops multiply that, evaluation harnesses cost more than the feature they grade, and none of it appears in a proof-of-concept sized on a single-call assumption."}
+  - {"q":"What was the Uber AI budget example?","a":"Uber rolled Claude Code out to roughly 5,000 engineers in December 2025 and had spent its entire annual AI budget by April 2026, at $500 to $2,000 per engineer per month. The deployment was successful; the forecast was the failure. Seat-based reasoning does not hold when the cost per seat is consumption-driven."}
+  - {"q":"How should a CFO forecast agentic AI spend?","a":"Forecast in tokens per completed task rather than dollars per seat, measure the multiplier between one user action and the model calls it generates, and treat a pilot as a measurement exercise for that multiplier rather than a price quote. Then apply a hard consumption cap with an approval path, not a soft budget."}
+  - {"q":"Is an AI budget overrun the same as waste?","a":"No, and conflating them causes bad decisions. Overrun means the forecast was wrong; waste means the spend produced nothing. Most 2026 overruns are forecasting failures on projects that worked. The fix is a better unit model and a spending limit, not cancelling the programme."}
+  - {"q":"What is the fastest control to put in place?","a":"A hard per-agent consumption ceiling enforced at the gateway, with an explicit approval path to raise it. Soft budgets are reporting; hard ceilings are control. An agent in a retry loop can spend a quarter's budget in a weekend and no monthly review catches that in time."}
+section: "New and timely"
+blurb: "- 73% of 127 reviewed enterprise agentic implementations ran over budget, averaging $2.3M in costs nobody modelled. The overruns are forecasting failures, not waste."
+---
+  <div class="eye">RESEARCH · TIMELY</div>
+  <h1 class="page-title">73% of agentic AI projects went <em>over budget.</em></h1>
+  <p class="updated">15 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">A review of 127 enterprise agentic AI implementations found 73% ran over budget, some by more than 2.4x, with an average of $2.3M in costs that had never been modelled. That is not a failure rate for AI. It is a failure rate for AI <em>forecasting</em>. Most of those projects shipped and worked. What broke was the number somebody put in a slide before the work started.</p>
+
+  <h2>The number behind the number</h2>
+  <p>Three-quarters missing a forecast is not variance, it is a structurally wrong model. When almost every project in a category misses in the same direction, the cause is not execution, it is that the estimating method does not describe the thing being estimated.</p>
+  <p>The clearest public example is Uber. It gave Claude Code to roughly 5,000 engineers in December 2025 and had burned its <em>entire</em> annual AI budget by April 2026, at $500 to $2,000 per engineer per month. Nobody misused it. The rollout was a success. The forecast assumed a seat had a price, and a seat turned out to have a consumption profile.</p>
+  <p>The same pattern showed up industry-wide in the first half of 2026, with companies reporting they were 3x over their whole-year token budget by May.</p>
+
+  <h2>Where the unmodelled $2.3M actually goes</h2>
+  <p>Almost none of it is the token price. The overruns cluster in four places that a pilot never surfaces:</p>
+  <table class="kv">
+    <thead><tr><th scope="col">Cost</th><th scope="col">Why the pilot missed it</th><th scope="col">Typical shape at scale</th></tr></thead>
+    <tbody>
+      <tr><td>Orchestration multiplier</td><td>The pilot measured one call. Production runs a loop.</td><td>10-50 model calls per user-visible action.</td></tr>
+      <tr><td>Retries and tool loops</td><td>Failure paths were not in the demo.</td><td>An agent that cannot finish retries until it hits a cap - if there is one.</td></tr>
+      <tr><td>Evaluation</td><td>Quality was judged by hand at pilot size.</td><td>The eval harness routinely costs more than the feature it grades.</td></tr>
+      <tr><td>Integration and human review</td><td>Scoped as engineering time, not run-rate.</td><td>Recurring monthly, indefinitely, on anything customer-facing.</td></tr>
+    </tbody>
+  </table>
+  <p>The common thread: <strong>agents do not scale linearly and were forecast as if they did.</strong> A per-call price multiplied by expected requests is the right arithmetic for an API and the wrong arithmetic for an agent, because the agent decides how many calls a request costs.</p>
+
+  <h2>Overrun is not waste, and the distinction matters</h2>
+  <p>Finance teams tend to hear "73% over budget" and reach for a freeze. That is usually the wrong response, because two different failures are being merged:</p>
+  <ul>
+    <li><strong>Overrun</strong> means the forecast was wrong. The spend may have been entirely worth it.</li>
+    <li><strong>Waste</strong> means the spend produced nothing. Different problem, different fix.</li>
+  </ul>
+  <p>Uber's engineers presumably got real value for $500 to $2,000 a month; whether it was worth that is a separate question from whether anyone predicted it. Cancelling a programme because the estimate was bad destroys value to fix a spreadsheet. Fix the spreadsheet. See <a href="/research/proving-ai-roi">proving AI ROI</a> for the other half of the equation.</p>
+
+  <h2>Forecast in consumption, not seats</h2>
+  <p>The method that survives contact with agents:</p>
+  <ul>
+    <li><strong>Measure the multiplier, do not assume it.</strong> For each agent workflow, instrument how many model calls one completed user task generates - including retries. That ratio is the single most important number in the forecast and it is the one nobody has.</li>
+    <li><strong>Denominate the budget in tokens per completed task.</strong> Dollars per seat drifts with pricing and hides volume. Tokens per resolved ticket is stable enough to forecast against. See <a href="/research/falling-token-prices-rising-bills">why falling prices raise bills</a>.</li>
+    <li><strong>Treat the pilot as a measurement exercise, not a quote.</strong> A pilot's job is to produce the multiplier and the task-completion rate. If it produced a monthly cost figure and nothing else, it did not de-risk the rollout.</li>
+    <li><strong>Model the eval and review line explicitly.</strong> If it is not on the forecast it will be the biggest surprise on the invoice.</li>
+    <li><strong>Forecast a range with a stated driver.</strong> "$400k-$1.1M depending on whether agent adoption reaches 40% or 90% of engineers" is a forecast a board can act on. A single number is a hostage.</li>
+  </ul>
+  <p>More on the mechanics in <a href="/research/ai-spend-forecasting">AI spend forecasting</a> and <a href="/research/ai-spend-variance-analysis">variance analysis</a>.</p>
+
+  <h2>The one control worth having before the next rollout</h2>
+  <p>A hard consumption ceiling per agent, enforced at the gateway, with a named approval path to raise it.</p>
+  <p>Soft budgets are reporting, not control. An agent stuck in a retry loop can spend a quarter's allocation over a weekend, and no monthly variance review catches that in time to matter. The ceiling needs to live where the requests are, not in the finance system. See <a href="/research/ai-agent-spending-limits">agent spending limits</a> and <a href="/research/agent-spend-guardrails">spend guardrails</a>.</p>
+  <p>For coding agents specifically - the category that produced the most dramatic 2026 overruns - see <a href="/research/coding-agent-cost-control">coding agent cost control</a>.</p>
+
+  <h2>What to bring to the next AI budget meeting</h2>
+  <ol>
+    <li>The call multiplier per workflow, measured, not estimated.</li>
+    <li>A consumption budget in tokens, with the dollar figure derived from it rather than the other way round.</li>
+    <li>The eval, integration, and human review lines shown separately from inference.</li>
+    <li>A hard ceiling per agent and the name of whoever can raise it.</li>
+    <li>One unit metric per workflow - cost per resolved ticket, per merged PR - so the next overrun can be argued on value rather than on size. See <a href="/research/llm-cost-per-request">cost per request</a>.</li>
+  </ol>
+  <p>A 73% overrun rate across a category is what an immature forecasting practice looks like from the outside. The teams that fix it are not spending less; they are being right about how much.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/ai-spend-forecasting">AI spend forecasting</a></li>
+    <li><a href="/research/ai-spend-variance-analysis">AI spend variance analysis</a></li>
+    <li><a href="/research/ai-agent-spending-limits">AI agent spending limits</a></li>
+    <li><a href="/research/coding-agent-cost-control">Coding agent cost control</a></li>
+    <li><a href="/research/state-of-finops-2026-for-cfos">State of FinOps 2026 for CFOs</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>

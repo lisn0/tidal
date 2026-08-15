@@ -1,0 +1,75 @@
+---
+layout: "research.njk"
+permalink: "research/ai-value-management-cfo.html"
+titleCore: "Who owns AI value in the finance function"
+description: "AI value management is the top skillset FinOps teams are hiring for in 2026. What the discipline is, who owns it, and the instrumentation finance has to supply."
+slug: "ai-value-management-cfo"
+breadcrumbName: "Who owns AI value in the finance function"
+datePublished: "2026-08-15"
+dateModified: "2026-08-15"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is AI value management?","a":"The practice of tying AI spend to measurable business outcomes rather than only reducing it. Cost management asks why a bill is high; value management asks what the spend produced and whether you would buy it again at that price. It is the number-one skillset FinOps teams reported hiring for in 2026."}
+  - {"q":"Who should own AI value in a company?","a":"Finance owns the numerator and the discipline; the business unit owns the denominator. Neither works alone - a value metric invented entirely inside finance gets contested on definition, and one owned entirely by the business gets contested on cost. The join is the operating model."}
+  - {"q":"Why did this become urgent in 2026?","a":"Because fewer than a third of decision-makers can tie AI value to financial growth, CEOs began routing AI investment approval through CFOs, and Forrester expects a quarter of planned AI spend to slip to 2027. A programme that can report only cost cannot survive that review."}
+  - {"q":"What does finance actually have to supply?","a":"Attributed cost at feature level, a full-cost numerator including evaluation and human review, and a stated counterfactual. Those three are the finance contribution. Without them the business unit's outcome count has nothing credible to divide into."}
+  - {"q":"Where should we start?","a":"One workflow, not a portfolio. Cost per resolved ticket or per merged PR for a single workflow with a countable outcome beats an org-wide ROI figure nobody believes, and it forces the instrumentation everything else reuses."}
+  - {"q":"Does this replace cost optimization?","a":"No, it contains it. Cost per outcome cannot be computed without accurate cost attribution first, so the optimization work is a prerequisite. What changes is that a cost reduction stops being the end of the report."}
+section: "Governance"
+blurb: "- AI value management is the top skillset FinOps is hiring for. Finance owns the numerator, the business owns the denominator, and the join is the operating model."
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">Somebody has to own <em>AI value.</em></h1>
+  <p class="updated">15 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">AI value management - tying AI spend to measurable business outcomes rather than only reducing it - is the number-one skillset FinOps teams reported hiring for in 2026. The reason is not intellectual. Fewer than a third of decision-makers can tie AI value to financial growth, CEOs have started routing AI approval through their CFOs, and a quarter of planned AI spend is forecast to slip to 2027. The capability gap has become a budget problem.</p>
+
+  <h2>What changes when the question changes</h2>
+  <table class="kv">
+    <thead><tr><th scope="col"></th><th scope="col">Cost management</th><th scope="col">Value management</th></tr></thead>
+    <tbody>
+      <tr><td>Question</td><td>Why is this expensive?</td><td>What did it produce, and would we buy it again?</td></tr>
+      <tr><td>Unit</td><td>Cost per request, per team, per model</td><td>Cost per resolved ticket, per merged PR, per sourced deal</td></tr>
+      <tr><td>Data</td><td>Billing plus gateway telemetry - finance can get this alone</td><td>The same, joined to business events - finance cannot get this alone</td></tr>
+      <tr><td>Failure mode</td><td>Optimising a workload that should not exist</td><td>An ROI number nobody outside the team believes</td></tr>
+    </tbody>
+  </table>
+  <p>Value management contains cost management rather than replacing it. You cannot compute cost per outcome without correct attribution first, which makes the cost work a prerequisite rather than a competing priority.</p>
+
+  <h2>The ownership question, answered plainly</h2>
+  <p>The reason this needs an owner is that the metric spans two organisations and neither half is credible on its own.</p>
+  <ul>
+    <li><strong>Finance owns the numerator.</strong> Full cost, attributed to a feature, reconciled to the invoice. Nobody else will build this and nobody else will be trusted on it.</li>
+    <li><strong>The business unit owns the denominator.</strong> Tickets resolved, PRs merged, orders completed. Critically, it should be a count the business <em>already publishes</em> - if finance invents the outcome measure, the number gets argued on definition instead of substance.</li>
+    <li><strong>The join is the operating model.</strong> The same feature tag has to appear on the cost record and on the business event. That is one field on an existing event, and it is a negotiation rather than an engineering problem.</li>
+  </ul>
+  <p>In practice this is a standing capability, not an exercise run when a deferral list appears. See <a href="/research/how-to-build-an-llm-cfo-function">how to build an LLM CFO function</a>.</p>
+
+  <h2>What makes a value metric survive challenge</h2>
+  <p>It will be challenged, usually by the team whose workflow it describes. Three properties hold it up:</p>
+  <ol>
+    <li><strong>A full-cost numerator.</strong> Inference plus evaluation, retries, vector storage, and human review. A cost per outcome built on the token line alone is provably understated, and being caught understating it costs the whole argument rather than the delta.</li>
+    <li><strong>A borrowed denominator.</strong> The count the business already reports to its own leadership. Borrowed numbers are not disputed.</li>
+    <li><strong>A stated counterfactual.</strong> "$0.31 per resolved ticket against $4.10 handled by a person" is an argument. "$0.31" alone is trivia. See <a href="/research/proving-ai-roi">proving AI ROI</a>.</li>
+  </ol>
+  <p>And keep the two failure modes separate when you report. A workflow can be <em>over budget</em> because the forecast was wrong while still being <em>worth it</em>. Merging them turns a forecasting problem into a cancellation decision. See <a href="/research/ai-budget-overruns-2026">73% of agentic AI projects went over budget</a>.</p>
+
+  <h2>Where the standards are heading</h2>
+  <p>The Tokenomics Foundation's named workstreams include value metrics for AI ROI and AI Value Frameworks, which is the denominator problem stated as a standards effort. <a href="/research/focus-1-5-cfo">FOCUS 1.5</a>, due December 2026, makes the numerator comparable across providers.</p>
+  <p>Neither will supply your outcome data. That join is local to your business and always will be. Teams that build it now plug into the frameworks when they ship; teams waiting for a framework to supply it will find it does not. See <a href="/research/tokenomics-foundation-cfo">a standards body for token costs</a>.</p>
+
+  <h2>Start here</h2>
+  <p>Pick one workflow with a countable outcome. Get the cost attributed to it at full cost, borrow the outcome count from whoever already reports it, divide, and state the counterfactual. One credible number, weekly. That is the whole first deliverable, and it is what the rest of the portfolio gets measured against.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/proving-ai-roi">Proving AI ROI</a></li>
+    <li><a href="/research/llm-roi-calculation">LLM ROI calculation</a></li>
+    <li><a href="/research/how-to-build-an-llm-cfo-function">How to build an LLM CFO function</a></li>
+    <li><a href="/research/ai-spend-deferral-2027">A quarter of planned AI spend is slipping to 2027</a></li>
+    <li><a href="/research/llm-cost-per-request">LLM cost per request</a></li>
+  </ul>
+
+  <a class="back" href="/">← Back to llmcfo.com</a>
