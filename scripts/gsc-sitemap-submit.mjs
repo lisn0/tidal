@@ -21,8 +21,14 @@
  */
 
 import { createSign } from "node:crypto";
+import { readFileSync } from "node:fs";
 
-const SA_KEY = (process.env.GSC_SA_KEY || "").trim();
+// GSC_SA_KEY_FILE is the local convenience path (see ~/projects/ai/llm-cfo/.env);
+// CI sets GSC_SA_KEY inline.
+const SA_KEY = (
+  process.env.GSC_SA_KEY ||
+  (process.env.GSC_SA_KEY_FILE ? readFileSync(process.env.GSC_SA_KEY_FILE, "utf8") : "")
+).trim();
 const SITE = (process.env.GSC_SITE || "").trim();
 const SITEMAPS = (process.env.GSC_SITEMAPS || "")
   .split(",")
