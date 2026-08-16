@@ -1,0 +1,68 @@
+---
+layout: "research.njk"
+permalink: "research/deepseek-harness-failing-safely.html"
+titleCore: "What DeepSeek Harness gets right about failing safe"
+description: "Seven defensive engineering rules from the DeepSeek Harness docs, read as cost controls: swallowed timeouts, orphaned processes, and leaked credentials."
+slug: "deepseek-harness-failing-safely"
+breadcrumbName: "What DeepSeek Harness gets right about failing safe"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Why can a process time out and still report success?","a":"Because a process that traps the termination signal can shut down cleanly and exit zero. If the timeout is only reported inside a failure branch, the outcome disappears. Timed-out, signal, and exit code are independent facts that need independent fields."}
+  - {"q":"What does it mean for dispose to reach quiescence?","a":"Requesting termination is not achieving it. Teardown must await children's actual termination before returning, and close listener registries before sending kill signals so late completions arrive silently rather than firing into a half-dismantled system."}
+  - {"q":"Why should spawned subprocess environments be scrubbed?","a":"Because harness credentials in the ambient environment can be read by an untrusted process and printed into its output, which the model then reads into its context and the system records in its session log. The documented rule is to strip variables matching key, secret, token, and password patterns before spawning."}
+  - {"q":"How do engineering reliability patterns affect AI cost?","a":"Directly. Swallowed timeouts produce retries, orphaned subprocesses keep metered compute running after their parent forgets them, and a failing telemetry listener can starve the accounting listener behind it so usage never gets recorded."}
+section: "Accounting and tooling"
+blurb: "- the reliability failures behind agent bills, and the seven rules that prevent them."
+---
+  <div class="eye">RESEARCH · ACCOUNTING</div>
+  <h1 class="page-title">Most agent waste is a <em>reliability</em> bug.</h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">When an agent bill comes in higher than expected, the investigation usually goes looking for a pricing decision. More often the cause is mechanical: something failed and reported success, so it ran again, or something was told to stop and did not. <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> publishes a short document of defensive patterns, each paired with the bug that motivated it. Read as a cost document, four of the seven are worth acting on immediately.</p>
+
+  <h2>Rule 1: report independent outcomes independently</h2>
+  <p>Never nest one flag's report inside another flag's condition. A process can time out <em>and</em> exit zero, because it caught the termination signal and shut down cleanly. If the timeout is only reported when the exit code is non-zero, that outcome vanishes.</p>
+  <p>The cost consequence is retries. A caller that sees success, receives nothing useful, and tries again is paying twice for one failure it was never told about. Swallowed timeouts are the most common source of invisible duplicate work in agent systems.</p>
+
+  <h2>Rule 4: shutting down means actually stopping</h2>
+  <p>Requesting termination is not achieving it. Teardown here waits for children to genuinely terminate before returning, and closes its listener registries <em>before</em> sending kill signals, so late completions land silently instead of firing callbacks into a half-dismantled system.</p>
+  <p>This is the rule with the clearest financial edge. Teardown that returns early leaves orphaned subprocesses and unclosed sandboxes running, and metered compute does not stop because the thing that started it forgot about it. That spend appears on the invoice attributed to nothing, which is also why it survives so long.</p>
+
+  <div class="callout"><strong>The test:</strong> after an agent session ends, does anything it started still exist? If nobody on the team can answer that from instrumentation, the answer is almost certainly yes.</div>
+
+  <h2>Rule 3: idle is not the same as finished</h2>
+  <p>Status is a property of the whole agent, not of your particular request. Awaiting "the agent is idle" as a completion signal for one message is unreliable, because several queued operations share execution intervals — idle can arrive before yours ran, or after somebody else's did.</p>
+  <p>The prescribed alternative is that an automation caller defines its own interval explicitly, from the moment its work was accepted to the next whole-agent idle, and attributes output to that interval rather than to individual messages. And it must handle the case where there is nothing to wait for, or it hangs forever — with the whole session and its children resident and billing the entire time.</p>
+
+  <h2>Rule 6: never hand untrusted output the ambient environment</h2>
+  <p>The strongest rule in the set. Before spawning a process whose output the model will read, strip environment variables matching key, secret, token, and password patterns. Use private directories with owner-only permissions and randomly named files opened exclusively, rather than predictable paths.</p>
+  <p>The failure this prevents is worth spelling out, because it is not obvious. If a subprocess can read your credentials and print them, that output goes into the model's context, and from there into the permanent session record. A leak of that shape is not a moment; it is written down.</p>
+
+  <h2>The remaining three, briefly</h2>
+  <ul>
+    <li><strong>Normalise outcomes at the boundary.</strong> Where a failure has several valid representations, convert them to one before exposing it, or callers cannot tell whose error they caught.</li>
+    <li><strong>Contain callback exceptions.</strong> One failing subscriber must not starve the listeners queued behind it. In practice the starved one is frequently the accounting listener, which is how usage records go missing with no error anywhere.</li>
+    <li><strong>Unlink link-shaped paths.</strong> Check whether a path is a symbolic link before deleting, and delete the link rather than following it. Cleanup that removes more than it created has no upper bound on the damage.</li>
+  </ul>
+
+  <h2>What to ask for</h2>
+  <ol>
+    <li><strong>Evidence that teardown completes</strong>, not that it was requested. A count of surviving processes after session end.</li>
+    <li><strong>Timeout, signal, and exit code reported as separate fields</strong> everywhere a subprocess is run.</li>
+    <li><strong>An environment allow-list</strong> for spawned processes, rather than inheriting the harness environment.</li>
+    <li><strong>Confirmation that the accounting listener cannot be starved</strong> by an unrelated failing subscriber.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement belongs inside the agent loop</a></li>
+    <li><a href="/research/deepseek-harness-delegation-cost">DeepSeek Harness and the real cost of delegation</a></li>
+    <li><a href="/research/evaluating-open-agent-harness">Evaluating an open-source agent harness</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

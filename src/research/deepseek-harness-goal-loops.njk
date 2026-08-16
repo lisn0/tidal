@@ -1,0 +1,66 @@
+---
+layout: "research.njk"
+permalink: "research/deepseek-harness-goal-loops.html"
+titleCore: "When should an agent stop? DeepSeek Harness goals"
+description: "A standing objective plus automatic continuation is an open budget. How DeepSeek Harness separates turns, steps, and rounds, and where the stop rule belongs."
+slug: "deepseek-harness-goal-loops"
+breadcrumbName: "When should an agent stop? DeepSeek Harness goals"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is a goal in an agent harness?","a":"A goal is a durable completion objective that persists across turns, with an explicit phase of active, paused, blocked, or complete. Unlike a message, it gives the agent a standing objective rather than a single instruction."}
+  - {"q":"What is the difference between a turn, a step, and a round?","a":"A step is one model request plus the tool executions it produces, and it is the billing unit. A turn is one drain of input, ending when the model stops or policy intervenes. A round is an outer policy iteration above turns, such as a goal continuation or a fresh-agent attempt."}
+  - {"q":"What is the Ralph loop?","a":"A workflow that iterates toward a fixed objective by starting fresh agent sessions rather than continuing one long conversation. Each round begins with no prior conversation, and a bounded structured handoff carries status, summary, evidence, and blockers forward."}
+  - {"q":"Why do goals need human authorisation?","a":"Because a standing objective combined with automatic continuation authorises spend with no defined upper bound. Requiring direct human authorisation to create or edit a goal makes a person the accountable owner of that budget."}
+section: "Governance"
+blurb: "- the stopping rule is the budget, and most agent systems have never written one."
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">The stopping rule <em>is</em> the budget.</h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">An agent that keeps working until the job is done sounds like the point of the technology. It is also an unpriced commitment, because "until the job is done" has no upper bound and the meter runs the whole time. <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> gives this behaviour precise vocabulary, and the vocabulary is where the control lives.</p>
+
+  <h2>Three units, not one</h2>
+  <table class="kv">
+    <tr><th>Unit</th><th>What it is</th><th>Why finance cares</th></tr>
+    <tr><td>Step</td><td>One model call plus the tools it triggers</td><td>The billing atom</td></tr>
+    <tr><td>Turn</td><td>One drain of input, ending when the model stops or policy intervenes</td><td>The user-facing unit</td></tr>
+    <tr><td>Round</td><td>An outer policy iteration - a continuation or a fresh attempt</td><td>The multiplier above turns</td></tr>
+  </table>
+  <p>Rounds are the layer that business cases omit. A forecast that counts user requests, applied to a system that runs rounds, is measuring a different quantity from the one that appears on the invoice.</p>
+
+  <h2>A goal outlives the conversation</h2>
+  <p>A goal is a durable completion objective attached to a session, carrying an explicit phase — active, paused, blocked, or complete. It persists across turns. Each continuation cycle admitted against it is a round, and whether another round can be admitted is governed by a single armed-or-disarmed permission bit.</p>
+  <p>That bit is the throttle. Everything else about open-ended agent work is downstream of who controls it and what disarms it.</p>
+
+  <div class="callout"><strong>Why goal creation requires a human:</strong> the harness documents goal creation and edits as needing direct human authorisation. Read that as an accounting control, not a safety one. Someone has to be the named owner of an open-ended spend commitment.</div>
+
+  <h2>Restarting is cheaper per round, and that cuts both ways</h2>
+  <p>The Ralph loop iterates toward a fixed objective by starting fresh sessions instead of extending one long conversation. Each round starts with no prior conversation. Continuity comes through a bounded structured handoff carrying status, summary, evidence, and blockers.</p>
+  <p>The economics are genuinely favourable per round. A conversation that grows across a long task pays for its whole history on every call; restarting clean holds per-round cost flat. The bounded handoff is what makes that true, because it is the only channel between rounds and it caps context growth by construction.</p>
+  <p>The catch is the obvious one. Cheap rounds are easy to run many of, and nothing about a clean restart guarantees the objective gets closer. Cost per round going down while rounds per objective goes up is not a saving.</p>
+
+  <h2>Convergence is measurable</h2>
+  <p>The handoff carries a blockers list. If the same blocker appears in three consecutive rounds, the loop is not converging and every further round is waste. That is a stopping rule you can implement in an afternoon, and it is more valuable than most token-level optimisation, because it addresses the failure mode with no ceiling rather than trimming a percentage off one with a known size.</p>
+
+  <h2>Four controls for open-ended agent work</h2>
+  <ol>
+    <li><strong>A maximum round count per objective</strong>, enforced before the next round is admitted rather than reviewed afterwards.</li>
+    <li><strong>A cumulative token budget across all rounds of one goal.</strong> Per-round budgets do not bound a loop; they only bound each pass through it.</li>
+    <li><strong>Convergence detection.</strong> Repeated blockers stop the loop and escalate to a human.</li>
+    <li><strong>Named authorisation on goal creation</strong>, retained as the record of who approved the commitment.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement belongs inside the agent loop</a></li>
+    <li><a href="/research/deepseek-harness-delegation-cost">DeepSeek Harness and the real cost of delegation</a></li>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+    <li><a href="/research/what-is-ai-governance">What is AI governance</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

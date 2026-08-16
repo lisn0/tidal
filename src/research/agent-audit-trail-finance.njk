@@ -1,0 +1,68 @@
+---
+layout: "research.njk"
+permalink: "research/agent-audit-trail-finance.html"
+titleCore: "An agent audit trail finance can actually read"
+description: "DeepSeek's open harness logs every agent turn as an append-only event record with token usage attached. What a complete-by-design audit trail changes."
+slug: "agent-audit-trail-finance"
+breadcrumbName: "An agent audit trail finance can actually read"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Why is agent cost attribution usually incomplete?","a":"Because it is retrofitted. Teams wrap the provider SDK and emit metrics from that wrapper, then later add a second call path, a subagent, or a retry loop that bypasses it. The record is complete only as long as instrumentation discipline holds."}
+  - {"q":"How does DeepSeek Harness record agent activity?","a":"Every session is an append-only log of typed events, described as the single source of truth for the agent's whole interaction history. Turn boundaries, step boundaries, messages, tool calls, and tool results are all events, and message history is derived from the log rather than stored separately."}
+  - {"q":"Where does token usage appear in that log?","a":"Usage travels with model output. Per-step usage records ride alongside the assistant output that incurred them, with the assistant message usage field as a fallback, so accounting cannot become detached from the step it describes."}
+  - {"q":"What is the unit of AI cost inside an agent?","a":"The step, meaning one model call plus its tool calls. A turn contains zero or more steps. Steps per turn is the orchestration multiplier, and it is the number that most often explains why an agent bill exceeds the naive per-request estimate."}
+section: "Accounting and tooling"
+blurb: "- what an append-only agent log gives finance that a wrapped SDK never will."
+---
+  <div class="eye">RESEARCH · ACCOUNTING</div>
+  <h1 class="page-title">The log is the <em>ledger.</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Ask a platform team how they track agent cost and you usually get the same answer: a wrapper around the provider SDK that emits a metric. It works until someone adds a second call path, a subagent, or a retry loop that does not go through the wrapper. Then the numbers quietly stop adding up and nobody notices for a quarter. DeepSeek's open-source harness takes the opposite approach, and it is worth understanding why.</p>
+
+  <h2>The session is the primary artefact</h2>
+  <p>In <a href="https://github.com/deepseek-ai/deepseek-harness">deepseek-harness</a>, a session is an append-only log of typed events, and the documentation calls it the single source of truth for an agent's whole interaction history. Message history is not stored separately — it is derived from the log by projection. There is one record, and reading it cannot disagree with what the model actually saw.</p>
+  <p>The governing principle is stated as "model-visible means logged": anything the model could see must appear in the log, because the log has to be able to reconstitute the run. That constraint exists for replay and debugging, but it has a useful side effect. A log complete enough to replay a session is complete enough to cost it.</p>
+
+  <h2>The events that matter to finance</h2>
+  <table class="kv">
+    <tr><th>Event</th><th>What it tells you</th></tr>
+    <tr><td>Turn start / end</td><td>The user-facing unit of work, and why it ended</td></tr>
+    <tr><td>Step start / end</td><td>One model call plus its tools - the billing unit</td></tr>
+    <tr><td>Assistant output</td><td>The response, carrying the step's token usage</td></tr>
+    <tr><td>Tool call / result</td><td>What the agent invoked and what came back</td></tr>
+    <tr><td>Request context</td><td>Provider, model, and context window for the step</td></tr>
+    <tr><td>Request header</td><td>Config, system prompt, and tool set as sent</td></tr>
+  </table>
+  <p>Those last two are the ones homegrown telemetry almost always omits, and they are the ones that let you price a step from the record alone rather than from an assumption about which model was serving.</p>
+
+  <div class="callout"><strong>What changes:</strong> when usage is attached to output by construction, you cannot end up with token counts you can no longer attribute. That single property removes the most common defect in retrofitted agent cost tracking.</div>
+
+  <h2>Steps per turn is the number to watch</h2>
+  <p>A turn contains zero or more steps, and a step is one model request plus the tool calls it produces. The naive cost model in most business cases assumes something close to one model call per user request. Real agents run several, sometimes many, and the ratio is what separates a forecast from the invoice.</p>
+  <p>Because turn and step boundaries are explicit events, that ratio is directly measurable rather than inferred. So is the distribution of turn-end reasons: turns that ended for reasons other than completion are work you paid for that produced nothing, and they are usually the cheapest thing to fix.</p>
+
+  <h2>Four questions this record answers</h2>
+  <ol>
+    <li><strong>What did a completed task actually cost?</strong> Sum step usage within the turn, priced by the model each step actually used.</li>
+    <li><strong>How much of the bill is orchestration?</strong> Steps per turn, tracked over time. Rising means the agent is working harder for the same output.</li>
+    <li><strong>How much is waste?</strong> The share of turns ending without completion, and the tool calls inside them.</li>
+    <li><strong>Where is the tool fan-out?</strong> Tool calls per step, including internally dispatched sub-calls, which are recorded separately rather than hidden inside a parent call.</li>
+  </ol>
+
+  <h2>The takeaway for a finance function</h2>
+  <p>You do not need to adopt this harness to use the lesson. The requirement to put to your platform team is architectural, not vendor-specific: agent cost data should be a byproduct of how the system records its own work, not a parallel instrumentation effort that depends on nobody forgetting. Ask whether your current setup could reconstruct last Tuesday's expensive session from its own logs. If the answer is no, the cost numbers you are being shown are an estimate wearing a dashboard.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/opentelemetry-genai-cost-tracking">OpenTelemetry GenAI cost tracking</a></li>
+    <li><a href="/research/reasoning-token-cost-allocation">Reasoning token cost allocation</a></li>
+    <li><a href="/research/agent-harness-lock-in">Your agent harness decides how much lock-in you buy</a></li>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement that sits inside the agent loop</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

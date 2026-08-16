@@ -1,0 +1,74 @@
+---
+layout: "research.njk"
+permalink: "research/agent-budget-enforcement.html"
+titleCore: "Budget enforcement belongs inside the agent loop"
+description: "An agent that learns its budget from the invoice has no budget. What DeepSeek's open harness shows about enforcing spend limits at the decision point."
+slug: "agent-budget-enforcement"
+breadcrumbName: "Budget enforcement belongs inside the agent loop"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Why are monthly AI budget alerts insufficient for agents?","a":"Because an agent can spend a month's allowance in an afternoon. A non-converging loop issues model calls continuously, so a control that reports after the fact reports a loss rather than preventing one. Enforcement has to sit at the point where the next model call is decided."}
+  - {"q":"Where can spend limits be enforced in an agent harness?","a":"At two points. Before a model request is issued, where step caps, token ceilings, and model downshifting apply. And before a tool executes, where permission guards and execution policy apply."}
+  - {"q":"What does fail-closed mean for agent permissions?","a":"It means that if the approval channel is missing or cannot answer, the answer is denial rather than permission. DeepSeek's harness works this way: guards can deny or abstain but never grant, and an unanswerable approval prompt denies."}
+  - {"q":"What controls actually reduce runaway agent spend?","a":"A hard step ceiling per turn, a cumulative token budget checked before each step, model downshifting past a soft threshold, tool allow-lists by cost class, and sandbox policy on subprocess and network access."}
+section: "Governance"
+blurb: "- why spend controls have to be enforcement points, not alerts."
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">An alert is not a <em>control.</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Most AI budget governance is a threshold and an email. That works for infrastructure whose cost accrues on a human timescale. It does not work for agents, which can consume a month's allowance in an afternoon by looping on a task that will never converge. The control has to sit where the next model call is decided. DeepSeek's open-source harness makes that point unusually visible, because it names the places.</p>
+
+  <h2>The two decision points</h2>
+  <p>Inside <a href="https://github.com/deepseek-ai/deepseek-harness">deepseek-harness</a>, work is organised into turns and steps. A step is one model request plus the tool calls it produces; a turn contains zero or more steps. Two checkpoints bracket the expensive parts:</p>
+  <table class="kv">
+    <tr><th>Checkpoint</th><th>Runs</th><th>Governs</th></tr>
+    <tr><td>Pre-step</td><td>Before the model request goes out</td><td>Whether to spend on another model call</td></tr>
+    <tr><td>Pre-execute</td><td>Before any tool body runs</td><td>Whether an action is permitted at all</td></tr>
+  </table>
+  <p>Both are ordered chains where each participant can inspect, modify, or refuse. The pre-step decision is documented as authoritative: what the chain returns is what happens. That is the difference between an observability hook and a control.</p>
+
+  <h2>Controls that belong at pre-step</h2>
+  <ul>
+    <li><strong>A hard step ceiling per turn.</strong> The single highest-value control. It converts an unbounded failure mode into a bounded one.</li>
+    <li><strong>A cumulative token budget.</strong> Sum what the session has spent so far; refuse the next step past the limit.</li>
+    <li><strong>Model downshifting.</strong> Past a soft threshold, rewrite the request to a cheaper route rather than refusing. Degraded service beats no service and beats an open tab.</li>
+    <li><strong>Context-size limits.</strong> The prompt is already assembled at this point, so its size is measurable before you pay for it.</li>
+  </ul>
+
+  <h2>Controls that belong at pre-execute</h2>
+  <p>Tool execution runs a three-phase pipeline: a pre-execute chain, then permission guards, then the tool body itself under sandbox and filesystem gatekeeping. A post-execute chain can accept, block, replace, or add context to the result.</p>
+  <p>Two design choices here are worth copying regardless of what harness you run. First, the permission guards are deliberately one-directional: they can deny or abstain, never grant. Second, if the approval prompt is absent or cannot be answered, the result is denial. Both mean the system fails closed. Most homegrown agent policy layers fail open when the approval channel is missing, which is precisely the moment the control was needed.</p>
+  <p>Filesystem writes are separately gated as explicit write or edit intents, so mutation is never an incidental side effect of a tool running.</p>
+
+  <div class="callout"><strong>The governance question worth asking:</strong> if the approval service is down, does the agent stop or does it proceed? There is only one acceptable answer, and a surprising number of production setups give the other one.</div>
+
+  <h2>Every decision is recorded</h2>
+  <p>The pipeline writes three events into the session log: the tool call before execution, a dispatch record for internal sub-calls, and the final authoritative result. Sub-calls being logged separately matters for audit — a single model-visible tool call that fans out internally cannot hide the fan-out. Denials are part of the record too, which turns policy from something you assert into something you can evidence.</p>
+
+  <h2>A practical control set</h2>
+  <ol>
+    <li>Step ceiling per turn, tuned from observed distributions rather than guessed.</li>
+    <li>Cumulative token budget per session, with a soft threshold that downshifts and a hard one that stops.</li>
+    <li>Tool allow-lists by cost class, so expensive tools are unavailable in cheap contexts.</li>
+    <li>Sandbox policy on subprocess and network access, so egress is metered.</li>
+    <li>Explicit write gating, so unreviewed mutations require an intent.</li>
+  </ol>
+
+  <h2>The caveat</h2>
+  <p>DeepSeek Harness is a developer preview whose documentation warns of compatibility-breaking changes. Treat the specific names as illustrative and the structure as the requirement: your agents should have an enforcement point before the model call and another before the tool runs, and both should fail closed.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+    <li><a href="/research/agent-harness-lock-in">Your agent harness decides how much lock-in you buy</a></li>
+    <li><a href="/research/what-is-ai-governance">What is AI governance</a></li>
+    <li><a href="/research/model-routing">Model routing as a cost lever</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

@@ -1,0 +1,67 @@
+---
+layout: "research.njk"
+permalink: "research/deepseek-harness-tool-permissions.html"
+titleCore: "Every agent tool you ship is billed on every call"
+description: "Tool definitions ride in every model request. How DeepSeek Harness scopes tools per agent, and why a narrower tool surface is a direct cost control."
+slug: "deepseek-harness-tool-permissions"
+breadcrumbName: "Every agent tool you ship is billed on every call"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Why do agent tool definitions cost money?","a":"Because they are part of the request. The tool set is sent to the model on every request in the session, so a large catalogue is a fixed token charge repeated on every step rather than a one-time setup cost."}
+  - {"q":"How does DeepSeek Harness scope tools per agent?","a":"Through scopes. A restriction filters the global tool set for one agent by intersection, and scope-local registrations merge in afterwards. Scoped registrations are bound to that agent's lifetime, so they cannot leak into the parent."}
+  - {"q":"What is shadowing?","a":"Shadowing lets a scoped item replace a same-named global counterpart within that scope alone. One agent can be given a read-only or cheaper implementation behind a familiar tool name while every other agent continues to see the global version."}
+  - {"q":"Does a smaller tool set only save tokens?","a":"No. A wide catalogue also widens the model's choice space, which raises the rate of plausible-but-wrong tool selections. Since a step is the billing unit, each wrong selection costs a full step. Trimming the surface reduces the token floor and the error rate together."}
+section: "Optimization levers"
+blurb: "- the tool catalogue is a recurring charge, not a one-off setup cost."
+---
+  <div class="eye">RESEARCH · OPTIMIZATION</div>
+  <h1 class="page-title">The tool catalogue is a <em>subscription.</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Tool catalogues grow the way permissions grow. Someone adds a browser tool, someone adds a database tool, someone adds five terminal operations, and a year later every agent in the estate is offered forty tools whether it needs them or not. This is usually raised as a safety concern. It is also a recurring charge, and one of the few AI cost levers that requires no negotiation with a vendor.</p>
+
+  <h2>Why the catalogue is billed repeatedly</h2>
+  <p>Tool definitions are not configuration that lives on a server somewhere. They are part of the request. <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> makes this visible by recording, as an event, the exact configuration, system prompt, and tool set that went out with each request. The tool set is re-transmitted on every model call in the session.</p>
+  <p>So the arithmetic is: tool catalogue size, times steps per session, times sessions. For a busy agent estate that is not a rounding error, and unlike most cost levers it can be pulled without changing model, vendor, or behaviour.</p>
+
+  <h2>The second effect is larger than the first</h2>
+  <p>A wide catalogue widens the model's choice space. More options means more plausible-but-wrong selections, and since a step is one model call plus its tools, every wrong selection costs a whole step — not a fraction of one.</p>
+  <p>This is why trimming the tool surface tends to outperform the token arithmetic that motivated it. You reduce the fixed charge and the error rate at the same time.</p>
+
+  <h2>How per-agent scoping works</h2>
+  <table class="kv">
+    <tr><th>Mechanism</th><th>What it does</th></tr>
+    <tr><td>Restriction</td><td>Filters the global tool set for one agent, by intersection</td></tr>
+    <tr><td>Scoped registration</td><td>Adds agent-specific tools after filtering, bound to that agent's lifetime</td></tr>
+    <tr><td>Shadowing</td><td>Replaces a same-named global tool within one scope only</td></tr>
+    <tr><td>Setup window</td><td>The creation slot where all of this is composed, before the first prompt</td></tr>
+  </table>
+  <p>The ordering is what makes least privilege practical. You start from an intersection with the global set — never more than global — and then add exactly what this agent needs. Shadowing covers the substitution case without forking anything: a read-only variant, a metered variant, or a cheaper backend can sit behind a familiar name for one agent while everyone else sees the original.</p>
+
+  <div class="callout"><strong>The timing detail that matters:</strong> composition happens in the setup window, before the agent is published or assembles its first prompt. A privilege decision taken after the first prompt has already gone out is not a control. It is cleanup.</div>
+
+  <h2>Children should not inherit the parent's tools</h2>
+  <p>The harness treats lineage — who spawned whom, and how deep — as data that does not by itself affect what an agent can see. Access is composed deliberately for each child rather than inherited.</p>
+  <p>That distinction is where a lot of avoidable spend lives. Inherited-by-default privilege is how a cheap summarisation subagent ends up carrying the same forty-tool catalogue as the orchestrator that created it, paying the full fixed charge on every one of its own steps to do a job that needed two tools.</p>
+
+  <h2>Four things to do this quarter</h2>
+  <ol>
+    <li><strong>Count the tokens in your tool definitions</strong> and multiply by steps per session. That number is your recurring tool charge, and most teams have never seen it.</li>
+    <li><strong>Define a minimum tool set per agent role</strong> and enforce it as a restriction rather than a convention.</li>
+    <li><strong>Substitute rather than remove</strong> where a capability is occasionally needed - a cheaper or read-only variant behind the same name.</li>
+    <li><strong>Audit what subagents inherit.</strong> If children get the parent's catalogue by default, that is the largest single item on this list.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement belongs inside the agent loop</a></li>
+    <li><a href="/research/deepseek-harness-delegation-cost">DeepSeek Harness and the real cost of delegation</a></li>
+    <li><a href="/research/prompt-caching-explained">Prompt caching explained</a></li>
+    <li><a href="/research/reasoning-token-cost-allocation">Reasoning token cost allocation</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

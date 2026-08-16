@@ -1,0 +1,68 @@
+---
+layout: "research.njk"
+permalink: "research/agent-harness-lock-in.html"
+titleCore: "Your agent harness decides how much lock-in you buy"
+description: "DeepSeek's open-source harness makes model, sandbox, and delegation swappable. Why that structural choice sets the ceiling on your future AI savings."
+slug: "agent-harness-lock-in"
+breadcrumbName: "Your agent harness decides how much lock-in you buy"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is DeepSeek Harness?","a":"DeepSeek Harness (dsh) is an MIT-licensed open-source agent harness from DeepSeek AI, built on the Cordis plugin runtime. Model adapters, tool registries, session logs, and the agent loop are all replaceable plugins rather than a fixed core."}
+  - {"q":"Why does agent architecture affect AI cost?","a":"The main cost levers in an agent system are substitutions: routing to a cheaper model, moving execution to a cheaper sandbox, or replacing a subagent transport. If those are hardcoded, each becomes an engineering project. If they are pluggable interfaces, each is a configuration change."}
+  - {"q":"What is a capability seam?","a":"A capability seam is a service interface with more than one implementation. The owner package declares the interface, provider packages implement it, and consumers call it without knowing which provider is active. In DeepSeek Harness the model, filesystem, sandbox, and subagent services are all seams."}
+  - {"q":"Should a CFO care which agent harness engineering picks?","a":"Yes, at the level of one question: can we change model providers without a rewrite. The answer determines whether next year's price cuts and cheaper model tiers are savings you can capture or savings you can only read about."}
+section: "Governance"
+blurb: "- the architecture question that decides whether future AI price cuts reach your P&L."
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">Lock-in is an <em>architecture</em> decision.</h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Finance leaders are rarely asked to have an opinion about an agent framework, and mostly they should not have one. But there is a single question inside that decision with a direct line to the P&amp;L: when a cheaper model appears, is switching to it a config change or a rewrite? DeepSeek's newly published open-source harness is a useful case study, because it answers that question deliberately.</p>
+
+  <h2>What was published</h2>
+  <p>DeepSeek AI released <a href="https://github.com/deepseek-ai/deepseek-harness">deepseek-harness</a> (<code>dsh</code>), an MIT-licensed harness for running coding and automation agents. Its design premise is that everything is a plugin. It runs on Cordis, a plugin runtime in which plugins contribute services, typed events, and reversible effects to a shared context. There is no privileged core: model adapters, tool registries, session logs, and even the agent loop are plugins.</p>
+
+  <h2>Why that is unusual</h2>
+  <p>Most extensible systems offer a fixed core plus hooks. You can observe and decorate; you cannot replace. Replacing means forking, and a fork is a permanent maintenance liability that quietly shows up in engineering cost rather than AI cost. A plugin runtime inverts the default: the pieces you would want to replace are the units of composition.</p>
+
+  <h2>The four substitutions that map to money</h2>
+  <table class="kv">
+    <tr><th>Seam</th><th>What it swaps</th><th>Cost lever</th></tr>
+    <tr><td><code>ctx.llm</code></td><td>Model provider</td><td>Route cheap work to cheap models</td></tr>
+    <tr><td><code>ctx.fs</code></td><td>Where files live</td><td>Local, sandboxed, or remote execution</td></tr>
+    <tr><td><code>ctx.sandbox</code></td><td>Execution policy</td><td>Contain and meter what runs</td></tr>
+    <tr><td><code>ctx.subagents</code></td><td>Delegation transport</td><td>Control the orchestration multiplier</td></tr>
+  </table>
+  <p>Each of these is what the harness calls a capability seam: an interface with an owner package, multiple implementations, and consumers that never learn which implementation is live. The model seam already ships several backends, including a replay implementation that re-runs a recorded session without paying for inference again.</p>
+
+  <div class="callout"><strong>The test:</strong> ask your team what it would take to move 40% of agent traffic to a cheaper model tier. If the answer is measured in sprints rather than a config review, the harness is the reason, and it will be the reason again next quarter.</div>
+
+  <h2>Why this compounds</h2>
+  <p>Model pricing has moved downward repeatedly, and cheaper tiers keep appearing beneath the frontier. Every one of those is a savings opportunity with an expiry attached to how fast you can adopt it. Teams whose harness treats model choice as a configuration row capture those cuts almost immediately. Teams whose harness bakes model choice into application code capture them a quarter or two later, if at all, because the work competes with the feature roadmap and usually loses.</p>
+  <p>The gap is not visible on any single invoice. It shows up as a persistent spread between what your agents cost and what they could cost, and it widens every time the market moves.</p>
+
+  <h2>What to ask for</h2>
+  <ol>
+    <li><strong>A named model routing layer.</strong> Not scattered provider calls. One place where routing policy lives.</li>
+    <li><strong>A recorded switching cost.</strong> How long, in engineering days, to change the default model. Track it as a number.</li>
+    <li><strong>Execution location as a choice.</strong> Whether tools run on a developer laptop or a metered remote sandbox should be policy, not an accident of how the code was written.</li>
+    <li><strong>No forks.</strong> If your team has forked the harness to change behaviour, that is a standing cost you are paying to keep an option you already lost.</li>
+  </ol>
+
+  <h2>The honest caveat</h2>
+  <p>DeepSeek Harness is a developer preview and its own documentation warns that there will be compatibility-breaking changes. This is not a recommendation to standardise on it this quarter. It is a recommendation to use it as the benchmark when evaluating what you already run.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/model-concentration-risk">Model concentration risk</a></li>
+    <li><a href="/research/model-routing">Model routing as a cost lever</a></li>
+    <li><a href="/research/open-weight-model-tco">Open-weight model TCO</a></li>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

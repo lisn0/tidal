@@ -1,0 +1,66 @@
+---
+layout: "research.njk"
+permalink: "research/evaluating-open-agent-harness.html"
+titleCore: "Evaluating an open-source agent harness before you commit"
+description: "A short evaluation checklist for open agent harnesses, worked against DeepSeek's dsh: what to run, what to check, and what a developer preview means."
+slug: "evaluating-open-agent-harness"
+breadcrumbName: "Evaluating an open-source agent harness before you commit"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"How do you try DeepSeek Harness quickly?","a":"Run npx @deepseek-ai/dsh web, which starts a local web UI on port 3080. Enter a DeepSeek API key under Settings then Models, and activate a project directory with Choose workspace. The session composer stays unavailable until a workspace is active."}
+  - {"q":"What is a profile in an agent harness?","a":"A profile is a named composition of plugins: an ordered list of bundles plus user patches. DeepSeek Harness ships three templates, covering the base runtime, the browser UI, and a headless one-shot runner."}
+  - {"q":"What does developer preview mean for an evaluation?","a":"It means the interfaces will change. Evaluate and prototype, pin the version you build against, and do not schedule production migration work off a preview API. Treat the evaluation as a benchmark for what you already run."}
+  - {"q":"What should an agent harness evaluation actually test?","a":"Whether model choice is swappable, whether there is a complete session record with token usage attached, whether enforcement points exist before model calls and tool execution, and whether headless and automation modes exist for CI use."}
+section: "New and timely"
+blurb: "- a short checklist for judging an agent harness, worked against DeepSeek's."
+---
+  <div class="eye">RESEARCH · TOOLING</div>
+  <h1 class="page-title">Evaluate the harness, not the <em>demo.</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Agent harnesses demo well and cost badly. The demo shows a task completing; the invoice shows what the task cost, how many times it retried, and which model served each attempt. This is a short checklist for the second question, worked against <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek's newly published open-source harness</a> so the criteria stay concrete.</p>
+
+  <h2>Getting it running takes about five minutes</h2>
+  <p>The quick path is <code>npx @deepseek-ai/dsh web</code>, which starts a local web UI on port 3080. Two steps before it becomes usable: enter a DeepSeek API key under Settings then Models — the route enables immediately, no restart — and activate a project directory with Choose workspace, since the session composer is unavailable until one is active. From source it is a clone, then install, build, and run, on Node 22.19 or newer with pnpm pinned by Corepack.</p>
+  <p>Once running, the agent reads and edits files, runs commands, delegates to subagents, and plans, prompting for confirmation according to the active permission policy.</p>
+
+  <h2>Criterion 1: is model choice swappable?</h2>
+  <p>Ask where the provider is named. In <code>dsh</code> the model service is a pluggable interface with several implementations behind it, and the agent loop consumes a provider-neutral stream without knowing which backend is live. One of those implementations replays a recorded session without paying for inference again, which is the sort of thing that only exists when the interface is real.</p>
+  <p>If the harness you already run names a provider inside application code, that is your answer, and it is the finding worth taking away from the exercise.</p>
+
+  <h2>Criterion 2: is there a complete record?</h2>
+  <p>Every session in <code>dsh</code> is an append-only log of typed events, treated as the single source of truth for the interaction. Turn and step boundaries are explicit, and token usage travels attached to the model output that incurred it. Message history is derived from the log rather than stored beside it, so there is one record and it cannot disagree with itself.</p>
+  <p>The test for any harness: could you reconstruct last week's most expensive session, including which model served each call, from what the system already writes down?</p>
+
+  <h2>Criterion 3: are there enforcement points?</h2>
+  <p>Two, in this case. One before the model request is issued, whose decision is documented as authoritative. One before any tool body executes, backed by permission guards that can deny or abstain but never grant, and that treat an unanswerable approval prompt as a denial. That is fail-closed behaviour, and it is the property to look for rather than the specific names.</p>
+
+  <h2>Criterion 4: does it run headless?</h2>
+  <p>A harness that only works interactively cannot be put in CI, and a harness that cannot be put in CI cannot be measured on a schedule. <code>dsh</code> ships a headless one-shot profile and an automation server speaking JSON-RPC over stdio. It also ships a self-referential demo that inspects and modifies its own live plugin runtime, which is a fair way to confirm the plugin claim is structural rather than positioning.</p>
+
+  <h2>Criterion 5: what does the config layering look like?</h2>
+  <p>Composition here runs through profiles — named plugin compositions storing an ordered bundle list plus patches — resolving in four layers: profile bundles, then profile patches, then home-level patches, then command-line overlays, with later layers winning. Knowing that order is what turns "why is it using that model" from an investigation into a lookup.</p>
+
+  <div class="callout"><strong>Set expectations before you start:</strong> DeepSeek Harness is a developer preview and its own README says there will be compatibility-breaking changes. That is not a reason to skip the evaluation. It is a reason to run the evaluation and keep the checklist, rather than scheduling a migration.</div>
+
+  <h2>What to do with the result</h2>
+  <ol>
+    <li>Run the five criteria against the harness you already use in production. The gaps are your roadmap.</li>
+    <li>Record the switching cost for your default model, in engineering days. Re-measure it each quarter.</li>
+    <li>Put a step ceiling and a token budget in place before scaling agent usage, not after the first surprising invoice.</li>
+    <li>Require that agent cost data come out of the system's own record rather than a parallel instrumentation effort.</li>
+  </ol>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-harness-lock-in">Your agent harness decides how much lock-in you buy</a></li>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement belongs inside the agent loop</a></li>
+    <li><a href="/research/open-weight-model-tco">Open-weight model TCO</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

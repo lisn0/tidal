@@ -1,0 +1,75 @@
+---
+layout: "research.njk"
+permalink: "research/what-is-deepseek-harness.html"
+titleCore: "What is DeepSeek Harness? A plain explainer"
+description: "DeepSeek Harness is an MIT-licensed open-source agent harness from DeepSeek AI. What it is, how to run it, and what it tells you about agent cost."
+slug: "what-is-deepseek-harness"
+breadcrumbName: "What is DeepSeek Harness? A plain explainer"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is DeepSeek Harness?","a":"DeepSeek Harness, published as the package dsh, is an MIT-licensed open-source agent harness from DeepSeek AI. It runs coding and automation agents that read and edit files, run commands, delegate to subagents and plan work. Its organising idea is that every part of it is a plugin."}
+  - {"q":"How do you run DeepSeek Harness?","a":"Run npx @deepseek-ai/dsh web to start a local web interface on port 3080, or clone the repository and build it with pnpm. It needs Node 22.19 or newer and Git 2.26 or newer. Two setup steps are easy to miss: entering an API key under Settings then Models, and activating a workspace directory."}
+  - {"q":"Is DeepSeek Harness free to use?","a":"The harness is MIT-licensed and costs nothing. Model inference is billed separately by whichever provider you point it at. Licence cost is not the number that matters here; steps per turn, tool catalogue size and delegation depth are."}
+  - {"q":"Should we adopt DeepSeek Harness?","a":"Not as a standard yet. The project describes itself as a developer preview and warns of compatibility-breaking changes. Its value right now is as a reference implementation to evaluate your existing agent stack against, on model swappability, session recording, enforcement points and headless operation."}
+section: "New and timely"
+blurb: "- what the harness is, how to run it, and the four questions it should make you ask about your own stack."
+---
+  <div class="eye">RESEARCH · NEW AND TIMELY</div>
+  <h1 class="page-title">What is <em>DeepSeek Harness?</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">We have written several pieces on what <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> implies for agent spend. This one is the version that assumes nothing: what the thing is, how you run it, and why a finance function should care that an open-source project has published its internals in this much detail.</p>
+
+  <h2>Start with the distinction that matters</h2>
+  <p>A model produces text and requests to call tools. That is the whole of what it does. Everything else belongs to the harness: building the prompt, actually executing those tool calls, deciding what the agent is permitted to do, recording what happened, running the loop that decides whether to call the model again, and handing work to child agents.</p>
+  <p>Get this distinction wrong and every cost conversation goes to the wrong place. Teams negotiate token prices, which is the one variable they do not control, while steps per turn, tool catalogue size and delegation depth — which they do control, and which move the bill far more — sit unmeasured. Those are all harness properties.</p>
+
+  <h2>What DeepSeek Harness is</h2>
+  <p>An MIT-licensed open-source agent harness published by DeepSeek AI, distributed as the package <code>dsh</code>. It runs coding and automation agents: reading and editing files, running shell commands, searching a codebase, delegating to subagents, planning work, and requesting confirmation according to whatever permission policy is configured. It offers a browser interface, a headless one-shot mode, and an automation server that speaks JSON-RPC over standard input and output.</p>
+  <p>Its organising principle is that everything is a plugin. It runs on Cordis, a plugin runtime, and there is no privileged core: the model adapter, the tool registry, the session log and the agent loop itself are all plugins composed into a shared context.</p>
+
+  <h2>How to run it</h2>
+  <table class="kv">
+    <tr><th>Step</th><th>What to do</th></tr>
+    <tr><td>Fastest start</td><td><code>npx @deepseek-ai/dsh web</code>, then open port 3080 locally</td></tr>
+    <tr><td>From source</td><td>Clone the repository, then <code>pnpm install</code>, <code>pnpm run build</code>, <code>pnpm dsh web</code></td></tr>
+    <tr><td>Prerequisites</td><td>Node 22.19 or newer, Git 2.26 or newer, pnpm pinned through Corepack</td></tr>
+    <tr><td>Add your key</td><td>Settings, then Models. The route enables immediately with no restart</td></tr>
+    <tr><td>Activate a workspace</td><td>Choose workspace and add your project directory, or the composer stays unavailable</td></tr>
+    <tr><td>Headless</td><td>Run with the headless profile and a prompt as an argument</td></tr>
+  </table>
+  <p>Those last two rows are where most first attempts stall. Neither is a failure; both are configuration steps the interface expects before it will do anything.</p>
+
+  <h2>The vocabulary you need</h2>
+  <p>A <strong>step</strong> is one model request plus the tools it triggers, and it is the billing atom. A <strong>turn</strong> is one drain of input, ending when the model stops or policy intervenes. A <strong>round</strong> is an outer iteration above turns. A <strong>session</strong> is an append-only log of typed events, treated as the single source of truth for the run. A <strong>capability seam</strong> is an interface with several interchangeable implementations behind it. A <strong>profile</strong> is a named composition — an ordered list of plugin bundles plus your patches — and configuration resolves through four layers in a documented order.</p>
+
+  <div class="callout"><strong>The one to memorise:</strong> steps, not requests. A forecast built on user requests, applied to a system that runs multiple steps per turn and multiple turns per round, is counting a different quantity from the one on the invoice.</div>
+
+  <h2>Why a finance team should read an engineering repository</h2>
+  <p>Because it is a published reference for what a well-built agent runtime does, and that gives you four concrete questions to put to whatever you already run.</p>
+  <ol>
+    <li><strong>Is the model swappable?</strong> Here it sits behind an interface with several backends, one of which replays a recorded session at no inference cost. If your stack cannot switch providers without a rewrite, your negotiating position is weaker than you think.</li>
+    <li><strong>Is the record complete?</strong> The stated principle is that model-visible means logged, and token usage travels attached to the output that incurred it. Cost attribution is a property of the log, and no dashboard fixes a log that was never complete.</li>
+    <li><strong>Where are the enforcement points?</strong> Two: one before the model request goes out, documented as authoritative, and one before any tool executes. Guards can deny or abstain but never grant, and an unanswerable approval prompt denies. An alert is not a control.</li>
+    <li><strong>Does it run headless?</strong> If it only works interactively it cannot be scheduled, and what cannot be scheduled cannot be measured on a cadence.</li>
+  </ol>
+
+  <h2>What it costs</h2>
+  <p>Nothing to licence. Everything to run. You supply an API key, or point the model seam elsewhere, and inference is billed by that provider. The practical shape of the bill is set by steps per turn, the size of the tool catalogue re-sent on every request, how deep delegation is allowed to go, and how many rounds an open-ended objective may run — every one of them a configuration decision rather than a price.</p>
+
+  <h2>The caveat</h2>
+  <p>This is a developer preview and its own documentation warns of compatibility-breaking changes. Do not put it on a standardisation roadmap this quarter. Use it as an evaluation reference, pin any version you build against, and take the four questions above to your existing stack — those outlive whatever the API looks like next release.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/evaluating-open-agent-harness">Evaluating an open-source agent harness</a></li>
+    <li><a href="/research/agent-harness-lock-in">Your agent harness decides how much lock-in you buy</a></li>
+    <li><a href="/research/deepseek-harness-delegation-cost">DeepSeek Harness and the real cost of delegation</a></li>
+    <li><a href="/research/deepseek-harness-goal-loops">When should an agent stop? DeepSeek Harness goals</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>

@@ -1,0 +1,72 @@
+---
+layout: "research.njk"
+permalink: "research/deepseek-harness-delegation-cost.html"
+titleCore: "DeepSeek Harness and the real cost of delegation"
+description: "When agents spawn agents, one request becomes a tree. How DeepSeek Harness caps delegation depth, and why that cap is the control finance should ask about."
+slug: "deepseek-harness-delegation-cost"
+breadcrumbName: "DeepSeek Harness and the real cost of delegation"
+datePublished: "2026-08-16"
+dateModified: "2026-08-16"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What are subagents in DeepSeek Harness?","a":"Subagents are a capability seam, registered by name so multiple providers can coexist. Delegation runs either as a one-shot child that is created, prompted, awaited and disposed, or as a continuable background child that persists across turns."}
+  - {"q":"Why does delegation multiply AI cost?","a":"Because each level of delegation multiplies the model calls made per user request. A parent that spawns three children, each spawning three more, has turned one request into thirteen agents. Without a depth cap the fan-out has no defined upper bound."}
+  - {"q":"How is delegation depth controlled?","a":"Depth is persisted in the session header and tracked at runtime as the greater of the stored and current values. A cold resume cannot lower it, and a delegation start is rejected outright if the derived depth would exceed the configured maximum."}
+  - {"q":"What should finance ask about agent delegation?","a":"Three numbers: descendants per user request, maximum observed delegation depth against the configured cap, and the share of delegated runs that ended for a reason other than completion. The third is spend that produced nothing."}
+section: "Governance"
+blurb: "- why delegation depth, not token price, is the number that moves an agent bill."
+---
+  <div class="eye">RESEARCH · GOVERNANCE</div>
+  <h1 class="page-title">One request, <em>thirteen agents.</em></h1>
+  <p class="updated">16 August 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Nearly every conversation about AI cost starts at the price per million tokens. That number is usually not the problem. The problem is that one user request no longer means one model call — it means a tree of them, and the tree has no natural size. <a href="https://github.com/deepseek-ai/deepseek-harness">DeepSeek Harness</a> treats that tree as a first-class subsystem with an explicit cap, which makes it a useful place to see the mechanism clearly.</p>
+
+  <h2>The arithmetic nobody puts in the business case</h2>
+  <p>A parent agent that delegates to three children, each of which delegates to three more, has turned a single user request into thirteen agents. Nobody chose thirteen. It fell out of two independent decisions that each looked reasonable in isolation.</p>
+  <p>This is the orchestration multiplier, and it sits on top of the multiplier you already know about — the several model calls a single agent makes to complete one task. The two compound.</p>
+
+  <h2>Two delegation shapes, two cost profiles</h2>
+  <table class="kv">
+    <tr><th>Shape</th><th>Behaviour</th><th>Cost character</th></tr>
+    <tr><td>One-shot</td><td>Create, prompt, await, dispose</td><td>Bounded and attributable to one parent turn</td></tr>
+    <tr><td>Continuable</td><td>Durable background session, resumed later</td><td>Open-ended, accrues across turns</td></tr>
+  </table>
+  <p>The second one carries a charge most teams have never priced. When a continuable child is woken after being idle, it is reconstructed from its stored session record — which costs input tokens proportional to how long that record has grown. A long-lived background agent gets more expensive to wake the more it has done.</p>
+
+  <h2>The cap that cannot be laundered</h2>
+  <p>Delegation depth here is persisted with the session and tracked at runtime as the greater of the stored and current values. Two rules protect it: resuming a stored session cannot lower the depth, and a delegation is rejected if the resulting depth would exceed the configured maximum. You cannot reset the counter by restarting a child.</p>
+  <p>That second rule is the one worth carrying into any governance conversation. A limit that a restart can quietly clear is not a limit.</p>
+
+  <div class="callout"><strong>Ask for the number:</strong> what is the maximum delegation depth your agents are permitted, and what is the deepest tree actually observed last month? Most teams can answer neither, which means the fan-out is discovered rather than sized.</div>
+
+  <h2>Requests fail loudly when a capability is missing</h2>
+  <p>Before delegating, the harness checks the requested capabilities — an output schema, a depth limit, a tool filter, a persona — against the chosen provider. The documentation is explicit that a request needing something the provider cannot do is rejected with a typed error rather than accepted and then ignored.</p>
+  <p>That is the right default for a control. Silent degradation is how a tool filter meant to keep an expensive capability out of a cheap child stops applying, and nobody finds out until the invoice arrives.</p>
+
+  <h2>Failed delegations are pure waste</h2>
+  <p>Every delegated run returns a stop reason from a fixed set: completed, aborted, error, out of tokens, refused. Anything other than completed means partial output. That distribution is the cheapest cost report in the system, because a run that ended for any of the other four reasons consumed tokens and produced nothing usable.</p>
+  <p>A rising share of out-of-tokens outcomes in particular usually means the delegated task was scoped wrong, not that the budget was too small.</p>
+
+  <h2>Four questions for the platform team</h2>
+  <ol>
+    <li><strong>Descendants per user request.</strong> Not children — the full tree.</li>
+    <li><strong>Deepest observed delegation</strong> against the configured maximum. If there is no maximum, that is the finding.</li>
+    <li><strong>Cost of waking a background agent</strong>, and how that cost has trended as those agents accumulate history.</li>
+    <li><strong>Share of delegated runs not ending in completion.</strong> This is the waste line.</li>
+  </ol>
+
+  <h2>The caveat</h2>
+  <p>DeepSeek Harness is a developer preview and its own documentation warns of compatibility-breaking changes. The specific names will move. The structure — bounded depth, fail-loud capability checks, an explicit stop reason on every delegated run — is the requirement to hold your own system to.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/research/agent-harness-lock-in">Your agent harness decides how much lock-in you buy</a></li>
+    <li><a href="/research/deepseek-harness-goal-loops">When should an agent stop? DeepSeek Harness goals</a></li>
+    <li><a href="/research/agent-budget-enforcement">Budget enforcement belongs inside the agent loop</a></li>
+    <li><a href="/research/agent-audit-trail-finance">An agent audit trail finance can actually read</a></li>
+  </ul>
+
+  <a class="back" href="/">&larr; Back to llmcfo.com</a>
