@@ -39,7 +39,10 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addTransform("webPageSchema", function (content) {
     if (!this.page.outputPath?.endsWith(".html")) return content;
     if (/dateModified/.test(content)) return content;
-    const url = "https://llmcfo.com" + this.page.url;
+    // Prefer the page's own canonical: A/B variants (index-v2) canonical to the
+    // control, so keying the WebPage node off page.url made the schema claim a
+    // different URL than the canonical tag one line above it.
+    const url = (content.match(/<link rel="canonical" href="([^"]+)"/i) || [])[1] || "https://llmcfo.com" + this.page.url;
     const node = {
       "@context": "https://schema.org",
       "@type": "WebPage",
