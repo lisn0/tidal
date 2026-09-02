@@ -1,0 +1,136 @@
+{
+  "slug": "ai-gross-margin-erosion",
+  "tags": [
+    "unit-economics",
+    "gross-margin",
+    "cfo"
+  ],
+  "datePublished": "2026-09-02",
+  "dateModified": "2026-09-02",
+  "languages": {
+    "en": {
+      "title": "AI gross-margin erosion: model it before you ship",
+      "titleCore": "AI gross-margin erosion: model it before you ship",
+      "description": "How to put an AI feature's inference cost into cost of revenue and see the gross-margin impact before launch rather than at the next board pack.",
+      "body": "<p>An AI feature moves spend out of R&amp;D and into cost of revenue. Model training and prototyping can sit in development budgets, but inference runs every time a customer uses the product, which makes it a variable cost of serving. If it is not modelled as one before launch, the first visible signal is a gross-margin decline that finance has to explain after the fact.</p><h2>Put inference in cost of revenue</h2><p>Classify recurring inference, plus its retries, tool calls, and any vendor per-seat AI add-on that scales with usage, as cost of revenue rather than R&amp;D. The test is whether the cost recurs when a customer uses the feature again. One-off fine-tuning runs and evaluation suites usually fail that test; the serving path passes it.</p><h2>The calculation</h2><p>Work in cost per active account per month, not cost per token. Take measured cost per successful task, multiply by expected tasks per account per month, and add the share of failed and retried work you will still pay for. Compare that against the revenue the account already produces. The output is the new gross margin for that cohort, not a percentage saved.</p><p>Run it at three volumes: median usage, the 90th-percentile account, and the heaviest account you would still accept. The median usually looks fine. Margin failures live in the tail, because AI cost scales with usage while a flat subscription price does not.</p><h2>Where the erosion actually comes from</h2><p>Four causes account for most of it. Heavy users on flat pricing, where consumption has no ceiling. Retries and failed runs billed at full rate. Long conversation context resent on every turn. And agentic flows that expand one user action into many model calls. Each is measurable before launch if the feature is instrumented in staging with realistic traffic.</p><h2>Decide the pricing response early</h2><p>The options are a usage ceiling in the plan, a consumption component in the price, a cheaper model on the default path with the expensive one reserved for cases that need it, or accepting the margin as a deliberate acquisition cost for a fixed period. All four are defensible. What is not defensible is discovering the answer from a variance report a quarter later.</p><h2>Report it as a margin line</h2><p>Give the board AI cost of revenue as its own line inside gross margin, with cost per account and the margin at each usage percentile. That framing makes a rising bill readable: spend that grows with revenue at a stable cost per account is scale, and spend that grows faster is erosion.</p>",
+      "faq": [
+        {
+          "question": "Is AI inference cost R&D or cost of revenue?",
+          "answer": "Recurring inference that runs when a customer uses the product behaves as a variable cost of serving and belongs in cost of revenue. One-off training, prototyping, and evaluation work generally stay in development spend."
+        },
+        {
+          "question": "How do you estimate AI gross-margin impact before launch?",
+          "answer": "Multiply measured cost per successful task by expected tasks per account per month, add the cost of failed and retried work, and compare against account revenue at median, 90th-percentile, and heaviest usage."
+        },
+        {
+          "question": "What causes AI gross-margin erosion?",
+          "answer": "Heavy users on flat pricing, retries billed at full rate, long context resent on every turn, and agentic flows that turn one user action into many model calls."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Cost per profitable outcome"
+        },
+        {
+          "slug": "/research/llm-cost-per-request",
+          "label": "LLM cost per request"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Proving AI ROI"
+        }
+      ]
+    },
+    "es": {
+      "title": "Erosión del margen bruto por IA: modélala antes de lanzar",
+      "titleCore": "Erosión del margen bruto por IA: modélala antes de lanzar",
+      "description": "Cómo llevar el coste de inferencia al coste de ventas y ver el impacto en margen bruto antes del lanzamiento.",
+      "body": "<p>Una función de IA traslada gasto de I+D al coste de ventas. La inferencia se ejecuta cada vez que el cliente usa el producto, así que es un coste variable de servicio. Si no se modela antes del lanzamiento, la primera señal es una caída de margen que finanzas debe explicar después.</p><h2>El cálculo</h2><p>Trabaje en coste por cuenta activa al mes, no por token. Multiplique el coste por tarea exitosa por las tareas esperadas y sume el trabajo fallido y los reintentos que igualmente se pagan. Haga el ejercicio en uso mediano, percentil 90 y la cuenta más pesada que aceptaría.</p><h2>De dónde viene la erosión</h2><p>Usuarios intensivos con precio plano, reintentos facturados a tarifa completa, contexto largo reenviado en cada turno y flujos agénticos que convierten una acción en muchas llamadas al modelo.</p><h2>Decida la respuesta de precio</h2><p>Techo de uso, componente de consumo en el precio, modelo más barato por defecto, o aceptar el margen como coste de adquisición durante un periodo definido. Repórtelo como una línea propia dentro del margen bruto.</p>",
+      "faq": [
+        {
+          "question": "¿La inferencia es I+D o coste de ventas?",
+          "answer": "La inferencia recurrente que se ejecuta cuando el cliente usa el producto es un coste variable de servicio y pertenece al coste de ventas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Coste por resultado rentable"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Érosion de la marge brute par l’IA : à modéliser",
+      "titleCore": "Érosion de la marge brute par l’IA : à modéliser",
+      "description": "Comment inscrire le coût d’inférence en coût des ventes et mesurer l’effet sur la marge brute avant le lancement.",
+      "body": "<p>Une fonctionnalité d’IA déplace la dépense de la R&amp;D vers le coût des ventes. L’inférence s’exécute à chaque usage client : c’est un coût variable de service. Sans modélisation préalable, le premier signal est une baisse de marge à expliquer après coup.</p><h2>Le calcul</h2><p>Raisonnez en coût par compte actif et par mois, pas par token. Multipliez le coût par tâche réussie par le volume attendu, ajoutez les échecs et les reprises facturés. Testez à l’usage médian, au 90e centile et sur le compte le plus lourd acceptable.</p><h2>Origines de l’érosion</h2><p>Utilisateurs intensifs à prix forfaitaire, reprises facturées plein tarif, contexte long renvoyé à chaque tour, et flux agentiques qui multiplient les appels au modèle.</p><h2>Choisir la réponse tarifaire</h2><p>Plafond d’usage, part de consommation dans le prix, modèle moins cher par défaut, ou marge assumée comme coût d’acquisition sur une période définie. Présentez-la comme une ligne dédiée de la marge brute.</p>",
+      "faq": [
+        {
+          "question": "L’inférence est-elle de la R&D ou du coût des ventes ?",
+          "answer": "L’inférence récurrente déclenchée par l’usage client est un coût variable de service et relève du coût des ventes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Coût par résultat rentable"
+        }
+      ]
+    },
+    "de": {
+      "title": "KI-Margenerosion vor dem Launch modellieren",
+      "titleCore": "KI-Margenerosion vor dem Launch modellieren",
+      "description": "Wie Inferenzkosten in die Umsatzkosten gehören und der Bruttomargeneffekt vor dem Launch sichtbar wird.",
+      "body": "<p>Ein KI-Feature verschiebt Ausgaben von F&amp;E in die Umsatzkosten. Inferenz läuft bei jeder Kundennutzung und ist damit ein variabler Servicekosten-Block. Ohne vorherige Modellierung zeigt sich das erst als Margenrückgang.</p><h2>Die Rechnung</h2><p>Rechnen Sie in Kosten je aktivem Konto und Monat, nicht je Token. Kosten je erfolgreicher Aufgabe mal erwartete Aufgaben, plus bezahlte Fehlläufe und Retries. Prüfen Sie Median, 90. Perzentil und das schwerste noch akzeptable Konto.</p><h2>Ursachen der Erosion</h2><p>Vielnutzer bei Pauschalpreis, voll berechnete Retries, langer Kontext in jedem Turn und agentische Abläufe mit vielen Modellaufrufen je Nutzeraktion.</p><h2>Preisantwort früh festlegen</h2><p>Nutzungsobergrenze, Verbrauchskomponente im Preis, günstigeres Standardmodell oder bewusst akzeptierte Marge als Akquisitionskosten. Berichten Sie es als eigene Zeile in der Bruttomarge.</p>",
+      "faq": [
+        {
+          "question": "Ist Inferenz F&E oder Umsatzkosten?",
+          "answer": "Wiederkehrende Inferenz bei Kundennutzung ist ein variabler Servicekosten-Block und gehört in die Umsatzkosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Kosten je profitablem Ergebnis"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AI機能による粗利率の低下を、出荷前に試算する",
+      "titleCore": "AI機能による粗利率の低下を、出荷前に試算する",
+      "description": "推論コストを売上原価に計上し、粗利率への影響をローンチ前に把握する方法。",
+      "body": "<p>AI機能は支出を研究開発から売上原価へ移します。推論は顧客が使うたびに走るため、提供に伴う変動費です。事前に試算しなければ、最初の兆候は事後に説明を求められる粗利率の低下になります。</p><h2>計算方法</h2><p>トークン単価ではなく、月あたりアクティブ顧客単価で考えます。成功タスク単価に想定タスク数を掛け、支払う失敗分とリトライを加えます。中央値、90パーセンタイル、許容できる最重量顧客の三点で検証します。</p><h2>低下の要因</h2><p>定額料金の高頻度利用、全額課金されるリトライ、毎ターン再送される長いコンテキスト、そして一操作を多数のモデル呼び出しに変えるエージェント処理です。</p><h2>価格側の対応を先に決める</h2><p>利用上限、従量課金の併用、既定モデルの低価格化、または期間を区切った獲得コストとしての容認。粗利の内訳として独立した行で報告します。</p>",
+      "faq": [
+        {
+          "question": "推論コストは研究開発費ですか、売上原価ですか？",
+          "answer": "顧客利用のたびに発生する継続的な推論は提供に伴う変動費であり、売上原価に含めます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "収益性ある成果あたりコスト"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Erosão da margem bruta por IA: modele antes de lançar",
+      "titleCore": "Erosão da margem bruta por IA: modele antes de lançar",
+      "description": "Como levar o custo de inferência ao custo das vendas e ver o impacto na margem bruta antes do lançamento.",
+      "body": "<p>Uma funcionalidade de IA move despesa de I&amp;D para o custo das vendas. A inferência corre sempre que o cliente usa o produto, logo é um custo variável de serviço. Sem modelação prévia, o primeiro sinal é uma queda de margem explicada à posteriori.</p><h2>O cálculo</h2><p>Trabalhe em custo por conta ativa por mês, não por token. Multiplique o custo por tarefa bem-sucedida pelas tarefas esperadas e some falhas e retries pagos. Teste no uso mediano, no percentil 90 e na conta mais pesada aceitável.</p><h2>De onde vem a erosão</h2><p>Utilizadores intensivos com preço fixo, retries faturados por inteiro, contexto longo reenviado a cada turno e fluxos agênticos que multiplicam chamadas ao modelo.</p><h2>Decida a resposta de preço</h2><p>Teto de uso, componente de consumo no preço, modelo mais barato por omissão, ou margem assumida como custo de aquisição por um período definido. Reporte como linha própria da margem bruta.</p>",
+      "faq": [
+        {
+          "question": "A inferência é I&D ou custo das vendas?",
+          "answer": "A inferência recorrente despoletada pelo uso do cliente é um custo variável de serviço e pertence ao custo das vendas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Custo por resultado rentável"
+        }
+      ]
+    }
+  }
+}
