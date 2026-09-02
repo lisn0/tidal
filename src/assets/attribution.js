@@ -4,10 +4,11 @@
  * social / direct) for the session and attaches it to the booking CTA, so we
  * can tell whether AI citations and search clicks actually produce a booking.
  *
- * Privacy: first-party only. Uses sessionStorage (cleared when the tab closes)
- * and a GA4 `book_click` event that fires ONLY after the visitor has granted
- * analytics consent (i.e. when window.gtag exists, loaded by consent.js). No
- * third-party calls, no cross-site identifiers, no persistent cookie.
+ * Privacy: first-party only, and it does nothing at all until the visitor has
+ * granted analytics consent in consent.js (`window.analyticsConsent`) — the
+ * sessionStorage write is terminal-equipment storage and needs consent just as
+ * the GA4 `book_click` event does. No third-party calls, no cross-site
+ * identifiers, no persistent cookie. Cleared when the tab closes.
  *
  * Read it in GA4 → Reports/Explore on the `book_click` event. Register the
  * event params `book_source`, `book_medium`, `landing_page` as custom
@@ -98,7 +99,7 @@
     document.addEventListener('click', function (ev) {
       var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
       if (!a || !isBookLink(a)) return;
-      if (typeof window.gtag === 'function') {
+      if (window.analyticsConsent && typeof window.gtag === 'function') {
         window.gtag('event', 'book_click', {
           book_source: ft.source,
           book_medium: ft.medium,
@@ -108,9 +109,17 @@
     }, true);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
+  // Nothing here may run before consent — not even the sessionStorage write.
+  var started = false;
+  function start() {
+    if (started || !window.analyticsConsent) return;
+    started = true;
     init();
+  }
+  window.addEventListener('analyticsconsent', start);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
   }
 })();
