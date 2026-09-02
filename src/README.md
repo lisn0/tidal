@@ -17,7 +17,7 @@ Discovery: [sitemap.xml](https://llmcfo.com/sitemap.xml) · [llms.txt](https://l
 ## Stack — Eleventy
 
 **Eleventy 3.1.6** (`@11ty/eleventy`, the only dependency). Input `src/`, output
-`_site/`. 58 source templates build 56 HTML pages.
+`_site/`. Builds ~185 HTML pages across EN/ES/FR/DE/JA/PT.
 
 ```bash
 npm install
@@ -28,14 +28,50 @@ npm run serve     # eleventy --serve (local dev)
 - `src/index.html` — landing page
 - `src/*.njk` — about, research, benchmarks, glossary, methodology, case-studies,
   changelog, careers, security, terms
-- `src/research/*.njk` — the research articles
+- `src/research/*.njk` — hand-written English research articles (76)
+- `src/_data/articles/*.json` — the current way to publish an article: one JSON
+  file carries every locale (see **Adding an article**)
 - `src/_includes/` — shared layouts/partials
 - `eleventy.config.js` — build config; every static file (`robots.txt`,
   `sitemap.xml`, `_headers`, `_redirects`, `worker.js`, icons, …) is an explicit
   `addPassthroughCopy` entry. **A new static file is not copied unless you add it there.**
 
-`_site/` is committed build output — regenerate it with `npm run build`, don't
-hand-edit it.
+`_site/` is **gitignored** — it is build output, never committed and never
+hand-edited. Cloudflare runs `npm run build` itself on deploy.
+
+## Adding an article
+
+Write one JSON file in `src/_data/articles/`. `src/_data/articlePages.js`
+paginates it into one page per locale, and `eleventy.config.js` merges those into
+the `research` A–Z collection and the sitemap — no stub `.njk`, no registration.
+
+```jsonc
+{
+  "slug": "my-article",                // NOTE: bare, no research/ prefix on this site
+  "tags": ["…"],
+  "datePublished": "2026-09-02",
+  "dateModified": "2026-09-02",
+  "languages": {
+    "en": { "title": "…", "titleCore": "…", "description": "…", "body": "<h2>…", "faq": [], "related": [] }
+  }
+}
+```
+
+Gotchas the build catches for you:
+
+- **`titleCore` is what goes in `<title>`** here (`article.njk` renders
+  `{{ locale.titleCore }} · LLM CFO`), capped at **70 chars including that
+  suffix**; `description` caps at 165. `title` feeds the JSON-LD `headline`, and
+  `scripts/check-links.js` fails the build if the two disagree — so in practice
+  keep `title` and `titleCore` identical. *On the sibling finopsllm site this is
+  inverted: there `title` is the `<title>` and `titleCore` is the H1.*
+- `related[].slug` must be a full path (`/research/…`).
+- Data-driven articles land in the `/research` A–Z list but **not** in the
+  curated sections — those only group `src/research/*.njk` files that declare a
+  `section:`.
+
+`npm run build` fails on any broken internal link and prints title/description
+length warnings at the end. The pre-commit hook runs it too.
 
 ## Analytics
 
