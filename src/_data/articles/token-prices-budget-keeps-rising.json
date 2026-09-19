@@ -1,6 +1,10 @@
 {
   "slug": "token-prices-budget-keeps-rising",
-  "tags": ["ai-finops", "forecasting", "budgeting"],
+  "tags": [
+    "ai-finops",
+    "forecasting",
+    "budgeting"
+  ],
   "datePublished": "2026-08-27",
   "dateModified": "2026-08-27",
   "languages": {
@@ -9,15 +13,244 @@
       "titleCore": "Token prices fell. The AI budget still went up.",
       "description": "A CFO framework for explaining why lower AI prices can coexist with higher spend, using rate, volume, mix, and efficiency variance.",
       "body": "<p>Lower token prices are not the same as lower AI spend. A budget can rise after a major provider discount because usage, model mix, context length, and agent activity grew faster than the rate fell. The finance question is not whether AI became cheaper per token; it is what changed between the approved plan and the invoice.</p><h2>Build the variance bridge</h2><p>Start with the locked baseline: provider invoices, approved traffic assumptions, and the model mix used in the budget. Explain the movement in four steps. <strong>Rate</strong> captures price changes and negotiated discounts. <strong>Volume</strong> captures requests and tokens. <strong>Mix</strong> captures movement between models, providers, regions, and workloads. <strong>Efficiency</strong> captures the cost of delivering one successful outcome, including retries, long context, tool calls, and unused output.</p><table><thead><tr><th>Variance</th><th>Finance interpretation</th><th>Owner</th></tr></thead><tbody><tr><td>Rate</td><td>Supplier economics changed.</td><td>Procurement</td></tr><tr><td>Volume</td><td>Demand exceeded the plan.</td><td>Product and sales</td></tr><tr><td>Mix</td><td>The business used a different capability.</td><td>Engineering</td></tr><tr><td>Efficiency</td><td>The same outcome now costs more.</td><td>Engineering and product</td></tr></tbody></table><h2>Do not reward the wrong number</h2><p>A falling blended price can conceal a deteriorating unit margin. A product may be acquiring customers faster while each completed workflow requires more reasoning, retrieval, or retries. Conversely, a higher bill can be healthy if it bought revenue-producing usage. The board metric should pair spend with an outcome: cost per successful task, gross margin per AI feature, or AI cost per active customer segment.</p><h2>What the monthly close needs</h2><p>Finance should receive a provider-reconciled spend statement, a variance bridge, and a forecast using actual usage drivers. Ask for p50 and p95 cost per successful task, not just a company-wide average. Require owners for the three largest movements and record whether each is temporary demand, a deliberate investment, or an avoidable leak.</p><h2>The budget decision</h2><p>Do not respond to a variance by applying a universal token cap. Set guardrails by workload: latency-sensitive customer requests, background jobs, evaluation traffic, and autonomous agents have different economic limits. Approve more spend when the contribution margin supports it; require a routing, caching, or stopping-rule change when efficiency deteriorates without a corresponding business benefit.</p><p>AI price cuts create room for better economics, but only if the organization can see where the room went. A disciplined close turns a surprising invoice into a decision about demand, capability, and value.</p><h2>Related</h2><ul><li><a href=&quot;/research/ai-spend-variance-analysis&quot;>AI spend variance analysis</a></li><li><a href=&quot;/research/ai-spend-forecasting&quot;>AI spend forecasting</a></li><li><a href=&quot;/research/proving-ai-roi&quot;>Proving AI ROI</a></li></ul>",
-      "faq": [{"question":"Why can the AI budget rise when token prices fall?","answer":"Usage, model mix, context length, and agent activity can grow faster than provider rates fall."},{"question":"What are the four AI spend variances?","answer":"Rate, volume, mix, and efficiency. They map the surprise to procurement, demand, capability choice, or operating discipline."},{"question":"What should a CFO review instead of total AI spend?","answer":"Review provider-reconciled spend, the variance bridge, forecast drivers, and cost per successful task or another outcome-linked unit metric."}],
-      "related": [{"slug":"/research/ai-spend-variance-analysis","label":"AI spend variance analysis"},{"slug":"/research/ai-spend-forecasting","label":"AI spend forecasting"},{"slug":"/research/proving-ai-roi","label":"Proving AI ROI"}]
+      "faq": [
+        {
+          "question": "Why can the AI budget rise when token prices fall?",
+          "answer": "Usage, model mix, context length, and agent activity can grow faster than provider rates fall."
+        },
+        {
+          "question": "What are the four AI spend variances?",
+          "answer": "Rate, volume, mix, and efficiency. They map the surprise to procurement, demand, capability choice, or operating discipline."
+        },
+        {
+          "question": "What should a CFO review instead of total AI spend?",
+          "answer": "Review provider-reconciled spend, the variance bridge, forecast drivers, and cost per successful task or another outcome-linked unit metric."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI spend variance analysis"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Proving AI ROI"
+        }
+      ]
     },
-    "es": {"title":"Bajó el precio de los tokens. El presupuesto de IA subió.","titleCore":"Bajó el precio de los tokens. El presupuesto de IA subió.","description":"Un marco para explicar por qué precios menores pueden coexistir con mayor gasto de IA.","body":"<p>Tokens más baratos no significan menor gasto de IA. El presupuesto puede subir porque el uso, la mezcla de modelos, el contexto y la actividad de los agentes crecieron más rápido que la tarifa. La pregunta financiera es qué cambió entre el plan aprobado y la factura.</p><h2>Construye el puente de variación</h2><p>Parte de la línea base: facturas, tráfico previsto y mezcla de modelos. Separa <strong>tarifa</strong>, <strong>volumen</strong>, <strong>mezcla</strong> y <strong>eficiencia</strong>. La tarifa es el proveedor; el volumen es la demanda; la mezcla es la capacidad utilizada; la eficiencia es el coste por resultado, incluidos retries, contexto largo y herramientas.</p><h2>No premies el número equivocado</h2><p>Un precio medio menor puede esconder un margen unitario peor. Relaciona el gasto con un resultado: coste por tarea exitosa, margen por función o coste por cliente activo.</p><h2>El cierre mensual</h2><p>Exige una conciliación con proveedores, un puente de variación y un pronóstico basado en los factores reales de uso. Pide p50 y p95 del coste por tarea, no solo el promedio. Asigna responsables a los tres mayores movimientos.</p><p>Una reducción de precios solo crea valor si la organización puede ver dónde terminó ese ahorro.</p>","faq":[{"question":"¿Por qué sube el presupuesto si bajan los precios?","answer":"Porque el uso, la mezcla de modelos, el contexto y los agentes pueden crecer más rápido que las tarifas."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Análisis de variación del gasto de IA"}]},
-    "fr": {"title":"Le prix des tokens baisse. Le budget IA augmente quand même.","titleCore":"Le prix des tokens baisse. Le budget IA augmente quand même.","description":"Un cadre de direction financière pour expliquer la hausse des dépenses malgré la baisse des tarifs.","body":"<p>Des tokens moins chers ne signifient pas une dépense IA plus faible. L'usage, le mix de modèles, la longueur du contexte et l'activité des agents peuvent progresser plus vite que le tarif ne baisse. La question est ce qui a changé entre le plan approuvé et la facture.</p><h2>Construire le pont d'écart</h2><p>Séparez le <strong>tarif</strong>, le <strong>volume</strong>, le <strong>mix</strong> et l'<strong>efficacité</strong>. Le tarif relève du fournisseur, le volume de la demande, le mix de la capacité choisie et l'efficacité du coût par résultat réussi, reprises et outils compris.</p><h2>Fermer le mois</h2><p>Demandez une dépense rapprochée des factures, un pont d'écart et une prévision fondée sur les vrais inducteurs. Suivez le p50 et le p95 du coût par tâche réussie, pas seulement la moyenne. Chaque mouvement important doit avoir un responsable.</p><p>Une baisse de prix ne devient une économie que si l'entreprise sait où elle a été absorbée.</p>","faq":[{"question":"Pourquoi le budget augmente-t-il malgré la baisse des prix?","answer":"L'usage, le mix, le contexte et l'activité des agents peuvent croître plus vite que les tarifs ne baissent."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Analyse des écarts de dépenses IA"}]},
-    "de": {"title":"Tokenpreise fallen. Das KI-Budget steigt trotzdem.","titleCore":"Tokenpreise fallen. Das KI-Budget steigt trotzdem.","description":"Ein Finanzrahmen, um höhere KI-Ausgaben trotz sinkender Tokenpreise zu erklären.","body":"<p>Günstigere Tokens bedeuten nicht automatisch geringere KI-Ausgaben. Nutzung, Modellmix, Kontextlänge und Agentenaktivität können schneller wachsen als der Preis fällt. Entscheidend ist die Abweichung zwischen genehmigtem Plan und Rechnung.</p><h2>Die Abweichung aufteilen</h2><p>Trennen Sie <strong>Tarif</strong>, <strong>Volumen</strong>, <strong>Mix</strong> und <strong>Effizienz</strong>. Tarif betrifft den Anbieter, Volumen die Nachfrage, Mix die gewählte Fähigkeit und Effizienz die Kosten je erfolgreichem Ergebnis inklusive Retries und Tool-Aufrufen.</p><h2>Der Monatsabschluss</h2><p>Fordern Sie eine mit Provider-Rechnungen abgestimmte Ausgabenübersicht, eine Abweichungsbrücke und eine Prognose mit echten Nutzungstreibern. P50 und P95 der Kosten je erfolgreicher Aufgabe sind aussagekräftiger als ein globaler Durchschnitt.</p><p>Eine Preissenkung wird erst dann zur Einsparung, wenn sichtbar ist, wo sie geblieben ist.</p>","faq":[{"question":"Warum steigt das Budget trotz sinkender Preise?","answer":"Weil Nutzung, Modellmix, Kontext und Agenten schneller wachsen können als die Tarife fallen."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Abweichungsanalyse für KI-Ausgaben"}]},
-    "ja": {"title":"トークン価格が下がっても、AI予算が増える理由","titleCore":"トークン価格が下がっても、AI予算が増える理由","description":"トークン単価が下がってもAI支出が増える理由を、財務向けに分解します。","body":"<p>トークンが安くなっても、AI支出が減るとは限りません。利用量、モデル構成、コンテキスト、エージェントの活動が単価低下より速く増えるためです。財務では承認済み計画と請求額の差分を説明します。</p><h2>差分を4つに分ける</h2><p><strong>料金</strong>はプロバイダー、<strong>量</strong>は需要、<strong>構成</strong>は選んだモデル、<strong>効率</strong>は成功した成果1件のコストです。リトライやツール呼び出しも効率に含めます。</p><h2>月次締めで見るもの</h2><p>請求との照合、差分の橋渡し、実際の利用要因に基づく予測を揃えます。全体平均だけでなく、成功タスク単価のp50とp95を確認し、大きな差分に責任者を置きます。</p><p>値下げは、どこに吸収されたかを把握して初めて節約になります。</p>","faq":[{"question":"価格が下がっても予算が増えるのはなぜですか？","answer":"利用量、モデル構成、コンテキスト、エージェント活動が価格低下を上回って増えることがあるためです。"}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"AI支出の差分分析"}]},
-    "pt": {"title":"O preço dos tokens caiu. O orçamento de IA subiu na mesma.","titleCore":"O preço dos tokens caiu. O orçamento de IA subiu na mesma.","description":"Um enquadramento financeiro para explicar mais despesa de IA apesar de preços menores.","body":"<p>Tokens mais baratos não significam menor despesa de IA. Utilização, mistura de modelos, contexto e atividade dos agentes podem crescer mais depressa do que a tarifa diminui. A pergunta financeira é o que mudou entre o plano aprovado e a fatura.</p><h2>Divida a variação</h2><p>Separe <strong>tarifa</strong>, <strong>volume</strong>, <strong>mix</strong> e <strong>eficiência</strong>. A tarifa é o fornecedor; o volume é a procura; o mix é a capacidade usada; a eficiência é o custo por resultado bem-sucedido, incluindo retries e ferramentas.</p><h2>O fecho mensal</h2><p>Peça uma reconciliação com as faturas, uma ponte de variação e uma previsão baseada nos verdadeiros fatores de uso. Acompanhe p50 e p95 do custo por tarefa concluída e atribua responsáveis aos maiores movimentos.</p><p>Uma descida de preço só se torna poupança quando é possível ver onde ficou.</p>","faq":[{"question":"Porque sobe o orçamento quando os preços descem?","answer":"Porque o uso, o mix, o contexto e os agentes podem crescer mais depressa do que as tarifas descem."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Análise de variação da despesa de IA"}]}
+    "es": {
+      "title": "Bajó el precio de los tokens. El presupuesto de IA subió.",
+      "titleCore": "Bajó el precio de los tokens. El presupuesto de IA subió.",
+      "description": "Un marco para explicar por qué precios menores pueden coexistir con mayor gasto de IA.",
+      "body": "<p>Tokens más baratos no significan menor gasto de IA. El presupuesto puede subir porque el uso, la mezcla de modelos, el contexto y la actividad de los agentes crecieron más rápido que la tarifa. La pregunta financiera es qué cambió entre el plan aprobado y la factura.</p><h2>Construye el puente de variación</h2><p>Parte de la línea base: facturas, tráfico previsto y mezcla de modelos. Separa <strong>tarifa</strong>, <strong>volumen</strong>, <strong>mezcla</strong> y <strong>eficiencia</strong>. La tarifa es el proveedor; el volumen es la demanda; la mezcla es la capacidad utilizada; la eficiencia es el coste por resultado, incluidos retries, contexto largo y herramientas.</p><h2>No premies el número equivocado</h2><p>Un precio medio menor puede esconder un margen unitario peor. Relaciona el gasto con un resultado: coste por tarea exitosa, margen por función o coste por cliente activo.</p><h2>El cierre mensual</h2><p>Exige una conciliación con proveedores, un puente de variación y un pronóstico basado en los factores reales de uso. Pide p50 y p95 del coste por tarea, no solo el promedio. Asigna responsables a los tres mayores movimientos.</p><p>Una reducción de precios solo crea valor si la organización puede ver dónde terminó ese ahorro.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué sube el presupuesto si bajan los precios?",
+          "answer": "Porque el uso, la mezcla de modelos, el contexto y los agentes pueden crecer más rápido que las tarifas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Análisis de variación del gasto de IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le prix des tokens baisse. Le budget IA augmente quand même.",
+      "titleCore": "Le prix des tokens baisse. Le budget IA augmente quand même.",
+      "description": "Un cadre de direction financière pour expliquer la hausse des dépenses malgré la baisse des tarifs.",
+      "body": "<p>Des tokens moins chers ne signifient pas une dépense IA plus faible. L'usage, le mix de modèles, la longueur du contexte et l'activité des agents peuvent progresser plus vite que le tarif ne baisse. La question est ce qui a changé entre le plan approuvé et la facture.</p><h2>Construire le pont d'écart</h2><p>Séparez le <strong>tarif</strong>, le <strong>volume</strong>, le <strong>mix</strong> et l'<strong>efficacité</strong>. Le tarif relève du fournisseur, le volume de la demande, le mix de la capacité choisie et l'efficacité du coût par résultat réussi, reprises et outils compris.</p><h2>Fermer le mois</h2><p>Demandez une dépense rapprochée des factures, un pont d'écart et une prévision fondée sur les vrais inducteurs. Suivez le p50 et le p95 du coût par tâche réussie, pas seulement la moyenne. Chaque mouvement important doit avoir un responsable.</p><p>Une baisse de prix ne devient une économie que si l'entreprise sait où elle a été absorbée.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi le budget augmente-t-il malgré la baisse des prix?",
+          "answer": "L'usage, le mix, le contexte et l'activité des agents peuvent croître plus vite que les tarifs ne baissent."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Analyse des écarts de dépenses IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Tokenpreise fallen. Das KI-Budget steigt trotzdem.",
+      "titleCore": "Tokenpreise fallen. Das KI-Budget steigt trotzdem.",
+      "description": "Ein Finanzrahmen, um höhere KI-Ausgaben trotz sinkender Tokenpreise zu erklären.",
+      "body": "<p>Günstigere Tokens bedeuten nicht automatisch geringere KI-Ausgaben. Nutzung, Modellmix, Kontextlänge und Agentenaktivität können schneller wachsen als der Preis fällt. Entscheidend ist die Abweichung zwischen genehmigtem Plan und Rechnung.</p><h2>Die Abweichung aufteilen</h2><p>Trennen Sie <strong>Tarif</strong>, <strong>Volumen</strong>, <strong>Mix</strong> und <strong>Effizienz</strong>. Tarif betrifft den Anbieter, Volumen die Nachfrage, Mix die gewählte Fähigkeit und Effizienz die Kosten je erfolgreichem Ergebnis inklusive Retries und Tool-Aufrufen.</p><h2>Der Monatsabschluss</h2><p>Fordern Sie eine mit Provider-Rechnungen abgestimmte Ausgabenübersicht, eine Abweichungsbrücke und eine Prognose mit echten Nutzungstreibern. P50 und P95 der Kosten je erfolgreicher Aufgabe sind aussagekräftiger als ein globaler Durchschnitt.</p><p>Eine Preissenkung wird erst dann zur Einsparung, wenn sichtbar ist, wo sie geblieben ist.</p>",
+      "faq": [
+        {
+          "question": "Warum steigt das Budget trotz sinkender Preise?",
+          "answer": "Weil Nutzung, Modellmix, Kontext und Agenten schneller wachsen können als die Tarife fallen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Abweichungsanalyse für KI-Ausgaben"
+        }
+      ]
+    },
+    "ja": {
+      "title": "トークン価格が下がっても、AI予算が増える理由",
+      "titleCore": "トークン価格が下がっても、AI予算が増える理由",
+      "description": "トークン単価が下がってもAI支出が増える理由を、財務向けに分解します。",
+      "body": "<p>トークンが安くなっても、AI支出が減るとは限りません。利用量、モデル構成、コンテキスト、エージェントの活動が単価低下より速く増えるためです。財務では承認済み計画と請求額の差分を説明します。</p><h2>差分を4つに分ける</h2><p><strong>料金</strong>はプロバイダー、<strong>量</strong>は需要、<strong>構成</strong>は選んだモデル、<strong>効率</strong>は成功した成果1件のコストです。リトライやツール呼び出しも効率に含めます。</p><h2>月次締めで見るもの</h2><p>請求との照合、差分の橋渡し、実際の利用要因に基づく予測を揃えます。全体平均だけでなく、成功タスク単価のp50とp95を確認し、大きな差分に責任者を置きます。</p><p>値下げは、どこに吸収されたかを把握して初めて節約になります。</p>",
+      "faq": [
+        {
+          "question": "価格が下がっても予算が増えるのはなぜですか？",
+          "answer": "利用量、モデル構成、コンテキスト、エージェント活動が価格低下を上回って増えることがあるためです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出の差分分析"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O preço dos tokens caiu. O orçamento de IA subiu na mesma.",
+      "titleCore": "O preço dos tokens caiu. O orçamento de IA subiu na mesma.",
+      "description": "Um enquadramento financeiro para explicar mais despesa de IA apesar de preços menores.",
+      "body": "<p>Tokens mais baratos não significam menor despesa de IA. Utilização, mistura de modelos, contexto e atividade dos agentes podem crescer mais depressa do que a tarifa diminui. A pergunta financeira é o que mudou entre o plano aprovado e a fatura.</p><h2>Divida a variação</h2><p>Separe <strong>tarifa</strong>, <strong>volume</strong>, <strong>mix</strong> e <strong>eficiência</strong>. A tarifa é o fornecedor; o volume é a procura; o mix é a capacidade usada; a eficiência é o custo por resultado bem-sucedido, incluindo retries e ferramentas.</p><h2>O fecho mensal</h2><p>Peça uma reconciliação com as faturas, uma ponte de variação e uma previsão baseada nos verdadeiros fatores de uso. Acompanhe p50 e p95 do custo por tarefa concluída e atribua responsáveis aos maiores movimentos.</p><p>Uma descida de preço só se torna poupança quando é possível ver onde ficou.</p>",
+      "faq": [
+        {
+          "question": "Porque sobe o orçamento quando os preços descem?",
+          "answer": "Porque o uso, o mix, o contexto e os agentes podem crescer mais depressa do que as tarifas descem."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Análise de variação da despesa de IA"
+        }
+      ]
+    },
+    "it": {
+      "title": "Prezzi token in calo ma budget AI in crescita",
+      "titleCore": "Prezzi token in calo ma budget AI in crescita",
+      "description": "Un framework per spiegare perché tariffe di inferenza più basse possono coesistere con una spesa totale in aumento.",
+      "body": "<p>La riduzione dei prezzi dei token non equivale a una riduzione automatica della spesa per l'AI. Il budget complessivo può aumentare dopo uno sconto tariffario aggressivo se l'utilizzo, il mix di modelli, la lunghezza del contesto e le chiamate degli agenti crescono a un ritmo superiore rispetto al ribasso del listino. La domanda per il CFO non è se i token costino meno, ma cosa sia cambiato tra il piano approvato e la fattura finale.</p><h2>Costruire il ponte delle varianze</h2><p>Partite dalla baseline approvata e scomponete lo scostamento in quattro fattori: <strong>Tariffa</strong> (sconti negoziati e variazioni di listino), <strong>Volume</strong> (aumento di richieste e token consumati), <strong>Mix</strong> (spostamento verso modelli più complessi, contesti estesi o aree geografiche diverse) ed <strong>Efficienza</strong> (costo per produrre un risultato valido, compresi retry, passaggi a vuoto e output scartato).</p><h2>Non premiare il numero sbagliato</h2><p>Un costo medio per token in discesa può celare un margine unitario in rapido deterioramento. Un prodotto può acquisire clienti a ritmi elevati mentre ogni singolo workflow richiede un numero crescente di chiamate di ragionamento o recuperi di contesto. La metrica di riferimento per il board deve unire la spesa a un risultato concreto: costo per task completato o margine lordo per feature AI.</p><h2>Cosa verificare a fine mese</h2><p>Esigete un rendiconto riconciliato con i provider, un ponte dettagliato delle varianze e previsioni aggiornate con driver di utilizzo effettivi. Richiedete i percentili p50 e p95 del costo per task anziché medie generiche, e assegnate responsabili dedicati ai tre scostamenti di maggiore entità.</p>",
+      "faq": [
+        {
+          "question": "Perché il budget AI può crescere se i prezzi dei token scendono?",
+          "answer": "Perché l'aumento dei volumi, l'estensione dei contesti, l'uso di modelli avanzati e le attività degli agenti crescono più rapidamente dei ribassi tariffari."
+        },
+        {
+          "question": "Quali sono le quattro componenti di varianza della spesa AI?",
+          "answer": "Tariffa, volume, mix ed efficienza. Permettono di isolare se lo scostamento dipenda da acquisti, domanda, architettura o inefficienza operativa."
+        },
+        {
+          "question": "Cosa deve esaminare il CFO invece della sola spesa totale?",
+          "answer": "Deve esaminare la spesa riconciliata, il ponte delle varianze, i driver di previsione e il costo per task riuscito o margine per feature."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Analisi degli scostamenti di spesa AI"
+        }
+      ]
+    },
+    "ko": {
+      "title": "토큰 단가는 내렸는데 AI 예산이 증가하는 이유",
+      "titleCore": "토큰 단가는 내렸는데 AI 예산이 증가하는 이유",
+      "description": "단가, 볼륨, 믹스, 효율성 차이 분석을 통해 토큰 가격 인하에도 총지출이 증가하는 역설을 규명하는 CFO 프레임워크.",
+      "body": "<p>토큰 단가 인하가 곧 AI 지출 감소를 의미하지는 않습니다. 주요 공급업체가 단가를 대폭 인하한 뒤에도 사용량, 모델 믹스, 컨텍스트 길이, 에이전트 활동 증가율이 단가 인하율을 초과하면 예산은 오히려 급증합니다. CFO가 던져야 할 질문은 토큰이 저렴해졌는가가 아니라, 승인된 사업 계획과 실제 청구서 사이에서 무엇이 달라졌는가입니다.</p><h2>4대 예실 차이 브리지 구축</h2><p>승인된 기준선에서 시작하여 변동 요인을 네 단계로 규명하십시오. <strong>단가(Rate)</strong>는 공급업체 가격 인하 및 협상된 할인율을 포착합니다. <strong>볼륨(Volume)</strong>은 요청 수와 토큰 양을 포착합니다. <strong>믹스(Mix)</strong>는 고가 모델, 리전, 긴 컨텍스트 기능으로의 이동을 반영합니다. <strong>효율성(Efficiency)</strong>은 재시도, 불필요한 도구 호출, 버려지는 출력을 포함하여 하나의 유효한 결과를 내는 데 들어간 비용을 측정합니다.</p><h2>잘못된 지표에 현혹되지 마십시오</h2><p>블렌디드 토큰 단가가 하락하더라도 단위당 공헌이익은 악화될 수 있습니다. 신규 고객은 빠르게 유치하지만, 워크플로 완료를 위해 더 많은 추론이나 재시도가 필요할 수 있기 때문입니다. 이사회 보고 시에는 단순 지출 총액이 아니라 성공 작업당 비용, AI 기능별 매출총이익 등 성과 지표와 연계하여 보고해야 합니다.</p><h2>월말 결산 시 요구 사항</h2><p>공급업체 대사 지출 명세서, 예실 차이 브리지, 실제 사용량 동인을 반영한 업데이트된 재무 전망을 요구하십시오. 회사 전체 평균뿐 아니라 성공 작업당 p50 및 p95 단가를 확인하고, 가장 큰 3대 변동 요인에 대해 담당 부서와 실행 계획을 지정해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "토큰 단가가 내렸는데도 AI 예산이 증가할 수 있는 이유는 무엇인가요?",
+          "answer": "사용량 증가, 고성능 모델 믹스 전환, 컨텍스트 확장 및 자율 에이전트 호출 빈도가 단가 인하 폭을 앞지르기 때문입니다."
+        },
+        {
+          "question": "AI 지출의 4대 예실 차이 요인은 무엇인가요?",
+          "answer": "단가, 볼륨, 믹스, 효율성입니다. 이를 통해 조달, 수요, 아키텍처 선택, 운영 규율 중 어느 영역의 문제인지 분리합니다."
+        },
+        {
+          "question": "CFO는 단순 지출 총액 대신 무엇을 검토해야 하나요?",
+          "answer": "대사 완료 지출, 4대 변동 브리지, 예측 동인, 그리고 성공 작업당 비용이나 기능별 단위 마진을 검토해야 합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI 지출 차이 분석"
+        }
+      ]
+    },
+    "zh": {
+      "title": "Token价格大跌，企业AI预算为何依然暴增",
+      "titleCore": "Token价格大跌，企业AI预算为何依然暴增",
+      "description": "CFO分析框架：利用费率、用量、结构与效率四维方差分析模型，合理解释降价背景下AI支出增加的深层原因。",
+      "body": "<p>单Token价格大幅下调并不代表企业AI支出总额必然下降。即便核心云供应商给出了显著的合同折扣，整体预算仍可能快速走高，因为实际调用量、模型选型结构、对话上下文长度以及自律智能体的活动频次，其增速已彻底超过了单价的降幅。财务部门需要回答的不是“每个Token是否变便宜了”，而是“核准预算与实际供应商发票之间究竟发生了哪些结构性偏离”。</p><h2>搭建四维方差分析桥梁</h2><p>从已锁定的财务基线出发：包括供应商历史发票、经批准的业务用量假设以及预算预设的模型组合。按四个核心动因拆解变动：<strong>费率（Rate）</strong>反映供应商价格调整与商务折扣；<strong>用量（Volume）</strong>反映总请求数与实际Token吞吐；<strong>结构（Mix）</strong>反映工作负载在不同模型、供应商、区域及功能之间的迁移；<strong>效率（Efficiency）</strong>反映交付单个可用商业成果的工程成本，涵盖重试、超长上下文、工具调用与冗余输出。</p><table><thead><tr><th>方差维度</th><th>财务实质解读</th><th>主责部门</th></tr></thead><tbody><tr><td>费率</td><td>供应商商业定价变化</td><td>采购与供应链</td></tr><tr><td>用量</td><td>终端业务需求超出规划</td><td>产品与销售团队</td></tr><tr><td>结构</td><td>系统调用了不同层级的能力</td><td>技术与架构团队</td></tr><tr><td>效率</td><td>产出相同成果耗费了更多资源</td><td>工程研发与产品</td></tr></tbody></table><h2>避免奖励错误的统计表象</h2><p>加权平均单价的持续下调很容易掩盖单客经济模型（Unit Economics）的严重恶化。产品可能在快速获取新用户，但每个业务流程却消耗了数倍的推理计算、知识检索和重试纠错。向董事会汇报的关键指标必须将财务支出与业务产出紧密绑定：单次成功任务成本、AI功能毛利率、或按客群分层的单位AI服务成本。</p><h2>月度结账的标准交付要求</h2><p>财务部门应要求工程团队提供发票对齐的支出报告、四维方差桥梁以及基于真实业务动因的前瞻预测。重点复盘p50与p95单次成功任务成本，要求变动最大的三项主要动因责任人签字确认，明确该偏离属于短期业务激增、战略性扩张投资，还是工程缺陷造成的系统泄漏。</p>",
+      "faq": [
+        {
+          "question": "为什么供应商降价后企业的AI总预算依然会上升？",
+          "answer": "因为系统实际用量、高阶模型调用比例、上下文膨胀以及自主智能体活跃度的增速，远高于供应商价格下调的幅度。"
+        },
+        {
+          "question": "CFO应该用哪四大方差来拆解AI支出异动？",
+          "answer": "应当采用费率（Rate）、用量（Volume）、结构（Mix）与效率（Efficiency）四维方差，精确定位异动责任主体。"
+        },
+        {
+          "question": "CFO在月度结账时应当重点审查什么指标？",
+          "answer": "应审查与发票对齐的实际支出、四维方差桥梁、未来预测驱动因子，以及单次成功任务成本（Cost per successful task）。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出差异分析"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI支出预测"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "证明AI的投资回报率"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Tokenprijzen daalden, maar het AI-budget steeg",
+      "titleCore": "Tokenprijzen daalden, maar het AI-budget steeg",
+      "description": "Een CFO-framework om te verklaren waarom lagere AI-tarieven samengaan met hogere uitgaven, via variantie op tarief, volume, mix en efficiëntie.",
+      "body": "<p>Lagere tokenprijzen zijn niet synoniem met lagere totale AI-uitgaven. Een goedgekeurd budget kan fors worden overschreden na een grote providerkorting omdat het volume, de modelmix, de contextlengte en autonome agentactiviteiten sneller toenamen dan de tarieven daalden. De strategische vraag voor de CFO is niet of AI per token goedkoper werd, maar wat er precies veranderde tussen het goedgekeurde businessplan en de uiteindelijke factuur.</p><h2>Bouw de variantiebrug over vier assen</h2><p>Vertrek vanuit de goedgekeurde nulmeting: providerfacturen, geaccordeerde volumeprognoses en de gebudgetteerde modelmix. Verklaar de afwijking in vier stappen: <strong>Tarief (Rate)</strong> omvat prijsdalingen en staffelkortingen. <strong>Volume</strong> omvat verzoeken en tokens. <strong>Mix</strong> omvat verschuivingen tussen modellen, providers en regio's. <strong>Efficiëntie</strong> omvat de kosten om één succesvol resultaat te leveren, inclusief retries, contextlengte en tool calls.</p><table><thead><tr><th>Variantie</th><th>Financiële betekenis</th><th>Verantwoordelijke</th></tr></thead><tbody><tr><td>Tarief</td><td>Leverancierscondities gewijzigd</td><td>Inkoop / Procurement</td></tr><tr><td>Volume</td><td>Vraag overstijgt het plan</td><td>Product en Sales</td></tr><tr><td>Mix</td><td>Ander type intelligentie ingezet</td><td>Engineering</td></tr><tr><td>Efficiëntie</td><td>Zelfde resultaat kost meer tokens</td><td>Engineering en Product</td></tr></tbody></table><h2>Beloon niet het verkeerde getal</h2><p>Een dalende gemiddelde tokenprijs maskeert regelmatig een verslechterende dekkingsbijdrage per klant. Een applicatie trekt mogelijk snel gebruikers aan, terwijl elke voltooide transactie exponentieel meer redeneerstappen en context vergt. Koppel de bestuursrapportage daarom altijd aan tastbare uitkomsten: kosten per geslaagde taak of brutomarge per AI-functie.</p><h2>Vereisten voor de maandafsluiting</h2><p>Finance moet een met facturen afgestemd overzicht ontvangen, inclusief de variantiebrug en een prognose op basis van reële gebruiksdrijvers. Eis inzicht in p50- en p95-kosten per geslaagde taak en wijs eigenaren toe aan de drie grootste kostenverschuivingen.</p>",
+      "faq": [
+        {
+          "question": "Waarom kan het AI-budget stijgen als tokenprijzen dalen?",
+          "answer": "Gebruiksvolume, verschuiving naar duurdere modellen, langere context en autonome agent-stappen kunnen sneller groeien dan de tarieven dalen."
+        },
+        {
+          "question": "Wat zijn de vier varianties in AI-uitgaven?",
+          "answer": "Tarief (rate), volume, mix en efficiëntie. Deze splitsing wijst begrotingsafwijkingen eenduidig toe aan inkoop, marktvraag, modelkeuze of discipline."
+        },
+        {
+          "question": "Wat moet de CFO analyseren in plaats van totale AI-uitgaven?",
+          "answer": "Gereconcilieerde facturen, de vierdelige variantiebrug, actuele prognosedrijvers en kosten per geslaagde taak gekoppeld aan de bedrijfsmarge."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Variantieanalyse van AI-uitgaven"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI-uitgaven voorspellen"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI-ROI bewijzen"
+        }
+      ]
+    }
   }
 }
-
-

@@ -119,9 +119,8 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
     // neither eligible for rich results nor a thing anyone would cite.
     if (node["@type"] === "FAQPage") {
       for (const q of node.mainEntity || []) {
-        // Japanese ends questions with the fullwidth ？ (U+FF1F); an ASCII-only
-        // test flags every JA page as broken.
-        if (!/[?？]$/.test((q.name || "").trim())) errors.push(`${rel}: FAQ entry is not a question — "${q.name}"`);
+        // Japanese ends questions with \uFF1F (？); Arabic ends with \u061F (؟).
+        if (!/[?\u061F\uFF1F]$/.test((q.name || "").trim())) errors.push(`${rel}: FAQ entry is not a question — "${q.name}"`);
         if (!decode(html).includes(q.name)) errors.push(`${rel}: FAQ question is not visible on the page — "${q.name}"`);
         if (((q.acceptedAnswer || {}).text || "").length < 40) errors.push(`${rel}: FAQ answer is too thin for "${q.name}"`);
       }

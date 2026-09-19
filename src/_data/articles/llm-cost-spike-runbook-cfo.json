@@ -1,11 +1,216 @@
 {
-  "slug":"llm-cost-spike-runbook-cfo","tags":["ai-finops","incident-response","cfo"],"datePublished":"2026-08-27","dateModified":"2026-08-27","languages":{
-    "en":{"title":"What finance should do when the AI bill spikes","titleCore":"What finance should do when the AI bill spikes","description":"A CFO response sequence for confirming, containing, explaining, and reporting a sudden AI cost spike.","body":"<p>A sudden AI bill spike is a finance incident and an operating incident. Finance should preserve the invoice evidence, confirm the period and currency, ask engineering for a volume and model bridge, and protect revenue-critical workloads before approving a blunt budget cut.</p><h2>Confirm the signal</h2><p>Check invoice date, credits, taxes, commitment discounts, and late adjustments. Compare the provider bill with gateway and product usage. Record the baseline, the affected period, and the materiality threshold used for escalation.</p><h2>Contain without destroying value</h2><p>Ask for a reversible control: pause a runaway workflow, cap an agent, move background jobs to batch, or route eligible traffic to a cheaper model. Keep customer-critical and revenue-producing flows protected. Every temporary action needs a named owner and expiry.</p><h2>Ask the four questions</h2><p>Was the change rate, volume, mix, or efficiency? Rate is procurement. Volume is demand or adoption. Mix is capability choice. Efficiency is cost per successful outcome, including retries, human repair, and tool calls. This framing stops every variance becoming an engineering blame exercise.</p><h2>Report the decision</h2><p>Show dollar impact, customer impact, quality movement, control applied, and permanent action. Classify the spike as investment, forecast error, provider event, or avoidable leakage. Update the forecast and budget owner; do not close the incident when the graph merely returns to normal.</p><p>The finance role is to make the trade-off explicit: what spend was protected, what value was preserved, and what control prevents the next surprise.</p><h2>Related</h2><ul><li>AI spend variance analysis</li><li>AI spend forecasting</li><li>Reporting AI spend to the board</li></ul>","faq":[{"question":"What should finance do first when the AI bill spikes?","answer":"Confirm invoice period, credits, discounts, and currency, then compare provider billing with usage telemetry and preserve the baseline."},{"question":"Should finance immediately cut AI traffic?","answer":"No. Use a reversible, targeted control that protects revenue-critical and customer-critical workloads while the driver is identified."},{"question":"How should a spike be reported?","answer":"Report dollar and customer impact, quality movement, temporary control, root cause category, owner, and permanent next-period action."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"AI spend variance analysis"},{"slug":"/research/ai-spend-forecasting","label":"AI spend forecasting"},{"slug":"/research/ai-spend-board-reporting","label":"Reporting AI spend to the board"}]},
-    "es":{"title":"Qué debe hacer finanzas cuando se dispara la factura de IA","titleCore":"Qué debe hacer finanzas cuando se dispara la factura de IA","description":"Una secuencia para confirmar, contener, explicar y reportar un pico repentino de gasto de IA.","body":"<p>Un pico de IA es un incidente financiero y operativo. Finanzas debe conservar la factura, confirmar periodo y moneda, pedir el puente de volumen y modelos y proteger los flujos críticos antes de recortar todo.</p><h2>Confirma la señal</h2><p>Revisa créditos, impuestos, descuentos y ajustes. Compara factura con uso del producto y gateway.</p><h2>Contén sin destruir valor</h2><p>Usa una medida reversible: pausa un flujo, limita un agente, mueve batch o enruta a un modelo menor. Define responsable y caducidad.</p><h2>Pregunta cuatro cosas</h2><p>¿Fue tarifa, volumen, mezcla o eficiencia? Cada categoría tiene un dueño distinto. Después reporta impacto en dólares, clientes, calidad, control y acción permanente.</p>","faq":[{"question":"¿Qué hace finanzas primero ante un pico?","answer":"Confirma periodo, créditos, descuentos y moneda, compara factura con telemetría y conserva la línea base."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Variación del gasto de IA"}]},
-    "fr":{"title":"Que doit faire la finance quand la facture IA explose","titleCore":"Que doit faire la finance quand la facture IA explose","description":"Une séquence CFO pour confirmer, contenir, expliquer et présenter un pic de dépense IA.","body":"<p>Un pic IA est un incident financier et opérationnel. Préservez la facture, confirmez période et devise, demandez le pont volume-modèles et protégez les flux critiques avant une coupe générale.</p><h2>Confirmer</h2><p>Vérifiez crédits, taxes, remises et ajustements. Comparez facture et usage.</p><h2>Contenir</h2><p>Appliquez une mesure réversible: suspendre un flux, plafonner un agent, router en batch ou vers un modèle moins cher. Nommez un propriétaire et une expiration.</p><h2>Expliquer</h2><p>Le changement vient-il du tarif, du volume, du mix ou de l’efficacité? Rapportez impact, qualité, contrôle et action permanente.</p>","faq":[{"question":"Que fait la finance en premier lors d’un pic IA?","answer":"Elle confirme période, crédits, remises et devise, compare facture et télémétrie, puis conserve la base."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Écarts de dépenses IA"}]},
-    "de":{"title":"Was Finance bei einem KI-Kostensprung tun sollte","titleCore":"Was Finance bei einem KI-Kostensprung tun sollte","description":"Eine CFO-Sequenz zum Bestätigen, Begrenzen, Erklären und Berichten eines KI-Kostensprungs.","body":"<p>Ein KI-Kostensprung ist ein Finanz- und Betriebsereignis. Sichern Sie die Rechnung, bestätigen Sie Zeitraum und Währung, verlangen Sie eine Volumen- und Modellbrücke und schützen Sie kritische Workloads.</p><h2>Bestätigen</h2><p>Prüfen Sie Credits, Steuern, Rabatte und Nachträge und vergleichen Sie Rechnung mit Telemetrie.</p><h2>Begrenzen</h2><p>Nutzen Sie eine reversible Maßnahme: Workflow pausieren, Agent begrenzen, Batch oder günstigeres Modell. Besitzer und Ablauf festlegen.</p><h2>Erklären</h2><p>War es Tarif, Volumen, Mix oder Effizienz? Berichten Sie Dollar-, Kunden- und Qualitätswirkung sowie dauerhafte Aktion.</p>","faq":[{"question":"Was tut Finance zuerst bei einem KI-Kostensprung?","answer":"Zeitraum, Credits, Rabatte und Währung bestätigen, Rechnung mit Telemetrie vergleichen und die Baseline sichern."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Abweichungsanalyse für KI-Ausgaben"}]},
-    "ja":{"title":"AI請求額が急増したとき財務が行うこと","titleCore":"AI請求額が急増したとき財務が行うこと","description":"AI支出急増を確認、封じ込め、説明、報告するCFO向けの手順です。","body":"<p>AI請求の急増は財務と運用のインシデントです。請求の証拠を保存し、期間と通貨を確認し、量とモデルの差分を求め、重要なワークロードを保護します。</p><h2>信号を確認する</h2><p>クレジット、税、割引、調整を確認し、請求と利用テレメトリを比較します。</p><h2>価値を壊さず封じ込める</h2><p>ワークフロー停止、エージェント上限、バッチ化、安価なモデルへの振り分けなど可逆的な制御を使い、担当者と期限を決めます。</p><h2>差分を説明する</h2><p>料金、量、構成、効率のどれかを判定し、金額、顧客、品質、恒久対策を報告します。</p>","faq":[{"question":"AI請求が急増したとき最初に何をしますか？","answer":"期間、クレジット、割引、通貨を確認し、請求とテレメトリを比較して基準値を保存します。"}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"AI支出の差分分析"}]},
-    "pt":{"title":"Quando a fatura de IA dispara","titleCore":"Quando a fatura de IA dispara","description":"Uma sequência para confirmar, conter, explicar e reportar um pico repentino de despesa de IA.","body":"<p>Um pico de IA é um incidente financeiro e operacional. Preserve a fatura, confirme período e moeda, peça a ponte de volume e modelos e proteja os fluxos críticos antes de cortar tudo.</p><h2>Confirme o sinal</h2><p>Verifique créditos, impostos, descontos e ajustes. Compare a fatura com a telemetria.</p><h2>Contenha sem destruir valor</h2><p>Use uma medida reversível: pausar um fluxo, limitar um agente, usar batch ou um modelo mais barato. Defina responsável e validade.</p><h2>Explique e reporte</h2><p>Foi tarifa, volume, mix ou eficiência? Mostre impacto financeiro, cliente e qualidade, controlo aplicado e ação permanente.</p>","faq":[{"question":"O que faz a área financeira primeiro num pico de IA?","answer":"Confirma período, créditos, descontos e moeda, compara fatura com telemetria e guarda a linha de base."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Análise de variação da despesa de IA"}]}
+  "slug": "llm-cost-spike-runbook-cfo",
+  "tags": [
+    "ai-finops",
+    "incident-response",
+    "cfo"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "languages": {
+    "en": {
+      "title": "What finance should do when the AI bill spikes",
+      "titleCore": "What finance should do when the AI bill spikes",
+      "description": "A CFO response sequence for confirming, containing, explaining, and reporting a sudden AI cost spike.",
+      "body": "<p>A sudden AI bill spike is a finance incident and an operating incident. Finance should preserve the invoice evidence, confirm the period and currency, ask engineering for a volume and model bridge, and protect revenue-critical workloads before approving a blunt budget cut.</p><h2>Confirm the signal</h2><p>Check invoice date, credits, taxes, commitment discounts, and late adjustments. Compare the provider bill with gateway and product usage. Record the baseline, the affected period, and the materiality threshold used for escalation.</p><h2>Contain without destroying value</h2><p>Ask for a reversible control: pause a runaway workflow, cap an agent, move background jobs to batch, or route eligible traffic to a cheaper model. Keep customer-critical and revenue-producing flows protected. Every temporary action needs a named owner and expiry.</p><h2>Ask the four questions</h2><p>Was the change rate, volume, mix, or efficiency? Rate is procurement. Volume is demand or adoption. Mix is capability choice. Efficiency is cost per successful outcome, including retries, human repair, and tool calls. This framing stops every variance becoming an engineering blame exercise.</p><h2>Report the decision</h2><p>Show dollar impact, customer impact, quality movement, control applied, and permanent action. Classify the spike as investment, forecast error, provider event, or avoidable leakage. Update the forecast and budget owner; do not close the incident when the graph merely returns to normal.</p><p>The finance role is to make the trade-off explicit: what spend was protected, what value was preserved, and what control prevents the next surprise.</p><h2>Related</h2><ul><li>AI spend variance analysis</li><li>AI spend forecasting</li><li>Reporting AI spend to the board</li></ul>",
+      "faq": [
+        {
+          "question": "What should finance do first when the AI bill spikes?",
+          "answer": "Confirm invoice period, credits, discounts, and currency, then compare provider billing with usage telemetry and preserve the baseline."
+        },
+        {
+          "question": "Should finance immediately cut AI traffic?",
+          "answer": "No. Use a reversible, targeted control that protects revenue-critical and customer-critical workloads while the driver is identified."
+        },
+        {
+          "question": "How should a spike be reported?",
+          "answer": "Report dollar and customer impact, quality movement, temporary control, root cause category, owner, and permanent next-period action."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI spend variance analysis"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting"
+        },
+        {
+          "slug": "/research/ai-spend-board-reporting",
+          "label": "Reporting AI spend to the board"
+        }
+      ]
+    },
+    "es": {
+      "title": "Qué debe hacer finanzas cuando se dispara la factura de IA",
+      "titleCore": "Qué debe hacer finanzas cuando se dispara la factura de IA",
+      "description": "Una secuencia para confirmar, contener, explicar y reportar un pico repentino de gasto de IA.",
+      "body": "<p>Un pico de IA es un incidente financiero y operativo. Finanzas debe conservar la factura, confirmar periodo y moneda, pedir el puente de volumen y modelos y proteger los flujos críticos antes de recortar todo.</p><h2>Confirma la señal</h2><p>Revisa créditos, impuestos, descuentos y ajustes. Compara factura con uso del producto y gateway.</p><h2>Contén sin destruir valor</h2><p>Usa una medida reversible: pausa un flujo, limita un agente, mueve batch o enruta a un modelo menor. Define responsable y caducidad.</p><h2>Pregunta cuatro cosas</h2><p>¿Fue tarifa, volumen, mezcla o eficiencia? Cada categoría tiene un dueño distinto. Después reporta impacto en dólares, clientes, calidad, control y acción permanente.</p>",
+      "faq": [
+        {
+          "question": "¿Qué hace finanzas primero ante un pico?",
+          "answer": "Confirma periodo, créditos, descuentos y moneda, compara factura con telemetría y conserva la línea base."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Variación del gasto de IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Que doit faire la finance quand la facture IA explose",
+      "titleCore": "Que doit faire la finance quand la facture IA explose",
+      "description": "Une séquence CFO pour confirmer, contenir, expliquer et présenter un pic de dépense IA.",
+      "body": "<p>Un pic IA est un incident financier et opérationnel. Préservez la facture, confirmez période et devise, demandez le pont volume-modèles et protégez les flux critiques avant une coupe générale.</p><h2>Confirmer</h2><p>Vérifiez crédits, taxes, remises et ajustements. Comparez facture et usage.</p><h2>Contenir</h2><p>Appliquez une mesure réversible: suspendre un flux, plafonner un agent, router en batch ou vers un modèle moins cher. Nommez un propriétaire et une expiration.</p><h2>Expliquer</h2><p>Le changement vient-il du tarif, du volume, du mix ou de l’efficacité? Rapportez impact, qualité, contrôle et action permanente.</p>",
+      "faq": [
+        {
+          "question": "Que fait la finance en premier lors d’un pic IA?",
+          "answer": "Elle confirme période, crédits, remises et devise, compare facture et télémétrie, puis conserve la base."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Écarts de dépenses IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Was Finance bei einem KI-Kostensprung tun sollte",
+      "titleCore": "Was Finance bei einem KI-Kostensprung tun sollte",
+      "description": "Eine CFO-Sequenz zum Bestätigen, Begrenzen, Erklären und Berichten eines KI-Kostensprungs.",
+      "body": "<p>Ein KI-Kostensprung ist ein Finanz- und Betriebsereignis. Sichern Sie die Rechnung, bestätigen Sie Zeitraum und Währung, verlangen Sie eine Volumen- und Modellbrücke und schützen Sie kritische Workloads.</p><h2>Bestätigen</h2><p>Prüfen Sie Credits, Steuern, Rabatte und Nachträge und vergleichen Sie Rechnung mit Telemetrie.</p><h2>Begrenzen</h2><p>Nutzen Sie eine reversible Maßnahme: Workflow pausieren, Agent begrenzen, Batch oder günstigeres Modell. Besitzer und Ablauf festlegen.</p><h2>Erklären</h2><p>War es Tarif, Volumen, Mix oder Effizienz? Berichten Sie Dollar-, Kunden- und Qualitätswirkung sowie dauerhafte Aktion.</p>",
+      "faq": [
+        {
+          "question": "Was tut Finance zuerst bei einem KI-Kostensprung?",
+          "answer": "Zeitraum, Credits, Rabatte und Währung bestätigen, Rechnung mit Telemetrie vergleichen und die Baseline sichern."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Abweichungsanalyse für KI-Ausgaben"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AI請求額が急増したとき財務が行うこと",
+      "titleCore": "AI請求額が急増したとき財務が行うこと",
+      "description": "AI支出急増を確認、封じ込め、説明、報告するCFO向けの手順です。",
+      "body": "<p>AI請求の急増は財務と運用のインシデントです。請求の証拠を保存し、期間と通貨を確認し、量とモデルの差分を求め、重要なワークロードを保護します。</p><h2>信号を確認する</h2><p>クレジット、税、割引、調整を確認し、請求と利用テレメトリを比較します。</p><h2>価値を壊さず封じ込める</h2><p>ワークフロー停止、エージェント上限、バッチ化、安価なモデルへの振り分けなど可逆的な制御を使い、担当者と期限を決めます。</p><h2>差分を説明する</h2><p>料金、量、構成、効率のどれかを判定し、金額、顧客、品質、恒久対策を報告します。</p>",
+      "faq": [
+        {
+          "question": "AI請求が急増したとき最初に何をしますか？",
+          "answer": "期間、クレジット、割引、通貨を確認し、請求とテレメトリを比較して基準値を保存します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出の差分分析"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Quando a fatura de IA dispara",
+      "titleCore": "Quando a fatura de IA dispara",
+      "description": "Uma sequência para confirmar, conter, explicar e reportar um pico repentino de despesa de IA.",
+      "body": "<p>Um pico de IA é um incidente financeiro e operacional. Preserve a fatura, confirme período e moeda, peça a ponte de volume e modelos e proteja os fluxos críticos antes de cortar tudo.</p><h2>Confirme o sinal</h2><p>Verifique créditos, impostos, descontos e ajustes. Compare a fatura com a telemetria.</p><h2>Contenha sem destruir valor</h2><p>Use uma medida reversível: pausar um fluxo, limitar um agente, usar batch ou um modelo mais barato. Defina responsável e validade.</p><h2>Explique e reporte</h2><p>Foi tarifa, volume, mix ou eficiência? Mostre impacto financeiro, cliente e qualidade, controlo aplicado e ação permanente.</p>",
+      "faq": [
+        {
+          "question": "O que faz a área financeira primeiro num pico de IA?",
+          "answer": "Confirma período, créditos, descontos e moeda, compara fatura com telemetria e guarda a linha de base."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Análise de variação da despesa de IA"
+        }
+      ]
+    },
+    "it": {
+      "title": "Cosa fare quando la fattura di IA esplode",
+      "titleCore": "Cosa fare quando la fattura di IA esplode",
+      "description": "La sequenza operativa per CFO per confermare, contenere, spiegare e rendicontare un picco improvviso di costi IA.",
+      "body": "<p>Un picco imprevisto nella bolletta dell'IA è sia un incidente operativo sia un incidente finanziario. Finanza e ingegneria devono cooperare per confermare l'anomalia, isolare i workload critici e applicare rimedi mirati prima di tagliare indiscriminatamente i budget.</p><h2>Confermare il segnale</h2><p>Verificate data di fatturazione, crediti, tasse, sconti sui volumi concordati e valute. Confrontate i dati dei provider con i log del gateway aziendale.</p><h2>Contenere senza distruggere valore</h2><p>Attivate controlli reversibili: mettete in pausa un flusso anomalo, limitate la concorrenza di un agente, spostate i task differibili su API batch ed effettuate routing verso modelli più leggeri.</p><h2>Le quattro domande chiave</h2><p>La variazione è dipesa da tariffa, volume, mix di modelli o efficienza? Ognuna di queste cause ha un responsabile dedicato.</p>",
+      "faq": [
+        {
+          "question": "Cosa deve fare la finanza quando la bolletta IA esplode?",
+          "answer": "Confermare periodo, crediti e sconti, confrontare la fattura con i log di telemetria e applicare controlli mirati e reversibili."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Analisi delle variazioni di spesa IA"
+        }
+      ]
+    },
+    "ko": {
+      "title": "AI 비용이 폭증했을 때 CFO가 취해야 할 조치",
+      "titleCore": "AI 비용이 폭증했을 때 CFO가 취해야 할 조치",
+      "description": "갑작스러운 AI 청구서 급증을 확인, 격리, 원인 규명 및 보고하기 위한 CFO 비상 대응 런북.",
+      "body": "<p>예기치 않은 AI 비용 급증은 운영 장애이자 재무 인사이던트입니다. 일괄적인 예산 삭감으로 비즈니스를 마비시키기 전에 청구 내역을 확인하고, 병목 워크로드를 격리하며, 매출 기여 작업은 안전하게 보호해야 합니다.</p><h2>비용 이상 신호 확인</h2><p>청구 기간, 약정 할인, 세금 및 크레딧 적용 여부를 확인하고 게이트웨이 및 실제 제품 텔레메트리와 대조합니다.</p><h2>가치를 훼손하지 않는 격리 조치</h2><p>오작동하는 워크플로우 일시 중지, 에이전트 동시성 상한 적용, 배치 API 전환 등 가역적인 제어 장치를 적용합니다.</p><h2>4가지 원인 분석 질문</h2><p>단가, 사용량, 모델 믹스, 작업 효율성 중 어디에서 변동이 발생했는지 분석하여 책임 소재를 명확히 하고 재발 방지 조치를 수립합니다.</p>",
+      "faq": [
+        {
+          "question": "AI 청구서가 급증했을 때 재무팀이 가장 먼저 해야 할 일은 무엇인가요?",
+          "answer": "청구 기간과 약정 할인 적용을 확인하고, 게이트웨이 텔레메트리와 대조하여 이상 징후의 기준선을 보존하는 것입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI 지출 변동 분석"
+        }
+      ]
+    },
+    "zh": {
+      "title": "AI账单突发暴增时CFO应急处置指南",
+      "titleCore": "AI账单突发暴增时CFO应急处置指南",
+      "description": "CFO应急响应框架：确认账单异动、可逆性止血隔离、拆解根因动因并向执行层与董事会汇报决策。",
+      "body": "<p>AI云账单的突然暴增既是技术运营事故，更是重大财务风险事件。财务团队应当第一时间核实发票凭证、锁定结算周期与计费币种，要求工程团队提供用量与模型分析桥梁，并在批准激进的预算硬性切断前，优先保护核心创收工作负载。</p><h2>核实异常信号</h2><p>审查开票时间点、预付款折扣、税费、承诺消费抵扣及补结算项。将云厂商账单与内部API网关用量对比，明确异常周期的基线水平与事件升级的阈值标准。</p><h2>在不破坏商业价值的前提下遏制</h2><p>优先采用可逆的治理措施：暂停异常跑批流、对自律智能体设置并发上限、将非实时计算转为批处理、或将适宜流量分流至轻量模型。坚决保障客户关键交互与产生直接营收的业务通路。</p><h2>聚焦四大动因提问</h2><p>本次变动是单价（Rate）、用量（Volume）、结构（Mix）还是效率（Efficiency）问题？单价属于采购议价，用量反映业务采纳，结构代表模型选型，而效率则关乎有效任务单价与重试浪费。</p><h2>复盘决策与常态化治理</h2><p>如实汇报涉及的财务金额、受影响客户、质量波动指标、临时控制措施以及长效规避方案。将暴增准确界定为业务扩张投资、预测偏差、供应商计费异动或系统冗余漏洞，并同步更新财务模型。</p>",
+      "faq": [
+        {
+          "question": "AI账单出现突发暴增时，财务部门首要动作是什么？",
+          "answer": "核验账单周期、合同折扣、税费与结算币种，并将云厂商账单与内部网关遥测比对，固化基线数据。"
+        },
+        {
+          "question": "面对AI支出暴增，财务是否应立即切断业务流量？",
+          "answer": "不应该。应协同工程团队采取针对性的可逆控制措施，在查明根因的同时优先保护创收核心工作流。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出差异分析"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Wat de CFO moet doen bij een AI-factuurpiek",
+      "titleCore": "Wat de CFO moet doen bij een AI-factuurpiek",
+      "description": "Een stappenplan voor CFO's om een plotselinge AI-kostenpiek te verifiëren, in te dammen, te verklaren en te rapporteren.",
+      "body": "<p>Een plotselinge piek in de AI-factuur is zowel een operationeel als een financieel incident. Finance moet factuurgegevens veiligstellen, facturatieperiodes en valuta controleren, engineering om een volume- en modelbridge vragen en omzet-kritieke workloads beschermen voordat een botte bezuiniging wordt goedgekeurd.</p><h2>Verifieer het signaal</h2><p>Controleer factuurdata, credits, belastingen, staffelkortingen en eventuele naheffingen. Vergelijk de factuur met gateway- en producttelemetrie. Leg de uitgangssituatie, de getroffen periode en de materialiteitsdrempel vast.</p><h2>Indammen zonder waardeverlies</h2><p>Vraag om omkeerbare maatregelen: pauzeer ontspoorde workflows, begrens agent-concurrency, verplaats achtergrondtaken naar batch of routeer geschikte taken naar lichtere modellen. Houd omzetgenererende flows te allen tijde beschermd.</p><h2>Stel de vier kernvragen</h2><p>Werd de stijging veroorzaakt door tarief, volume, mix of efficiëntie? Tarief hoort bij inkoop; volume bij klantadoptie; mix bij modelkeuzes; en efficiëntie bij kosten per succesvol resultaat inclusief retries en handmatige correcties.</p><h2>Rapporteer de besluitvorming</h2><p>Toon de financiële impact, klantervaring, kwaliteitsverschuivingen, toegepaste beheersmaatregelen en structurele acties. Classificeer de piek als bewuste investering, prognosefout, provider-incident of vermijdbare inefficiëntie.</p>",
+      "faq": [
+        {
+          "question": "Wat moet finance als eerste doen bij een AI-kostenpiek?",
+          "answer": "Factuurperiode, credits en kortingen verifiëren, de factuur afzetten tegen de telemetrie en de nulmeting vastleggen."
+        },
+        {
+          "question": "Moet finance AI-verkeer direct rigoureus stopzetten?",
+          "answer": "Nee. Kies voor omkeerbare, gerichte ingrepen die omzet-kritieke flows ontzien terwijl de oorzaak wordt onderzocht."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Variantieanalyse van AI-uitgaven"
+        }
+      ]
+    }
   }
 }
-

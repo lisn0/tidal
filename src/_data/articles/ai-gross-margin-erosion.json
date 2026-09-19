@@ -131,6 +131,110 @@
           "label": "Custo por resultado rentável"
         }
       ]
+    },
+    "it": {
+      "title": "Erosione del margine lordo per IA: stimarla prima",
+      "titleCore": "Erosione del margine lordo per IA: stimarla prima",
+      "description": "Come imputare i costi di inferenza al costo del venduto e misurare l'impatto sul margine lordo prima del lancio del prodotto.",
+      "body": "<p>Una funzionalità di IA sposta la spesa da R&amp;D al costo del venduto (COGS). L'inferenza viene eseguita ogni volta che un cliente usa il prodotto: è un costo variabile di erogazione. Se non viene modellata prima del lancio, il primo segnale visibile è un calo improvviso del margine lordo.</p><h2>Il calcolo del margine</h2><p>Lavorate sul costo per account attivo al mese, non sul costo per token. Moltiplicate il costo per task riuscito per i task attesi e aggiungete i fallimenti e i retry pagati. Verificate a livello mediano, al 90° percentile e sull'account più pesante accettabile.</p><h2>Da dove nasce l'erosione</h2><p>Utenti intensivi con tariffa flat, retry fatturati a prezzo pieno, contesti lunghi reinviati a ogni turno e flussi agentici che moltiplicano le chiamate.</p><h2>Definire la risposta di prezzo</h2><p>Tetti di consumo, componente a consumo nel prezzo o modello predefinito più economico. Riportate l'inferenza come voce dedicata all'interno del margine lordo.</p>",
+      "faq": [
+        {
+          "question": "L'inferenza di IA è R&D o costo del venduto?",
+          "answer": "L'inferenza ricorrente legata all'uso dei clienti è un costo variabile di erogazione e appartiene al costo del venduto (COGS)."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Costo per risultato redditizio"
+        }
+      ]
+    },
+    "ko": {
+      "title": "AI 기능에 따른 매출총이익률 저하: 출시 전 예측",
+      "titleCore": "AI 기능에 따른 매출총이익률 저하: 출시 전 예측",
+      "description": "AI 추론 비용을 매출원가에 반영하여 분기 결산 전 매출총이익률에 미치는 영향을 출시 전에 미리 모델링하고 방어하는 방법.",
+      "body": "<p>AI 기능은 지출 항목을 연구개발(R&amp;D)에서 매출원가(COGS)로 이전시킵니다. 추론은 고객이 제품을 사용할 때마다 실행되는 변동비입니다. 출시 전에 이를 모델링하지 않으면 경영진 보고서에서 뒤늦게 설명해야 하는 이익률 저하로 이어집니다.</p><h2>계산 방법</h2><p>토큰 단가가 아닌 월간 활성 계정당 비용을 기준으로 계산합니다. 성공적인 작업당 비용에 예상 작업 수를 곱하고, 유료 실패 및 재시도 비용을 합산합니다. 중위수, 90번째 백분위수, 그리고 최대 사용량 계정 등 세 구간에서 검증합니다.</p><h2>이익률 침식의 근본 원인</h2><p>정액 요금제의 헤비 유저, 전액 청구되는 재시도, 매 턴마다 재전송되는 긴 컨텍스트, 단일 작업을 수많은 호출로 확장하는 에이전트 워크플로우가 주된 원인입니다.</p><h2>가격 전략 사전 결정</h2><p>사용량 상한제, 종량제 과금 결합, 기본 모델의 저비용화 등을 검토하고, 매출총이익 내에 독립된 AI 원가 항목으로 보고해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "AI 추론 비용은 R&D인가요, 매출원가인가요?",
+          "answer": "고객의 실제 제품 사용에 의해 발생하는 지속적인 추론 비용은 서비스 제공 변동비로서 매출원가(COGS)에 해당합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "수익성 있는 결과당 비용"
+        }
+      ]
+    },
+    "zh": {
+      "title": "AI导致毛利率侵蚀：上线前必须建立财务模型",
+      "titleCore": "AI导致毛利率侵蚀：上线前必须建立财务模型",
+      "description": "如何将AI推理成本正确计入营业成本，在功能上线前而非董事会季报中看清对毛利率的真实侵蚀。",
+      "body": "<p>AI功能的推出将企业支出从研发预算（R&amp;D）转移到了营业成本（Cost of Goods Sold）。模型离线训练与工程原型验证可以列入研发预算，但在线推理在客户每次操作时都会产生实际支出，属于标准的服务变动成本。如果在上线前未能建立严谨的测算模型，财务部门首次察觉它的信号往往就是董事会例会上无法合理解释的毛利率突降。</p><h2>将推理支出列入营业成本</h2><p>将重复发生的推理调用、失败重试、工具交互以及按使用量挂钩的第三方席位费统一归入营业成本，而不是研发费用。判断标准很简单：只要客户再次使用该功能时这笔成本就会再次发生，它就属于交付成本。一次性模型调优和基准测试属于研发，生产推理链路必须纳入营业成本。</p><h2>核心测算公式</h2><p>财务测算必须基于“月度单活跃账户成本”，而非技术人员常用的“单Token单价”。计算实测的单次成功任务成本，乘以单账户预期的月度任务总量，再加上必须全额付费的失败和重试损耗。将该数据与该账户现有的订阅收入对比，得出的就是该客群的全新毛利率，而非模糊的节省比例。</p><p>在三种使用量维度上进行模拟：中位数用量账户、第90百分位账户、以及商业上可接受的最极端用量账户。中位数通常看起来很健康，但毛利塌陷往往潜伏在右侧长尾，因为AI支出随使用无上限攀升，而固定套餐收入却有硬顶。</p><h2>毛利率侵蚀的四大现实根源</h2><p>大多数侵蚀由四大根源引发：无用量封顶的固定订阅重度用户、按全额计费的系统失败与重试、每轮对话重复发送的冗长上下文、以及将单个操作裂变成数十次调用的复杂智能体。只要在预发环境采用真实流量埋点，这些在上线前均完全可测可控。</p><h2>尽早明确产品定价应对策略</h2><p>可选策略包括：在套餐中设定用量阶梯上限、在报价中引入超额用量计费模块、将默认路由切换为高性价比模型并将昂贵模型保留给复杂用例、或在固定周期内将低毛利作为获客成本主动接受。这四种策略在商业上皆可论证，唯独在季度末看着方差报告措手不及是无法接受的。</p>",
+      "faq": [
+        {
+          "question": "AI推理成本应计入研发费用还是营业成本？",
+          "answer": "因客户使用而持续发生的推理属于服务交付的变动成本，应计入营业成本（COGS）；而一次性模型训练、原型和离线评估通常计入研发费用。"
+        },
+        {
+          "question": "财务团队如何在AI功能上线前预测其对毛利率的影响？",
+          "answer": "将实测的单次成功任务成本乘以账户月度任务量，加上失败重试损耗，并在中位数、90分位与最重度账户维度与现有客户收入进行比对。"
+        },
+        {
+          "question": "AI功能侵蚀企业毛利率的主要原因是什么？",
+          "answer": "主要包括固定费率套餐下的重度客户消耗、全额计费的重试报错、多轮交互中重复计费的超长上下文，以及智能体多步并发调用。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "盈利性成果单价"
+        },
+        {
+          "slug": "/research/llm-cost-per-request",
+          "label": "LLM单次请求成本"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "证明AI的投资回报率"
+        }
+      ]
+    },
+    "nl": {
+      "title": "AI-brutomarge-erosie: modelleer vóór de livegang",
+      "titleCore": "AI-brutomarge-erosie: modelleer vóór de livegang",
+      "description": "Hoe CFO's AI-inferentiekosten toewijzen aan omzetkosten en margedruk kwantificeren vóór de presentatie aan de raad van bestuur.",
+      "body": "<p>Een AI-functionaliteit verschuift budgetten van R&amp;D naar de omzetkosten (Cost of Goods Sold). Modeltraining en prototyping kunnen binnen onderzoeksbudgetten vallen, maar inferentie wordt uitgevoerd bij elke klantinteractie en vormt een variabele kostprijs van de dienstverlening. Wordt dit vooraf niet gemodelleerd, dan is het eerste zichtbare signaal een plotselinge daling van de brutomarge die finance achteraf moet verantwoorden.</p><h2>Plaats inferentie in de omzetkosten</h2><p>Classificeer operationele inferentie, retries, tool calls en eventuele AI-seat-uitbreidingen als omzetkosten in plaats van R&amp;D. De doorslaggevende toets is herhaalbaarheid: treedt de kost opnieuw op wanneer een klant de feature gebruikt? Eenmalige fine-tuning en validatieseries zijn R&amp;D; het productietraject hoort onomstotelijk thuis in de brutomarge.</p><h2>De financiële calculatie</h2><p>Reken in kosten per actief account per maand, niet in kosten per token. Vermenigvuldig de gemeten kosten per geslaagde taak met de verwachte maandelijkse taken per account en voeg de doorberekende faal- en retry-kosten toe. Toets dit aan de werkelijke contractwaarde van het account. Het resultaat is de nieuwe brutomarge van dat cohort in plaats van een hypothetische besparingsclaim.</p><p>Simuleer dit op drie niveaus: mediaan verbruik, het 90e percentiel en het zwaarste acceptabele account. De mediaan oogt vrijwel altijd positief. Marge-erosie schuilt in de lange staart, omdat AI-kosten blijven meegroeien met intensiteit terwijl vaste abonnementstarieven stilstaan.</p><h2>Waar de erosie daadwerkelijk vandaan komt</h2><p>Vier factoren verklaren het leeuwendeel van de margeval: grootverbruikers op flat-fee tarieven zonder volumebegrenzing, mislukte taken die tegen vol tarief worden afgerekend, context die bij elke beurt opnieuw over de lijn gaat, en autonome agents die één prompt omzetten in tientallen modelaanroepen.</p><h2>Kies vroegtijdig de juiste prijsstrategie</h2><p>De opties zijn een volumecap in het contract, een variabele verbruikscomponent in de prijsstructuur, een voordeliger standaardmodel met selectieve escalatie, of het tijdelijk accepteren van de lagere marge als strategische acquisitiekost.</p>",
+      "faq": [
+        {
+          "question": "Zijn AI-inferentiekosten R&D of omzetkosten?",
+          "answer": "Terugkerende inferentie die ontstaat wanneer een klant het product gebruikt is een variabele kostprijs van levering en behoort tot de omzetkosten (COGS)."
+        },
+        {
+          "question": "Hoe berekent finance de impact op de brutomarge vóór launch?",
+          "answer": "Vermenigvuldig de kosten per geslaagde taak met het maandvolume per account, tel de faalkosten erbij op en vergelijk met de omzet op p50-, p90- en piekniveau."
+        },
+        {
+          "question": "Wat veroorzaakt de erosie van de AI-brutomarge?",
+          "answer": "Onbegrensde flat-rate contracten bij grootverbruikers, herhaalpogingen tegen vol tarief, lange meegestuurde context en meervoudige agent-fan-outs."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Kosten per rendabel resultaat"
+        },
+        {
+          "slug": "/research/llm-cost-per-request",
+          "label": "LLM-kosten per verzoek"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI-ROI bewijzen"
+        }
+      ]
     }
   }
 }

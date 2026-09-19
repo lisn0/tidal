@@ -1,10 +1,266 @@
 {
-  "slug":"evals-cost-board","tags":["ai-finops","evaluations","governance"],"datePublished":"2026-08-27","dateModified":"2026-08-27","languages":{
-    "en":{"title":"Evaluation spend belongs in the AI budget","titleCore":"Evaluation spend belongs in the AI budget","description":"Why CFOs should budget LLM evaluations separately and connect test spend to release confidence and business value.","body":"<p>Evaluation spend is part of the cost of operating AI, not a free engineering sidecar. Regression suites, red-team tests, model comparisons, and release certification consume tokens, tools, and reviewer time. Put them in the AI budget and judge them by the decisions they improve.</p><h2>Separate evaluation types</h2><p>Budget pull-request checks, nightly regressions, pre-release certification, and exploratory research separately. They have different urgency, coverage, and acceptable cost. A single blended number makes an expensive experiment look like production demand.</p><h2>Measure confidence per dollar</h2><p>Track test-set coverage, quality confidence, cost per run, cost per detected defect, and cost per release decision. Cache stable fixtures and sample redundant cases, but never hide evaluation cost inside production feature spend.</p><h2>Make it a portfolio decision</h2><p>Increase evaluation spend when the downside of a bad release is high. Reduce or redesign a suite when it produces little new evidence. Finance can ask which decision the next run will change and what quality or financial risk it retires.</p><p>The right evaluation budget is not the smallest one. It is the amount that buys credible release confidence at a known cost.</p><h2>Related</h2><ul><li>Proving AI ROI</li><li>AI spend forecasting</li><li>AI governance framework</li></ul>","faq":[{"question":"Should LLM evaluation spend be in the AI budget?","answer":"Yes. Evaluations consume provider, tool, infrastructure, and reviewer resources and are part of the cost of operating AI."},{"question":"How should finance measure evaluation value?","answer":"Track coverage, confidence, cost per run, cost per detected defect, and cost per release decision, then compare with the risk retired."},{"question":"When should an evaluation suite be redesigned?","answer":"Redesign it when repeated runs produce little new evidence, miss important workflows, or consume more cost than the release risk justifies."}],"related":[{"slug":"/research/proving-ai-roi","label":"Proving AI ROI"},{"slug":"/research/ai-spend-forecasting","label":"AI spend forecasting"},{"slug":"/research/ai-governance-framework","label":"AI governance framework"}]},
-    "es":{"title":"El gasto de evaluación pertenece al presupuesto de IA","titleCore":"El gasto de evaluación pertenece al presupuesto de IA","description":"Por qué finanzas debe presupuestar evaluaciones LLM y conectarlas con confianza de lanzamiento y valor.","body":"<p>Las evaluaciones consumen tokens, herramientas y tiempo de revisión. Son parte del coste de operar IA, no un extra gratuito. Sepáralas por tipo y mide qué decisiones mejoran.</p><h2>Confianza por dólar</h2><p>Mide cobertura, confianza, coste por ejecución, defecto detectado y decisión de lanzamiento. Usa caché y muestreo sin ocultar el gasto.</p><h2>Decisión de cartera</h2><p>Gasta más cuando el riesgo de una mala versión sea alto y rediseña suites que aporten poca evidencia.</p>","faq":[{"question":"¿Debe estar la evaluación LLM en el presupuesto de IA?","answer":"Sí. Consume proveedores, herramientas, infraestructura y revisión y forma parte del coste operativo."}],"related":[{"slug":"/research/proving-ai-roi","label":"Demostrar el ROI de IA"}]},
-    "fr":{"title":"Les dépenses d’évaluation appartiennent au budget IA","titleCore":"Les dépenses d’évaluation appartiennent au budget IA","description":"Pourquoi budgéter séparément les évaluations LLM et relier leur coût aux décisions de lancement.","body":"<p>Les évaluations consomment tokens, outils et temps de revue. Elles font partie du coût d’exploitation de l’IA. Séparez les types et mesurez les décisions améliorées.</p><h2>Confiance par euro</h2><p>Suivez couverture, confiance, coût par exécution, défaut détecté et décision. Échantillonnez sans masquer la dépense.</p><h2>Choix de portefeuille</h2><p>Dépensez davantage si le risque d’une mauvaise mise en production est élevé et refondez les suites peu informatives.</p>","faq":[{"question":"Les évaluations LLM doivent-elles être dans le budget IA?","answer":"Oui. Elles consomment fournisseurs, outils, infrastructure et revue humaine et font partie du coût réel."}],"related":[{"slug":"/research/proving-ai-roi","label":"Prouver le ROI de l’IA"}]},
-    "de":{"title":"Evaluationskosten gehören ins KI-Budget","titleCore":"Evaluationskosten gehören ins KI-Budget","description":"Warum Finance LLM-Evaluationen separat budgetieren und mit Release-Vertrauen verbinden sollte.","body":"<p>Evaluationen verbrauchen Tokens, Tools und Reviewzeit. Sie gehören zu den KI-Betriebskosten. Trennen Sie ihre Arten und messen Sie, welche Entscheidungen sie verbessern.</p><h2>Vertrauen je Dollar</h2><p>Verfolgen Sie Abdeckung, Vertrauen, Kosten je Lauf, gefundene Fehler und Release-Entscheidung. Sampling darf Kosten senken, nicht verstecken.</p><h2>Portfolioentscheidung</h2><p>Erhöhen Sie Ausgaben bei hohem Release-Risiko und bauen Sie wenig informative Suiten um.</p>","faq":[{"question":"Gehören LLM-Evaluationen ins KI-Budget?","answer":"Ja. Sie verbrauchen Provider, Tools, Infrastruktur und Review und sind echte Betriebskosten."}],"related":[{"slug":"/research/proving-ai-roi","label":"KI-ROI nachweisen"}]},
-    "ja":{"title":"評価コストはAI予算に含める","titleCore":"評価コストはAI予算に含める","description":"LLM評価を予算化し、リリースの信頼度と事業価値に結び付ける理由です。","body":"<p>評価はトークン、ツール、レビュー時間を使います。AI運用の実コストとして予算に含め、改善した意思決定で評価します。</p><h2>1ドルあたりの信頼度</h2><p>カバレッジ、信頼度、実行単価、検出欠陥、リリース判断を測ります。サンプリングで減らしても支出は隠しません。</p><h2>ポートフォリオ判断</h2><p>リリースの失敗リスクが高ければ評価に投資し、証拠を増やさないスイートは設計し直します。</p>","faq":[{"question":"LLM評価はAI予算に含めるべきですか？","answer":"はい。プロバイダー、ツール、インフラ、人手レビューを消費する実際の運用コストだからです。"}],"related":[{"slug":"/research/proving-ai-roi","label":"AI ROIの証明"}]},
-    "pt":{"title":"A despesa de avaliação pertence ao orçamento de IA","titleCore":"A despesa de avaliação pertence ao orçamento de IA","description":"Porque as avaliações LLM devem ser orçamentadas e ligadas à confiança de lançamento e ao valor.","body":"<p>Avaliações consomem tokens, ferramentas e tempo de revisão. Fazem parte do custo de operar IA. Separe os tipos e meça as decisões que melhoram.</p><h2>Confiança por euro</h2><p>Acompanhe cobertura, confiança, custo por execução, defeitos encontrados e decisões de lançamento. Use amostragem sem esconder despesa.</p><h2>Decisão de carteira</h2><p>Gaste mais quando o risco de uma versão má for elevado e redesenhe suites que produzem pouca evidência.</p>","faq":[{"question":"A despesa de avaliação LLM deve estar no orçamento de IA?","answer":"Sim. Consome fornecedores, ferramentas, infraestrutura e revisão humana e faz parte do custo real."}],"related":[{"slug":"/research/proving-ai-roi","label":"Provar o ROI da IA"}]}
+  "slug": "evals-cost-board",
+  "tags": [
+    "ai-finops",
+    "evaluations",
+    "governance"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "languages": {
+    "en": {
+      "title": "Evaluation spend belongs in the AI budget",
+      "titleCore": "Evaluation spend belongs in the AI budget",
+      "description": "Why CFOs should budget LLM evaluations separately and connect test spend to release confidence and business value.",
+      "body": "<p>Evaluation spend is part of the cost of operating AI, not a free engineering sidecar. Regression suites, red-team tests, model comparisons, and release certification consume tokens, tools, and reviewer time. Put them in the AI budget and judge them by the decisions they improve.</p><h2>Separate evaluation types</h2><p>Budget pull-request checks, nightly regressions, pre-release certification, and exploratory research separately. They have different urgency, coverage, and acceptable cost. A single blended number makes an expensive experiment look like production demand.</p><h2>Measure confidence per dollar</h2><p>Track test-set coverage, quality confidence, cost per run, cost per detected defect, and cost per release decision. Cache stable fixtures and sample redundant cases, but never hide evaluation cost inside production feature spend.</p><h2>Make it a portfolio decision</h2><p>Increase evaluation spend when the downside of a bad release is high. Reduce or redesign a suite when it produces little new evidence. Finance can ask which decision the next run will change and what quality or financial risk it retires.</p><p>The right evaluation budget is not the smallest one. It is the amount that buys credible release confidence at a known cost.</p><h2>Related</h2><ul><li>Proving AI ROI</li><li>AI spend forecasting</li><li>AI governance framework</li></ul>",
+      "faq": [
+        {
+          "question": "Should LLM evaluation spend be in the AI budget?",
+          "answer": "Yes. Evaluations consume provider, tool, infrastructure, and reviewer resources and are part of the cost of operating AI."
+        },
+        {
+          "question": "How should finance measure evaluation value?",
+          "answer": "Track coverage, confidence, cost per run, cost per detected defect, and cost per release decision, then compare with the risk retired."
+        },
+        {
+          "question": "When should an evaluation suite be redesigned?",
+          "answer": "Redesign it when repeated runs produce little new evidence, miss important workflows, or consume more cost than the release risk justifies."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Proving AI ROI"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting"
+        },
+        {
+          "slug": "/research/ai-governance-framework",
+          "label": "AI governance framework"
+        }
+      ]
+    },
+    "es": {
+      "title": "El gasto de evaluación pertenece al presupuesto de IA",
+      "titleCore": "El gasto de evaluación pertenece al presupuesto de IA",
+      "description": "Por qué finanzas debe presupuestar evaluaciones LLM y conectarlas con confianza de lanzamiento y valor.",
+      "body": "<p>Las evaluaciones consumen tokens, herramientas y tiempo de revisión. Son parte del coste de operar IA, no un extra gratuito. Sepáralas por tipo y mide qué decisiones mejoran.</p><h2>Confianza por dólar</h2><p>Mide cobertura, confianza, coste por ejecución, defecto detectado y decisión de lanzamiento. Usa caché y muestreo sin ocultar el gasto.</p><h2>Decisión de cartera</h2><p>Gasta más cuando el riesgo de una mala versión sea alto y rediseña suites que aporten poca evidencia.</p>",
+      "faq": [
+        {
+          "question": "¿Debe estar la evaluación LLM en el presupuesto de IA?",
+          "answer": "Sí. Consume proveedores, herramientas, infraestructura y revisión y forma parte del coste operativo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Demostrar el ROI de IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Les dépenses d’évaluation appartiennent au budget IA",
+      "titleCore": "Les dépenses d’évaluation appartiennent au budget IA",
+      "description": "Pourquoi budgéter séparément les évaluations LLM et relier leur coût aux décisions de lancement.",
+      "body": "<p>Les évaluations consomment tokens, outils et temps de revue. Elles font partie du coût d’exploitation de l’IA. Séparez les types et mesurez les décisions améliorées.</p><h2>Confiance par euro</h2><p>Suivez couverture, confiance, coût par exécution, défaut détecté et décision. Échantillonnez sans masquer la dépense.</p><h2>Choix de portefeuille</h2><p>Dépensez davantage si le risque d’une mauvaise mise en production est élevé et refondez les suites peu informatives.</p>",
+      "faq": [
+        {
+          "question": "Les évaluations LLM doivent-elles être dans le budget IA?",
+          "answer": "Oui. Elles consomment fournisseurs, outils, infrastructure et revue humaine et font partie du coût réel."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Prouver le ROI de l’IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Evaluationskosten gehören ins KI-Budget",
+      "titleCore": "Evaluationskosten gehören ins KI-Budget",
+      "description": "Warum Finance LLM-Evaluationen separat budgetieren und mit Release-Vertrauen verbinden sollte.",
+      "body": "<p>Evaluationen verbrauchen Tokens, Tools und Reviewzeit. Sie gehören zu den KI-Betriebskosten. Trennen Sie ihre Arten und messen Sie, welche Entscheidungen sie verbessern.</p><h2>Vertrauen je Dollar</h2><p>Verfolgen Sie Abdeckung, Vertrauen, Kosten je Lauf, gefundene Fehler und Release-Entscheidung. Sampling darf Kosten senken, nicht verstecken.</p><h2>Portfolioentscheidung</h2><p>Erhöhen Sie Ausgaben bei hohem Release-Risiko und bauen Sie wenig informative Suiten um.</p>",
+      "faq": [
+        {
+          "question": "Gehören LLM-Evaluationen ins KI-Budget?",
+          "answer": "Ja. Sie verbrauchen Provider, Tools, Infrastruktur und Review und sind echte Betriebskosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "KI-ROI nachweisen"
+        }
+      ]
+    },
+    "ja": {
+      "title": "評価コストはAI予算に含める",
+      "titleCore": "評価コストはAI予算に含める",
+      "description": "LLM評価を予算化し、リリースの信頼度と事業価値に結び付ける理由です。",
+      "body": "<p>評価はトークン、ツール、レビュー時間を使います。AI運用の実コストとして予算に含め、改善した意思決定で評価します。</p><h2>1ドルあたりの信頼度</h2><p>カバレッジ、信頼度、実行単価、検出欠陥、リリース判断を測ります。サンプリングで減らしても支出は隠しません。</p><h2>ポートフォリオ判断</h2><p>リリースの失敗リスクが高ければ評価に投資し、証拠を増やさないスイートは設計し直します。</p>",
+      "faq": [
+        {
+          "question": "LLM評価はAI予算に含めるべきですか？",
+          "answer": "はい。プロバイダー、ツール、インフラ、人手レビューを消費する実際の運用コストだからです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI ROIの証明"
+        }
+      ]
+    },
+    "pt": {
+      "title": "A despesa de avaliação pertence ao orçamento de IA",
+      "titleCore": "A despesa de avaliação pertence ao orçamento de IA",
+      "description": "Porque as avaliações LLM devem ser orçamentadas e ligadas à confiança de lançamento e ao valor.",
+      "body": "<p>Avaliações consomem tokens, ferramentas e tempo de revisão. Fazem parte do custo de operar IA. Separe os tipos e meça as decisões que melhoram.</p><h2>Confiança por euro</h2><p>Acompanhe cobertura, confiança, custo por execução, defeitos encontrados e decisões de lançamento. Use amostragem sem esconder despesa.</p><h2>Decisão de carteira</h2><p>Gaste mais quando o risco de uma versão má for elevado e redesenhe suites que produzem pouca evidência.</p>",
+      "faq": [
+        {
+          "question": "A despesa de avaliação LLM deve estar no orçamento de IA?",
+          "answer": "Sim. Consome fornecedores, ferramentas, infraestrutura e revisão humana e faz parte do custo real."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Provar o ROI da IA"
+        }
+      ]
+    },
+    "it": {
+      "title": "I costi di valutazione appartengono al budget IA",
+      "titleCore": "I costi di valutazione appartengono al budget IA",
+      "description": "Perché i CFO devono stanziare budget separati per le valutazioni LLM e collegare la spesa di test all'affidabilità dei rilasci e al valore aziendale.",
+      "body": "<p>La spesa per le valutazioni non è un costo tecnico accessorio, ma parte integrante del costo operativo dell'intelligenza artificiale. Suite di regressione, test di red-teaming, confronti tra modelli e certificazioni di rilascio consumano token, tool e tempo di revisione. Stanziatele nel budget IA e valutatele in base alle decisioni che migliorano.</p><h2>Distinguere le tipologie di test</h2><p>Suddividete i budget per verifiche su pull-request, regressioni notturne, certificazioni pre-lancio e ricerca esplorativa. Hanno urgenze, coperture e costi sostenibili differenti.</p><h2>Misurare la fiducia generata per euro speso</h2><p>Monitorate copertura dei test, confidenza qualitativa, costo per run, costo per difetto rilevato e impatto sulle decisioni di rilascio. Il giusto budget di valutazione non è quello minimo, ma quello che acquista certezza di rilascio a un costo noto.</p>",
+      "faq": [
+        {
+          "question": "I costi di valutazione LLM devono essere inclusi nel budget IA?",
+          "answer": "Sì. Le valutazioni consumano provider, strumenti, infrastruttura e revisione umana e fanno parte dei costi operativi dell'IA."
+        },
+        {
+          "question": "Come deve valutare la finanza il valore delle suite di test?",
+          "answer": "Misurando copertura, confidenza, costo per esecuzione e per difetto intercettato rispetto al rischio commerciale evitato."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Dimostrare il ROI dell'IA"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "Previsione della spesa in IA"
+        }
+      ]
+    },
+    "ko": {
+      "title": "AI 평가 비용은 반드시 AI 예산에 포함되어야 합니다",
+      "titleCore": "AI 평가 비용은 반드시 AI 예산에 포함되어야 합니다",
+      "description": "CFO가 LLM 평가 지출을 별도로 예산화하고 테스트 비용을 릴리스 신뢰도 및 비즈니스 가치와 직접 연결해야 하는 이유.",
+      "body": "<p>평가 비용은 무료 엔지니어링 덤이 아니라 AI 운영 원가의 핵심 구성 요소입니다. 회귀 테스트, 레드팀 검증, 모델 벤치마크 및 릴리스 인증은 막대한 토큰, 도구 및 검토자 리소스를 소비합니다. 이를 AI 공식 예산에 편성하고 개선된 의사결정 가치로 평가하십시오.</p><h2>평가 유형별 예산 분리</h2><p>PR 스모크 테스트, 야간 회귀 테스트, 릴리스 인증 및 연구용 테스트를 명확히 분리하여 예산화하십시오. 단일 평균치로 묶으면 고비용 실험이 실제 운영 수요처럼 왜곡됩니다.</p><h2>투자 대비 신뢰도 측정</h2><p>테스트 커버리지, 품질 신뢰도, 실행당 비용, 발견된 결함당 비용, 릴리스 결정당 비용을 추적하십시오. 적절한 평가 예산은 무조건 가장 적은 금액이 아니라 신뢰할 수 있는 품질 보증을 확정된 비용으로 확보하는 금액입니다.</p>",
+      "faq": [
+        {
+          "question": "LLM 평가 비용을 AI 예산에 포함해야 하는 이유는?",
+          "answer": "평가는 모델 공급업체 비용, 인프라 및 인력 검토를 소모하는 실질적인 AI 운영 비용이기 때문입니다."
+        },
+        {
+          "question": "재무팀은 평가의 가치를 어떻게 측정해야 하나요?",
+          "answer": "커버리지, 신뢰도 지수, 결함 1건 발견당 비용을 결함 발생 시 회피할 수 있었던 사업적 손실과 비교 분석합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI ROI 입증 전략"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI 지출 예측 모델"
+        }
+      ]
+    },
+    "zh": {
+      "title": "评测支出属于正式的AI业务预算",
+      "titleCore": "评测支出属于正式的AI业务预算",
+      "description": "为什么CFO必须单独编制LLM评测预算，并将测试成本与发版决策信心及商业回报紧密挂钩。",
+      "body": "<p>评测支出是运行AI的必要生产成本，绝非工程团队免费的附属品。回归测试集、红队攻防演练、模型横向对比与上线前认证持续消耗大量Token、外部工具和专家审查时间。请将其列入AI正式预算，并以其帮助规避的业务风险来考核成效。</p><h2>按评测类型独立核算</h2><p>将日常代码提交检查、夜间批量回归、发版认证与前沿探索测试分立预算。将所有评测混为一谈会导致昂贵的研发实验伪装成生产业务需求。</p><h2>度量每单位成本换取的决策信心</h2><p>追踪测试集覆盖率、质量置信度、单次运行成本、捕获单个缺陷的成本以及发版决策成本。最优的评测预算不是数字最小的预算，而是以已知且可控的成本购得坚实上线信心的预算。</p>",
+      "faq": [
+        {
+          "question": "LLM评测支出是否应当纳入AI整体预算？",
+          "answer": "必须纳入。评测消耗真实的算力、Token、工程工具和人工审核资源，属于企业运营AI不可分割的经常性成本。"
+        },
+        {
+          "question": "财务团队应如何度量评测投入的商业价值？",
+          "answer": "综合评估测试覆盖率、发布置信度、单缺陷捕获成本，并与潜在坏版上线引发的商业损失进行对比核算。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "论证AI投资回报率"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "企业级AI支出预测模型"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Evaluatiekosten horen thuis in het AI-budget",
+      "titleCore": "Evaluatiekosten horen thuis in het AI-budget",
+      "description": "Waarom CFO's LLM-evaluaties apart moeten budgetteren en testkosten moeten koppelen aan release-zekerheid en bedrijfswaarde.",
+      "body": "<p>Evaluatiekosten zijn een wezenlijk onderdeel van de operationele AI-kosten en geen gratis bijproduct van engineering. Regressietests, red-team validaties, modelvergelijkingen en releasecertificeringen verbruiken tokens, tools en reviewtijd. Neem ze op in het AI-budget en beoordeel ze op basis van de beslissingen die ze verbeteren.</p><h2>Splits evaluatietypen</h2><p>Budgetteer PR-controles, nachtelijke regressies, pre-release certificering en verkennend onderzoek afzonderlijk. Ze kennen een verschillende urgentie en kostenstructuur.</p><h2>Meet vertrouwen per geïnvesteerde euro</h2><p>Volg testdekking, kwaliteitsvertrouwen, kosten per run, kosten per gedetecteerd defect en kosten per releasebesluit. Het juiste evaluatiebudget is niet het kleinste, maar het bedrag dat geloofwaardige kwaliteitsgaranties koopt tegen voorspelbare kosten.</p>",
+      "faq": [
+        {
+          "question": "Horen LLM-evaluatiekosten in het AI-budget?",
+          "answer": "Ja. Evaluaties verbruiken API-aanroepen, infrastructuur en menselijke review en zijn volwaardige operationele AI-kosten."
+        },
+        {
+          "question": "Hoe meet finance de waarde van evaluaties?",
+          "answer": "Door dekking, foutreductie en kosten per releasebesluit af te zetten tegen de vermeden risico's van ondeugdelijke software."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI ROI aantonen"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI-kostenprognoses voor finance"
+        }
+      ]
+    },
+    "ar": {
+      "title": "نفقات التقييم تنتمي لميزانية الذكاء الاصطناعي",
+      "titleCore": "نفقات التقييم تنتمي لميزانية الذكاء الاصطناعي",
+      "description": "لماذا يجب على المدراء الماليين رصد ميزانية خاصة لتقييمات النماذج وربط نفقات الاختبار بثقة الإطلاق والقيمة التجارية.",
+      "body": "<p>نفقات التقييم جزء أصيل من التكلفة التشغيلية للذكاء الاصطناعي وليست إضافة هندسية مجانية. فاختبارات التراجع، واختبارات الأمان (red-teaming)، والمقارنة بين النماذج، واعتماد الإصدارات تستهلك الرموز والأدوات ووقت المراجعين. ضعها في ميزانية الذكاء الاصطناعي واحكم عليها بالقرارات التي تحسنها.</p><h2>فصل أنواع التقييم</h2><p>خصص ميزانية مستقلة لفحوصات طلبات الدمج، واختبارات التراجع الليلية، واعتماد ما قبل الإطلاق، والأبحاث الاستكشافية. فلها أولويات وتكاليف مقبولة متباينة، ودمجها في رقم واحد يظهر التجارب المكلفة كأنها طلب إنتاجي مستمر.</p><h2>قياس الثقة المكتسبة لكل دولار</h2><p>تتبع تغطية مجموعة الاختبار، ومستوى الثقة، وتكلفة التشغيلة، وتكلفة اكتشاف العيب الواحد، وتكلفة قرار الإصدار. ميزانية التقييم الصحيحة ليست الأقل رقماً، بل هي المبلغ الذي يشتري ثقة موثوقة في الإصدار بتكلفة معلومة.</p>",
+      "faq": [
+        {
+          "question": "هل يجب إدراج نفقات التقييم في ميزانية الذكاء الاصطناعي؟",
+          "answer": "نعم، فالتقييمات تستهلك الموفرين والأدوات والبنية التحتية والمراجعة البشرية وتشكل جزءاً من التكلفة التشغيلية الفعلية."
+        },
+        {
+          "question": "كيف تقيس الإدارة المالية قيمة التقييمات؟",
+          "answer": "بتتبع التغطية والثقة وتكلفة العيب المكتشف وقرار الإطلاق، ومقارنتها بالمخاطر المالية المحتملة التي تم تجنبها."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "إثبات العائد على الاستثمار"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "توقع نفقات الذكاء الاصطناعي"
+        }
+      ]
+    }
   }
 }

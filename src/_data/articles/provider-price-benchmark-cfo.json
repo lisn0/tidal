@@ -1,12 +1,250 @@
 {
-  "slug":"provider-price-benchmark-cfo","tags":["ai-finops","procurement","provider-arbitrage"],"datePublished":"2026-08-27","dateModified":"2026-08-27","languages":{
-    "en":{"title":"Comparing AI providers beyond list price","titleCore":"Comparing AI providers beyond list price","description":"A CFO procurement framework for comparing AI providers by effective outcome cost, contract terms, quality, and switching leverage.","body":"<p>AI provider procurement fails when finance compares headline token prices as if they were equivalent products. The real comparison is effective cost per successful business outcome, including model mix, discounts, commitments, reliability, quality, support, and the cost of operating a second provider.</p><h2>Build a common price sheet</h2><p>Normalize provider, model, region, token type, cache state, batch eligibility, credits, minimum commitments, and contract date. Keep discounts and committed spend visible rather than baking them into an unexplained average.</p><h2>Price the same work</h2><p>Use a fixed workload sample and the same quality acceptance test. Measure completion, p50 and p95 latency, retries, human correction, and cost per successful task. A lower unit rate is not a saving if the provider needs more attempts or creates more review work.</p><h2>Include switching cost</h2><p>Add gateway changes, evaluations, migration engineering, data transfer, support, compliance review, and failover testing. A second provider can reduce concentration risk, but its standby and integration cost belongs in the business case.</p><h2>Use the result in negotiation</h2><p>Bring the normalized workload and effective-cost curve to renewal. Ask for discounts tied to the workloads you can actually move, transparent treatment of cached and reasoning tokens, useful exit terms, service credits, and access to auditable usage data. Price leverage comes from credible alternatives, not from a spreadsheet of list prices.</p><p>The best provider is the one that meets the required quality and reliability at the lowest fully loaded cost, not necessarily the one with the cheapest token.</p><h2>Related</h2><ul><li>LLM purchasing guide</li><li>Provider arbitrage</li><li>Model concentration risk</li></ul>","faq":[{"question":"What is the right way to compare AI providers?","answer":"Compare fully loaded cost per successful outcome for the same workload, quality target, latency, reliability, contract terms, and operating cost."},{"question":"Should discounts be included in provider comparisons?","answer":"Yes, but show list rate, discount, commitment, credits, and effective rate separately so the commercial assumption stays auditable."},{"question":"What switching costs belong in the business case?","answer":"Include gateway and migration engineering, evaluations, data transfer, support, compliance review, failover testing, and standby integration."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM purchasing guide"},{"slug":"/research/provider-arbitrage","label":"Provider arbitrage"},{"slug":"/research/model-concentration-risk","label":"Model concentration risk"}]},
-    "es":{"title":"Cómo comparar proveedores de IA con precios no comparables","titleCore":"Cómo comparar proveedores de IA con precios no comparables","description":"Un marco financiero para comparar coste efectivo, contratos, calidad y capacidad de cambio.","body":"<p>Comparar el precio anunciado por token trata proveedores distintos como si fueran iguales. Compara el coste efectivo por resultado exitoso, incluyendo mezcla, descuentos, fiabilidad, calidad, soporte y operación.</p><h2>Tabla común</h2><p>Normaliza proveedor, modelo, región, tipo de token, caché, batch, créditos, compromisos y fecha contractual. Muestra descuentos aparte.</p><h2>El mismo trabajo</h2><p>Usa una carga fija y la misma prueba de calidad. Mide finalización, latencia, reintentos, corrección humana y coste por tarea exitosa.</p><h2>Coste de cambio</h2><p>Incluye gateway, migración, evaluación, transferencia, soporte, cumplimiento y pruebas de failover. Llévalo a la renovación y negocia con alternativas creíbles.</p>","faq":[{"question":"¿Cómo se comparan proveedores de IA?","answer":"Por coste total por resultado exitoso con la misma carga, calidad, latencia, contrato y coste operativo."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guía de compras LLM"}]},
-    "fr":{"title":"Comparer les prix IA","titleCore":"Comparer les prix IA","description":"Un cadre financier pour comparer coût effectif, contrats, qualité et coût de changement.","body":"<p>Comparer le prix affiché par token traite des produits différents comme équivalents. Comparez le coût complet par résultat réussi, avec mix, remises, fiabilité, qualité et exploitation.</p><h2>Une grille commune</h2><p>Normalisez fournisseur, modèle, région, type de token, cache, batch, crédits, engagements et date. Affichez les remises séparément.</p><h2>Le même travail</h2><p>Rejouez une charge fixe avec le même test de qualité. Mesurez réussite, latence, reprises, correction humaine et coût par tâche réussie.</p><h2>Le changement</h2><p>Ajoutez passerelle, migration, évaluation, transfert, conformité, support et tests de bascule. Utilisez la courbe au renouvellement.</p>","faq":[{"question":"Comment comparer des fournisseurs IA?","answer":"Par coût complet par résultat réussi sur la même charge, avec qualité, latence, contrat et exploitation."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guide d’achat LLM"}]},
-    "de":{"title":"KI-Anbieterpreise sinnvoll vergleichen","titleCore":"KI-Anbieterpreise sinnvoll vergleichen","description":"Ein Finanzrahmen für effektive Kosten, Verträge, Qualität und Wechselaufwand.","body":"<p>Token-Listenpreise behandeln verschiedene Anbieter wie gleiche Produkte. Vergleichen Sie die Vollkosten je erfolgreichem Ergebnis mit Mix, Rabatten, Qualität, Zuverlässigkeit und Betrieb.</p><h2>Gemeinsame Preistabelle</h2><p>Normalisieren Sie Anbieter, Modell, Region, Tokentyp, Cache, Batch, Credits, Verpflichtungen und Datum. Rabatte bleiben sichtbar.</p><h2>Gleiche Arbeit</h2><p>Nutzen Sie einen festen Workload und denselben Qualitätstest. Messen Sie Abschluss, Latenz, Retries, Nacharbeit und Kosten je erfolgreicher Aufgabe.</p><h2>Wechsel einrechnen</h2><p>Berücksichtigen Sie Gateway, Migration, Evaluation, Transfer, Compliance, Support und Failover-Tests.</p>","faq":[{"question":"Wie vergleicht man KI-Anbieter?","answer":"Über Vollkosten je erfolgreichem Ergebnis für denselben Workload mit gleicher Qualität, Latenz, Vertrags- und Betriebsannahme."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM-Einkaufsleitfaden"}]},
-    "ja":{"title":"比較できないAIプロバイダーの価格表を比較する方法","titleCore":"比較できないAIプロバイダーの価格表を比較する方法","description":"実効成果単価、契約条件、品質、切り替えコストでAIプロバイダーを比較する財務向けの枠組みです。","body":"<p>トークン単価だけを比べると、異なる製品を同じものとして扱います。同じワークロードで、品質、信頼性、運用費を含む成功成果あたりの総コストを比較します。</p><h2>共通の価格表</h2><p>プロバイダー、モデル、地域、トークン種別、キャッシュ、バッチ、クレジット、契約日をそろえ、割引は別に示します。</p><h2>同じ仕事を測る</h2><p>固定サンプルと同じ品質テストを使い、完了率、遅延、リトライ、人手修正、成功タスク単価を測ります。</p><h2>切り替え費用</h2><p>ゲートウェイ変更、移行、評価、転送、コンプライアンス、サポート、フェイルオーバー試験を事業計画に含めます。</p>","faq":[{"question":"AIプロバイダーはどう比較しますか？","answer":"同じワークロード、品質、遅延、契約、運用条件で、成功した成果1件あたりの総コストを比較します。"}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM購買ガイド"}]},
-    "pt":{"title":"Comparar preços de IA","titleCore":"Comparar preços de IA","description":"Um enquadramento financeiro para comparar custo efetivo, contratos, qualidade e custo de mudança.","body":"<p>Comparar o preço anunciado por token trata fornecedores diferentes como produtos iguais. Compare o custo total por resultado bem-sucedido, incluindo mix, descontos, qualidade, fiabilidade e operação.</p><h2>Tabela comum</h2><p>Normalize fornecedor, modelo, região, tipo de token, cache, batch, créditos, compromissos e data. Mostre descontos separadamente.</p><h2>O mesmo trabalho</h2><p>Use uma carga fixa e o mesmo teste de qualidade. Meça conclusão, latência, retries, correção humana e custo por tarefa bem-sucedida.</p><h2>Custo de mudança</h2><p>Inclua gateway, migração, avaliação, transferência, conformidade, suporte e testes de failover. Use a análise na renovação.</p>","faq":[{"question":"Como se comparam fornecedores de IA?","answer":"Pelo custo total por resultado bem-sucedido para a mesma carga, qualidade, latência, contrato e operação."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guia de compras LLM"}]}
+  "slug": "provider-price-benchmark-cfo",
+  "tags": [
+    "ai-finops",
+    "procurement",
+    "provider-arbitrage"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "languages": {
+    "en": {
+      "title": "Comparing AI providers beyond list price",
+      "titleCore": "Comparing AI providers beyond list price",
+      "description": "A CFO procurement framework for comparing AI providers by effective outcome cost, contract terms, quality, and switching leverage.",
+      "body": "<p>AI provider procurement fails when finance compares headline token prices as if they were equivalent products. The real comparison is effective cost per successful business outcome, including model mix, discounts, commitments, reliability, quality, support, and the cost of operating a second provider.</p><h2>Build a common price sheet</h2><p>Normalize provider, model, region, token type, cache state, batch eligibility, credits, minimum commitments, and contract date. Keep discounts and committed spend visible rather than baking them into an unexplained average.</p><h2>Price the same work</h2><p>Use a fixed workload sample and the same quality acceptance test. Measure completion, p50 and p95 latency, retries, human correction, and cost per successful task. A lower unit rate is not a saving if the provider needs more attempts or creates more review work.</p><h2>Include switching cost</h2><p>Add gateway changes, evaluations, migration engineering, data transfer, support, compliance review, and failover testing. A second provider can reduce concentration risk, but its standby and integration cost belongs in the business case.</p><h2>Use the result in negotiation</h2><p>Bring the normalized workload and effective-cost curve to renewal. Ask for discounts tied to the workloads you can actually move, transparent treatment of cached and reasoning tokens, useful exit terms, service credits, and access to auditable usage data. Price leverage comes from credible alternatives, not from a spreadsheet of list prices.</p><p>The best provider is the one that meets the required quality and reliability at the lowest fully loaded cost, not necessarily the one with the cheapest token.</p><h2>Related</h2><ul><li>LLM purchasing guide</li><li>Provider arbitrage</li><li>Model concentration risk</li></ul>",
+      "faq": [
+        {
+          "question": "What is the right way to compare AI providers?",
+          "answer": "Compare fully loaded cost per successful outcome for the same workload, quality target, latency, reliability, contract terms, and operating cost."
+        },
+        {
+          "question": "Should discounts be included in provider comparisons?",
+          "answer": "Yes, but show list rate, discount, commitment, credits, and effective rate separately so the commercial assumption stays auditable."
+        },
+        {
+          "question": "What switching costs belong in the business case?",
+          "answer": "Include gateway and migration engineering, evaluations, data transfer, support, compliance review, failover testing, and standby integration."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing guide"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "Model concentration risk"
+        }
+      ]
+    },
+    "es": {
+      "title": "Cómo comparar proveedores de IA con precios no comparables",
+      "titleCore": "Cómo comparar proveedores de IA con precios no comparables",
+      "description": "Un marco financiero para comparar coste efectivo, contratos, calidad y capacidad de cambio.",
+      "body": "<p>Comparar el precio anunciado por token trata proveedores distintos como si fueran iguales. Compara el coste efectivo por resultado exitoso, incluyendo mezcla, descuentos, fiabilidad, calidad, soporte y operación.</p><h2>Tabla común</h2><p>Normaliza proveedor, modelo, región, tipo de token, caché, batch, créditos, compromisos y fecha contractual. Muestra descuentos aparte.</p><h2>El mismo trabajo</h2><p>Usa una carga fija y la misma prueba de calidad. Mide finalización, latencia, reintentos, corrección humana y coste por tarea exitosa.</p><h2>Coste de cambio</h2><p>Incluye gateway, migración, evaluación, transferencia, soporte, cumplimiento y pruebas de failover. Llévalo a la renovación y negocia con alternativas creíbles.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo se comparan proveedores de IA?",
+          "answer": "Por coste total por resultado exitoso con la misma carga, calidad, latencia, contrato y coste operativo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guía de compras LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Comparer les prix IA",
+      "titleCore": "Comparer les prix IA",
+      "description": "Un cadre financier pour comparer coût effectif, contrats, qualité et coût de changement.",
+      "body": "<p>Comparer le prix affiché par token traite des produits différents comme équivalents. Comparez le coût complet par résultat réussi, avec mix, remises, fiabilité, qualité et exploitation.</p><h2>Une grille commune</h2><p>Normalisez fournisseur, modèle, région, type de token, cache, batch, crédits, engagements et date. Affichez les remises séparément.</p><h2>Le même travail</h2><p>Rejouez une charge fixe avec le même test de qualité. Mesurez réussite, latence, reprises, correction humaine et coût par tâche réussie.</p><h2>Le changement</h2><p>Ajoutez passerelle, migration, évaluation, transfert, conformité, support et tests de bascule. Utilisez la courbe au renouvellement.</p>",
+      "faq": [
+        {
+          "question": "Comment comparer des fournisseurs IA?",
+          "answer": "Par coût complet par résultat réussi sur la même charge, avec qualité, latence, contrat et exploitation."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guide d’achat LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "KI-Anbieterpreise sinnvoll vergleichen",
+      "titleCore": "KI-Anbieterpreise sinnvoll vergleichen",
+      "description": "Ein Finanzrahmen für effektive Kosten, Verträge, Qualität und Wechselaufwand.",
+      "body": "<p>Token-Listenpreise behandeln verschiedene Anbieter wie gleiche Produkte. Vergleichen Sie die Vollkosten je erfolgreichem Ergebnis mit Mix, Rabatten, Qualität, Zuverlässigkeit und Betrieb.</p><h2>Gemeinsame Preistabelle</h2><p>Normalisieren Sie Anbieter, Modell, Region, Tokentyp, Cache, Batch, Credits, Verpflichtungen und Datum. Rabatte bleiben sichtbar.</p><h2>Gleiche Arbeit</h2><p>Nutzen Sie einen festen Workload und denselben Qualitätstest. Messen Sie Abschluss, Latenz, Retries, Nacharbeit und Kosten je erfolgreicher Aufgabe.</p><h2>Wechsel einrechnen</h2><p>Berücksichtigen Sie Gateway, Migration, Evaluation, Transfer, Compliance, Support und Failover-Tests.</p>",
+      "faq": [
+        {
+          "question": "Wie vergleicht man KI-Anbieter?",
+          "answer": "Über Vollkosten je erfolgreichem Ergebnis für denselben Workload mit gleicher Qualität, Latenz, Vertrags- und Betriebsannahme."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM-Einkaufsleitfaden"
+        }
+      ]
+    },
+    "ja": {
+      "title": "比較できないAIプロバイダーの価格表を比較する方法",
+      "titleCore": "比較できないAIプロバイダーの価格表を比較する方法",
+      "description": "実効成果単価、契約条件、品質、切り替えコストでAIプロバイダーを比較する財務向けの枠組みです。",
+      "body": "<p>トークン単価だけを比べると、異なる製品を同じものとして扱います。同じワークロードで、品質、信頼性、運用費を含む成功成果あたりの総コストを比較します。</p><h2>共通の価格表</h2><p>プロバイダー、モデル、地域、トークン種別、キャッシュ、バッチ、クレジット、契約日をそろえ、割引は別に示します。</p><h2>同じ仕事を測る</h2><p>固定サンプルと同じ品質テストを使い、完了率、遅延、リトライ、人手修正、成功タスク単価を測ります。</p><h2>切り替え費用</h2><p>ゲートウェイ変更、移行、評価、転送、コンプライアンス、サポート、フェイルオーバー試験を事業計画に含めます。</p>",
+      "faq": [
+        {
+          "question": "AIプロバイダーはどう比較しますか？",
+          "answer": "同じワークロード、品質、遅延、契約、運用条件で、成功した成果1件あたりの総コストを比較します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM購買ガイド"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Comparar preços de IA",
+      "titleCore": "Comparar preços de IA",
+      "description": "Um enquadramento financeiro para comparar custo efetivo, contratos, qualidade e custo de mudança.",
+      "body": "<p>Comparar o preço anunciado por token trata fornecedores diferentes como produtos iguais. Compare o custo total por resultado bem-sucedido, incluindo mix, descontos, qualidade, fiabilidade e operação.</p><h2>Tabela comum</h2><p>Normalize fornecedor, modelo, região, tipo de token, cache, batch, créditos, compromissos e data. Mostre descontos separadamente.</p><h2>O mesmo trabalho</h2><p>Use uma carga fixa e o mesmo teste de qualidade. Meça conclusão, latência, retries, correção humana e custo por tarefa bem-sucedida.</p><h2>Custo de mudança</h2><p>Inclua gateway, migração, avaliação, transferência, conformidade, suporte e testes de failover. Use a análise na renovação.</p>",
+      "faq": [
+        {
+          "question": "Como se comparam fornecedores de IA?",
+          "answer": "Pelo custo total por resultado bem-sucedido para a mesma carga, qualidade, latência, contrato e operação."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guia de compras LLM"
+        }
+      ]
+    },
+    "it": {
+      "title": "Confrontare i prezzi dei provider IA oltre il listino",
+      "titleCore": "Confrontare i prezzi dei provider IA oltre il listino",
+      "description": "Un framework finanziario per CFO: costo effettivo per risultato, condizioni contrattuali, qualità e costi di transizione.",
+      "body": "<p>Il procurement di provider IA fallisce quando il dipartimento finanziario confronta i prezzi nominali dei token come se fossero prodotti identici. Il vero confronto si basa sul costo effettivo per risultato aziendale utile, considerando mix di modelli, sconti, impegni di spesa, affidabilità, qualità, supporto e costi di gestione di un secondo fornitore.</p><h2>Creare un listino normalizzato</h2><p>Normalizzate fornitore, modello, regione geografica, tipologia di token, stato della cache, disponibilità batch, crediti, impegni minimi e data del contratto. Mantenete separati sconti e impegni contrattuali per non diluirli in medie fuorvianti.</p><h2>Valutare lo stesso carico di lavoro</h2><p>Utilizzate un campione di workload fisso e lo stesso test di accettazione qualitativa. Misurate tasso di completamento, latenza p50 e p95, retry, correzione umana manuale e costo per attività completata con successo.</p><h2>Includere i costi di transizione</h2><p>Aggiungete modifiche all'API gateway, benchmark di valutazione, migrazione ingegneristica, trasferimento dati, supporto, conformità normativa e test di failover. La diversificazione mitiga il rischio di concentrazione, ma i costi di standby e integrazione vanno inseriti nel business case.</p>",
+      "faq": [
+        {
+          "question": "Come si confrontano correttamente i provider di IA?",
+          "answer": "Confrontando il costo totale per risultato utile sullo stesso workload, con pari requisiti di qualità, latenza, contratto e gestione operativa."
+        },
+        {
+          "question": "Come vanno trattati gli sconti contrattuali?",
+          "answer": "Esponendo separatamente prezzo di listino, sconti, volumi minimi e crediti per garantire l'auditabilità delle assunzioni commerciali."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guida all'acquisto di LLM"
+        }
+      ]
+    },
+    "ko": {
+      "title": "정가 이상의 AI 공급업체 가격 비교 프레임워크",
+      "titleCore": "정가 이상의 AI 공급업체 가격 비교 프레임워크",
+      "description": "CFO를 위한 AI 조달 프레임워크: 유효 성과당 비용, 계약 조건, 품질 및 전환 비용을 포괄적으로 분석합니다.",
+      "body": "<p>AI 공급업체 조달에서 토큰 표시 정가만을 비교하는 것은 서로 다른 제품을 동일하다고 가정하는 치명적인 오류를 범합니다. 실제 비교는 모델 믹스, 약정 할인, 안정성, 출력 품질, 기술 지원 및 복수 공급업체 운영 비용을 포함한 <strong>성공적인 비즈니스 성과당 유효 비용</strong>이어야 합니다.</p><h2>표준화된 단가표 구축</h2><p>공급업체, 모델, 리전, 토큰 유형, 프롬프트 캐시 상태, 배치 처리, 크레딧, 최소 약정 및 계약 일자를 일관되게 정규화하십시오. 할인율과 약정 지출은 별도 항목으로 투명하게 관리해야 합니다.</p><h2>동일한 워크로드 검증</h2><p>고정된 워크로드 표본과 동일한 품질 합격 기준을 사용하십시오. 작업 완료율, p50/p95 지연 시간, 재시도 횟수, 사람의 검토 개입, 성공 작업당 비용을 정량적으로 측정합니다.</p><h2>전환 비용 반영</h2><p>게이트웨이 연동 수정, 평가 엔지니어링, 데이터 이전, 규정 준수 검토, 장애 복구 테스트 비용을 비즈니스 케이스에 반영하십시오. 복수 공급업체 전략은 집중 리스크를 줄이지만 대기 비용이 수반됩니다.</p>",
+      "faq": [
+        {
+          "question": "AI 공급업체를 올바르게 비교하는 방법은 무엇인가요?",
+          "answer": "동일한 워크로드, 목표 품질, 응답 속도, 계약 조건 및 운영 비용을 고려한 성공 성과당 총비용을 비교해야 합니다."
+        },
+        {
+          "question": "공급업체 비교 시 약정 할인을 어떻게 다루어야 하나요?",
+          "answer": "정가, 할인율, 최소 약정, 크레딧 및 실효 단가를 분리하여 표시해야 재무적 가정이 감사 가능하게 유지됩니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM 조달 가이드"
+        }
+      ]
+    },
+    "zh": {
+      "title": "超越刊例价的AI供应商对比框架",
+      "titleCore": "超越刊例价的AI供应商对比框架",
+      "description": "CFO采购决策框架：从有效业务产出成本、合同条款、模型质量与多供应商切换杠杆进行真实对比。",
+      "body": "<p>当财务部门将公布的Token刊例价视为等价产品进行对比时，AI供应商采购就已经注定失败。真正的对比必须基于<strong>单个成功业务成果的有效成本</strong>，综合考虑模型配比、承诺折扣、稳定性、输出质量、技术支持以及备用供应商的维持费用。</p><h2>建立标准价格底表</h2><p>规范供应商、模型版本、区域、Token类型、缓存命中状态、批处理费率、赠送额度及承诺支出。将折扣与底线承诺单独列出，切忌折算成模糊的单一平均费率。</p><h2>基于相同工作量测试</h2><p>使用固定业务数据集和统一质量验收标准。严密测量完成率、p50与p95延迟、重试次数、人工介入补救比例和单个成功任务成本。</p><h2>计入切换与多活成本</h2><p>将网关适配、评测工程、数据出网、合规审批与故障演练成本纳入商业论证。第二供应商能分散集中度风险，但其待机与维护开销必须有据可循。</p>",
+      "faq": [
+        {
+          "question": "对比AI供应商的正确方式是什么？",
+          "answer": "在相同负载、质量标准、响应速度、合同条款和运营成本的前提下，对比每个成功业务成果的综合总成本。"
+        },
+        {
+          "question": "采购对比时应如何计算合同折扣？",
+          "answer": "将刊例价、折扣率、最低承诺支出与实效结算单价单独分列，确保财务预测与核算模型完全可审计。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM采购决策指南"
+        }
+      ]
+    },
+    "nl": {
+      "title": "AI-leveranciersprijzen vergelijken voor CFOs",
+      "titleCore": "AI-leveranciersprijzen vergelijken voor CFOs",
+      "description": "Inkoopframework voor CFO's: vergelijk AI-leveranciers op effectieve resultaatkosten, contractvoorwaarden, kwaliteit en overstapkosten.",
+      "body": "<p>Inkoop van AI-leveranciers mislukt wanneer finance standaard tokenprijzen vergelijkt alsof het identieke grondstoffen zijn. De werkelijke vergelijking is de <strong>effectieve kost per succesvol bedrijfsresultaat</strong>, inclusief modelmix, kortingen, uptime, kwaliteit, support en de operationele kosten van een tweede provider.</p><h2>Bouw een gestandaardiseerd prijsoverzicht</h2><p>Normaliseer provider, model, regio, tokentype, cachestatus, batchverwerking, credits en minimale verplichtingen. Houd kortingen en commitments zichtbaar in plaats van ze te verstoppen in een gewogen gemiddelde.</p><h2>Prijs hetzelfde werk</h2><p>Gebruik een vaste steekproef en dezelfde kwaliteitsacceptatietest. Meet voltooiingspercentages, p50/p95 latency, retries, handmatige correcties en de kosten per geslaagde taak.</p><h2>Reken overstapkosten mee</h2><p>Tel aanpassingen aan de gateway, evaluaties, data-egress, compliance en failover-testen mee. Een tweede leverancier verlaagt concentratierisico, maar standby-kosten horen thuis in de business case.</p>",
+      "faq": [
+        {
+          "question": "Hoe vergelijkt u AI-leveranciers op de juiste manier?",
+          "answer": "Vergelijk de totale kosten per geslaagd resultaat voor dezelfde workload, kwaliteitsnorm, latency en contractuele voorwaarden."
+        },
+        {
+          "question": "Moeten kortingen meegenomen worden in de vergelijking?",
+          "answer": "Ja, maar toon het basistarief, de korting, verplichtingen en het effectieve tarief apart voor auditeerbaarheid."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Inkoopgids voor LLM's"
+        }
+      ]
+    },
+    "ar": {
+      "title": "مقارنة أسعار مزودي الذكاء الاصطناعي للمدراء الماليين",
+      "titleCore": "مقارنة أسعار مزودي الذكاء الاصطناعي للمدراء الماليين",
+      "description": "إطار مالي للمدراء الماليين لمقارنة مزودي الذكاء الاصطناعي حسب التكلفة الفعلية للنتيجة وشروط العقود والجودة وتكاليف التبديل.",
+      "body": "<p>تفشل مفاوضات شراء نماذج الذكاء الاصطناعي عندما تقارن الإدارة المالية أسعار الرموز المعلنة كما لو كانت سلعاً متطابقة. المقارنة الحقيقية تقوم على التكلفة الإجمالية لتحقيق نتيجة تجارية ناجحة، بما في ذلك مزيج النماذج، والخصومات، والالتزامات السنوية، والاستقرار، وتكلفة إدارة مزود بديل.</p>\n\n<h2>بناء جدول تسعير موحد للمشتريات</h2>\n<p>قم بتوحيد معايير المزود والنموذج والإقليم ونوع الرمز والتخزين المؤقت ومعالجة الدفعات والحد الأدنى للالتزام. حافظ على فصل الخصومات والالتزامات عن المتوسطات الحسابية لضمان قابلية التدقيق المالي.</p>\n\n<h2>تسعير نفس حجم العمل والنتائج</h2>\n<p>استخدم عينة موحدة من أعباء العمل مع نفس شروط الجودة. قس نسب الإنجاز، وزمن التأخير، والمحاولات الإضافية، والتكلفة لكل مهمة مكتملة. فالسعر الأقل لا يعني توفيراً إذا كان المزود يتطلب مزيداً من المراجعات وتصحيح الأخطاء.</p>\n\n<h2>احتساب تكاليف التبديل والتعددية</h2>\n<p>أضف تكاليف تكامل البوابات، والاختبارات الهندسية، ورسوم نقل البيانات عبر السحب، والامتثال، واختبارات الجاهزية عند الأعطال. تعدد المزودين يقلل مخاطر الاعتماد على مورد واحد، لكن تكاليف الإبقاء على نظام احتياطي يجب إدراجها في دراسة الجدوى.</p>",
+      "faq": [
+        {
+          "question": "كيف يقارن المدير المالي بين موفري الذكاء الاصطناعي؟",
+          "answer": "بمقارنة التكلفة المحملة بالكامل لكل نتيجة ناجحة لنفس متطلبات الجودة والاستقرار والشروط التعاقدية."
+        },
+        {
+          "question": "هل يجب احتساب الخصومات التعاقدية في المقارنة؟",
+          "answer": "نعم، مع عرض السعر الأساسي والخصم والحد الأدنى للالتزام بشكل منفصل لضمان الشفافية وقابلية التدقيق."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "دليل المشتريات لنماذج الذكاء الاصطناعي"
+        },
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "إدارة مخاطر التركز على مزود واحد"
+        }
+      ]
+    }
   }
 }
-
-

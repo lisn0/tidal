@@ -1,11 +1,286 @@
 {
-  "slug":"cost-per-profitable-outcome","tags":["ai-roi","unit-economics","cfo"],"datePublished":"2026-08-27","dateModified":"2026-08-27","languages":{
-    "en":{"title":"Cost per successful task is the AI margin metric","titleCore":"Cost per successful task is the AI margin metric","description":"Why finance leaders should connect AI spend to successful outcomes and contribution margin, not only API request volume.","body":"<p>Finance should not approve AI investment on request volume alone. A request can fail, trigger human repair, or require three expensive retries. The decision metric is cost per successful task: attributable AI spend divided by work that meets the business definition of done. Pair it with revenue or avoided cost to see contribution margin.</p><h2>Use an outcome denominator</h2><p>Define success for each workflow before opening the dashboard. A support answer may need user acceptance; invoice extraction may need a confidence threshold and no manual correction; a research workflow may need a delivered artifact. The denominator must be observable and owned by the business, not invented after the invoice arrives.</p><h2>The CFO bridge</h2><p>Begin with the approved baseline and bridge the change through volume, rate, model mix, and efficiency. Then show cost per successful task by product, customer segment, and workflow. A higher bill can be a good investment if successful outcomes and gross profit grew faster. A lower bill can be bad news if completion quality fell.</p><table><thead><tr><th>Metric</th><th>Question it answers</th></tr></thead><tbody><tr><td>Total AI spend</td><td>How much cash left the business?</td></tr><tr><td>Cost per request</td><td>What does an attempt cost?</td></tr><tr><td>Cost per successful task</td><td>What does usable work cost?</td></tr><tr><td>Contribution per task</td><td>Does the workflow create economic value?</td></tr></tbody></table><h2>What to request at month-end</h2><p>Ask for provider-reconciled spend, successful-task volume, p50 and p95 cost, failure and repair rates, and the three largest movements. Require a named owner for every material variance. This turns AI reporting from a technology invoice into a business review.</p><p>The metric does not exist to force every workload to be cheap. It exists to make expensive capability visible, comparable, and accountable.</p><h2>Related</h2><ul><li>AI spend variance analysis</li><li>Proving AI ROI</li><li>LLM cost monitoring</li></ul>","faq":[{"question":"What is cost per successful task?","answer":"It is attributable AI spend divided by work that meets a defined business completion or quality condition."},{"question":"Why is cost per request insufficient for finance?","answer":"It measures attempts, not usable outcomes, and can hide failures, retries, human repair, and expensive long-tail cases."},{"question":"What should finance request at month-end?","answer":"Request reconciled spend, successful-task volume, p50 and p95 cost, failure rates, and owners for the largest variances."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"AI spend variance analysis"},{"slug":"/research/proving-ai-roi","label":"Proving AI ROI"},{"slug":"/research/llm-cost-monitoring","label":"LLM cost monitoring"}]},
-    "es":{"title":"El coste por tarea exitosa es la métrica del margen de IA","titleCore":"El coste por tarea exitosa es la métrica del margen de IA","description":"Por qué finanzas debe conectar el gasto de IA con resultados exitosos, no solo con solicitudes API.","body":"<p>Finanzas no debe aprobar la inversión en IA usando solo el volumen de solicitudes. Una solicitud puede fallar, requerir reparación humana o repetir llamadas caras. Mide el coste por tarea exitosa y relaciónalo con ingresos o coste evitado.</p><h2>Define el resultado</h2><p>Establece la condición de éxito antes de abrir el panel: aceptación del usuario, confianza mínima o flujo sin corrección manual. La métrica debe ser observable y tener dueño de negocio.</p><h2>El puente financiero</h2><p>Explica el cambio desde la línea base mediante volumen, tarifa, mezcla y eficiencia. Después muestra el coste por tarea por producto, segmento y flujo. Una factura mayor puede ser buena si el margen creció más.</p><h2>El cierre mensual</h2><p>Pide gasto conciliado, tareas exitosas, p50 y p95, tasa de fallos y responsables de las mayores variaciones. Así el gasto se convierte en una revisión de negocio.</p>","faq":[{"question":"¿Qué es el coste por tarea exitosa?","answer":"Es el gasto atribuible dividido por el trabajo que cumple una condición de calidad o finalización definida."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Análisis de variación del gasto de IA"}]},
-    "fr":{"title":"Le coût par tâche réussie est la mesure de marge IA","titleCore":"Le coût par tâche réussie est la mesure de marge IA","description":"Pourquoi relier les dépenses IA aux résultats réussis plutôt qu’au seul volume de requêtes.","body":"<p>Une requête peut échouer, demander une reprise humaine ou lancer plusieurs appels coûteux. Mesurez le coût par tâche réussie et comparez-le au revenu ou au coût évité.</p><h2>Définir la réussite</h2><p>Fixez la condition avant la mesure: acceptation, seuil de confiance ou flux sans correction manuelle. Le dénominateur doit être observable et porté par le métier.</p><h2>Le pont financier</h2><p>Expliquez l’écart par volume, tarif, mix et efficacité, puis montrez le coût par tâche par produit et segment. Une facture plus élevée peut être saine si la marge progresse davantage.</p><p>Au clôture, demandez dépense rapprochée, tâches réussies, p50, p95, échecs et responsables.</p>","faq":[{"question":"Qu’est-ce que le coût par tâche réussie?","answer":"C’est la dépense attribuable divisée par le travail qui atteint une condition de qualité ou d’achèvement définie."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Analyse des écarts de dépenses IA"}]},
-    "de":{"title":"Kosten pro erfolgreicher Aufgabe sind die KI-Marginkennzahl","titleCore":"Kosten pro erfolgreicher Aufgabe sind die KI-Marginkennzahl","description":"Warum Finanzteams KI-Ausgaben mit erfolgreichen Ergebnissen statt nur mit API-Anfragen verbinden sollten.","body":"<p>Eine Anfrage kann scheitern, menschliche Nacharbeit auslösen oder mehrere teure Retries benötigen. Messen Sie die Kosten je erfolgreicher Aufgabe und vergleichen Sie sie mit Umsatz oder vermiedenen Kosten.</p><h2>Erfolg definieren</h2><p>Bestimmen Sie die Bedingung vor der Messung: Nutzerakzeptanz, Konfidenzschwelle oder ein Ablauf ohne manuelle Korrektur. Der Nenner muss beobachtbar sein.</p><h2>Die Finanzbrücke</h2><p>Erklären Sie Abweichungen über Volumen, Tarif, Mix und Effizienz. Zeigen Sie die Kosten je Aufgabe nach Produkt und Segment. Eine höhere Rechnung kann gesund sein, wenn die Marge stärker wächst.</p><p>Zum Monatsabschluss gehören abgestimmte Ausgaben, erfolgreiche Aufgaben, p50, p95, Fehlerquote und Verantwortliche.</p>","faq":[{"question":"Was sind Kosten pro erfolgreicher Aufgabe?","answer":"Zurechenbare KI-Ausgaben geteilt durch Arbeit, die eine definierte Qualitäts- oder Abschlussbedingung erfüllt."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Abweichungsanalyse für KI-Ausgaben"}]},
-    "ja":{"title":"成功タスク単価はAIの利益率指標である","titleCore":"成功タスク単価はAIの利益率指標である","description":"APIリクエスト数ではなく成功した成果にAI支出を結び付ける理由を説明します。","body":"<p>リクエストは失敗したり、人手修正や高価な再試行を必要としたりします。成功タスク単価を測り、売上または回避コストと比較してください。</p><h2>成功条件を定義する</h2><p>利用者の承認、信頼度の閾値、手動修正なしの完了など、測定前に条件を決めます。分母は観測可能で事業側が所有します。</p><h2>財務の橋渡し</h2><p>差分を量、料金、構成、効率に分解し、製品と顧客区分ごとに成功タスク単価を示します。請求額が増えても利益がより増えれば健全です。</p><p>月次締めでは、照合済み支出、成功数、p50、p95、失敗率、責任者を確認します。</p>","faq":[{"question":"成功タスク単価とは何ですか？","answer":"定義した品質または完了条件を満たした仕事で、モデル、ツール、再試行などの帰属AI支出を割った値です。"}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"AI支出の差分分析"}]},
-    "pt":{"title":"O custo por tarefa bem-sucedida é a métrica de margem de IA","titleCore":"O custo por tarefa bem-sucedida é a métrica de margem de IA","description":"Porque a equipa financeira deve ligar a despesa de IA a resultados bem-sucedidos, não apenas a pedidos API.","body":"<p>Um pedido pode falhar, exigir correção humana ou gerar vários retries caros. Meça o custo por tarefa bem-sucedida e compare-o com receita ou custo evitado.</p><h2>Defina o resultado</h2><p>Estabeleça a condição antes da medição: aceitação, limite de confiança ou fluxo sem correção manual. O denominador deve ser observável e ter dono de negócio.</p><h2>A ponte financeira</h2><p>Explique a variação por volume, tarifa, mix e eficiência. Mostre o custo por tarefa por produto e segmento. Uma fatura maior pode ser saudável se a margem crescer mais.</p><p>No fecho mensal, peça despesa reconciliada, tarefas concluídas, p50, p95, falhas e responsáveis.</p>","faq":[{"question":"O que é o custo por tarefa bem-sucedida?","answer":"É a despesa de IA atribuível dividida pelo trabalho que cumpre uma condição de qualidade ou conclusão definida."}],"related":[{"slug":"/research/ai-spend-variance-analysis","label":"Análise de variação da despesa de IA"}]}
+  "slug": "cost-per-profitable-outcome",
+  "tags": [
+    "ai-roi",
+    "unit-economics",
+    "cfo"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "languages": {
+    "en": {
+      "title": "Cost per successful task is the AI margin metric",
+      "titleCore": "Cost per successful task is the AI margin metric",
+      "description": "Why finance leaders should connect AI spend to successful outcomes and contribution margin, not only API request volume.",
+      "body": "<p>Finance should not approve AI investment on request volume alone. A request can fail, trigger human repair, or require three expensive retries. The decision metric is cost per successful task: attributable AI spend divided by work that meets the business definition of done. Pair it with revenue or avoided cost to see contribution margin.</p><h2>Use an outcome denominator</h2><p>Define success for each workflow before opening the dashboard. A support answer may need user acceptance; invoice extraction may need a confidence threshold and no manual correction; a research workflow may need a delivered artifact. The denominator must be observable and owned by the business, not invented after the invoice arrives.</p><h2>The CFO bridge</h2><p>Begin with the approved baseline and bridge the change through volume, rate, model mix, and efficiency. Then show cost per successful task by product, customer segment, and workflow. A higher bill can be a good investment if successful outcomes and gross profit grew faster. A lower bill can be bad news if completion quality fell.</p><table><thead><tr><th>Metric</th><th>Question it answers</th></tr></thead><tbody><tr><td>Total AI spend</td><td>How much cash left the business?</td></tr><tr><td>Cost per request</td><td>What does an attempt cost?</td></tr><tr><td>Cost per successful task</td><td>What does usable work cost?</td></tr><tr><td>Contribution per task</td><td>Does the workflow create economic value?</td></tr></tbody></table><h2>What to request at month-end</h2><p>Ask for provider-reconciled spend, successful-task volume, p50 and p95 cost, failure and repair rates, and the three largest movements. Require a named owner for every material variance. This turns AI reporting from a technology invoice into a business review.</p><p>The metric does not exist to force every workload to be cheap. It exists to make expensive capability visible, comparable, and accountable.</p><h2>Related</h2><ul><li>AI spend variance analysis</li><li>Proving AI ROI</li><li>LLM cost monitoring</li></ul>",
+      "faq": [
+        {
+          "question": "What is cost per successful task?",
+          "answer": "It is attributable AI spend divided by work that meets a defined business completion or quality condition."
+        },
+        {
+          "question": "Why is cost per request insufficient for finance?",
+          "answer": "It measures attempts, not usable outcomes, and can hide failures, retries, human repair, and expensive long-tail cases."
+        },
+        {
+          "question": "What should finance request at month-end?",
+          "answer": "Request reconciled spend, successful-task volume, p50 and p95 cost, failure rates, and owners for the largest variances."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI spend variance analysis"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "Proving AI ROI"
+        },
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM cost monitoring"
+        }
+      ]
+    },
+    "es": {
+      "title": "El coste por tarea exitosa es la métrica del margen de IA",
+      "titleCore": "El coste por tarea exitosa es la métrica del margen de IA",
+      "description": "Por qué finanzas debe conectar el gasto de IA con resultados exitosos, no solo con solicitudes API.",
+      "body": "<p>Finanzas no debe aprobar la inversión en IA usando solo el volumen de solicitudes. Una solicitud puede fallar, requerir reparación humana o repetir llamadas caras. Mide el coste por tarea exitosa y relaciónalo con ingresos o coste evitado.</p><h2>Define el resultado</h2><p>Establece la condición de éxito antes de abrir el panel: aceptación del usuario, confianza mínima o flujo sin corrección manual. La métrica debe ser observable y tener dueño de negocio.</p><h2>El puente financiero</h2><p>Explica el cambio desde la línea base mediante volumen, tarifa, mezcla y eficiencia. Después muestra el coste por tarea por producto, segmento y flujo. Una factura mayor puede ser buena si el margen creció más.</p><h2>El cierre mensual</h2><p>Pide gasto conciliado, tareas exitosas, p50 y p95, tasa de fallos y responsables de las mayores variaciones. Así el gasto se convierte en una revisión de negocio.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es el coste por tarea exitosa?",
+          "answer": "Es el gasto atribuible dividido por el trabajo que cumple una condición de calidad o finalización definida."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Análisis de variación del gasto de IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le coût par tâche réussie est la mesure de marge IA",
+      "titleCore": "Le coût par tâche réussie est la mesure de marge IA",
+      "description": "Pourquoi relier les dépenses IA aux résultats réussis plutôt qu’au seul volume de requêtes.",
+      "body": "<p>Une requête peut échouer, demander une reprise humaine ou lancer plusieurs appels coûteux. Mesurez le coût par tâche réussie et comparez-le au revenu ou au coût évité.</p><h2>Définir la réussite</h2><p>Fixez la condition avant la mesure: acceptation, seuil de confiance ou flux sans correction manuelle. Le dénominateur doit être observable et porté par le métier.</p><h2>Le pont financier</h2><p>Expliquez l’écart par volume, tarif, mix et efficacité, puis montrez le coût par tâche par produit et segment. Une facture plus élevée peut être saine si la marge progresse davantage.</p><p>Au clôture, demandez dépense rapprochée, tâches réussies, p50, p95, échecs et responsables.</p>",
+      "faq": [
+        {
+          "question": "Qu’est-ce que le coût par tâche réussie?",
+          "answer": "C’est la dépense attribuable divisée par le travail qui atteint une condition de qualité ou d’achèvement définie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Analyse des écarts de dépenses IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Kosten pro erfolgreicher Aufgabe sind die KI-Marginkennzahl",
+      "titleCore": "Kosten pro erfolgreicher Aufgabe sind die KI-Marginkennzahl",
+      "description": "Warum Finanzteams KI-Ausgaben mit erfolgreichen Ergebnissen statt nur mit API-Anfragen verbinden sollten.",
+      "body": "<p>Eine Anfrage kann scheitern, menschliche Nacharbeit auslösen oder mehrere teure Retries benötigen. Messen Sie die Kosten je erfolgreicher Aufgabe und vergleichen Sie sie mit Umsatz oder vermiedenen Kosten.</p><h2>Erfolg definieren</h2><p>Bestimmen Sie die Bedingung vor der Messung: Nutzerakzeptanz, Konfidenzschwelle oder ein Ablauf ohne manuelle Korrektur. Der Nenner muss beobachtbar sein.</p><h2>Die Finanzbrücke</h2><p>Erklären Sie Abweichungen über Volumen, Tarif, Mix und Effizienz. Zeigen Sie die Kosten je Aufgabe nach Produkt und Segment. Eine höhere Rechnung kann gesund sein, wenn die Marge stärker wächst.</p><p>Zum Monatsabschluss gehören abgestimmte Ausgaben, erfolgreiche Aufgaben, p50, p95, Fehlerquote und Verantwortliche.</p>",
+      "faq": [
+        {
+          "question": "Was sind Kosten pro erfolgreicher Aufgabe?",
+          "answer": "Zurechenbare KI-Ausgaben geteilt durch Arbeit, die eine definierte Qualitäts- oder Abschlussbedingung erfüllt."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Abweichungsanalyse für KI-Ausgaben"
+        }
+      ]
+    },
+    "ja": {
+      "title": "成功タスク単価はAIの利益率指標である",
+      "titleCore": "成功タスク単価はAIの利益率指標である",
+      "description": "APIリクエスト数ではなく成功した成果にAI支出を結び付ける理由を説明します。",
+      "body": "<p>リクエストは失敗したり、人手修正や高価な再試行を必要としたりします。成功タスク単価を測り、売上または回避コストと比較してください。</p><h2>成功条件を定義する</h2><p>利用者の承認、信頼度の閾値、手動修正なしの完了など、測定前に条件を決めます。分母は観測可能で事業側が所有します。</p><h2>財務の橋渡し</h2><p>差分を量、料金、構成、効率に分解し、製品と顧客区分ごとに成功タスク単価を示します。請求額が増えても利益がより増えれば健全です。</p><p>月次締めでは、照合済み支出、成功数、p50、p95、失敗率、責任者を確認します。</p>",
+      "faq": [
+        {
+          "question": "成功タスク単価とは何ですか？",
+          "answer": "定義した品質または完了条件を満たした仕事で、モデル、ツール、再試行などの帰属AI支出を割った値です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出の差分分析"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O custo por tarefa bem-sucedida é a métrica de margem de IA",
+      "titleCore": "O custo por tarefa bem-sucedida é a métrica de margem de IA",
+      "description": "Porque a equipa financeira deve ligar a despesa de IA a resultados bem-sucedidos, não apenas a pedidos API.",
+      "body": "<p>Um pedido pode falhar, exigir correção humana ou gerar vários retries caros. Meça o custo por tarefa bem-sucedida e compare-o com receita ou custo evitado.</p><h2>Defina o resultado</h2><p>Estabeleça a condição antes da medição: aceitação, limite de confiança ou fluxo sem correção manual. O denominador deve ser observável e ter dono de negócio.</p><h2>A ponte financeira</h2><p>Explique a variação por volume, tarifa, mix e eficiência. Mostre o custo por tarefa por produto e segmento. Uma fatura maior pode ser saudável se a margem crescer mais.</p><p>No fecho mensal, peça despesa reconciliada, tarefas concluídas, p50, p95, falhas e responsáveis.</p>",
+      "faq": [
+        {
+          "question": "O que é o custo por tarefa bem-sucedida?",
+          "answer": "É a despesa de IA atribuível dividida pelo trabalho que cumpre uma condição de qualidade ou conclusão definida."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Análise de variação da despesa de IA"
+        }
+      ]
+    },
+    "it": {
+      "title": "Il costo per task riuscito guida il margine AI",
+      "titleCore": "Il costo per task riuscito guida il margine AI",
+      "description": "Perché i CFO devono collegare la spesa AI ai risultati di successo e al margine di contribuzione, non solo ai volumi API.",
+      "body": "<p>La direzione finanziaria non deve approvare investimenti in intelligenza artificiale basandosi unicamente sul volume di chiamate API. Una richiesta può fallire, innescare interventi manuali di correzione o richiedere costosi cicli di retry. La vera metrica decisionale è il <strong>costo per task completato con successo</strong>: spesa AI attribuibile divisa per il lavoro che rispetta la definizione aziendale di completamento.</p><h2>Un denominatore basato sul risultato</h2><p>Definite il criterio di successo prima di aprire la dashboard. Una risposta di supporto clienti richiede l'accettazione dell'utente; l'estrazione di fatture richiede una soglia minima di confidenza senza correzione manuale; un workflow analitico richiede un report convalidato. Il denominatore deve essere oggettivo, verificabile e di proprietà del business.</p><h2>Il ponte per il CFO</h2><p>Partite dalla baseline approvata e spiegate la variazione attraverso volume, tariffa, mix di modelli ed efficienza operativa. Quindi mostrate il costo per task riuscito per prodotto, segmento di clientela e workflow. Una fattura più elevata è un ottimo investimento se i risultati utili e il margine di contribuzione crescono a un ritmo superiore.</p><h2>Richieste per la chiusura mensile</h2><p>Esigete spesa riconciliata con i provider, volume di task riusciti, costi p50 e p95, tassi di fallimento e indicazione dei proprietari per ogni variazione rilevante. Questo trasforma il controllo costi da un'analisi tecnica a una revisione strategica di redditività.</p>",
+      "faq": [
+        {
+          "question": "Che cos'è il costo per task completato con successo?",
+          "answer": "È la spesa totale attribuibile divisa per le unità di lavoro che soddisfano una determinata condizione qualitativa o di business."
+        },
+        {
+          "question": "Perché il costo per richiesta non basta alla finanza?",
+          "answer": "Misura i tentativi grezzi anziché i risultati utilizzabili, nascondendo fallimenti, retry, correzioni manuali e code lunghe costose."
+        },
+        {
+          "question": "Cosa deve richiedere il CFO a fine mese?",
+          "answer": "Spesa riconciliata, volume di task riusciti, costi percentili p50 e p95, percentuali di errore e responsabili degli scostamenti."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Analisi degli scostamenti di spesa AI"
+        }
+      ]
+    },
+    "ko": {
+      "title": "성공 작업당 비용은 AI 마진을 결정짓는 핵심 지표",
+      "titleCore": "성공 작업당 비용은 AI 마진을 결정짓는 핵심 지표",
+      "description": "CFO가 단순 API 호출량이 아니라 성공적인 비즈니스 산출물과 공헌이익에 AI 지출을 연결해야 하는 이유.",
+      "body": "<p>재무 리더는 단순 API 호출량 지표만 보고 AI 투자를 승인해서는 안 됩니다. 호출은 실패할 수 있고, 사람의 수동 수정을 유발하거나, 값비싼 재시도를 세 번 반복할 수 있습니다. CFO가 추적해야 할 진정한 의사결정 지표는 <strong>성공적인 작업당 비용(Cost per successful task)</strong>입니다. 즉, 비즈니스 완료 조건을 온전히 충족한 작업 수로 귀속 AI 지출을 나눈 수치입니다.</p><h2>비즈니스 성과 중심의 분모 정의</h2><p>대시보드를 보기 전에 각 워크플로의 성공 기준을 먼저 확정하십시오. 고객 지원 답변은 사용자의 수락 여부, 송장 데이터 추출은 사람의 개입 없는 신뢰도 임계값 달성, 리서치 에이전트는 검증된 문서 완성이 기준이 될 수 있습니다. 분모는 관측 가능해야 하며 비즈니스 부서가 소유해야 합니다.</p><h2>CFO를 위한 예실 분석 브리지</h2><p>승인된 기준선에서 출발하여 단가, 볼륨, 모델 믹스, 효율성 4가지 축으로 변동을 분해하십시오. 그런 다음 제품군, 고객 세그먼트, 워크플로별로 성공 작업당 비용을 산출하십시오. 성공적인 산출물과 매출 총이익이 더 빠르게 성장했다면 청구액 증가 역시 건강한 투자입니다.</p><h2>월말 결산 시 요구할 항목</h2><p>공급업체 대사 지출, 완료 작업량, p50 및 p95 단가, 실패 및 수동 수정률, 상위 3대 변동 요인에 대한 담당자 서명을 요구하십시오. 이를 통해 기술 청구서 확인을 비즈니스 마진 검토 회의로 격상시킬 수 있습니다.</p>",
+      "faq": [
+        {
+          "question": "성공 작업당 비용(Cost per successful task)이란 무엇인가요?",
+          "answer": "사전에 정의된 품질 및 비즈니스 완료 조건을 충족한 작업 수로 귀속 AI 총지출을 나눈 단위 경제성 지표입니다."
+        },
+        {
+          "question": "요청당 비용(Cost per request)만으로 불충분한 이유는 무엇인가요?",
+          "answer": "성공 여부가 아닌 시도 횟수만 측정하므로, 실패, 재시도, 사람의 수정 비용 및 롱테일 고비용 이상치를 은폐하기 때문입니다."
+        },
+        {
+          "question": "CFO가 월말에 엔지니어링팀에 요구해야 하는 것은 무엇인가요?",
+          "answer": "공급업체 대사 지출액, 완료 작업량, p50/p95 단가 분포, 실패율, 그리고 주요 변동에 대한 원인 및 담당자입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI 지출 차이 분석"
+        }
+      ]
+    },
+    "zh": {
+      "title": "成功任务单价是衡量AI毛利的核心指标",
+      "titleCore": "成功任务单价是衡量AI毛利的核心指标",
+      "description": "财务负责人为何必须将AI支出与业务成果及贡献利润挂钩，而非单纯审视API请求量。",
+      "body": "<p>财务部门绝不能仅凭API请求调用量来审批AI预算。一次API请求可能会遭遇失败报错、触发线下人工介入、或产生三次昂贵的重复重试。真正的决策指标是<strong>成功任务单价</strong>：即可归因的AI总支出除以达到业务明确验收标准的有效工作成果。将其与客户收入或节省的成本挂钩，方能看清真实的边际贡献。</p><h2>确立以业务交付为导向的分母</h2><p>在调取监控看板前，必须为每个工作流明确定义成功条件：客服应答需获得用户采纳；发票识别需达到置信度阈值且无人工干预纠错；分析流程需生成合格交付文档。分母必须具备客观可观测性且由业务部门认领，绝不能等厂商账单送达后再事后拼凑。</p><h2>CFO方差分析桥梁</h2><p>以核准的财务基线为起点，通过单价、用量、模型组合及交付效率四个维度拆解支出变动。随后按产品线、客群分层和业务流展示成功任务单价。如果有效交付成果与毛利润的增速显著高于支出增速，账单金额上涨反而是健康的业务扩张；反之，若账单下降是因为完成率与质量雪崩，则属于严重隐患。</p><table><thead><tr><th>指标</th><th>回答的商业问题</th></tr></thead><tbody><tr><td>AI总支出</td><td>企业实际流出了多少现金？</td></tr><tr><td>单次请求成本</td><td>单次尝试的成本是多少？</td></tr><tr><td>成功任务单价</td><td>产出可用业务成果需花费多少？</td></tr><tr><td>任务边际贡献</td><td>该AI流程是否创造正向经济价值？</td></tr></tbody></table><h2>月度财务结账应要求的关键数据</h2><p>财务应要求工程团队提供发票对齐后的支出总额、成功任务交付量、p50与p95成本分布、失败与人工介入率，以及变动最大的三项根因，并由相关责任人签字确认。唯有如此，AI汇报才能从晦涩的云技术账单转变为严谨的商业经营复盘。</p>",
+      "faq": [
+        {
+          "question": "什么是单次成功任务成本？",
+          "answer": "它是指可归因的AI全部支出总额除以完全符合业务预设完成度或质量验收条件的有效工作成果数量。"
+        },
+        {
+          "question": "为什么单次请求成本对财务决策是不充分的？",
+          "answer": "因为单次请求成本只记录技术调用次数而非可用商业成果，极易掩盖系统故障、高频重试、人工修复成本以及长尾极端开销。"
+        },
+        {
+          "question": "财务部门在月末结账时应向工程团队索取哪些数据？",
+          "answer": "应索取经发票对齐的支出总额、成功任务总量、p50与p95成本、失败与人工接管率，以及重大方差的归因与责任人。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI支出差异分析"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "证明AI的投资回报率"
+        },
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM成本监控"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Kosten per geslaagde taak bepalen de AI-marge",
+      "titleCore": "Kosten per geslaagde taak bepalen de AI-marge",
+      "description": "Waarom financieel leiders AI-uitgaven moeten koppelen aan succesvolle resultaten en dekkingsbijdrage in plaats van API-volumes.",
+      "body": "<p>Finance moet AI-investeringen niet beoordelen op basis van louter API-aanroepvolumes. Een verzoek kan mislukken, handmatige correcties vereisen of drie kostbare retries doorlopen. De beslissende metriek is <strong>kosten per geslaagde taak</strong>: toewijsbare AI-uitgaven gedeeld door werk dat voldoet aan de zakelijke definitie van voltooiing. Koppel dit aan omzet of vermeden kosten om de werkelijke dekkingsbijdrage inzichtelijk te maken.</p><h2>Gebruik een noemer gebaseerd op uitkomsten</h2><p>Definieer zakelijk succes per workflow voordat het dashboard wordt geopend. Een supportantwoord vereist gebruikersacceptatie; factuurverwerking vereist een betrouwbaarheidsdrempel zonder handmatige correctie; een analyseflow vereist een gevalideerd rapport. De noemer moet observeerbaar zijn en eigenaarschap hebben binnen de businessunit.</p><h2>De CFO-variantiebrug</h2><p>Vertrek vanuit het goedgekeurde budget en overbrug de afwijking via volume, tarief, modelmix en operationele efficiëntie. Toon vervolgens de kosten per geslaagde taak per productlijn, klantsegment en workflow. Een hogere providerfactuur is een gezonde investering als succesvolle uitkomsten en brutowinst sneller zijn gestegen. Een lagere factuur is juist een waarschuwingssignaal wanneer afrondingskwaliteit daalt.</p><table><thead><tr><th>Metriek</th><th>Beantwoorde zakelijke vraag</th></tr></thead><tbody><tr><td>Totale AI-uitgaven</td><td>Hoeveel liquiditeit verlaat de onderneming?</td></tr><tr><td>Kosten per verzoek</td><td>Wat kost een afzonderlijke poging?</td></tr><tr><td>Kosten per geslaagde taak</td><td>Wat kost een bruikbaar resultaat?</td></tr><tr><td>Dekkingsbijdrage per taak</td><td>Creëert de workflow economische meerwaarde?</td></tr></tbody></table><h2>Wat finance moet opvragen bij de maandafsluiting</h2><p>Vraag om met facturen gereconcilieerde uitgaven, volumes van geslaagde taken, p50- en p95-kostenverdelingen, uitvalpercentages en onderbouwing van de drie grootste verschuivingen met benoemde eigenaren. Hiermee transformeert AI-rapportage van een ondoorzichtige IT-factuur in een strategische business review.</p>",
+      "faq": [
+        {
+          "question": "Wat zijn kosten per geslaagde taak?",
+          "answer": "Dit zijn toewijsbare AI-uitgaven gedeeld door het volume aan werk dat voldoet aan een vooraf gedefinieerde zakelijke kwaliteits- of afrondingsnorm."
+        },
+        {
+          "question": "Waarom zijn kosten per verzoek ontoereikend voor finance?",
+          "answer": "Ze meten technische pogingen in plaats van bruikbare uitkomsten en maskeren mislukkingen, herhaalpogingen, handmatige correcties en dure staartkosten."
+        },
+        {
+          "question": "Wat moet de CFO opvragen tijdens de maandafsluiting?",
+          "answer": "Gereconcilieerde uitgaven, volumes van voltooide taken, p50- en p95-kosten, foutpercentages en verantwoordelijken voor materiële begrotingsafwijkingen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "Variantieanalyse van AI-uitgaven"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "AI-ROI bewijzen"
+        },
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM-kostenmonitoring"
+        }
+      ]
+    },
+    "ar": {
+      "title": "التكلفة لكل مهمة ناجحة هي مقياس هامش الربح",
+      "titleCore": "التكلفة لكل مهمة ناجحة هي مقياس هامش الربح",
+      "description": "لماذا يجب على المدراء الماليين ربط إنفاق الذكاء الاصطناعي بالنتائج الناجحة وهامش المساهمة بدلاً من الاعتماد على حجم طلبات API فقط.",
+      "body": "<p>لا ينبغي للإدارة المالية اعتماد استثمارات الذكاء الاصطناعي بناءً على حجم الطلبات وحده. فالطلب قد يفشل، أو يتطلب تصحيحاً بشرياً يدوياً، أو يطلق 3 محاولات إعادة استنتاج باهظة التكلفة. المقياس المالي الحاسم هو <strong>التكلفة لكل مهمة ناجحة</strong>: الإنفاق الفعلي على الذكاء الاصطناعي مقسوماً على حجم العمل الذي حقق التعريف التجاري للإنجاز. اربط هذا المقياس بالإيرادات أو التكاليف المتجنبة لحساب هامش المساهمة الحقيقي.</p>\n\n<h2>تحديد مقام النتيجة بدقة</h2>\n<p>حدد شروط النجاح لكل تدفق عمل قبل فتح لوحة المؤشرات: إجابة خدمة العملاء تتطلب قبول المستخدم، واستخراج بيانات الفواتير يتطلب تخطي نسبة ثقة محددة دون تعديل يدوي. يجب أن يكون المقام قابلاً للرصد وتابعاً لمسؤول عمل تجاري، وليس رقماً يتم ابتكاره بعد وصول فاتورة المزود.</p>\n\n<h2>جسر التباين للمدير المالي (CFO Bridge)</h2>\n<p>ابدأ بالميزانية المعتمدة وفسر التباين عبر أربعة أبعاد: الحجم، وسعر الرمز، ومزيج النماذج، والكفاءة التشغيلية. ثم استعرض التكلفة لكل مهمة ناجحة حسب المنتج وفئة العملاء. قد تكون الفاتورة المرتفعة استثماراً ممتازاً إذا نمت النتائج الناجحة والأرباح بمعدل أسرع، بينما قد تكون الفاتورة المنخفضة مؤشراً سلبياً إذا تدهورت جودة الخدمة.</p>\n\n<table class=\"kv\">\n<thead><tr><th>المقياس</th><th>السؤال المالي الذي يجيب عنه</th></tr></thead>\n<tbody>\n<tr><td>إجمالي إنفاق الذكاء الاصطناعي</td><td>كم من السيولة النقدية خرجت من الشركة؟</td></tr>\n<tr><td>التكلفة لكل طلب</td><td>ما هي تكلفة المحاولة الواحدة؟</td></tr>\n<tr><td>التكلفة لكل مهمة ناجحة</td><td>ما هي تكلفة إنتاج عمل صالح للاستخدام؟</td></tr>\n<tr><td>هامش المساهمة لكل مهمة</td><td>هل يخلق تدفق العمل قيمة اقتصادية حقيقية؟</td></tr>\n</tbody>\n</table>\n\n<h2>متطلبات إقفال نهاية الشهر</h2>\n<p>اطلب بيانات الإنفاق المطابقة مع المزودين، وحجم المهام الناجحة، وتكلفة شريحتي p50 وp95، ومعدلات الفشل والتصحيح البشري، وأكبر ثلاثة انحرافات في الميزانية مع تحديد المسؤولين عنها. هذا التحليل يحول تقارير الذكاء الاصطناعي من مجرد فاتورة تقنية إلى مراجعة استراتيجية للأعمال.</p>",
+      "faq": [
+        {
+          "question": "ما هي التكلفة لكل مهمة ناجحة للمدير المالي؟",
+          "answer": "هي الإنفاق المنسوب على الذكاء الاصطناعي مقسوماً على مخرجات العمل التي تستوفي الشروط التجارية للجودة والإنجاز."
+        },
+        {
+          "question": "لماذا لا تكفي تكلفة الطلب وحدها للإدارة المالية؟",
+          "answer": "لأنها تقيس المحاولات المجردة وتخفي تكاليف المحاولات الفاشلة والإصلاح البشري والحالات المعقدة باهظة الاستنتاج."
+        },
+        {
+          "question": "ما الذي يجب أن تطلبه المالية عند إقفال الشهر؟",
+          "answer": "مطابقة الفواتير، وحجم المهام المكتملة، وتكلفة p50/p95، ونسب الفشل، وتعيين مسؤول لكل انحراف جوهري عن الميزانية."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "تحليل تباين إنفاق الذكاء الاصطناعي"
+        },
+        {
+          "slug": "/research/proving-ai-roi",
+          "label": "إثبات العائد على استثمار الذكاء الاصطناعي"
+        }
+      ]
+    }
   }
 }
-

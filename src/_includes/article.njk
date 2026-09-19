@@ -33,7 +33,7 @@
 } -%}
 
 <!DOCTYPE html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}"{% if lang == 'ar' %} dir="rtl"{% endif %}>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,7 +86,7 @@
 </script>
 {%- endif -%}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"{{ locale.titleCore | safe }}","item":"{{ canonicalUrl }}"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"{% if lang == 'ar' %}الرئيسية{% else %}Home{% endif %}","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"{% if lang == 'ar' %}أبحاث{% else %}Research{% endif %}","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"{{ locale.titleCore | safe }}","item":"{{ canonicalUrl }}"}]}
 </script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -95,6 +95,15 @@
 <meta name="theme-color" content="#FBFAF6" />
 <link rel="preload" href="/assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/assets/page.css" />
+{%- if lang == 'ar' -%}
+<style>
+code, pre { direction: ltr; text-align: left; unicode-bidi: embed; }
+.topbar .nav, .back { direction: ltr; }
+table.kv th, table.kv td { text-align: right; }
+table.kv th:last-child, table.kv td:last-child { text-align: left; }
+.langsw { direction: ltr; }
+</style>
+{%- endif -%}
 {%- if article.agentMode -%}
 <script type="text/x-llms-txt">
 # {{ locale.title }}

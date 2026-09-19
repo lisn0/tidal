@@ -1,0 +1,242 @@
+{
+  "slug": "mcp-tool-sprawl-budget-tax",
+  "tags": [
+    "mcp",
+    "budget-governance",
+    "cfo",
+    "tool-roi",
+    "unit-economics"
+  ],
+  "datePublished": "2026-09-19",
+  "dateModified": "2026-09-19",
+  "languages": {
+    "en": {
+      "title": "MCP tool sprawl: the hidden tax in agent budgets",
+      "titleCore": "MCP tool sprawl: the hidden tax in agent budgets",
+      "description": "Why enterprise MCP tool connections inflate agent input bills by 40% without extra value, and how CFOs can govern tool inventory and ROI.",
+      "body": "<p>Connecting enterprise systems to AI agents via Model Context Protocol (MCP) servers introduces an immediate, recurring balance-sheet tax that finance teams rarely anticipate. When an internal engineering team connects an agent to corporate databases, ticketing platforms, Slack, and code repositories, the full JSON schema of every declared tool is appended to the input prompt on every turn. In an organization with 500 active knowledge workers running agent workflows with 8 connected MCP servers, static tool schemas inflate baseline input token consumption by 35% to 60%, generating an extra $18,000 to $45,000 in monthly API charges without delivering any incremental business output.</p><h2>The economics of MCP tool inventory</h2><p>From a financial perspective, an MCP server is not free open-source infrastructure; it is an unmetered commitment against your LLM token budget. Unlike software licenses that bill per seat or per active user, an MCP tool injects variable cost into every query executed by the model. If an agent carries 40 tool declarations totaling 8,000 tokens of schema metadata, every user turn incurs an unavoidable baseline token cost regardless of whether the tools are utilized. When scaled across multi-turn agent interactions, tool schema bloat erodes the gross margin of AI-enabled internal software and customer-facing products alike.</p><h2>How does MCP tool sprawl affect enterprise AI budgets?</h2><p>MCP tool sprawl inflates token consumption by injecting thousands of static schema tokens into every conversational turn across all active agents, increasing baseline API expenditure by 35% to 60% without increasing user productivity.</p><h2>A financial governance framework for MCP servers</h2><p>Finance leaders must implement clear operational boundaries before authorizing broad MCP server rollouts across departments:</p><ul><li><strong>Tool Entitlement and Justification:</strong> Treat tool connectivity as privileged access. Departments requesting access to specialized MCP servers (e.g., Salesforce, BigQuery, Snowflake) must document expected query frequency and expected labor productivity gains. Prohibit global default tool sets in agent configuration templates.</li><li><strong>Cost-Per-Connected-Tool Audits:</strong> Require platform engineering to instrument token attribution by tool schema using OpenTelemetry attributes. Calculate the monthly carrying cost of each MCP integration by multiplying schema token size by total organizational turn volume. If an enterprise tool schema costs $3,000 monthly in token overhead but is invoked fewer than 50 times, deprecate or dynamically scope it.</li><li><strong>Enforce Prompt Caching Standards:</strong> Require engineering teams to implement prompt cache breakpoints after static MCP tool declarations. On providers supporting context caching, this reduces the carrying cost of tool schemas by up to 90%, converting a massive variable liability into a manageable fixed-cache charge.</li></ul><h2>What governance should CFOs mandate for MCP integrations?</h2><p>CFOs should mandate tool entitlement matrices, monthly audits of tool invocation frequency against schema token cost, and architecture reviews enforcing prompt caching on all production agent deployments.</p><h2>Can prompt caching protect margins on tool-heavy agents?</h2><p>Yes. Prefix caching reduces the recurring input token billing for static tool definitions by up to 90% after the first turn, preserving feature gross margins even when multi-turn agent tasks require extensive tool contracts.</p>",
+      "faq": [
+        {
+          "question": "How does MCP tool sprawl affect enterprise AI budgets?",
+          "answer": "MCP tool sprawl inflates token consumption by injecting thousands of static schema tokens into every conversational turn across all active agents, increasing baseline API expenditure by 35% to 60% without increasing user productivity."
+        },
+        {
+          "question": "What governance should CFOs mandate for MCP integrations?",
+          "answer": "CFOs should mandate tool entitlement matrices, monthly audits of tool invocation frequency against schema token cost, and architecture reviews enforcing prompt caching on all production agent deployments."
+        },
+        {
+          "question": "Can prompt caching protect margins on tool-heavy agents?",
+          "answer": "Yes. Prefix caching reduces the recurring input token billing for static tool definitions by up to 90% after the first turn, preserving feature gross margins even when multi-turn agent tasks require extensive tool contracts."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Coding agent cost control"
+        },
+        {
+          "slug": "/research/ai-gross-margin-erosion",
+          "label": "AI gross margin erosion"
+        },
+        {
+          "slug": "/research/three-agent-budgets-cfo",
+          "label": "Three agent budgets for CFOs"
+        }
+      ]
+    },
+    "es": {
+      "title": "Dispersión de herramientas MCP: el impuesto oculto",
+      "titleCore": "Dispersión de herramientas MCP: el impuesto oculto",
+      "description": "Por qué conectar herramientas MCP infla la factura de tokens un 40% sin generar valor extra, y cómo finanzas debe auditar su ROI.",
+      "body": "<p>Conectar sistemas corporativos a agentes de IA mediante servidores Model Context Protocol (MCP) introduce un coste recurrente que los equipos de finanzas rara vez anticipan. Cada herramienta declarada añade su esquema JSON completo al prompt de entrada en cada turno. En organizaciones con cientos de usuarios activos, los esquemas estáticos elevan el consumo de tokens entre un 35% y un 60%, encareciendo las facturas sin aportar productividad adicional.</p><h2>Cómo afecta la proliferación de herramientas MCP al presupuesto de IA</h2><p>La proliferación de herramientas MCP infla el gasto al inyectar miles de tokens de esquema estáticos en cada turno de conversación, elevando el coste de API sin aportar productividad proporcional.</p><h2>Gobernanza financiera para integraciones MCP</h2><p>Los directores financieros deben exigir matrices de justificación de herramientas, auditorías periódicas del coste de tokens por esquema frente al uso real, y la adopción estricta de caché de prefijos para proteger los márgenes operativos.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo afecta la proliferación de herramientas MCP al presupuesto de IA?",
+          "answer": "La proliferación de herramientas MCP infla el gasto al inyectar miles de tokens de esquema estáticos en cada turno de conversación, elevando el coste de API sin aportar productividad proporcional."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Control de costes en agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Outils MCP : la taxe cachée des budgets d'agents",
+      "titleCore": "Outils MCP : la taxe cachée des budgets d'agents",
+      "description": "Pourquoi connecter des outils MCP gonfle la facture de 40% sans valeur ajoutée, et comment la direction financière doit piloter leur ROI.",
+      "body": "<p>Relier les systèmes d'information aux agents d'IA via des serveurs Model Context Protocol (MCP) engendre un surcoût récurrent souvent ignoré des directions financières. Chaque outil enregistré ajoute son schéma JSON au prompt d'entrée à chaque tour. Dans une entreprise comptant des centaines de collaborateurs actifs, ces schémas statiques augmentent la consommation de tokens de 35% à 60% sans gain de valeur immédiat.</p><h2>Comment la prolifération des outils MCP impacte-t-elle les budgets d'IA ?</h2><p>Elle alourdit les coûts d'inférence en réinjectant des milliers de tokens de spécifications techniques à chaque interaction, augmentant mécaniquement la facture API globale.</p><h2>Cadre de gouvernance financière</h2><p>Les directeurs financiers doivent instaurer une matrice d'habilitation stricte pour les outils, analyser le ratio coût/usage des schémas connectés et imposer la mise en cache des prompts sur l'ensemble des agents déployés.</p>",
+      "faq": [
+        {
+          "question": "Comment la prolifération des outils MCP impacte-t-elle les budgets d'IA ?",
+          "answer": "Elle alourdit les coûts d'inférence en réinjectant des milliers de tokens de spécifications techniques à chaque interaction, augmentant mécaniquement la facture API globale."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Contrôle des coûts des agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "MCP-Tool-Sprawl: Die versteckte Steuer in Budgets",
+      "titleCore": "MCP-Tool-Sprawl: Die versteckte Steuer in Budgets",
+      "description": "Warum MCP-Tool-Integrationen KI-Rechnungen um 40% aufblähen und wie CFOs Tool-Bestände und ROI steuern können.",
+      "body": "<p>Die Integration von Unternehmenssystemen in KI-Agenten über Model Context Protocol (MCP) Server erzeugt eine wiederkehrende Kostenbelastung, die Finanzabteilungen selten einkalkulieren. Jedes registrierte Tool sendet sein komplettes JSON-Schema bei jedem einzelnen Gesprächsschritt mit. Bei Hunderten aktiven Nutzern erhöht dieser Ballast den Token-Verbrauch um 35% bis 60%.</p><h2>Wie beeinflusst MCP-Tool-Sprawl die KI-Budgets von Unternehmen?</h2><p>MCP-Tool-Sprawl treibt den Token-Verbrauch durch wiederholte Übertragung statischer Schemata in jedem Turn in die Höhe und erhöht die API-Kosten ohne Produktivitätszuwachs.</p><h2>Finanzielle Governance-Richtlinien</h2><p>CFOs sollten Zugriffsmatrizen für Tools etablieren, monatliche Kosten-Nutzen-Analysen für jedes MCP-Tool fordern und den verpflichtenden Einsatz von Prompt-Caching durchsetzen.</p>",
+      "faq": [
+        {
+          "question": "Wie beeinflusst MCP-Tool-Sprawl die KI-Budgets von Unternehmen?",
+          "answer": "MCP-Tool-Sprawl treibt den Token-Verbrauch durch wiederholte Übertragung statischer Schemata in jedem Turn in die Höhe und erhöht die API-Kosten ohne Produktivitätszuwachs."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Kostenkontrolle für Coding-Agenten"
+        }
+      ]
+    },
+    "ja": {
+      "title": "MCPツールの増殖：エージェント予算の隠れた税金",
+      "titleCore": "MCPツールの増殖：エージェント予算の隠れた税金",
+      "description": "MCPツール接続がAI請求を40%膨らませる要因と、CFOが主導すべきツールのROI監査およびガバナンス体制。",
+      "body": "<p>企業システムをModel Context Protocol（MCP）サーバー経由でAIエージェントに連携させると、財務部門が見落としがちな継続的コストが発生します。登録されたすべてのツールのJSON Schemaが毎ターン入力プロンプトに付加されるため、数百人規模の組織ではベースラインのトークン消費が35%〜60%増加します。</p><h2>MCPツールの増殖は企業のAI予算にどう影響するか？</h2><p>毎回の対話ターンにおいて静的なスキーマトークンが大量に再送されるため、業務成果が増えないままAPIコストだけが35%〜60%底上げされます。</p><h2>CFOが導入すべき財務ガバナンス</h2><p>利用ツールの承認権限マトリクスの策定、ツールごとの消費トークンと呼び出し頻度の月次費用対効果監査、およびプロンプトキャッシュによる固定費化の義務付けが必要です。</p>",
+      "faq": [
+        {
+          "question": "MCPツールの増殖は企業のAI予算にどう影響するか？",
+          "answer": "毎回の対話ターンにおいて静的なスキーマトークンが大量に再送されるため、業務成果が増えないままAPIコストだけが35%〜60%底上げされます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "コーディングエージェントの費用管理"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Dispersão de ferramentas MCP: o imposto oculto",
+      "titleCore": "Dispersão de ferramentas MCP: o imposto oculto",
+      "description": "Porque as conexões MCP inflam as faturas de IA em 40% sem valor extra, e como os CFOs devem auditar o inventário e o ROI das ferramentas.",
+      "body": "<p>Conectar sistemas corporativos a agentes de IA através do Model Context Protocol (MCP) acarreta um encargo financeiro recorrente que as equipas de gestão raramente antecipam. Cada ferramenta declarada injeta o seu esquema JSON no prompt de entrada a cada turno, inflando o consumo de tokens em 35% a 60% sem ganho proporcional de produtividade.</p><h2>Como é que a proliferação de ferramentas MCP afeta os orçamentos de IA?</h2><p>Ao injetar milhares de tokens de esquema estáticos em cada turno de conversação, encarece a fatura de API sem aumentar o volume de trabalho entregue.</p><h2>Governança financeira recomendada para CFOs</h2><p>A liderança financeira deve instituir matrizes de autorização de ferramentas, monitorizar a relação entre custo de tokens e taxa de utilização real, e exigir prefix caching em todas as soluções de agentes.</p>",
+      "faq": [
+        {
+          "question": "Como é que a proliferação de ferramentas MCP afeta os orçamentos de IA?",
+          "answer": "Ao injetar milhares de tokens de esquema estáticos em cada turno de conversação, encarece a fatura de API sem aumentar o volume de trabalho entregue."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Controlo de custos de agentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "Proliferazione tool MCP: tassa occulta nei budget",
+      "titleCore": "Proliferazione tool MCP: tassa occulta nei budget",
+      "description": "Perché collegare strumenti MCP gonfia i costi di input del 40% senza valore aggiunto e come i CFO devono governare inventario e ROI.",
+      "body": "<p>Collegare i sistemi aziendali agli agenti IA tramite server Model Context Protocol (MCP) introduce un costo ricorrente che i responsabili finanziari raramente anticipano. Ogni strumento registrato aggiunge il proprio schema JSON al prompt di input a ogni turno. In organizzazioni con centinaia di dipendenti attivi, questi schemi statici aumentano il consumo di token dal 35% al 60% senza generare valore economico incrementale.</p><h2>In che modo la proliferazione dei tool MCP influisce sui budget di IA?</h2><p>Gonfia i consumi di token iniettando migliaia di specifiche tecniche a ogni iterazione conversazionale, aumentando i costi delle API senza accrescere la produttività.</p><h2>Quadro di governance finanziaria per i CFO</h2><p>I CFO devono istituire matrici di autorizzazione per gli strumenti, audit mensili del rapporto tra costo dei token dello schema e frequenza di invocazione reale, e imporre l'adozione del prompt caching su tutti i deployment aziendali.</p>",
+      "faq": [
+        {
+          "question": "In che modo la proliferazione dei tool MCP influisce sui budget di IA?",
+          "answer": "Gonfia i consumi di token iniettando migliaia di specifiche tecniche a ogni iterazione conversazionale, aumentando i costi delle API senza accrescere la produttività."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Controllo costi per agenti"
+        }
+      ]
+    },
+    "ko": {
+      "title": "MCP 도구 확산: AI 에이전트 예산의 숨은 세금",
+      "titleCore": "MCP 도구 확산: AI 에이전트 예산의 숨은 세금",
+      "description": "엔터프라이즈 MCP 도구 연결이 추가 가치 없이 토큰 청구액을 40% 증가시키는 이유와 CFO가 주도해야 할 도구 ROI 거버넌스.",
+      "body": "<p>Model Context Protocol(MCP) 서버를 통해 기업 시스템을 AI 에이전트에 연결하면 재무 팀이 사전에 인지하기 어려운 반복적 비용이 발생합니다. 선언된 각 도구의 전체 JSON 스키마가 매 턴마다 입력 프롬프트에 추가되기 때문입니다. 수백 명의 지식 근로자가 활동하는 기업에서는 정적 툴 스키마로 인해 기준 토큰 소비가 35%~60% 증가하며, 비즈니스 성과 증대 없이 수만 달러의 API 비용이 추가됩니다.</p><h2>MCP 도구 확산은 기업의 AI 예산에 어떤 영향을 미치나요?</h2><p>매 대화 턴마다 수천 개의 정적 스키마 토큰을 주입하여 생산성 향상 없이도 기본 API 지출을 35%~60% 증가시킵니다.</p><h2>CFO를 위한 재무 거버넌스 프레임워크</h2><p>재무 리더는 도구별 권한 승인 매트릭스, 스키마 토큰 비용 대비 실제 호출 빈도에 대한 월별 ROI 감사, 그리고 컨텍스트 캐싱 의무화를 통해 소프트웨어 마진을 방어해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "MCP 도구 확산은 기업의 AI 예산에 어떤 영향을 미치나요?",
+          "answer": "매 대화 턴마다 수천 개의 정적 스키마 토큰을 주입하여 생산성 향상 없이도 기본 API 지출을 35%~60% 증가시킵니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "코딩 에이전트 비용 관리"
+        }
+      ]
+    },
+    "zh": {
+      "title": "MCP工具蔓延：智能体预算中的隐性资产负债税",
+      "titleCore": "MCP工具蔓延：智能体预算中的隐性资产负债税",
+      "description": "企业接入海量MCP工具如何使Token账单虚增40%且不产生业务增量，以及CFO如何审计工具清单与投资回报率。",
+      "body": "<p>通过模型上下文协议（Model Context Protocol, MCP）服务器将企业内部核心系统连接到AI智能体，正在悄然引入一项极少被财务团队预见到的隐性经常性开支。当内部工程团队将智能体接入企业数据库、工单系统、Slack与代码仓库时，每个声明工具的完整JSON Schema都会在每一轮对话中被强行追加到输入Prompt的前缀中。在一家拥有500名知识工作者且配置了8个MCP服务的企业中，静态工具模式会使基线输入Token消耗凭空膨胀35%至60%，每月额外产生18,000至45,000美元的纯冗余API账单，却不带来任何增量业务价值。</p><h2>MCP工具资产的单体经济学</h2><p>从财务视角来看，MCP服务器绝非零成本的开源中间件，而是一份对企业LLM预算的无节制开支承诺。与按席位或按活跃用户结算的传统软件许可证不同，MCP工具会向大模型执行的每一次查询注入确定性的变动成本。如果一个智能体携带40个工具声明，合计达到8,000 Token的模式元数据，那么用户的每一次按键交互都必须承担这笔不可逃避的基线费用，无论该次交互是否真正调用了这些工具。</p><h2>CFO必须建立的MCP财务治理框架</h2><ul><li><strong>工具接入权限与业务价值论证：</strong>将MCP工具连接视同特权访问。申请接入特定系统（如Salesforce、BigQuery、Snowflake）的业务部门必须书面说明预期查询频次与可量化的人效提升。严禁在默认模板中全局注入全量工具集。</li><li><strong>单工具持有成本动态审计：</strong>要求平台工程部基于OpenTelemetry埋点追踪工具Schema的Token归因。将Schema体积乘以全公司总交互轮次，计算出每个MCP工具的月度持有成本。若某工具模式每月产生3,000美元Token开销而实际调用不足50次，必须强制下线或改为按需加载。</li><li><strong>全面强制执行提示词前缀缓存：</strong>要求技术团队在静态MCP工具块之后设置缓存断点。在支持前缀缓存的供应商处，此举可将工具模式的持续持有成本削减最高达90%，将庞大的变动负债转化为低廉的固定缓存费用。</li></ul>",
+      "faq": [
+        {
+          "question": "MCP工具蔓延如何影响企业的AI总预算？",
+          "answer": "它通过在每个智能体的每一轮对话中注入数千个静态模式Token，在不提升人效的情况下将基线API支出无谓推高35%至60%。"
+        },
+        {
+          "question": "CFO在审批MCP工具接入时应实施哪些治理准则？",
+          "answer": "应推行工具价值准入论证矩阵、定期审计工具调用频次与模式成本比，并强制在生产架构中全面落实提示词前缀缓存。"
+        },
+        {
+          "question": "提示词前缀缓存能否有效保护高工具负荷下的产品毛利？",
+          "answer": "可以。前缀缓存可将后续交互中静态工具定义的计费输入成本降低最高90%，确保多轮长任务交互下的功能毛利率不被侵蚀。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "代码智能体成本控制"
+        },
+        {
+          "slug": "/research/ai-gross-margin-erosion",
+          "label": "AI毛利率侵蚀"
+        },
+        {
+          "slug": "/research/three-agent-budgets-cfo",
+          "label": "CFO视角的三层智能体预算"
+        }
+      ]
+    },
+    "nl": {
+      "title": "MCP-tool-wildgroei: de verborgen tax in agent-budgetten",
+      "titleCore": "MCP-tool-wildgroei: de verborgen tax in agent-budgetten",
+      "description": "Waarom enterprise MCP-koppelingen tokenfacturen met 40% opblazen zonder meerwaarde, en hoe CFO's tool-inventaris en ROI kunnen beheersen.",
+      "body": "<p>Het koppelen van bedrijfssystemen aan AI-agents via Model Context Protocol (MCP) servers introduceert een directe, terugkerende balanspost die finance zelden vooraf inschat. Wanneer engineering een agent verbindt met bedrijfsdatabases, ticketsystemen, Slack en GitHub, wordt het complete JSON-schema van elke tool bij iedere beurt meegestuurd in de inputprompt. In een organisatie met 500 actieve medewerkers en 8 MCP-servers stuwt deze statische overhead het tokenverbruik met 35% tot 60% omhoog, resulterend in $18.000 tot $45.000 aan maandelijkse meerkosten zonder enige incrementele productiviteitswinst.</p><h2>De economische realiteit van MCP-inventaris</h2><p>Vanuit financieel oogpunt is een MCP-server geen gratis open-source middleware; het is een blanco cheque ten laste van uw LLM-tokenbudget. Waar softwarelicenties factureren per werkplek, injecteert een MCP-tool variabele kosten in elke zoekopdracht van het model. Als een agent 40 tools declareert met 8.000 tokens aan metadata, betaalt u die basisheffing bij elke interactie, ongeacht of de functionaliteit daadwerkelijk wordt aangesproken.</p><h2>Een financieel governancemodel voor MCP-servers</h2><ul><li><strong>Autorisatie en zakelijke rechtvaardiging:</strong> Behandel toolkoppelingen als bevoorrechte toegang. Afdelingen die toegang vragen tot gespecialiseerde MCP-servers moeten de verwachte queryfrequentie en productiviteitswinst aantonen. Verbied universele standaardsets in agent-sjablonen.</li><li><strong>Kosten-per-tool audits:</strong> Eis dat platformteams tokenverbruik per toolschema meten via OpenTelemetry. Bereken de maandelijkse carry-kosten door het schematokenvolume te vermenigvuldigen met het aantal bedrijfsbrede interacties. Schrap tools die duizenden dollars kosten maar nauwelijks worden aangeroepen.</li><li><strong>Verplicht prompt caching standaarden:</strong> Stel het gebruik van prefix caching breekpunten na statische tooldeclaraties verplicht. Dit reduceert de doorlopende kosten van toolschema's tot 90%, wat een variabele kostenpost omzet in een vaste, beheersbare post.</li></ul>",
+      "faq": [
+        {
+          "question": "Hoe beïnvloedt MCP-toolwildgroei de enterprise AI-begroting?",
+          "answer": "Het stuwt het tokenverbruik op door duizenden statische schema-tokens toe te voegen aan elke interactie, wat de basis-API-kosten met 35% tot 60% verhoogt."
+        },
+        {
+          "question": "Welke governance moeten CFO's eisen voor MCP-integraties?",
+          "answer": "Autorisatiematrices voor tools, maandelijkse audits van aanroepfrequenties versus schemakosten en verplichte architectuurtoetsing op prompt caching."
+        },
+        {
+          "question": "Kan prompt caching de winstmarges van agent-features beschermen?",
+          "answer": "Ja. Prefix caching verlaagt de facturatie van repetitieve tooldefinitietokens tot 90% na de eerste turn, waardoor de brutomarge beschermd blijft."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Kostenbeheersing bij code-agents"
+        },
+        {
+          "slug": "/research/ai-gross-margin-erosion",
+          "label": "Erosie van de AI-brutomarge"
+        },
+        {
+          "slug": "/research/three-agent-budgets-cfo",
+          "label": "Drie agentbudgetten voor CFO's"
+        }
+      ]
+    }
+  }
+}
