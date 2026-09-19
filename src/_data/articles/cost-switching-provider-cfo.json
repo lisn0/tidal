@@ -1,15 +1,258 @@
 {
-  "slug":"cost-switching-provider-cfo","tags":["ai-finops","procurement","concentration-risk"],"datePublished":"2026-08-27","dateModified":"2026-08-27","languages":{
-    "en":{"title":"The business case for switching LLM providers","titleCore":"The business case for switching LLM providers","description":"How CFOs should price migration, dual-running, quality risk, concentration risk, and payback before changing AI providers.","body":"<p>The business case for changing LLM providers is the savings curve after all switching costs, not the difference between two list prices. Include migration, evaluation, parallel operation, contract commitments, quality risk, reliability, compliance, and the value of reducing concentration risk.</p><h2>Separate one-time and recurring cost</h2><p>One-time cost includes migration engineering, test-set creation, evaluation, data movement, and contract work. Recurring cost includes gateway operation, monitoring, support, minimum commitments, and standby capacity. Show both so a temporary implementation bill is not confused with the new run rate.</p><h2>Model the downside</h2><p>Use conservative, base, and upside cases. Stress test quality, provider reliability, traffic growth, and the percentage of workloads that can actually move. Include a rollback plan and the cost of running both providers during the transition.</p><h2>Price concentration risk</h2><p>A second provider may cost more in steady state but reduce the financial exposure of a single outage, price change, or contract dispute. Put the value of optionality beside the direct savings. It is not a reason to diversify blindly; it is a reason to make the risk explicit.</p><h2>Make the renewal decision</h2><p>Approve a switch only when the payback period, quality floor, exit terms, and accountable owner are clear. Sometimes the best decision is a routing policy that keeps two providers and moves only eligible workloads. The decision should be revisited when usage or provider economics change.</p><p>Provider choice is a capital allocation decision disguised as a technical preference. Price the option before the renewal window closes.</p><h2>Related</h2><ul><li>LLM purchasing guide</li><li>Model concentration risk</li><li>Provider arbitrage</li></ul>","faq":[{"question":"What is the business case for switching LLM providers?","answer":"Compare fully loaded post-migration savings with engineering, evaluation, dual-running, contract, quality, compliance, and operating costs."},{"question":"How should a CFO model provider-switching risk?","answer":"Use conservative, base, and upside cases for quality, reliability, traffic, movable workload, rollback, and temporary parallel operation."},{"question":"Can keeping two providers be cheaper than switching?","answer":"Yes. Routing only eligible workloads can preserve optionality and reduce concentration risk when full replacement has a long or uncertain payback."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM purchasing guide"},{"slug":"/research/model-concentration-risk","label":"Model concentration risk"},{"slug":"/research/provider-arbitrage","label":"Provider arbitrage"}]},
-    "es":{"title":"El caso de negocio para cambiar de proveedor LLM","titleCore":"El caso de negocio para cambiar de proveedor LLM","description":"Cómo valorar migración, doble operación, calidad, concentración y retorno antes de cambiar.","body":"<p>El caso de negocio no es la diferencia entre dos precios de lista. Incluye migración, evaluación, operación paralela, compromisos, calidad, fiabilidad y riesgo de concentración.</p><h2>Separa costes</h2><p>Distingue migración, pruebas y contratos de los costes recurrentes de gateway, soporte, monitorización y capacidad de reserva.</p><h2>Modela el riesgo</h2><p>Usa escenarios conservador, base y optimista para calidad, fiabilidad, crecimiento y trabajo realmente migrable. Incluye rollback y doble operación.</p><h2>Decide</h2><p>Aprueba solo con retorno, umbral de calidad, condiciones de salida y responsable claros. A veces conviene routing entre dos proveedores.</p>","faq":[{"question":"¿Qué incluye el caso de negocio?","answer":"Ahorro total después de migración frente a ingeniería, evaluación, doble operación, contrato, calidad, cumplimiento y operación."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guía de compras LLM"}]},
-    "fr":{"title":"Business case d’un changement de fournisseur LLM","titleCore":"Business case d’un changement de fournisseur LLM","description":"Évaluer migration, double fonctionnement, qualité, concentration et retour avant de changer.","body":"<p>Le business case ne compare pas deux prix catalogue. Il inclut migration, évaluation, fonctionnement parallèle, engagements, qualité, fiabilité et risque de concentration.</p><h2>Séparer les coûts</h2><p>Distinguez coûts ponctuels de migration, tests et contrats des coûts récurrents de passerelle, support, suivi et capacité de secours.</p><h2>Modéliser le risque</h2><p>Utilisez des scénarios prudent, central et haut pour qualité, fiabilité, croissance et charge réellement transférable. Incluez retour arrière et double fonctionnement.</p><p>Parfois le routage de deux fournisseurs offre un meilleur retour qu’un remplacement complet.</p>","faq":[{"question":"Que contient le business case d’un changement?","answer":"Les économies après migration comparées aux coûts d’ingénierie, évaluation, double fonctionnement, contrat, qualité et exploitation."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guide d’achat LLM"}]},
-    "de":{"title":"Der Business Case für einen LLM-Anbieterwechsel","titleCore":"Der Business Case für einen LLM-Anbieterwechsel","description":"Migration, Parallelbetrieb, Qualität, Konzentrationsrisiko und Amortisation vor dem Wechsel bewerten.","body":"<p>Der Business Case vergleicht nicht zwei Listenpreise. Er umfasst Migration, Evaluation, Parallelbetrieb, Verpflichtungen, Qualität, Zuverlässigkeit und Konzentrationsrisiko.</p><h2>Kosten trennen</h2><p>Unterscheiden Sie einmalige Migration, Tests und Vertragsarbeit von laufendem Gateway, Support, Monitoring und Reservekapazität.</p><h2>Risiko modellieren</h2><p>Rechnen Sie konservativ, als Basis und optimistisch für Qualität, Zuverlässigkeit, Wachstum und migrierbare Workloads. Planen Sie Rollback und Parallelbetrieb.</p><p>Routing über zwei Anbieter kann wirtschaftlicher sein als ein vollständiger Ersatz.</p>","faq":[{"question":"Was gehört in den Business Case?","answer":"Einsparungen nach der Migration gegenüber Engineering, Evaluation, Parallelbetrieb, Vertrag, Qualität und laufendem Betrieb."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM-Einkaufsleitfaden"}]},
-    "ja":{"title":"LLMプロバイダー切り替えの事業ケース","titleCore":"LLMプロバイダー切り替えの事業ケース","description":"移行、二重運用、品質、集中リスク、回収期間を切り替え前に評価する方法です。","body":"<p>事業ケースは2つの価格表の差ではありません。移行、評価、二重運用、契約、品質、信頼性、集中リスクを含めます。</p><h2>費用を分ける</h2><p>移行開発、テスト、契約の一時費用と、ゲートウェイ、監視、サポート、待機容量の継続費用を分けます。</p><h2>リスクをモデル化する</h2><p>品質、信頼性、成長率、実際に移行できるワークロードを保守・標準・上振れで計算し、ロールバックと二重運用を含めます。</p><p>完全移行より2社をルーティングする方が有利なこともあります。</p>","faq":[{"question":"切り替えの事業ケースには何を含めますか？","answer":"移行後の節約と、開発、評価、二重運用、契約、品質、コンプライアンス、運用費を比較します。"}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM購買ガイド"}]},
-    "pt":{"title":"O caso de negócio para mudar de fornecedor LLM","titleCore":"O caso de negócio para mudar de fornecedor LLM","description":"Como avaliar migração, operação dupla, qualidade, concentração e retorno antes da mudança.","body":"<p>O caso de negócio não é a diferença entre dois preços de tabela. Inclui migração, avaliação, operação paralela, compromissos, qualidade, fiabilidade e risco de concentração.</p><h2>Separe os custos</h2><p>Diferencie migração, testes e contratos dos custos recorrentes de gateway, suporte, monitorização e capacidade de reserva.</p><h2>Modele o risco</h2><p>Use cenários conservador, base e otimista para qualidade, fiabilidade, crescimento e carga migrável. Inclua rollback e operação dupla.</p><p>Por vezes, o routing entre dois fornecedores tem melhor retorno do que uma substituição total.</p>","faq":[{"question":"O que entra no caso de negócio?","answer":"Poupança após a migração comparada com engenharia, avaliação, operação dupla, contrato, qualidade, conformidade e operação."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guia de compras LLM"}]},
-    "it":{"title":"Il business case per cambiare provider LLM","titleCore":"Il business case per cambiare provider LLM","description":"Come i CFO valutano migrazione, doppio esercizio, rischio qualitativo e payback prima di cambiare fornitore di intelligenza artificiale.","body":"<p>Il business case per cambiare provider LLM non coincide con la semplice differenza tra listini prezzi. Deve riflettere la curva dei risparmi effettivi al netto di tutti i costi di transizione: ingegnerizzazione della migrazione, set di test di valutazione, operatività in parallelo, vincoli contrattuali, rischio qualitativo e affidabilità.</p><h2>Distinguere costi una tantum e ricorrenti</h2><p>I costi una tantum includono riscrittura prompt, aggiornamento schemi, test di accuratezza e revisione legale. I costi ricorrenti comprendono manutenzione del gateway, monitoraggio continuo e capacità di fallback.</p><h2>Modellare i rischi al ribasso</h2><p>Costruite scenari prudenziali, base e ottimali valutando latenza, qualità dell'output e quota di traffico realmente trasferibile. Includete una strategia di rollback e i costi di doppio esercizio durante il periodo di affiancamento.</p><h2>Decisione informata al rinnovo</h2><p>Approvate la transizione solo in presenza di un periodo di ammortamento chiaro, vincoli qualitativi inderogabili e accordi di uscita vantaggiosi. Talvolta un'architettura di routing dinamico tra due provider offre una flessibilità economica superiore alla sostituzione integrale.</p>","faq":[{"question":"Cosa include il business case per cambiare provider LLM?","answer":"Risparmi netti dopo la migrazione confrontati con costi ingegneristici, suite di valutazione, doppio esercizio, clausole contrattuali e conformità."},{"question":"Mantenere due provider può essere più conveniente di uno solo?","answer":"Sì. Instradare solo i carichi idonei preserva l'opzionalità strategica e mitiga il rischio di lock-in quando la sostituzione totale richiede un payback troppo lungo."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"Guida all'acquisto di LLM"}]},
-    "ko":{"title":"LLM 공급업체 전환을 위한 비즈니스 케이스","titleCore":"LLM 공급업체 전환을 위한 비즈니스 케이스","description":"CFO를 위한 LLM 전환 타당성 분석: 마이그레이션 공수, 이중 운영 비용, 품질 리스크 및 투자 회수 기간을 종합 모델링합니다.","body":"<p>LLM 공급업체 전환의 비즈니스 케이스는 단순히 두 업체의 정가 차이가 아닙니다. 마이그레이션 엔지니어링, 평가 테스트셋 구축, 병행 운영(Dual-running), 계약 약정, 품질 리스크, 규정 준수 및 집중 리스크 완화 가치를 반영한 실질 절감액을 계산해야 합니다.</p><h2>일회성 비용과 반복 비용 분리</h2><p>일회성 비용은 SDK 및 프롬프트 수정, 스키마 변환, 평가 파이프라인 구축 공수입니다. 반복 비용은 API 게이트웨이 운영, 모니터링, 대기 용량 유지비입니다. 두 비용을 분리해야 일시적 전환 비용과 장기 런레이트를 혼동하지 않습니다.</p><h2>리스크 시나리오 모델링</h2><p>보수적, 기본, 낙관적 시나리오를 설정하여 품질 저하, 장애 빈도, 실제 이전 가능한 워크로드 비중을 스트레스 테스트하십시오. 롤백 계획과 전환 기간의 이중 지출 비용을 반드시 포함해야 합니다.</p><h2>갱신 시점의 전략적 결정</h2><p>투자 회수 기간, 최저 품질 기준선, 계약 해지 조건이 명확할 때만 전면 전환을 승인하십시오. 전면 교체보다 적격 워크로드만 라우팅하는 멀티 프로바이더 정책이 재무적으로 더 유리할 수 있습니다.</p>","faq":[{"question":"LLM 공급업체 전환 비즈니스 케이스에는 무엇이 포함되나요?","answer":"마이그레이션 엔지니어링, 벤치마크 평가, 일시적 이중 운영, 계약 약정, 품질 안정성 및 인프라 운영 비용을 차감한 순절감액입니다."},{"question":"두 공급업체를 함께 유지하는 것이 전면 교체보다 유리할 수 있나요?","answer":"예. 전체 교체의 회수 기간이 길거나 불확실할 때, 일부 워크로드만 동적 라우팅하여 집중 리스크를 줄이고 협상력을 확보할 수 있습니다."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM 조달 가이드"}]},
-    "zh":{"title":"切换LLM供应商的商业论证与ROI分析","titleCore":"切换LLM供应商的商业论证与ROI分析","description":"CFO如何评估模型迁移、双轨运行、输出质量风险、供应链集中度与回收周期，制定LLM切换决策。","body":"<p>切换LLM供应商的商业论证不是对比两张公开价目表的差额，而是扣除全部迁移成本后的真实净节省曲线。必须将工程迁移、评测集构建、双轨并行运行、合同承诺、输出质量风险与集中度风险纳入测算。</p><h2>区分一次性与持续成本</h2><p>一次性成本包括Prompt重构、评测验证、数据迁移与合同合规评估。持续成本包括API网关维护、监控遥测、技术支持与待机冗余。清晰划分两类支出，避免将短期实施成本误计入长期运行费率。</p><h2>下行风险建模</h2><p>设定保守、基准与乐观情景，对模型表现下限、稳定性、业务流量增长以及实际可迁移工作流比例进行压力测试，并包含回滚方案与过渡期双重计费预算。</p><h2>为集中度风险定价</h2><p>引入第二供应商虽可能在稳态下增加少许维护开销，但能大幅降低单点故障、突发调价或合同纠纷带来的财务敞口。将战略可选性价值与直接节省并列考量。</p><h2>合同续约决策</h2><p>只有当投资回收期明确、质量底线可保障且退出条款完备时，才批准供应商切换。在很多场景下，保留双供应商并仅动态路由适用工作流是回报更高的选择。</p>","faq":[{"question":"切换LLM供应商的商业论证包含哪些要素？","answer":"全面对比迁移后的全生命周期节省与工程改造、评测验证、双轨并行、合同违约与运维开销。"},{"question":"维持双供应商是否可能优于完全切换？","answer":"是的。在全面替换回报周期漫长时，通过动态路由将适配流量分流至备用模型，既能防范单点依赖，又能保留议价能力。"}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM采购指南"}]},
-    "nl":{"title":"De businesscase voor wisselen van LLM-provider","titleCore":"De businesscase voor wisselen van LLM-provider","description":"Hoe CFO's migratiekosten, parallel draaien, kwaliteitsrisico's en terugverdientijd modelleren voor een LLM-overstap.","body":"<p>De businesscase voor het wisselen van LLM-provider is de werkelijke besparingscurve na aftrek van alle overstapkosten, niet het verschil tussen twee catalogusprijzen. Reken migratie-engineering, evaluatietests, parallel draaien, contractuele commitments, kwaliteitsrisico's en concentratierisico mee.</p><h2>Splits eenmalige en terugkerende kosten</h2><p>Eenmalige kosten omvatten prompt-aanpassingen, evaluatiesets, datamigratie en contractuele herzieningen. Terugkerende kosten betreffen gateway-beheer, monitoring, support en stand-by capaciteit. Houd beide strikt gescheiden om tijdelijke implementatiekosten niet te verwarren met de structurele run rate.</p><h2>Modelleer neerwaartse risico's</h2><p>Werk met conservatieve, basis- en optimistische scenario's. Voer stresstests uit op outputkwaliteit, uptime van de provider en het aandeel workloads dat daadwerkelijk kan migreren. Neem altijd een rollback-plan en de kosten van tijdelijk dubbel draaien op.</p><h2>Prijs het concentratierisico</h2><p>Een tweede provider brengt extra beheer met zich mee, maar verlaagt de financiële blootstelling bij storingen, prijsverhogingen of geschillen aanzienlijk. Maak de waarde van leveranciersonafhankelijkheid expliciet.</p><h2>Neem een gefundeerd besluit</h2><p>Keur een migratie alleen goed wanneer terugverdientijd, kwaliteitsondergrens en contractvoorwaarden helder zijn. Vaak levert slimme routering tussen twee providers meer op dan een volledige vervanging.</p>","faq":[{"question":"Wat omvat de businesscase voor het wisselen van LLM-provider?","answer":"Het vergelijken van de netto besparing na migratie met de kosten voor engineering, evaluatie, parallel draaien, contracten en beheer."},{"question":"Kan het aanhouden van twee providers voordeliger zijn dan een volledige overstap?","answer":"Ja. Door alleen geschikte workloads te routeren behoudt men strategische flexibiliteit en verlaagt men het concentratierisico zonder hoge migratiekosten."}],"related":[{"slug":"/research/llm-purchasing-guide","label":"LLM-inkoopgids"}]}
+  "slug": "cost-switching-provider-cfo",
+  "tags": [
+    "ai-finops",
+    "procurement",
+    "concentration-risk"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "languages": {
+    "en": {
+      "title": "The business case for switching LLM providers",
+      "titleCore": "The business case for switching LLM providers",
+      "description": "How CFOs should price migration, dual-running, quality risk, concentration risk, and payback before changing AI providers.",
+      "body": "<p>The business case for changing LLM providers is the savings curve after all switching costs, not the difference between two list prices. Include migration, evaluation, parallel operation, contract commitments, quality risk, reliability, compliance, and the value of reducing concentration risk.</p><h2>Separate one-time and recurring cost</h2><p>One-time cost includes migration engineering, test-set creation, evaluation, data movement, and contract work. Recurring cost includes gateway operation, monitoring, support, minimum commitments, and standby capacity. Show both so a temporary implementation bill is not confused with the new run rate.</p><h2>Model the downside</h2><p>Use conservative, base, and upside cases. Stress test quality, provider reliability, traffic growth, and the percentage of workloads that can actually move. Include a rollback plan and the cost of running both providers during the transition.</p><h2>Price concentration risk</h2><p>A second provider may cost more in steady state but reduce the financial exposure of a single outage, price change, or contract dispute. Put the value of optionality beside the direct savings. It is not a reason to diversify blindly; it is a reason to make the risk explicit.</p><h2>Make the renewal decision</h2><p>Approve a switch only when the payback period, quality floor, exit terms, and accountable owner are clear. Sometimes the best decision is a routing policy that keeps two providers and moves only eligible workloads. The decision should be revisited when usage or provider economics change.</p><p>Provider choice is a capital allocation decision disguised as a technical preference. Price the option before the renewal window closes.</p><h2>Related</h2><ul><li>LLM purchasing guide</li><li>Model concentration risk</li><li>Provider arbitrage</li></ul>",
+      "faq": [
+        {
+          "question": "What is the business case for switching LLM providers?",
+          "answer": "Compare fully loaded post-migration savings with engineering, evaluation, dual-running, contract, quality, compliance, and operating costs."
+        },
+        {
+          "question": "How should a CFO model provider-switching risk?",
+          "answer": "Use conservative, base, and upside cases for quality, reliability, traffic, movable workload, rollback, and temporary parallel operation."
+        },
+        {
+          "question": "Can keeping two providers be cheaper than switching?",
+          "answer": "Yes. Routing only eligible workloads can preserve optionality and reduce concentration risk when full replacement has a long or uncertain payback."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing guide"
+        },
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "Model concentration risk"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        }
+      ]
+    },
+    "es": {
+      "title": "El caso de negocio para cambiar de proveedor LLM",
+      "titleCore": "El caso de negocio para cambiar de proveedor LLM",
+      "description": "Cómo valorar migración, doble operación, calidad, concentración y retorno antes de cambiar.",
+      "body": "<p>El caso de negocio no es la diferencia entre dos precios de lista. Incluye migración, evaluación, operación paralela, compromisos, calidad, fiabilidad y riesgo de concentración.</p><h2>Separa costes</h2><p>Distingue migración, pruebas y contratos de los costes recurrentes de gateway, soporte, monitorización y capacidad de reserva.</p><h2>Modela el riesgo</h2><p>Usa escenarios conservador, base y optimista para calidad, fiabilidad, crecimiento y trabajo realmente migrable. Incluye rollback y doble operación.</p><h2>Decide</h2><p>Aprueba solo con retorno, umbral de calidad, condiciones de salida y responsable claros. A veces conviene routing entre dos proveedores.</p>",
+      "faq": [
+        {
+          "question": "¿Qué incluye el caso de negocio?",
+          "answer": "Ahorro total después de migración frente a ingeniería, evaluación, doble operación, contrato, calidad, cumplimiento y operación."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guía de compras LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Business case d’un changement de fournisseur LLM",
+      "titleCore": "Business case d’un changement de fournisseur LLM",
+      "description": "Évaluer migration, double fonctionnement, qualité, concentration et retour avant de changer.",
+      "body": "<p>Le business case ne compare pas deux prix catalogue. Il inclut migration, évaluation, fonctionnement parallèle, engagements, qualité, fiabilité et risque de concentration.</p><h2>Séparer les coûts</h2><p>Distinguez coûts ponctuels de migration, tests et contrats des coûts récurrents de passerelle, support, suivi et capacité de secours.</p><h2>Modéliser le risque</h2><p>Utilisez des scénarios prudent, central et haut pour qualité, fiabilité, croissance et charge réellement transférable. Incluez retour arrière et double fonctionnement.</p><p>Parfois le routage de deux fournisseurs offre un meilleur retour qu’un remplacement complet.</p>",
+      "faq": [
+        {
+          "question": "Que contient le business case d’un changement?",
+          "answer": "Les économies après migration comparées aux coûts d’ingénierie, évaluation, double fonctionnement, contrat, qualité et exploitation."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guide d’achat LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Der Business Case für einen LLM-Anbieterwechsel",
+      "titleCore": "Der Business Case für einen LLM-Anbieterwechsel",
+      "description": "Migration, Parallelbetrieb, Qualität, Konzentrationsrisiko und Amortisation vor dem Wechsel bewerten.",
+      "body": "<p>Der Business Case vergleicht nicht zwei Listenpreise. Er umfasst Migration, Evaluation, Parallelbetrieb, Verpflichtungen, Qualität, Zuverlässigkeit und Konzentrationsrisiko.</p><h2>Kosten trennen</h2><p>Unterscheiden Sie einmalige Migration, Tests und Vertragsarbeit von laufendem Gateway, Support, Monitoring und Reservekapazität.</p><h2>Risiko modellieren</h2><p>Rechnen Sie konservativ, als Basis und optimistisch für Qualität, Zuverlässigkeit, Wachstum und migrierbare Workloads. Planen Sie Rollback und Parallelbetrieb.</p><p>Routing über zwei Anbieter kann wirtschaftlicher sein als ein vollständiger Ersatz.</p>",
+      "faq": [
+        {
+          "question": "Was gehört in den Business Case?",
+          "answer": "Einsparungen nach der Migration gegenüber Engineering, Evaluation, Parallelbetrieb, Vertrag, Qualität und laufendem Betrieb."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM-Einkaufsleitfaden"
+        }
+      ]
+    },
+    "ja": {
+      "title": "LLMプロバイダー切り替えの事業ケース",
+      "titleCore": "LLMプロバイダー切り替えの事業ケース",
+      "description": "移行、二重運用、品質、集中リスク、回収期間を切り替え前に評価する方法です。",
+      "body": "<p>事業ケースは2つの価格表の差ではありません。移行、評価、二重運用、契約、品質、信頼性、集中リスクを含めます。</p><h2>費用を分ける</h2><p>移行開発、テスト、契約の一時費用と、ゲートウェイ、監視、サポート、待機容量の継続費用を分けます。</p><h2>リスクをモデル化する</h2><p>品質、信頼性、成長率、実際に移行できるワークロードを保守・標準・上振れで計算し、ロールバックと二重運用を含めます。</p><p>完全移行より2社をルーティングする方が有利なこともあります。</p>",
+      "faq": [
+        {
+          "question": "切り替えの事業ケースには何を含めますか？",
+          "answer": "移行後の節約と、開発、評価、二重運用、契約、品質、コンプライアンス、運用費を比較します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM購買ガイド"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O caso de negócio para mudar de fornecedor LLM",
+      "titleCore": "O caso de negócio para mudar de fornecedor LLM",
+      "description": "Como avaliar migração, operação dupla, qualidade, concentração e retorno antes da mudança.",
+      "body": "<p>O caso de negócio não é a diferença entre dois preços de tabela. Inclui migração, avaliação, operação paralela, compromissos, qualidade, fiabilidade e risco de concentração.</p><h2>Separe os custos</h2><p>Diferencie migração, testes e contratos dos custos recorrentes de gateway, suporte, monitorização e capacidade de reserva.</p><h2>Modele o risco</h2><p>Use cenários conservador, base e otimista para qualidade, fiabilidade, crescimento e carga migrável. Inclua rollback e operação dupla.</p><p>Por vezes, o routing entre dois fornecedores tem melhor retorno do que uma substituição total.</p>",
+      "faq": [
+        {
+          "question": "O que entra no caso de negócio?",
+          "answer": "Poupança após a migração comparada com engenharia, avaliação, operação dupla, contrato, qualidade, conformidade e operação."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guia de compras LLM"
+        }
+      ]
+    },
+    "it": {
+      "title": "Il business case per cambiare provider LLM",
+      "titleCore": "Il business case per cambiare provider LLM",
+      "description": "Come i CFO valutano migrazione, doppio esercizio, rischio qualitativo e payback prima di cambiare fornitore di intelligenza artificiale.",
+      "body": "<p>Il business case per cambiare provider LLM non coincide con la semplice differenza tra listini prezzi. Deve riflettere la curva dei risparmi effettivi al netto di tutti i costi di transizione: ingegnerizzazione della migrazione, set di test di valutazione, operatività in parallelo, vincoli contrattuali, rischio qualitativo e affidabilità.</p><h2>Distinguere costi una tantum e ricorrenti</h2><p>I costi una tantum includono riscrittura prompt, aggiornamento schemi, test di accuratezza e revisione legale. I costi ricorrenti comprendono manutenzione del gateway, monitoraggio continuo e capacità di fallback.</p><h2>Modellare i rischi al ribasso</h2><p>Costruite scenari prudenziali, base e ottimali valutando latenza, qualità dell'output e quota di traffico realmente trasferibile. Includete una strategia di rollback e i costi di doppio esercizio durante il periodo di affiancamento.</p><h2>Decisione informata al rinnovo</h2><p>Approvate la transizione solo in presenza di un periodo di ammortamento chiaro, vincoli qualitativi inderogabili e accordi di uscita vantaggiosi. Talvolta un'architettura di routing dinamico tra due provider offre una flessibilità economica superiore alla sostituzione integrale.</p>",
+      "faq": [
+        {
+          "question": "Cosa include il business case per cambiare provider LLM?",
+          "answer": "Risparmi netti dopo la migrazione confrontati con costi ingegneristici, suite di valutazione, doppio esercizio, clausole contrattuali e conformità."
+        },
+        {
+          "question": "Mantenere due provider può essere più conveniente di uno solo?",
+          "answer": "Sì. Instradare solo i carichi idonei preserva l'opzionalità strategica e mitiga il rischio di lock-in quando la sostituzione totale richiede un payback troppo lungo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "Guida all'acquisto di LLM"
+        }
+      ]
+    },
+    "ko": {
+      "title": "LLM 공급업체 전환을 위한 비즈니스 케이스",
+      "titleCore": "LLM 공급업체 전환을 위한 비즈니스 케이스",
+      "description": "CFO를 위한 LLM 전환 타당성 분석: 마이그레이션 공수, 이중 운영 비용, 품질 리스크 및 투자 회수 기간을 종합 모델링합니다.",
+      "body": "<p>LLM 공급업체 전환의 비즈니스 케이스는 단순히 두 업체의 정가 차이가 아닙니다. 마이그레이션 엔지니어링, 평가 테스트셋 구축, 병행 운영(Dual-running), 계약 약정, 품질 리스크, 규정 준수 및 집중 리스크 완화 가치를 반영한 실질 절감액을 계산해야 합니다.</p><h2>일회성 비용과 반복 비용 분리</h2><p>일회성 비용은 SDK 및 프롬프트 수정, 스키마 변환, 평가 파이프라인 구축 공수입니다. 반복 비용은 API 게이트웨이 운영, 모니터링, 대기 용량 유지비입니다. 두 비용을 분리해야 일시적 전환 비용과 장기 런레이트를 혼동하지 않습니다.</p><h2>리스크 시나리오 모델링</h2><p>보수적, 기본, 낙관적 시나리오를 설정하여 품질 저하, 장애 빈도, 실제 이전 가능한 워크로드 비중을 스트레스 테스트하십시오. 롤백 계획과 전환 기간의 이중 지출 비용을 반드시 포함해야 합니다.</p><h2>갱신 시점의 전략적 결정</h2><p>투자 회수 기간, 최저 품질 기준선, 계약 해지 조건이 명확할 때만 전면 전환을 승인하십시오. 전면 교체보다 적격 워크로드만 라우팅하는 멀티 프로바이더 정책이 재무적으로 더 유리할 수 있습니다.</p>",
+      "faq": [
+        {
+          "question": "LLM 공급업체 전환 비즈니스 케이스에는 무엇이 포함되나요?",
+          "answer": "마이그레이션 엔지니어링, 벤치마크 평가, 일시적 이중 운영, 계약 약정, 품질 안정성 및 인프라 운영 비용을 차감한 순절감액입니다."
+        },
+        {
+          "question": "두 공급업체를 함께 유지하는 것이 전면 교체보다 유리할 수 있나요?",
+          "answer": "예. 전체 교체의 회수 기간이 길거나 불확실할 때, 일부 워크로드만 동적 라우팅하여 집중 리스크를 줄이고 협상력을 확보할 수 있습니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM 조달 가이드"
+        }
+      ]
+    },
+    "zh": {
+      "title": "切换LLM供应商的商业论证与ROI分析",
+      "titleCore": "切换LLM供应商的商业论证与ROI分析",
+      "description": "CFO如何评估模型迁移、双轨运行、输出质量风险、供应链集中度与回收周期，制定LLM切换决策。",
+      "body": "<p>切换LLM供应商的商业论证不是对比两张公开价目表的差额，而是扣除全部迁移成本后的真实净节省曲线。必须将工程迁移、评测集构建、双轨并行运行、合同承诺、输出质量风险与集中度风险纳入测算。</p><h2>区分一次性与持续成本</h2><p>一次性成本包括Prompt重构、评测验证、数据迁移与合同合规评估。持续成本包括API网关维护、监控遥测、技术支持与待机冗余。清晰划分两类支出，避免将短期实施成本误计入长期运行费率。</p><h2>下行风险建模</h2><p>设定保守、基准与乐观情景，对模型表现下限、稳定性、业务流量增长以及实际可迁移工作流比例进行压力测试，并包含回滚方案与过渡期双重计费预算。</p><h2>为集中度风险定价</h2><p>引入第二供应商虽可能在稳态下增加少许维护开销，但能大幅降低单点故障、突发调价或合同纠纷带来的财务敞口。将战略可选性价值与直接节省并列考量。</p><h2>合同续约决策</h2><p>只有当投资回收期明确、质量底线可保障且退出条款完备时，才批准供应商切换。在很多场景下，保留双供应商并仅动态路由适用工作流是回报更高的选择。</p>",
+      "faq": [
+        {
+          "question": "切换LLM供应商的商业论证包含哪些要素？",
+          "answer": "全面对比迁移后的全生命周期节省与工程改造、评测验证、双轨并行、合同违约与运维开销。"
+        },
+        {
+          "question": "维持双供应商是否可能优于完全切换？",
+          "answer": "是的。在全面替换回报周期漫长时，通过动态路由将适配流量分流至备用模型，既能防范单点依赖，又能保留议价能力。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM采购指南"
+        }
+      ]
+    },
+    "nl": {
+      "title": "De businesscase voor wisselen van LLM-provider",
+      "titleCore": "De businesscase voor wisselen van LLM-provider",
+      "description": "Hoe CFO's migratiekosten, parallel draaien, kwaliteitsrisico's en terugverdientijd modelleren voor een LLM-overstap.",
+      "body": "<p>De businesscase voor het wisselen van LLM-provider is de werkelijke besparingscurve na aftrek van alle overstapkosten, niet het verschil tussen twee catalogusprijzen. Reken migratie-engineering, evaluatietests, parallel draaien, contractuele commitments, kwaliteitsrisico's en concentratierisico mee.</p><h2>Splits eenmalige en terugkerende kosten</h2><p>Eenmalige kosten omvatten prompt-aanpassingen, evaluatiesets, datamigratie en contractuele herzieningen. Terugkerende kosten betreffen gateway-beheer, monitoring, support en stand-by capaciteit. Houd beide strikt gescheiden om tijdelijke implementatiekosten niet te verwarren met de structurele run rate.</p><h2>Modelleer neerwaartse risico's</h2><p>Werk met conservatieve, basis- en optimistische scenario's. Voer stresstests uit op outputkwaliteit, uptime van de provider en het aandeel workloads dat daadwerkelijk kan migreren. Neem altijd een rollback-plan en de kosten van tijdelijk dubbel draaien op.</p><h2>Prijs het concentratierisico</h2><p>Een tweede provider brengt extra beheer met zich mee, maar verlaagt de financiële blootstelling bij storingen, prijsverhogingen of geschillen aanzienlijk. Maak de waarde van leveranciersonafhankelijkheid expliciet.</p><h2>Neem een gefundeerd besluit</h2><p>Keur een migratie alleen goed wanneer terugverdientijd, kwaliteitsondergrens en contractvoorwaarden helder zijn. Vaak levert slimme routering tussen twee providers meer op dan een volledige vervanging.</p>",
+      "faq": [
+        {
+          "question": "Wat omvat de businesscase voor het wisselen van LLM-provider?",
+          "answer": "Het vergelijken van de netto besparing na migratie met de kosten voor engineering, evaluatie, parallel draaien, contracten en beheer."
+        },
+        {
+          "question": "Kan het aanhouden van twee providers voordeliger zijn dan een volledige overstap?",
+          "answer": "Ja. Door alleen geschikte workloads te routeren behoudt men strategische flexibiliteit en verlaagt men het concentratierisico zonder hoge migratiekosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM-inkoopgids"
+        }
+      ]
+    },
+    "ar": {
+      "title": "الجدوى الاقتصادية لتبديل مزودي النماذج اللغوية",
+      "titleCore": "الجدوى الاقتصادية لتبديل مزودي النماذج اللغوية",
+      "description": "كيف يقيم المديرون الماليون تكاليف الهجرة، والتشغيل المزدوج، ومخاطر الجودة والتركيز، وفترة الاسترداد قبل تغيير مزودي الذكاء.",
+      "body": "<p>عندما يعلن مزود جديد لنماذج اللغة الكبيرة عن خفض أسعاره بنسبة 50% مقارنة بالمزود الحالي، يبدو قرار التحول بديهياً لأول وهلة. ولكن في بيئات المؤسسات المعقدة، نادراً ما تعكس أسعار الرموز المنشورة التكلفة الحقيقية لعملية التبديل. يحتاج المدير المالي إلى نموذج جدوى متكامل يأخذ في الحسبان تكاليف الهندسة والمخاطر التشغيلية.</p>\n\n<h2>فصل التكاليف لمرة واحدة عن التكاليف المتكررة</h2>\n<p>تنقسم تكاليف الانتقال إلى شقين أساسيين:</p>\n<ul>\n  <li><strong>تكاليف الهجرة لمرة واحدة (One-time Migration Costs):</strong> تشمل ساعات عمل المهندسين لإعادة صياغة واختبار المطالبات (Prompt Engineering)، وتحديث مخططات الأدوات، وإعادة بناء خطوط أنابيب التقييم المعياري، والتدقيق الأمني والامتثالي للمزود الجديد.</li>\n  <li><strong>تكلفة التشغيل المزدوج المتزامن (Dual-Running Costs):</strong> تشغيل كلا المزودين بالتوازي لعدة أسابيع في بيئة الإنتاج لمقارنة زمن الاستجابة وجودة المخرجات ومعدلات الخطأ تحت حركة المرور الواقعية.</li>\n</ul>\n\n<h2>نمذجة مخاطر تراجع الجودة</h2>\n<p>إن التوفير في تكلفة الرمز يفقد قيمته تماماً إذا أدى النموذج الجديد إلى زيادة معدلات رفض المستخدمين أو توليد مخرجات غير دقيقة تتطلب مراجعة بشرية مكلفة. يجب تحديد عتبة جودة دنيا غير قابلة للمساومة، وتقييم الانحدار في دقة الإجابات كعنصر تكلفة مباشر في دراسة الجدوى.</p>\n\n<h2>حساب فترة الاسترداد الحقيقية</h2>\n<p>تُحسب فترة الاسترداد (Payback Period) بقسمة إجمالي تكاليف الانتقال والهندسة والتشغيل المزدوج على صافي التوفير الشهري المتوقع في تكاليف الاستدلال. إذا كانت فترة الاسترداد تتجاوز 6 أشهر في سوق يتغير فيه تسعير النماذج كل 90 يوماً، فإن قرار التبديل الكامل يصبح مخاطرة مالية غير مجدية، ويكون الاعتماد على بنية توجيه مرنة (Dynamic Routing) خياراً أكثر حكمة واستدامة.</p>",
+      "faq": [
+        {
+          "question": "ما هي الجدوى الاقتصادية من تغيير مزود النماذج اللغوية؟",
+          "answer": "تحقيق وفورات حقيقية في التكلفة بعد احتساب تكاليف الهندسة وإعادة التقييم وفترة التشغيل المزدوج ومخاطر الجودة."
+        },
+        {
+          "question": "كيف ينمذج المدير المالي مخاطر التبديل بين المزودين؟",
+          "answer": "باحتساب مخاطر تراجع جودة المخرجات، وتكلفة إعادة هندسة المطالبات، واحتمال انقطاع الخدمات وزمن الاستجابة."
+        },
+        {
+          "question": "هل يمكن أن يكون الإبقاء على مزودين أرخص من التبديل؟",
+          "answer": "نعم، لأن التوجيه الذكي بين مزودين يمنح قوة تفاوضية تجارية ويقلل مخاطر الاعتماد على مصدر واحد ويعزز استمرارية العمل."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "دليل المشتريات لنماذج اللغة الكبيرة"
+        },
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "إدارة مخاطر تركز النماذج"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "الموازحة بين مزودي خدمات الذكاء"
+        }
+      ]
+    }
   }
 }
-
