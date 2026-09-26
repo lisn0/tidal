@@ -19,13 +19,18 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-# Google Gemini / Vertex generative grounding + citations
+# Google Gemini / Vertex training + grounding ONLY. Google states this does NOT
+# affect Google Search, AI Overviews, or AI Mode — those come from Googlebot.
+# Do not read a block here as "removes us from Search answers".
 User-agent: Google-Extended
 Allow: /
 
 User-agent: OAI-SearchBot
 Allow: /
 
+# ADVISORY ONLY — OpenAI states robots.txt may not apply to ChatGPT-User because
+# the fetch is user-initiated (developers.openai.com/api/docs/bots). Blocking it
+# requires the published IPs at openai.com/chatgpt-user.json.
 User-agent: ChatGPT-User
 Allow: /
 
@@ -36,7 +41,8 @@ Allow: /
 User-agent: Claude-SearchBot
 Allow: /
 
-# Perplexity — live retrieval (citations)
+# ADVISORY ONLY — Perplexity says Perplexity-User generally ignores robots.txt
+# for the same reason. The real control is perplexity.ai/perplexity-ips.json.
 User-agent: Perplexity-User
 Allow: /
 

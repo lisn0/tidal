@@ -111,6 +111,97 @@ export function detectAiCrawler(userAgent) {
 	return AI_CRAWLERS.find((c) => ua.includes(c.token)) || null;
 }
 
+// Answer surfaces that send a *human* to the site. This is the only half of
+// the journey that proves anything: a crawl is a cost, a referral is a
+// visitor. Until now the worker logged only the first.
+//
+// Hostname is matched with a real URL parse and an exact-or-subdomain test,
+// never a substring test. `Referer: https://chatgpt.com.evil.net/` must not
+// be counted as a ChatGPT referral, and a substring match would count it —
+// anyone can set that header, so a naive test would let a third party
+// manufacture the one number this product sells.
+const AI_REFERRERS = [
+	{ host: 'chatgpt.com', name: 'ChatGPT' },
+	{ host: 'chat.openai.com', name: 'ChatGPT' },
+	{ host: 'openai.com', name: 'OpenAI' },
+	{ host: 'perplexity.ai', name: 'Perplexity' },
+	{ host: 'claude.ai', name: 'Claude' },
+	{ host: 'anthropic.com', name: 'Claude' },
+	{ host: 'copilot.microsoft.com', name: 'Copilot' },
+	{ host: 'bing.com', name: 'Copilot' },
+	{ host: 'gemini.google.com', name: 'Gemini' },
+	{ host: 'mistral.ai', name: 'Mistral' },
+	{ host: 'poe.com', name: 'Poe' },
+	{ host: 'you.com', name: 'You.com' },
+	{ host: 'phind.com', name: 'Phind' },
+	{ host: 'deepseek.com', name: 'DeepSeek' },
+	{ host: 'grok.com', name: 'Grok' },
+	{ host: 'meta.ai', name: 'Meta AI' },
+	{ host: 'bard.google.com', name: 'Gemini' }, // pre-Gemini legacy surface
+];
+
+// Returns { name } for a human arriving from an AI answer, else null.
+// Only the host is ever read, and only the surface name is stored — a
+// Referer can carry query strings with real user data in it, and none of
+// that is needed to answer "did this page get cited".
+function matchAiHost(host) {
+	return (
+		AI_REFERRERS.find((r) => host === r.host || host.endsWith('.' + r.host)) || null
+	);
+}
+
+// `utm_source` can also arrive as a bare surface label ('chatgpt') rather than
+// a hostname, so keep a name index alongside the host table.
+const AI_REFERRERS_BY_NAME = new Map(AI_REFERRERS.map((r) => [r.name.toLowerCase(), r]));
+
+export function detectAiReferrer(referer, url) {
+	if (referer) {
+		try {
+			const hit = matchAiHost(new URL(referer).hostname.toLowerCase());
+			if (hit) return hit;
+		} catch {
+			// a malformed Referer is routine, not exceptional — fall through
+			// to the query string rather than giving up.
+		}
+	}
+
+	// The Referer header alone undercounts our largest surface. ChatGPT's
+	// free-tier citation links carry ?utm_source=chatgpt.com, and its paid-tier
+	// inline links are rel=noreferrer, so the query string is the only signal
+	// that survives. Both go through the same exact-or-subdomain host test, so
+	// a spoofed utm_source cannot out-count a spoofed Referer.
+	const utm = url && url.searchParams && url.searchParams.get('utm_source');
+	if (utm) {
+		const value = utm.trim().toLowerCase();
+		const host = value.includes('.')
+			? value.replace(/^https?:\/\//, '').split('/')[0]
+			: null;
+		const hit = (host && matchAiHost(host)) || AI_REFERRERS_BY_NAME.get(value);
+		if (hit) return hit;
+	}
+
+	return null;
+}
+
+// Referral counterpart to logAiCrawler. A crawler carrying a Referer would
+// otherwise be counted twice — once as a hit, once as a visitor — so UA
+// detection runs first and wins.
+function logAiReferral(request, env, url) {
+	if (!env || !env.AI_HITS) return;
+	if (detectAiCrawler(request.headers.get('User-Agent'))) return;
+	const ref = detectAiReferrer(request.headers.get('Referer'), url);
+	if (!ref) return;
+	try {
+		env.AI_HITS.writeDataPoint({
+			blobs: [ref.name, 'referral', url.pathname.slice(0, 200), url.hostname],
+			doubles: [1],
+			indexes: [ref.name],
+		});
+	} catch (e) {
+		// Swallowed on purpose: analytics must never break the response.
+	}
+}
+
 // Fire-and-forget write to Workers Analytics Engine. Deliberately never throws:
 // a logging fault must not take down page serving. Note AE itself also fails
 // SILENTLY on malformed data — `npx wrangler tail` is the only way to see that,
@@ -132,13 +223,35 @@ function logAiCrawler(request, env, url) {
 	}
 }
 
+// Only page requests count. Without this, one human click from an assistant
+// logs the document plus every stylesheet, script, font and image it pulls in —
+// all of which carry the same Referer, inflating referrals roughly 10-30x.
+// The .txt arm also drops robots.txt fetches, which OpenAI marks with an
+// explicit `robots.txt` marker inside the crawler UA
+// (docs: developers.openai.com/api/docs/bots). Referrers are a floor on AI
+// traffic, not a total — mobile AI apps often send no Referer at all.
+const ASSET_PATH_RE =
+	/\.(?:css|js|mjs|map|json|xml|txt|ico|png|jpe?g|gif|svg|webp|avif|woff2?|ttf|otf|eot|mp4|webm|webmanifest)$/i;
+
+export function isTrackedPath(pathname) {
+	// Callers pass url.pathname, which never carries a query — but strip one
+	// anyway so a cache-busted asset path can't slip past if that ever changes.
+	return !ASSET_PATH_RE.test((pathname || '').split(/[?#]/)[0]);
+}
+
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
 
 		// 0. Record AI crawler hits before any redirect, so a bot that lands on
 		//    www is still counted against the URL it asked for. Never throws.
-		logAiCrawler(request, env, url);
+		//    Referrals share the dataset: kind 'referral' is a human arriving
+		//    from an AI answer, which is the only signal that shows a crawl
+		//    turned into a reader.
+		if (isTrackedPath(url.pathname)) {
+			logAiCrawler(request, env, url);
+			logAiReferral(request, env, url);
+		}
 
 		// 1. www -> apex (301).
 		if (url.hostname === 'www.' + APEX) {
