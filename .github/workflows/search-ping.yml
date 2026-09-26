@@ -1,15 +1,25 @@
 name: search-ping
 
-# After every push to main (which triggers the Cloudflare Workers build),
-# wait for the deploy, then ping IndexNow (Bing/Yandex/etc.) and resubmit
-# the sitemap to Google Search Console.
+# Submits the sitemap to IndexNow (Bing/Yandex/Naver/Seznam) and re-submits it
+# to Google Search Console.
+#
+# Deliberately NOT on `push`. Two reasons:
+#   1. This is a periodic concern, not a per-commit one. Google discovers pages
+#      from the sitemap already declared in robots.txt, so a push adds nothing
+#      Google cares about, and IndexNow only reaches the other engines.
+#   2. As a per-push check it was a guaranteed red X: a GitHub billing lock
+#      kills the job before a runner picks it up, so every content push since
+#      2026-08-15 failed without a single step running. Noise that trains you to
+#      ignore red is worse than no check.
+#
+# Manual dispatch is the "I just deployed" path. The sleep below is only load-
+# bearing for that case - a scheduled run is long past deploy - but it is one
+# line, so it stays rather than growing a conditional.
 on:
-  push:
-    branches: [main]
-    # Content-only trigger: a push touching nothing under src/ ships no new or
-    # changed page, so there is nothing to tell a search engine about.
-    paths:
-      - "src/**"
+  workflow_dispatch:
+  schedule:
+    # Mondays 06:00 UTC.
+    - cron: "0 6 * * 1"
 
 jobs:
   ping:
