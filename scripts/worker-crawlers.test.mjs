@@ -171,6 +171,8 @@ for (const page of [
 	// Extensionless is the rule that matters: a dot inside a slug is not a suffix.
 	'/research/v1.2-guide',
 	'/blog/llm.cost',
+	// Exempt from the dotfile rule on purpose: a real API catalog worth counting.
+	'/.well-known/api-catalog',
 ]) {
 	assert.equal(isTrackedPath(page), true, `should track page: ${page}`);
 }
@@ -188,6 +190,14 @@ for (const asset of [
 	'/favicon.ico',
 	'/data/table.json',
 	'/main.8f3a.css',
+	// Probes. The extension arm cannot catch these, which is why /.env logged
+	// 32 hits here before DOTFILE_PATH_RE existed.
+	'/.env',
+	'/.env.local',
+	'/.env.prod',
+	'/.git/HEAD',
+	'/.htaccess',
+	'/research/.env',
 ]) {
 	assert.equal(isTrackedPath(asset), false, `should NOT track asset: ${asset}`);
 }

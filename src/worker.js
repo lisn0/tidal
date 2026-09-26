@@ -232,11 +232,17 @@ function logAiCrawler(request, env, url) {
 // traffic, not a total — mobile AI apps often send no Referer at all.
 const ASSET_PATH_RE =
 	/\.(?:css|js|mjs|map|json|xml|txt|ico|png|jpe?g|gif|svg|webp|avif|woff2?|ttf|otf|eot|mp4|webm|webmanifest)$/i;
+// Dotfile segments are scanner probes, not pages, and the extension arm above
+// misses them: /.env logged 32 hits in this dataset before this rule existed.
+// Anchored to a segment start so an ordinary slug like /research/v1.2-guide is
+// unaffected; /.well-known is exempt because we serve a real API catalog there.
+const DOTFILE_PATH_RE = /(?:^|\/)\.(?!well-known(?:\/|$))/i;
 
 export function isTrackedPath(pathname) {
 	// Callers pass url.pathname, which never carries a query — but strip one
 	// anyway so a cache-busted asset path can't slip past if that ever changes.
-	return !ASSET_PATH_RE.test((pathname || '').split(/[?#]/)[0]);
+	const p = (pathname || '').split(/[?#]/)[0];
+	return !ASSET_PATH_RE.test(p) && !DOTFILE_PATH_RE.test(p);
 }
 
 export default {
