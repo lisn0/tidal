@@ -106,25 +106,33 @@ Key file `src/9f7a91c496064b7e96137c3326d9b895.txt` is copied to the site root �
 that key must stay served for submissions to be accepted. Manual submission:
 `node scripts/indexnow-submit.mjs`.
 
-## Indexing — automatic on deploy
+## Indexing — weekly, plus on demand
 
-`.github/workflows/search-ping.yml` runs on every push to `main` that touches
-`src/**`, waits 180s for the Cloudflare build to publish, then submits the
-sitemap to IndexNow and re-submits it to Google Search Console. There is nothing
-to run by hand.
+`.github/workflows/search-ping.yml` submits the sitemap to IndexNow and
+re-submits it to Google Search Console. It runs on a weekly schedule
+(Mondays 06:00 UTC) and can be dispatched by hand from the Actions tab right
+after a deploy.
+
+It is deliberately *not* on `push`. Google's discovery path is the sitemap
+already declared in `robots.txt`, which needs no push to notice, and IndexNow
+only reaches Bing/Yandex/Naver/Seznam — so per-commit timing bought almost
+nothing. It also cost a red X on every `src/**` change: a GitHub billing lock
+killed the job before a runner picked it up, so runs failed with an empty step
+list. A check that is permanently red and proves nothing is worse than no check.
 
 One-time setup is done: the domain property is verified and the service-account
-key is stored as the `GSC_SA_KEY` repo secret. Keep it that way — if the key goes
-missing the submit script exits successfully and logs a skip, so the workflow
-still reports success having told Google nothing.
+key is stored as the `GSC_SA_KEY` repo secret. A missing key now fails the run
+with a non-zero exit and an actionable message, rather than exiting `0` and
+looking healthy having told Google nothing.
 
 Two limits worth keeping in mind:
 
 - **Google ignores IndexNow.** IndexNow is a Microsoft protocol; Google publishes
   no equivalent. Re-submitting a sitemap is a crawl hint. Nothing here forces or
   guarantees indexing — that call stays Google's.
-- The workflow only fires on `src/**`. A push touching just `scripts/` or
-  `package.json` publishes no new content, so there is nothing to announce.
+- **GitHub Actions has a billing lock on this account**, so scheduled and
+  dispatched runs fail before starting until it is cleared. Clearing it is an
+  account-level fix (payment method on the GitHub account), not a repo change.
 
 ## Required assets
 
