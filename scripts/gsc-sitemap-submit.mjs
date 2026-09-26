@@ -9,8 +9,8 @@
  * Config (env):
  *   GSC_SA_KEY    full JSON of a Google Cloud service-account key. The SA's
  *                 email must be added as a user on the GSC property.
- *                 If unset, the script prints a notice and exits 0 so CI stays
- *                 green before the secret is configured.
+ *                 Required: if unset the script exits 2, because a run that
+ *                 quietly did nothing is worse than a red one.
  *   GSC_SITE      GSC property, e.g. "sc-domain:finopsllm.com" (domain
  *                 property) or "https://finopsllm.com/" (URL-prefix property)
  *   GSC_SITEMAPS  comma-separated full sitemap URLs to resubmit
@@ -36,8 +36,17 @@ const SITEMAPS = (process.env.GSC_SITEMAPS || "")
   .filter(Boolean);
 
 if (!SA_KEY) {
-  console.log("GSC_SA_KEY not set — skipping Google sitemap resubmit.");
-  process.exit(0);
+  // Deliberately fatal. This used to exit 0 so CI would stay green before the
+  // secret existed, and the cost was seven weeks of green runs that silently
+  // resubmitted nothing — indistinguishable from a working integration. A
+  // missing credential is a broken integration; say so.
+  console.error(
+    "ERROR: GSC_SA_KEY is not set — the Google sitemap resubmit did NOT run.\n" +
+      "  Local: export GSC_SA_KEY_FILE=~/projects/ai/llm-cfo/.secrets/gsc-sa.json\n" +
+      "  CI:    gh secret set GSC_SA_KEY --repo lisn0/tidal --body-file < sa.json\n" +
+      "  The service account's email must also be a user on the GSC property.",
+  );
+  process.exit(2);
 }
 if (!SITE || !SITEMAPS.length) {
   console.error("ERROR: GSC_SITE and GSC_SITEMAPS are required.");
