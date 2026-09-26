@@ -103,15 +103,28 @@ as static assets with `src/worker.js` in front (`run_worker_first: true`).
 ## IndexNow
 
 Key file `src/9f7a91c496064b7e96137c3326d9b895.txt` is copied to the site root —
-that key must stay served for submissions to be accepted. Submit with
-`scripts/indexnow-submit.mjs`.
+that key must stay served for submissions to be accepted. Manual submission:
+`node scripts/indexnow-submit.mjs`.
 
-## Submit to Google
+## Indexing — automatic on deploy
 
-1. **Search Console** → add `llmcfo.com` as a Domain property
-2. Verify via DNS TXT (Cloudflare auto-handles if domain is on Cloudflare)
-3. Submit `https://llmcfo.com/sitemap.xml`
-4. Request indexing for `https://llmcfo.com/`
+`.github/workflows/search-ping.yml` runs on every push to `main` that touches
+`src/**`, waits 180s for the Cloudflare build to publish, then submits the
+sitemap to IndexNow and re-submits it to Google Search Console. There is nothing
+to run by hand.
+
+One-time setup is done: the domain property is verified and the service-account
+key is stored as the `GSC_SA_KEY` repo secret. Keep it that way — if the key goes
+missing the submit script exits successfully and logs a skip, so the workflow
+still reports success having told Google nothing.
+
+Two limits worth keeping in mind:
+
+- **Google ignores IndexNow.** IndexNow is a Microsoft protocol; Google publishes
+  no equivalent. Re-submitting a sitemap is a crawl hint. Nothing here forces or
+  guarantees indexing — that call stays Google's.
+- The workflow only fires on `src/**`. A push touching just `scripts/` or
+  `package.json` publishes no new content, so there is nothing to announce.
 
 ## Required assets
 
