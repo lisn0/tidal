@@ -1,0 +1,58 @@
+{
+  "slug": "claude-code-cost-per-developer",
+  "tags": [
+    "llm-costs",
+    "vendor-management",
+    "cfo"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Claude Code Cost Per Developer: API vs Seats, 2026",
+      "titleCore": "Claude Code Cost Per Developer: API vs Seats, 2026",
+      "description": "Claude Code averages $150-250 per developer a month at API rates. Seats cost $20-200. List prices, measured usage and seat math for a ten-person team.",
+      "body": "<p><strong>Anthropic puts the average Claude Code cost at $150 to $250 per developer per month at API rates, about $13 per active day.</strong> A subscription seat costs $20 to $200 a month instead. For most developers a seat is cheaper than the metered API. For the heaviest users it is far cheaper: our own logs came to $4,500 to $8,700 a month at API rates, on seats costing $100 and $200. The budget question is which seat each developer needs, not whether a seat pays for itself.</p>\n\n<p>This page gives finance teams the list prices, the usage figures Anthropic publishes, our measured numbers, and seat math for a ten-person team. All prices are US list prices, checked on 27 September 2026.</p>\n\n<h2>What does Claude Code cost per developer on the API?</h2>\n\n<p><strong>About $150 to $250 a month on average, and under $30 per active day for 90% of users,</strong> according to <a href=\"https://code.claude.com/docs/en/costs\">Anthropic&rsquo;s Claude Code cost documentation</a>. Those figures come from enterprise deployments billed at API rates. They are an average across all developers who use the tool, so they include people who open it a few times a week.</p>\n\n<p>The spread around that average is wide. A developer who runs long agent sessions all day, every day, can cost many times the average. Across August and September our own Claude Code usage came to:</p>\n\n<table class=\"kv\">\n<thead><tr><th>Period</th><th>Seat</th><th>Seat price</th><th>Same usage at API rates</th></tr></thead>\n<tbody>\n<tr><td>August 2026</td><td>Claude Max 20x</td><td>$200</td><td>$8,676</td></tr>\n<tr><td>1&ndash;27 September 2026</td><td>Claude Max 5x</td><td>$100</td><td>$4,511</td></tr>\n</tbody>\n</table>\n\n<p>That is 20 to 40 times Anthropic&rsquo;s average, for one developer. The <a href=\"https://finopsllm.com/research/claude-max-20x-vs-5x-weekly-limit\">weekly limit study</a> has the full method. About half of those dollars were the agent re-reading its own context, which is why agent-heavy developers cost so much more than chat-style users.</p>\n\n<h2>How much is a Claude Code seat?</h2>\n\n<table class=\"kv\">\n<thead><tr><th>Plan</th><th>Price per seat per month</th><th>Usage</th></tr></thead>\n<tbody>\n<tr><td>Pro (individual)</td><td>$20</td><td>Base level</td></tr>\n<tr><td>Max 5x (individual)</td><td>$100</td><td>5x Pro per 5-hour session</td></tr>\n<tr><td>Max 20x (individual)</td><td>$200</td><td>20x Pro per 5-hour session</td></tr>\n<tr><td>Team Standard</td><td>$25 monthly, $20 annual</td><td>More than Pro</td></tr>\n<tr><td>Team Premium</td><td>$125 monthly, $100 annual</td><td>5x Standard</td></tr>\n<tr><td>Enterprise</td><td>$20 annual, plus all usage at API rates</td><td>Metered</td></tr>\n</tbody>\n</table>\n\n<p>Team plans take 2 to 150 seats, and Standard and Premium seats can be mixed on one plan. Every plan except Enterprise has a 5-hour limit and a weekly limit. Anthropic does not publish either one in tokens or dollars. On Team plans the allowance is shared across Claude Code, chat and Cowork, so a developer who also uses Claude for documents draws down the same pool.</p>\n\n<p>Anthropic&rsquo;s own ratios give a floor for Premium. Standard gives more than Pro, and Premium gives 5x Standard, so a Premium seat gets at least what a Max 5x seat gets in each 5-hour session. That is an inference from the published ratios. Anthropic states no weekly figure for Premium.</p>\n\n<h2>When is a seat cheaper than the API?</h2>\n\n<p><strong>Almost always for a developer who uses Claude Code most working days.</strong> Anthropic&rsquo;s average developer costs $150 to $250 a month on the API. The largest Team seat costs $125 a month billed monthly. So the average developer is cheaper on any seat, provided the seat&rsquo;s limits cover their usage. Heavy agent users are cheaper by a factor of 20 or more.</p>\n\n<p>The API wins in two cases:</p>\n\n<ul>\n<li><strong>Occasional users.</strong> Someone who uses Claude Code a few days a month may run up less than $25 at API rates. Enterprise pricing, a $20 seat plus metered usage, is built for a workforce like that.</li>\n<li><strong>Cost attribution.</strong> Metered usage through the Claude Console can be split by workspace and exported to your own systems over OpenTelemetry. A seat is a flat fee, so it can&rsquo;t tell you which product or client the work was for.</li>\n</ul>\n\n<h2>What does Claude Code cost for a team of ten?</h2>\n\n<p>Take ten developers: seven who use Claude Code most days and three who use it occasionally. Monthly billing, list prices:</p>\n\n<table class=\"kv\">\n<thead><tr><th>Setup</th><th>Monthly cost</th><th>Per developer</th></tr></thead>\n<tbody>\n<tr><td>All on the API at Anthropic&rsquo;s average</td><td>$1,500&ndash;$2,500</td><td>$150&ndash;$250</td></tr>\n<tr><td>7 Premium + 3 Standard seats</td><td>$950</td><td>$95</td></tr>\n<tr><td>Same mix, billed annually</td><td>$760</td><td>$76</td></tr>\n<tr><td>10 Premium seats</td><td>$1,250</td><td>$125</td></tr>\n</tbody>\n</table>\n\n<p>The seat plans cap spend. The API figure is an average and has no cap. If one of the seven turns out to be an all-day agent user, their API cost alone could pass the whole seat budget, as our logs show. The seat risk runs the other way: a developer who hits the Premium limit stops working or moves to usage credits billed at API rates.</p>\n\n<h2>How do we control Claude Code spend?</h2>\n\n<ul>\n<li><strong>Assign seats by usage.</strong> Start daily users on Premium and everyone else on Standard. Team and Enterprise spend reports give a per-user CSV, so the first month shows who should move.</li>\n<li><strong>Set spend limits on usage credits.</strong> Team and Enterprise admins can cap extra usage. Without a limit, a developer who runs out of their seat keeps working at API rates.</li>\n<li><strong>Watch the effort setting.</strong> On Opus 5.5 the same task cost 4.5x more at maximum effort than at medium in Artificial Analysis runs. The <a href=\"https://finopsllm.com/research/opus-5-5-effort-level-cost\">effort level study</a> has the numbers, and our <a href=\"https://finopsllm.com/research/claude-code-token-usage\">Claude Code token usage guide</a> covers the other settings that matter.</li>\n<li><strong>Review before renewal.</strong> Anthropic can change seat limits without changing the price. Rerun the per-developer numbers each quarter, not only at signing.</li>\n</ul>\n\n<h2>Sources</h2>\n\n<ul>\n<li><a href=\"https://code.claude.com/docs/en/costs\">Claude Code docs: Manage costs effectively</a></li>\n<li><a href=\"https://claude.com/pricing\">Claude pricing: Pro, Max, Team and Enterprise</a></li>\n<li><a href=\"https://finopsllm.com/research/claude-max-20x-vs-5x-weekly-limit\">FinOps LLM: Claude Max 20x vs 5x weekly limit, measured</a></li>\n<li><a href=\"https://finopsllm.com/research/claude-pro-max-tokens-limit\">FinOps LLM: How many tokens Claude Pro and Max give you</a></li>\n</ul><style>table.kv th,table.kv td{padding-right:18px;vertical-align:top}table.kv th:last-child,table.kv td:last-child{padding-right:0}</style>",
+      "faq": [
+        {
+          "question": "How much does Claude Code cost per developer per month?",
+          "answer": "Anthropic reports an average of $150 to $250 per developer per month at API rates, about $13 per active day. Subscription seats cost $20 to $200 a month, and Team seats $25 or $125 billed monthly."
+        },
+        {
+          "question": "Is a Claude Code seat cheaper than the API?",
+          "answer": "For anyone using it most working days, yes. The average API cost is above the price of every Team seat, and heavy agent users can cost $4,500 to $8,700 a month at API rates."
+        },
+        {
+          "question": "How much does Claude Code cost for a team of ten?",
+          "answer": "Seven Premium and three Standard seats cost $950 a month billed monthly, or $760 billed annually. The same team on the API at the average rate would cost $1,500 to $2,500."
+        },
+        {
+          "question": "What is the difference between Team Standard and Premium seats?",
+          "answer": "Premium seats cost $125 a month ($100 annual) and give 5x the usage of Standard seats, which cost $25 ($20 annual) and give more than Pro. Both can be mixed on one Team plan."
+        },
+        {
+          "question": "When should a company use the API instead of seats?",
+          "answer": "For occasional users whose usage is worth less than a seat, and when spend has to be attributed to products or clients. Enterprise combines a $20 seat with usage at API rates."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-max-vs-chatgpt-pro-codex-200",
+          "label": "Claude Max vs ChatGPT Pro: 60 days of logs"
+        },
+        {
+          "slug": "/research/i-used-claude-max-20x-heavily-for-a-week",
+          "label": "I used Claude Max 20x heavily for a week"
+        },
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Coding agent cost control"
+        },
+        {
+          "slug": "/research/ai-agent-spending-limits",
+          "label": "AI agent spending limits"
+        }
+      ]
+    }
+  }
+}
