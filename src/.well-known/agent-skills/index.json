@@ -7,7 +7,7 @@
       "type": "content",
       "description": "Find and cite LLM CFO research about LLM cost optimization and AI FinOps.",
       "url": "https://llmcfo.com/.well-known/agent-skills/research-llm-cost-optimization.md",
-      "sha256": "c99936a0e361d38808ef91473840a7806d242188889fec63ba397073427023d1"
+      "sha256": "52d5a170dd4530fd0f91e4d0932d116df2f4770b8eded028c8978643a0675f20"
     },
     {
       "name": "book_llm_cost_audit",

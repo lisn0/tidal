@@ -1,0 +1,55 @@
+{
+  "slug": "cost-optimization-order-and-the-fine-tuning-trap",
+  "tags": [
+    "llm-cost-optimization-cfo",
+    "prompt-caching-2026",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "The Order of Cost Reductions, and the Fine-Tuning Trap",
+      "titleCore": "The order of cost reductions",
+      "description": "Caching, then prompt trimming, then tool cleanup, then routing, then fine-tuning last. The sequence compounds, and the wrong one creates a recurring cost.",
+      "body": "<p>The consensus answer from teams running LLM cost control in production is not a list of techniques. It is that the order matters more than the list. The same teams report that the optimisation they reached for first &mdash; fine-tuning a small model for repetitive work &mdash; was the one that failed, on maintenance overhead and quality drift.</p><h2>The sequence that compounds</h2><ol><li><strong>Prompt caching.</strong> The cheapest engineering hour available. Reported flagship rates put cache reads at $0.20 per million against $4.00 fresh, a 95% discount on the largest line. Anything that repeats across calls &mdash; system prompts, tool definitions, retrieved context &mdash; is leaving this on the table.</li><li><strong>Trim the system prompt.</strong> Verbose instructions bill on every call forever. This is an editing task, not an engineering task, which is part of why it gets skipped.</li><li><strong>Remove unused tool definitions.</strong> Every tool definition is billed on every request whether or not it is called. This is a configuration change with a permanent effect.</li><li><strong>Route by task.</strong> Only now does routing pay, because a router built on steps 1&ndash;3 is already cheaper before it switches a single model.</li><li><strong>Batch the non-interactive traffic.</strong> A straight discount for anything that is not customer-facing.</li><li><strong>Fine-tune last, or not at all.</strong></li></ol><h2>Why the fine-tuning trap is a finance problem</h2><p>A fine-tune is not a one-off cost. It is a permanent ops tax: a retrain every time the underlying repetitive work shifts, plus ongoing evaluation as the base model is upgraded upstream. The saving usually lands on 15% of volume and about 2% of spend &mdash; a small number wrapped in a large ongoing cost. On a P&L that belongs in run-rate, not in a one-off project line, and a project line understates it.</p><h2>Why the order is the point</h2><p>Each step changes the token counts the next step operates on. Trim the prompt before routing and the cheap model carries less on every call. Enable caching before fine-tuning and the fine-tuning budget only has to cover cache misses. Run the sequence in the wrong order and you pay twice: a fine-tune a prompt rewrite would have made unnecessary, or a router that never pays for itself.</p><h2>Bottom line</h2><p>Caching, trimming and tool cleanup are cheap, compounding and low risk. Routing and batching come after. Fine-tuning comes last or not at all &mdash; because the list is easy and the sequence is where the money is.</p>",
+      "faq": [
+        {
+          "question": "What order should LLM cost reductions be applied in?",
+          "answer": "Prompt caching first, then trim the system prompt, then remove unused tool definitions, then routing, then batch for non-interactive traffic. Fine-tuning comes last, or not at all."
+        },
+        {
+          "question": "Why is fine-tuning often the wrong cost reduction?",
+          "answer": "A production team reported fine-tuning for repetitive work as a failure: a retrain whenever the work shifted, quality drifting as the base model was upgraded upstream, and the saving confined to roughly 15% of volume and 2% of spend."
+        },
+        {
+          "question": "How should fine-tuning cost be treated on the P&L?",
+          "answer": "As a recurring operating cost, not a one-off project cost. It needs ongoing retraining and evaluation as the base model changes, so booking it as a project understates its run-rate."
+        },
+        {
+          "question": "How much does prompt caching reduce a bill?",
+          "answer": "Reported flagship rates put cache reads at about $0.20 per million against $4.00 for fresh input. On a workload with a repeating prefix, total billed tokens typically fall 40 to 70 percent once caching is enabled."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-cost-optimization-cfo",
+          "label": "LLM cost optimization for CFOs"
+        },
+        {
+          "slug": "/research/prompt-caching-2026",
+          "label": "Prompt caching in 2026"
+        },
+        {
+          "slug": "/research/cache-invalidation-cost",
+          "label": "Cache invalidation cost"
+        },
+        {
+          "slug": "/research/openai-flex-vs-batch",
+          "label": "Flex vs batch pricing"
+        }
+      ]
+    }
+  }
+}

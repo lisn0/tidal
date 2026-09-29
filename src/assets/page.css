@@ -48,6 +48,10 @@ table.kv td:last-child { text-align:right; color:var(--ink); font-weight:500; }
 @font-face { font-family:'Geist Mono'; font-style:normal; font-weight:400; font-display:swap; src:url('/assets/fonts/geist-mono-latin-400-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family:'Geist Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('/assets/fonts/geist-mono-latin-500-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family:'Geist Mono'; font-style:normal; font-weight:600; font-display:swap; src:url('/assets/fonts/geist-mono-latin-600-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+.contact-honeypot { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+#contact-form input, #contact-form select, #contact-form textarea { box-sizing:border-box; width:min(100%, 36rem); padding:.7rem; border:1px solid #888; border-radius:4px; background:#fff; color:#222; font:inherit; }
+#contact-form button { padding:.8rem 1.3rem; border:0; border-radius:4px; background:#172626; color:white; font:inherit; cursor:pointer; }
+#contact-form button:disabled { opacity:.6; cursor:wait; }
 
 /* Mobile responsiveness; page.css (legal/article pages) */
 @media (max-width: 768px) {

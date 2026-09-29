@@ -1,0 +1,51 @@
+{
+  "slug": "real-swe-cost-per-resolved-outcome",
+  "tags": [
+    "cost-per-profitable-outcome",
+    "llm-roi-calculation",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "What a Resolved Issue Actually Costs You",
+      "titleCore": "What a resolved issue actually costs",
+      "description": "Pass rate is not a cost. A private-codebase benchmark reframes model choice as cost per resolved business outcome, including retries and human review.",
+      "body": "<p>A benchmark that evaluates models on private, real-world enterprise repositories launched in September 2026 and drew heavy discussion. The premise matters more than the leaderboard: public benchmark suites are public, and a model that has seen them is not being tested on the code your engineers actually maintain.</p><h2>Why a pass rate is not a finance number</h2><p>A pass rate answers a capability question. It cannot answer a budget question, because a budget question needs three inputs at once:</p><ul><li><strong>Success rate</strong> on tasks that resemble your backlog.</li><li><strong>Tokens per attempt</strong>, including the failures.</li><li><strong>Attempt multiplier</strong> &mdash; did it need a retry, a plan revision, a diff-and-rethink loop?</li></ul><p>Multiply those and you get cost per resolved outcome. Two models a few points apart can differ threefold on that number once retries, plan revisions and rejected diffs are counted. The point spread is the least important part of the result.</p><h2>Worked example</h2><p>Take a 40-issue scope. Model A resolves 22 in a single attempt at 60k input and 8k output. Model B resolves 26 with a 1.4x retry multiplier at 90k input and 14k output. At a reported $4/$20 flagship rate with $0.20 cache reads:</p><table><thead><tr><th>Model</th><th>Resolved</th><th>Cost per outcome</th><th>Total</th></tr></thead><tbody><tr><td>A</td><td>22</td><td>$0.32</td><td>$7.04</td></tr><td>B</td><td>26</td><td>$0.61</td><td>$15.86</td></tr></tbody></table><p>Model B costs 2.3x the total for 18% more resolved issues. Scaled to 4,000 issues a month that is roughly $880 more for 18% more throughput. Whether that is a good trade depends on what a missed issue costs, which is a business input no benchmark supplies.</p><h2>The four numbers to instrument</h2><ol><li><strong>Cost per resolved outcome</strong>, not per request. The denominator is merged outcomes, not calls.</li><li><strong>Retry multiplier per model.</strong> A model at 1.4x is already a third cheaper than its list price before anything else is counted.</li><li><strong>Tokens per accepted change</strong>, including plan and self-review tokens the diff never shows.</li><li><strong>Human review minutes.</strong> A 12% cheaper model that takes 20% longer to review is more expensive. This is the number most often omitted, and it is the one finance cares about.</li></ol><h2>Bottom line</h2><p>Until you run a private-codebase benchmark on your own repos, treat every model comparison as a cost-per-outcome hypothesis and price it with your own token counts and your own review hours. The pass rate is marketing; the resolved outcome is the budget.</p>",
+      "faq": [
+        {
+          "question": "Why is cost per resolved outcome better than a benchmark pass rate?",
+          "answer": "A pass rate ignores token consumption and attempt count. Two models a few points apart can differ threefold in cost per resolved outcome once retries, plan revisions and rejected diffs are counted."
+        },
+        {
+          "question": "What is a private-codebase benchmark for?",
+          "answer": "Public benchmark suites are public, so models can be optimised against them. Private, real-world enterprise repositories test models on code shaped like your actual backlog, which is what a cost forecast depends on."
+        },
+        {
+          "question": "Which cost numbers are most often missing from model comparisons?",
+          "answer": "Human review minutes. A cheaper model that takes longer to review is more expensive overall, and that number rarely appears in vendor benchmarks because it is a buyer-side cost."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Cost per profitable outcome"
+        },
+        {
+          "slug": "/research/llm-roi-calculation",
+          "label": "LLM ROI calculation for CFOs"
+        },
+        {
+          "slug": "/research/coding-agent-cost-control",
+          "label": "Coding agent cost control"
+        },
+        {
+          "slug": "/research/evals-cost-board",
+          "label": "Evals cost board"
+        }
+      ]
+    }
+  }
+}

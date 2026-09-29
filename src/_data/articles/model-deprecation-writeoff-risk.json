@@ -1,0 +1,51 @@
+{
+  "slug": "model-deprecation-writeoff-risk",
+  "tags": [
+    "ai-spend-forecasting",
+    "model-concentration-risk",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Model Deprecation Is an Accounting Event, Not an Engineering One",
+      "titleCore": "Model deprecation and write-off risk",
+      "description": "When a model is retired mid-quarter, the accrued liability on a pre-committed volume is real. Deprecation dates belong in the accrual review.",
+      "body": "<p>Model deprecation notices are filed as engineering changelogs and read as engineering notices. For a finance function they are an accounting event, because the decision to pre-commit spend against a model version creates an obligation that the vendor can withdraw from one side of the contract while the commitment remains on yours.</p><h2>The liability hiding in a volume commitment</h2><p>A pre-committed volume discount assumes you will still be running that version in the commitment period. If the model is deprecated, you face three outcomes, and only one of them was priced into the contract:</p><ul><li><strong>The successor is behaviourally close.</strong> The commitment is honoured. This is the case people plan for.</li><li><strong>The successor needs re-evaluation.</strong> The commitment is honoured but the rollout slips, and the value of the commitment falls without the spend falling.</li><li><strong>The commitment is volume, not version.</strong> The discount survives the changeover and nothing is lost. This is the term to negotiate.</li></ul><p>Only the third case is safe, and it is the case that has to be asked for in the contract rather than assumed at renewal.</p><h2>What the deprecation notice should trigger</h2><ol><li><strong>Update the accrual assumptions.</strong> If the model behind a committed volume is being retired, the discount you accrued against that volume needs re-review before the quarter closes.</li><li><strong>Re-baseline unit economics.</strong> The successor's rate card is a different product. Cost per resolved outcome computed on the old model does not carry forward.</li><li><strong>Check the re-evaluation cost, not just the migration.</strong> A behaviourally different successor means the eval programme is part of the migration cost, and eval spend is recurring.</li><li><strong>Log the date in the renewal calendar.</strong> Deprecation dates are a scheduling input. A version retired two weeks after your renewal negotiation is a bad week to be holding.</li></ol><h2>Writing it off honestly</h2><p>If a commitment was priced on the assumption of a version that no longer exists, the difference is a variance, and the useful thing is to recognise it early and label it as a deprecation effect rather than let it be absorbed into a general overspend line where it becomes invisible. A deprecation write-off that is explained in one sentence is a normal event. The same number buried in a run-rate overspend is a control failure.</p><h2>Bottom line</h2><p>Deprecation dates are an accrual input. Negotiate commitments against volume rather than version, re-baseline unit economics on the successor, and book the difference as a labelled deprecation variance instead of a generic overspend.</p>",
+      "faq": [
+        {
+          "question": "Why does model deprecation matter to finance rather than only to engineering?",
+          "answer": "Because a pre-committed volume discount assumes you will still be running that version. If the version is retired, the commitment can remain while the discount, the rollout plan and the unit economics it was priced on all change."
+        },
+        {
+          "question": "Which contract term makes committed spend safe across a model deprecation?",
+          "answer": "A commitment to volume rather than to a named model version. Volume commitments survive a changeover; version commitments do not, and the version form is the term to refuse."
+        },
+        {
+          "question": "How should a deprecation-driven cost difference be reported?",
+          "answer": "As a labelled deprecation variance in the period it occurs, not absorbed into a general overspend line. An explained write-off is a normal event; the same number hidden in a run-rate overspend is a control failure."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "Model concentration risk"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting for CFOs"
+        },
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI spend variance analysis"
+        },
+        {
+          "slug": "/research/scale-tier-decision",
+          "label": "Scale tier vs flex vs batch"
+        }
+      ]
+    }
+  }
+}

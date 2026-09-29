@@ -14,6 +14,24 @@ Vendor-neutral research on LLM cost and observability:
 
 Discovery: [sitemap.xml](https://llmcfo.com/sitemap.xml) · [llms.txt](https://llmcfo.com/llms.txt)
 
+## Contact API operator setup
+
+`/contact` and `POST /api/contact` share the same Worker handler. Requests are
+limited to 8 KiB and five attempts per minute per connecting IP at each
+Cloudflare location. Agents can send JSON using the fields in `openapi.json`.
+The Worker sends plain text only, from `noreply@llmcfo.com` to the fixed
+`hello@llmcfo.com` recipient, and returns `503 contact_unavailable` if either
+binding or delivery fails. The contact form never creates a Tidal account.
+
+Before releasing this endpoint, onboard `llmcfo.com` to Cloudflare Email
+Service, verify `hello@llmcfo.com` as a destination, configure the sender,
+and verify that a real message reaches the team inbox. The `send_email` binding
+and its address restrictions are declared in `wrangler.jsonc`. Incoming MX
+records exist, but delivery through this Worker has not been tested end to end.
+Do not push the Worker until the account setup is complete. Cloudflare's rate
+limit binding is local to each edge location, so it is abuse friction rather
+than a globally exact quota.
+
 ## Stack — Eleventy
 
 **Eleventy 3.1.6** (`@11ty/eleventy`, the only dependency). Input `src/`, output

@@ -1,0 +1,262 @@
+---
+permalink: "tools/llm-release-tracker.html"
+layout: "page.njk"
+title: "AI Model Release Tracker — What Shipped, What's Retiring"
+description: "Every new GPT, Claude, Gemini and Llama model in the last 45 days with USD-per-1M prices, plus the models labs have announced they are switching off."
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Model Release Tracker · LLM CFO</title>
+  <meta name="description" content="Every new GPT, Claude, Gemini and Llama model in the last 45 days with USD-per-1M prices, plus the models labs have announced they are switching off." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/tools/llm-release-tracker" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/tools/llm-release-tracker" />
+  <meta property="og:title" content="AI Model Release Tracker · LLM CFO" />
+  <meta property="og:description" content="Every new GPT, Claude, Gemini and Llama model in the last 45 days with USD-per-1M prices, plus the models labs have announced they are switching off." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="AI Model Release Tracker · LLM CFO" />
+  <meta name="twitter:description" content="Every new GPT, Claude, Gemini and Llama model in the last 45 days with USD-per-1M prices, plus the models labs have announced they are switching off." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"AI Model Release Tracker","applicationCategory":"FinanceApplication","operatingSystem":"Any","url":"https://llmcfo.com/tools/llm-release-tracker","description":"Every new GPT, Claude, Gemini and Llama model in the last 45 days with USD-per-1M prices, plus the models labs have announced they are switching off.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"AI Model Release Tracker","item":"https://llmcfo.com/tools/llm-release-tracker"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How current is this model release tracker?","acceptedAnswer":{"@type":"Answer","text":"The table is rebuilt from the upstream model feed at most six hours old, and the page is regenerated from a dated snapshot. Both dates are shown on the page."}},{"@type":"Question","name":"Is the date the model was announced by the lab?","acceptedAnswer":{"@type":"Answer","text":"No. The date shown is the day the model first became purchasable through a public model router, which usually follows the lab's announcement by days. For the announcement itself, read the lab's own newsroom and social accounts."}},{"@type":"Question","name":"What happens when a model is retired?","acceptedAnswer":{"@type":"Answer","text":"Requests to a retired model start failing, so any routing rule, prompt tuned against it, or evaluation baseline built on it needs replacing before the switch-off date. The retirement table lists the announced date and the model's price so the replacement can be costed directly."}}]}
+  </script>
+---
+
+{% set shipped = releases.releases %}
+{% set retiring = releases.retirements %}
+{# Mirrors the JS formatters below so the server-rendered table reads the same
+   with JS off. `r.in` is quoted for clarity: `in` is an operator in the template
+   language, and a dash beats printing a price the lab never published. #}
+{% macro usd(v) %}{% if v === null or v === undefined or v === "" %}&mdash;{% else %}${{ v }}{% endif %}{% endmacro %}
+{% macro ctx(n) %}{% if not n %}&mdash;{% elif n >= 1000000 %}{{ (n / 1000000) | round(2) }}M{% else %}{{ (n / 1000) | round }}K{% endif %}{% endmacro %}
+
+<div class="eye">FREE TOOL</div>
+<h1 class="page-title">AI Model Release <em>Tracker.</em></h1>
+<p class="lede">Every new model the major labs have put into production in the last 45 days, at the price you would actually pay, and every model they have announced they are switching off. Two lists, because the second one is the one that reaches your invoice unannounced.</p>
+
+<div class="tracker-bar">
+  <div class="filters" role="group" aria-label="Filter by lab">
+    <button type="button" class="chip is-on" data-lab="all" aria-pressed="true">All labs</button>
+    {% for lab in releases.labs %}
+    <button type="button" class="chip" data-lab="{{ lab }}" aria-pressed="false">{{ lab }}</button>
+    {% endfor %}
+  </div>
+  <p class="freshness">Snapshot <strong>{{ releases.updated }}</strong><span id="liveCheck"></span></p>
+</div>
+
+<h2>New in the last 45 days <span class="count">{{ shipped | length }} models</span></h2>
+<p class="note">A model appears here the day it first became purchasable through a public router. It usually trails the lab's own announcement by a few days. Prices are USD per 1M tokens, taken from the router's rate card.</p>
+<div class="table-wrap">
+  <table class="tracker-table" id="shippedTable">
+    <thead>
+      <tr>
+        <th scope="col">First available</th>
+        <th scope="col">Model</th>
+        <th scope="col">Lab</th>
+        <th scope="col" class="num">Input / 1M</th>
+        <th scope="col" class="num">Output / 1M</th>
+        <th scope="col" class="num">Context</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in shipped %}
+      <tr data-lab="{{ r.provider }}" data-id="{{ r.id }}">
+        <td><time datetime="{{ r.date }}">{{ r.date }}</time></td>
+        <td><strong>{{ r.id }}</strong></td>
+        <td>{{ r.provider }}</td>
+        <td class="num">{{ usd(r["in"]) }}</td>
+        <td class="num">{{ usd(r["out"]) }}</td>
+        <td class="num">{{ ctx(r.ctx) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="empty" id="shippedEmpty" hidden>No models from that lab in this window.</p>
+
+<h2>Announced retirements <span class="count">{{ retiring | length }} models</span></h2>
+<p class="note">Dates a lab or router has published for switching a model off. A model on this list is not deprecated-yet: on the date shown, calls to it start failing. Price is included so the replacement can be costed in the same column.</p>
+<div class="table-wrap">
+  <table class="tracker-table" id="retiringTable">
+    <thead>
+      <tr>
+        <th scope="col">Switch-off date</th>
+        <th scope="col">In</th>
+        <th scope="col">Model</th>
+        <th scope="col">Lab</th>
+        <th scope="col" class="num">Input / 1M</th>
+        <th scope="col" class="num">Output / 1M</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in retiring %}
+      <tr data-lab="{{ r.provider }}" data-id="{{ r.id }}" data-expires="{{ r.expires }}"{% if r.daysLeft <= 30 %} class="is-urgent"{% endif %}>
+        <td><time datetime="{{ r.expires }}">{{ r.expires }}</time></td>
+        <td class="left"><span class="days" data-days>{{ r.daysLeft }}d</span></td>
+        <td><strong>{{ r.id }}</strong></td>
+        <td>{{ r.provider }}</td>
+        <td class="num">{{ usd(r["in"]) }}</td>
+        <td class="num">{{ usd(r["out"]) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="empty" id="retiringEmpty" hidden>Nothing announced for that lab.</p>
+
+<div class="methodology">
+<h2>Why the second table is the one that costs you</h2>
+<p>A new model is a decision. A retirement is an event, and it arrives whether or not anyone was watching. Three things break quietly on a switch-off date:</p>
+<ul>
+<li><strong>Routing rules.</strong> A load balancer or fallback chain that still references the retired id returns errors for that slice of traffic. If the fallback was never load-tested, the retry path becomes the primary path and the latency bill follows.</li>
+<li><strong>Evaluation baselines.</strong> Any score, prompt or guardrail tuned against the old model's behaviour is now measuring a system that no longer exists. Regression alerts that fire afterwards are noise, and the ones that don't fire are worse.</li>
+<li><strong>Prompts tuned to a context window.</strong> A replacement with a smaller ceiling truncates mid-document. The failure is a plausible answer built on half the input, which is far more expensive to catch than an error.</li>
+</ul>
+<p>The cheapest time to price a replacement is before the switch-off date, while the old model still runs and both can be measured side by side on real traffic. That is the argument for keeping this list rather than reading about it after the fact.</p>
+<p>There is an accounting version of the same point. A model that is retired mid-quarter forces a decision between a mid-period write-off of capitalised engineering spend and a straight hit to run-rate, and which one you get is decided by whether the migration was planned. <a href="/research/model-deprecation-writeoff-risk">Model deprecation and write-off risk</a> covers how that lands in the numbers.</p>
+
+<h2>How we build this</h2>
+<p>Both tables come from one public model feed that lists every served model with the timestamp it first appeared and, where a switch-off has been announced, the date it ends. The filter keeps first-party models only: third-party routers, quantised mirrors and anonymous drops all carry timestamps but are not a lab shipping anything, and <code>:batch</code> or <code>:free</code> entries are the same weights behind a different endpoint, so they are dropped as duplicates of a row already here. Named tiers such as <code>-pro</code> are kept, because they are separate price points and choosing between them is the reason to be on this page.</p>
+<p>Two dates matter and they are not the same date. <strong>{{ releases.updated }}</strong> is when this page's table was generated. The live feed behind it is at most six hours old and is checked when you load this page; a new model found in the live check is added to the top of the table and marked. Prices come from the router's rate card for that model, which is what you would be billed, and a model whose lab has not published a price shows a dash rather than a number.</p>
+<p>What this page cannot tell you is what a lab said, or on what date they said it. For the announcement itself — the reasoning behind a price, the scope of a deprecation, the caveat on a benchmark — read the lab's own newsroom and social accounts. This is the operational layer underneath those posts: what is purchasable, what it costs, and what is about to stop working.</p>
+</div>
+
+<style>
+/* Page-local. page.css carries the editorial type and the base palette; these
+   are the tracker surfaces it has no equivalent for. */
+.tracker-bar{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;margin:32px 0 8px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--rule);border-radius:10px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--bg);color:var(--fg-2);cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--ink)}
+.chip.is-on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.freshness{margin:0;font-size:13px;color:var(--fg-2);font-family:'Geist Mono',ui-monospace,monospace}
+.freshness strong{color:var(--ink);font-weight:600}
+#liveCheck{display:block;font-size:12px}
+
+h2{margin:44px 0 6px;font-size:22px;color:var(--ink)}
+h2 .count{font-size:13px;font-weight:400;color:var(--fg-2);margin-left:10px;font-family:'Geist Mono',ui-monospace,monospace}
+.note{color:var(--fg-2);font-size:14px;max-width:70ch;margin:0 0 18px}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px;background:var(--bg)}
+.tracker-table{width:100%;border-collapse:collapse;font-size:14px}
+.tracker-table th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);padding:11px 14px;border-bottom:1px solid var(--rule);white-space:nowrap;background:var(--bg-2)}
+.tracker-table td{padding:10px 14px;border-bottom:1px solid var(--rule);color:var(--fg);vertical-align:top}
+.tracker-table tbody tr:last-child td{border-bottom:0}
+.tracker-table tbody tr:hover{background:var(--bg-2)}
+.tracker-table .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tracker-table td.left{text-align:left;white-space:nowrap}
+.days{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;color:var(--fg-2)}
+tr.is-urgent .days{color:var(--accent);font-weight:700}
+tr.is-urgent td:first-child{box-shadow:inset 2px 0 0 var(--accent)}
+tr.is-live{background:var(--green-soft)}
+.empty{color:var(--fg-2);font-size:14px;margin:14px 0}
+
+.methodology{margin-top:56px;padding-top:36px;border-top:1px solid var(--rule);color:var(--fg-2);font-size:14px}
+.methodology h2{font-size:18px;margin-bottom:12px}
+.methodology code{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;background:var(--bg-2);padding:1px 5px;border-radius:4px}
+.methodology a{color:var(--accent)}
+</style>
+
+<script>
+// Progressive enhancement only. Both tables are already in the HTML above, so
+// this never has to build them: it filters rows already on the page, keeps the
+// retirement countdown honest between snapshot builds, and appends anything the
+// live feed knows that the snapshot predates. A failed fetch changes nothing.
+(function () {
+  var fmt = function (v) {
+    if (v === null || v === undefined) return '—';
+    return '$' + v;
+  };
+  var ctx = function (n) {
+    if (!n) return '—';
+    return n >= 1e6 ? +(n / 1e6).toFixed(2) + 'M' : Math.round(n / 1000) + 'K';
+  };
+
+  function filterTo(lab) {
+    document.querySelectorAll('.chip').forEach(function (c) {
+      var on = c.dataset.lab === lab;
+      c.classList.toggle('is-on', on);
+      c.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    [['shippedTable', 'shippedEmpty'], ['retiringTable', 'retiringEmpty']].forEach(function (pair) {
+      var shown = 0;
+      document.querySelectorAll('#' + pair[0] + ' tbody tr').forEach(function (row) {
+        var on = lab === 'all' || row.dataset.lab === lab;
+        row.hidden = !on;
+        if (on) shown++;
+      });
+      document.getElementById(pair[1]).hidden = shown !== 0;
+    });
+  }
+
+  document.querySelectorAll('.chip').forEach(function (chip) {
+    chip.addEventListener('click', function () { filterTo(chip.dataset.lab); });
+  });
+  filterTo('all');
+
+  // Recount the countdown: a snapshot is dated, a reader is not.
+  var tick = function () {
+    var today = new Date().toISOString().slice(0, 10);
+    document.querySelectorAll('#retiringTable tbody tr').forEach(function (row) {
+      var cell = row.querySelector('[data-days]');
+      if (!cell || !row.dataset.expires) return;
+      var days = Math.round((Date.parse(row.dataset.expires + 'T00:00:00Z') - Date.parse(today + 'T00:00:00Z')) / 864e5);
+      cell.textContent = days + 'd';
+      row.classList.toggle('is-urgent', days <= 30);
+    });
+  };
+  tick();
+
+  fetch('/api/releases')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || !Array.isArray(d.releases)) return;
+      var known = {};
+      document.querySelectorAll('#shippedTable tbody tr').forEach(function (row) { known[row.dataset.id] = true; });
+      var tbody = document.querySelector('#shippedTable tbody');
+      var added = 0;
+
+      d.releases.forEach(function (r) {
+        if (known[r.id]) return;
+        var tr = document.createElement('tr');
+        tr.dataset.lab = r.provider;
+        tr.dataset.id = r.id;
+        tr.className = 'is-live';
+        tr.innerHTML =
+          '<td>' + r.date + '</td><td><strong>' + r.id + '</strong></td><td>' + r.provider +
+          '</td><td class="num">' + fmt(r.in) + '</td><td class="num">' + fmt(r.out) +
+          '</td><td class="num">' + ctx(r.ctx) + '</td>';
+        tbody.insertBefore(tr, tbody.firstChild);
+        added++;
+      });
+
+      document.getElementById('liveCheck').textContent =
+        'Live feed checked ' + (d.updated || '') + (added ? ' · ' + added + ' new since the snapshot' : ' · up to date');
+    })
+    .catch(function () {});
+})();
+</script>
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/tools/blended-rate-calculator">Blended rate calculator</a> — cost a mixed fleet once you have picked models</li>
+  <li><a href="/research/model-deprecation-writeoff-risk">Model deprecation and write-off risk</a> — the accounting side of a switch-off</li>
+  <li><a href="/research/model-routing">Model routing</a> — the fallback chains a retirement breaks first</li>
+  <li><a href="/research/committed-use-agreements-cache-rates-and-true-ups">Committed-use agreements and cache rates</a> — lock in before a repricing</li>
+  <li><a href="/research/falling-token-prices-rising-bills">Falling token prices, rising bills</a> — cheaper models are not the same as a smaller bill</li>
+  <li><a href="/research/open-weight-model-tco">Open-weight model TCO</a> — the migration target, costed properly</li>
+</ul>

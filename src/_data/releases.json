@@ -1,0 +1,557 @@
+{
+  "updated": "2026-09-27",
+  "source": "https://openrouter.ai/api/v1/models",
+  "note": "Dates are the day a model first became purchasable via OpenRouter, not the lab announcement date. in/out are USD per 1M tokens; null means the lab has not published a price.",
+  "labs": [
+    "Alibaba",
+    "DeepSeek",
+    "OpenAI",
+    "Google",
+    "Tencent",
+    "Z.ai",
+    "ByteDance",
+    "Meta",
+    "Xiaomi",
+    "Aion Labs",
+    "Anthropic",
+    "InclusionAI",
+    "Sakana",
+    "Baidu",
+    "Cohere",
+    "MiniMax",
+    "Upstage",
+    "xAI"
+  ],
+  "releases": [
+    {
+      "id": "z-ai/glm-5.3-prime",
+      "provider": "Z.ai",
+      "date": "2026-09-23",
+      "in": 2.8,
+      "out": 8.8,
+      "ctx": 1000000
+    },
+    {
+      "id": "upstage/solar-mini4",
+      "provider": "Upstage",
+      "date": "2026-09-23",
+      "in": 0.05,
+      "out": 0.2,
+      "ctx": 524288
+    },
+    {
+      "id": "qwen/qwen3.8-max-prime",
+      "provider": "Alibaba",
+      "date": "2026-09-23",
+      "in": 4,
+      "out": 12,
+      "ctx": 1000000
+    },
+    {
+      "id": "aion-labs/aion-3.5-mini",
+      "provider": "Aion Labs",
+      "date": "2026-09-23",
+      "in": 0.7,
+      "out": 1.4,
+      "ctx": 262144
+    },
+    {
+      "id": "aion-labs/aion-3.5",
+      "provider": "Aion Labs",
+      "date": "2026-09-23",
+      "in": 3,
+      "out": 6,
+      "ctx": 262144
+    },
+    {
+      "id": "openai/gpt-6-sol-pro",
+      "provider": "OpenAI",
+      "date": "2026-09-22",
+      "in": 2,
+      "out": 10,
+      "ctx": 1050000
+    },
+    {
+      "id": "openai/gpt-6-sol",
+      "provider": "OpenAI",
+      "date": "2026-09-22",
+      "in": 2,
+      "out": 10,
+      "ctx": 1050000
+    },
+    {
+      "id": "openai/gpt-6-luna-pro",
+      "provider": "OpenAI",
+      "date": "2026-09-22",
+      "in": 0.1,
+      "out": 0.5,
+      "ctx": 1050000
+    },
+    {
+      "id": "openai/gpt-6-luna",
+      "provider": "OpenAI",
+      "date": "2026-09-22",
+      "in": 0.1,
+      "out": 0.5,
+      "ctx": 1050000
+    },
+    {
+      "id": "cohere/command-a-plus",
+      "provider": "Cohere",
+      "date": "2026-09-22",
+      "in": 0.3,
+      "out": 1.5,
+      "ctx": 192000
+    },
+    {
+      "id": "anthropic/claude-opus-5.5",
+      "provider": "Anthropic",
+      "date": "2026-09-22",
+      "in": 4,
+      "out": 20,
+      "ctx": 1000000
+    },
+    {
+      "id": "xiaomi/mimo-v2.6-pro-ultraspeed",
+      "provider": "Xiaomi",
+      "date": "2026-09-21",
+      "in": 4.35,
+      "out": 8.7,
+      "ctx": 1048576
+    },
+    {
+      "id": "xiaomi/mimo-v2.6-pro",
+      "provider": "Xiaomi",
+      "date": "2026-09-21",
+      "in": 0.435,
+      "out": 0.87,
+      "ctx": 1050000
+    },
+    {
+      "id": "xiaomi/mimo-v2.6-flash",
+      "provider": "Xiaomi",
+      "date": "2026-09-21",
+      "in": 0.14,
+      "out": 0.28,
+      "ctx": 1048576
+    },
+    {
+      "id": "x-ai/grok-4.7",
+      "provider": "xAI",
+      "date": "2026-09-21",
+      "in": 1.6,
+      "out": 4.8,
+      "ctx": 500000
+    },
+    {
+      "id": "qwen/qwen3.8-omni-flash",
+      "provider": "Alibaba",
+      "date": "2026-09-21",
+      "in": 0.15,
+      "out": 0.47,
+      "ctx": 1000000
+    },
+    {
+      "id": "z-ai/glm-5.3-flashx",
+      "provider": "Z.ai",
+      "date": "2026-09-18",
+      "in": 0.37,
+      "out": 1.25,
+      "ctx": 1048576
+    },
+    {
+      "id": "sakana/fugu-ultra-v2",
+      "provider": "Sakana",
+      "date": "2026-09-11",
+      "in": 5,
+      "out": 30,
+      "ctx": 1000000
+    },
+    {
+      "id": "sakana/fugu-max",
+      "provider": "Sakana",
+      "date": "2026-09-11",
+      "in": 2,
+      "out": 6,
+      "ctx": 1000000
+    },
+    {
+      "id": "inclusionai/ling-3.0-flash-vl",
+      "provider": "InclusionAI",
+      "date": "2026-09-10",
+      "in": 0.021,
+      "out": 0.0616,
+      "ctx": 262144
+    },
+    {
+      "id": "deepseek/deepseek-v4.1-flash",
+      "provider": "DeepSeek",
+      "date": "2026-09-10",
+      "in": 0.035,
+      "out": 0.29,
+      "ctx": 1048576
+    },
+    {
+      "id": "openai/gpt-6-astra-pro",
+      "provider": "OpenAI",
+      "date": "2026-09-04",
+      "in": 10,
+      "out": 50,
+      "ctx": 1050000
+    },
+    {
+      "id": "openai/gpt-6-astra",
+      "provider": "OpenAI",
+      "date": "2026-09-04",
+      "in": 10,
+      "out": 50,
+      "ctx": 1050000
+    },
+    {
+      "id": "qwen/qwen3.8-max-0902",
+      "provider": "Alibaba",
+      "date": "2026-09-03",
+      "in": 2,
+      "out": 6,
+      "ctx": 1000000
+    },
+    {
+      "id": "meta/muse-spark-1.3-contributor",
+      "provider": "Meta",
+      "date": "2026-09-02",
+      "in": 0.1,
+      "out": 0.2,
+      "ctx": 1048576
+    },
+    {
+      "id": "meta/muse-spark-1.3",
+      "provider": "Meta",
+      "date": "2026-09-02",
+      "in": 1.25,
+      "out": 4.25,
+      "ctx": 1048576
+    },
+    {
+      "id": "google/gemini-3.8-flash",
+      "provider": "Google",
+      "date": "2026-09-02",
+      "in": 0.75,
+      "out": 3.75,
+      "ctx": 1048576
+    },
+    {
+      "id": "anthropic/claude-fable-5.1",
+      "provider": "Anthropic",
+      "date": "2026-09-01",
+      "in": 10,
+      "out": 50,
+      "ctx": 1000000
+    },
+    {
+      "id": "tencent/hy4-preview",
+      "provider": "Tencent",
+      "date": "2026-08-28",
+      "in": 0.834,
+      "out": 2.501,
+      "ctx": 1048576
+    },
+    {
+      "id": "inclusionai/ling-3.0-flash-fin",
+      "provider": "InclusionAI",
+      "date": "2026-08-27",
+      "in": 0.06,
+      "out": 0.18,
+      "ctx": 262144
+    },
+    {
+      "id": "z-ai/glm-5.3-flash",
+      "provider": "Z.ai",
+      "date": "2026-08-26",
+      "in": 0.045,
+      "out": 0.14,
+      "ctx": 1310720
+    },
+    {
+      "id": "qwen/qwen3.8-flash",
+      "provider": "Alibaba",
+      "date": "2026-08-26",
+      "in": 0.15,
+      "out": 0.47,
+      "ctx": 1000000
+    },
+    {
+      "id": "meta/muse-spark-1.2-contributor",
+      "provider": "Meta",
+      "date": "2026-08-21",
+      "in": 0.1,
+      "out": 0.2,
+      "ctx": 1048576
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash-vision-exp",
+      "provider": "DeepSeek",
+      "date": "2026-08-21",
+      "in": 0.2156,
+      "out": 0.6468,
+      "ctx": 1048576
+    },
+    {
+      "id": "tencent/hy-mt2-30b-a3b",
+      "provider": "Tencent",
+      "date": "2026-08-20",
+      "in": 0.074,
+      "out": 0.295,
+      "ctx": 8192
+    },
+    {
+      "id": "tencent/hy-mt2-1.8b",
+      "provider": "Tencent",
+      "date": "2026-08-20",
+      "in": 0.044,
+      "out": 0.177,
+      "ctx": 8192
+    },
+    {
+      "id": "tencent/hy-mt2-7b",
+      "provider": "Tencent",
+      "date": "2026-08-19",
+      "in": 0.074,
+      "out": 0.295,
+      "ctx": 8192
+    },
+    {
+      "id": "z-ai/glm-5.3",
+      "provider": "Z.ai",
+      "date": "2026-08-18",
+      "in": 1.4,
+      "out": 4.4,
+      "ctx": 1310720
+    },
+    {
+      "id": "qwen/qwen3.8-27b",
+      "provider": "Alibaba",
+      "date": "2026-08-14",
+      "in": 0.42,
+      "out": 3,
+      "ctx": 1000000
+    },
+    {
+      "id": "google/gemini-3.7-flash",
+      "provider": "Google",
+      "date": "2026-08-13",
+      "in": 0.75,
+      "out": 3.75,
+      "ctx": 1048576
+    }
+  ],
+  "retirements": [
+    {
+      "id": "deepseek/deepseek-v3.2",
+      "provider": "DeepSeek",
+      "expires": "2026-09-28",
+      "in": 0.269,
+      "out": 0.4,
+      "daysLeft": 1
+    },
+    {
+      "id": "deepseek/deepseek-v3.2-exp",
+      "provider": "DeepSeek",
+      "expires": "2026-09-28",
+      "in": 0.27,
+      "out": 0.41,
+      "daysLeft": 1
+    },
+    {
+      "id": "deepseek/deepseek-v3.1-terminus",
+      "provider": "DeepSeek",
+      "expires": "2026-09-28",
+      "in": 0.27,
+      "out": 1,
+      "daysLeft": 1
+    },
+    {
+      "id": "deepseek/deepseek-r1-distill-llama-70b",
+      "provider": "DeepSeek",
+      "expires": "2026-09-28",
+      "in": 0.8,
+      "out": 0.8,
+      "daysLeft": 1
+    },
+    {
+      "id": "minimax/minimax-m2.1",
+      "provider": "MiniMax",
+      "expires": "2026-10-08",
+      "in": 0.3,
+      "out": 1.2,
+      "daysLeft": 11
+    },
+    {
+      "id": "baidu/ernie-4.5-vl-424b-a47b",
+      "provider": "Baidu",
+      "expires": "2026-10-08",
+      "in": 0.42,
+      "out": 1.25,
+      "daysLeft": 11
+    },
+    {
+      "id": "qwen/qwen3.6-max-preview",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 1.027,
+      "out": 6.162,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-max-thinking",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.78,
+      "out": 3.9,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-vl-32b-instruct",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.104,
+      "out": 0.416,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-vl-8b-thinking",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.18,
+      "out": 2.1,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.117,
+      "out": 0.455,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-vl-30b-a3b-thinking",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.2,
+      "out": 2.4,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-vl-235b-a22b-thinking",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.4,
+      "out": 4,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-max",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.78,
+      "out": 3.9,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-coder-plus",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.65,
+      "out": 3.25,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen-plus-2025-07-28",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.26,
+      "out": 0.78,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-30b-a3b-thinking-2507",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.2,
+      "out": 2.4,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b-thinking-2507",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.23,
+      "out": 2.3,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-8b",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.117,
+      "out": 0.455,
+      "daysLeft": 12
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b",
+      "provider": "Alibaba",
+      "expires": "2026-10-09",
+      "in": 0.455,
+      "out": 1.82,
+      "daysLeft": 12
+    },
+    {
+      "id": "google/gemini-2.5-flash-lite",
+      "provider": "Google",
+      "expires": "2026-10-20",
+      "in": 0.1,
+      "out": 0.4,
+      "daysLeft": 23
+    },
+    {
+      "id": "google/gemini-2.5-flash",
+      "provider": "Google",
+      "expires": "2026-10-20",
+      "in": 0.3,
+      "out": 2.5,
+      "daysLeft": 23
+    },
+    {
+      "id": "google/gemini-2.5-pro",
+      "provider": "Google",
+      "expires": "2026-10-20",
+      "in": 1.25,
+      "out": 10,
+      "daysLeft": 23
+    },
+    {
+      "id": "bytedance-seed/seed-2.0-code",
+      "provider": "ByteDance",
+      "expires": "2026-11-11",
+      "in": 0.5,
+      "out": 3,
+      "daysLeft": 45
+    },
+    {
+      "id": "bytedance-seed/seed-1.6-flash",
+      "provider": "ByteDance",
+      "expires": "2026-11-11",
+      "in": 0.075,
+      "out": 0.3,
+      "daysLeft": 45
+    },
+    {
+      "id": "bytedance-seed/seed-1.6",
+      "provider": "ByteDance",
+      "expires": "2026-11-11",
+      "in": 0.25,
+      "out": 2,
+      "daysLeft": 45
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "slug": "committed-use-agreements-cache-rates-and-true-ups",
+  "tags": [
+    "ai-vendor-negotiation",
+    "committed-spend",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Committed Use, Cache Rates, and the Mid-Year True-Up",
+      "titleCore": "Committed use, cache rates and true-ups",
+      "description": "At procurement scale the bill is set by the floor, the cache rate and the pass-through clause. Four contract terms that decide more spend than model choice does.",
+      "body": "<p>AI model spend has moved from a line item to a procurement category. At that scale the mechanics that govern a large bill are not the same ones that govern a small one, and the negotiation is almost never about the headline rate.</p><h2>Term 1: the floor, and who owns the risk</h2><p>A committed-use agreement typically trades 10&ndash;35% off list for a 12-month floor. That is a bet on your own forecast, and the failure mode is specific: commit to a floor, then optimise onto a cheaper model, and end up paying committed rates for tokens you no longer need. Three controls make the bet survivable.</p><ul><li><strong>Size the floor to steady demand only.</strong> Batch, evals and internal traffic forecast far better than customer-facing agent traffic.</li><li><strong>Keep model selection fungible.</strong> A commitment to spend with a provider is portable across that provider's models. A commitment to a named model is not, and it is the term to refuse.</li><li><strong>Review at month six, not twelve.</strong> If run-rate is far under the floor, renegotiate before the true-up, not after.</li></ul><h2>Term 2: the cache rate</h2><p>Cached input is billed as a separate rate and, on cache-heavy agent workloads, is the majority of input cost. Reported flagship rates put cache reads at $0.20 per million against $4.00 for fresh input. Negotiate the cache rate explicitly &mdash; it is a separate line in the rate card and a separate line on the invoice.</p><h2>Term 3: the line items the rate card missed</h2><p>Server-side tools are billed independently of tokens. Web search, code execution and similar server tools produce a non-token cost that no headline rate negotiation touched, and on an agent built around web search it can be substantial. Ask for the tool-unit rates and the monthly tool ceiling, separately from the token commitment.</p><h2>Term 4: the pass-through clause</h2><p>This is the clause that matters most. When two labs cut prices on the same afternoon, a rate card locked six months earlier becomes the expensive option. Structure the agreement so provider price revisions pass through, or trigger a review window. Without it, every price cut by a competitor raises your cost until renewal.</p><h2>Bottom line</h2><p>Committed floor, cache rate, tool ceiling, pass-through clause. Those four terms decide more of the bill than which model you chose, and they are the terms to negotiate before the renewal date, not after.</p>",
+      "faq": [
+        {
+          "question": "How should we size a committed-use floor for AI spend?",
+          "answer": "Base it on steady, forecastable demand such as batch, evals and internal traffic rather than customer-facing agent traffic. Keep model selection fungible across the term, and renegotiate at month six if run-rate is materially under the floor."
+        },
+        {
+          "question": "Why negotiate the cached-input rate separately?",
+          "answer": "Cache reads are a separate rate card line and, on cache-heavy agent workloads, the majority of input cost. Reported flagship rates put cache reads around $0.20 per million against $4.00 for fresh input, so the cache rate drives the invoice."
+        },
+        {
+          "question": "Which contract clause matters most for AI spend?",
+          "answer": "The pass-through or price-review clause. When competitors cut prices mid-term, a locked rate card becomes the expensive option until renewal. Without a pass-through or review trigger, external price cuts raise your cost."
+        },
+        {
+          "question": "What do server-side tools cost on a large AI agreement?",
+          "answer": "They are billed independently of tokens, so no headline rate negotiation covers them. On an agent built around server-side web search or code execution the tool cost can be substantial, so ask for tool-unit rates and a monthly ceiling separately."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-vendor-negotiation",
+          "label": "AI vendor negotiation"
+        },
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing for CFOs"
+        },
+        {
+          "slug": "/research/scale-tier-decision",
+          "label": "Scale tier vs flex vs batch"
+        },
+        {
+          "slug": "/research/provider-price-benchmark-cfo",
+          "label": "Provider price benchmarking"
+        }
+      ]
+    }
+  }
+}

@@ -14,6 +14,34 @@
     }
   ],
   "paths": {
+    "/api/contact": {
+      "get": {
+        "summary": "Describe the contact endpoint",
+        "responses": {
+          "200": { "description": "Supported fields, topics, and request limits.", "content": { "application/json": { "schema": { "type": "object" } } } }
+        }
+      },
+      "post": {
+        "summary": "Send a message to LLM CFO",
+        "description": "Public, rate-limited contact form for humans and agents. Does not register a Tidal user or accept secrets. Delivery requires Cloudflare Email Service configuration.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ContactMessage" } },
+            "application/x-www-form-urlencoded": { "schema": { "$ref": "#/components/schemas/ContactMessage" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "Message accepted by the email binding.", "content": { "application/json": { "schema": { "type": "object", "properties": { "ok": { "type": "boolean", "const": true } } } } } },
+          "400": { "$ref": "#/components/responses/Error" },
+          "403": { "$ref": "#/components/responses/Error" },
+          "413": { "$ref": "#/components/responses/Error" },
+          "415": { "$ref": "#/components/responses/Error" },
+          "429": { "$ref": "#/components/responses/Error" },
+          "503": { "$ref": "#/components/responses/Error" }
+        }
+      }
+    },
     "/health.json": {
       "get": {
         "summary": "Health check",
@@ -33,6 +61,29 @@
             }
           }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContactMessage": {
+        "type": "object",
+        "required": ["name", "email", "topic", "message"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "email": { "type": "string", "format": "email", "maxLength": 254 },
+          "company": { "type": "string", "maxLength": 120 },
+          "topic": { "type": "string", "enum": ["audit", "telemetry", "partnership", "other"] },
+          "message": { "type": "string", "minLength": 10, "maxLength": 4000 },
+          "website": { "type": "string", "description": "Leave blank; honeypot field for browser forms." }
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Structured error response.",
+        "content": { "application/json": { "schema": { "type": "object", "required": ["error"], "properties": { "error": { "type": "string" } } } } }
       }
     }
   }

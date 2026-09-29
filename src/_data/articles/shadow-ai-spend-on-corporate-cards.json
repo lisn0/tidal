@@ -1,0 +1,51 @@
+{
+  "slug": "shadow-ai-spend-on-corporate-cards",
+  "tags": [
+    "ai-spend-board-reporting",
+    "cfo",
+    "llm-costs",
+    "ai-governance-framework"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Where the AI Spend You Cannot See Is Hiding",
+      "titleCore": "Shadow AI spend and corporate cards",
+      "description": "A material share of AI spend never touches the vendor portal. Corporate cards, personal keys and trial credits are where the uninvoiced line lives.",
+      "body": "<p>Most AI cost reporting starts from the vendor invoice, which means it reports what was bought through the approved route. The line that never arrives is the one bought with a corporate card, a personal API key, or a free trial credit that quietly became a production dependency. For a finance function, an unmeasured cost base is not a governance problem, it is a forecasting problem: you cannot forecast spend you cannot see, and you cannot control a base you have not sized.</p><h2>Three hiding places, in order of how much they cost</h2><ul><li><strong>Flat subscriptions on corporate cards.</strong> A seat plan at $100 to $500 a month, bought once by one person, appearing for months. The problem is not the amount, it is that it is invisible to the team that owns the budget and permanent until someone notices.</li><li><strong>Personal or team API keys.</strong> A single leaked key with no project tag produces an unattributable line that looks like noise on the vendor report, which is exactly how it stays alive.</li><li><strong>Trial and free-tier credits that became load-bearing.</strong> A workload that depends on a promotional rate is a workload whose cost is unknown and whose exit is a production incident rather than a procurement decision.</li></ul><h2>The sizing exercise, which is the whole point</h2><p>You do not need to eliminate this to manage it. You need to size it, and sizing it is cheap:</p><ol><li><strong>Run card spend against a keyword list</strong> for the vendors, plus any recurring charge above a threshold that no department has claimed.</li><li><strong>Ask for a list, not a policy.</strong> A short survey of who has an AI tool on a company card produces the denominator within a day. A policy document produces nothing.</li><li><strong>Look for repeat card payments to the same AI vendor</strong> across multiple cards. Two people paying the same flat plan independently is a duplicate seat, and it is the most common avoidable line in this category.</li></ol><h2>Then decide what is a real cost</h2><p>Not all of it belongs in the budget. Interactive tooling genuinely used by engineers is a legitimate fixed cost, and it belongs as a named line with an owner rather than being swept into a token budget that cannot absorb it. The distinction that matters is whether the cost is visible, owned and reviewed &mdash; not whether it is large. An invisible $4,000 a month is a bigger forecasting problem than a visible $40,000.</p><h2>Bottom line</h2><p>The invoice only tells you what was bought through the approved route. A day of card analysis and a one-question survey sizes the rest, and until that base is sized, every AI budget number is a floor rather than an estimate.</p>",
+      "faq": [
+        {
+          "question": "How do we find AI spend that is not in our vendor reports?",
+          "answer": "Run corporate card spend against a vendor keyword list, look for unclaimed recurring charges above a threshold, and ask for a short list of who has an AI tool on a company card. Duplicate flat-plan seats bought by two people independently are the most common avoidable line."
+        },
+        {
+          "question": "Is shadow AI spend a governance problem or a cost problem?",
+          "answer": "Primarily a forecasting problem. An unmeasured cost base cannot be forecast or controlled, and until it is sized, every AI budget number is a floor rather than an estimate."
+        },
+        {
+          "question": "Should flat personal AI subscriptions be in the AI budget?",
+          "answer": "If the tool is genuinely used and reviewed, yes, as a named fixed-cost line with an owner. The problem is invisibility and lack of ownership, not that the spend is a subscription rather than a token bill."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-board-reporting",
+          "label": "AI spend board reporting"
+        },
+        {
+          "slug": "/research/ai-chargeback-showback",
+          "label": "AI chargeback and showback"
+        },
+        {
+          "slug": "/research/ai-governance-framework",
+          "label": "AI governance framework"
+        },
+        {
+          "slug": "/research/llm-usage-metering-billing",
+          "label": "LLM usage metering and billing"
+        }
+      ]
+    }
+  }
+}

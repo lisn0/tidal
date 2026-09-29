@@ -14,6 +14,15 @@
       "dataset": "llmcfo_ai_crawler_hits"
     }
   ],
+  // Contact API: 5 attempts per minute per connecting IP at each Cloudflare location.
+  "ratelimits": [
+    { "name": "CONTACT_RATE_LIMIT", "namespace_id": "9274102", "simple": { "limit": 5, "period": 60 } }
+  ],
+  // Activate only after onboarding llmcfo.com to Email Service and verifying
+  // hello@llmcfo.com as a destination. The Worker fails closed if send fails.
+  "send_email": [
+    { "name": "EMAIL", "destination_address": "hello@llmcfo.com", "allowed_sender_addresses": ["noreply@llmcfo.com"] }
+  ],
   "build": {
     "command": "npm run build",
     "cwd": ".",

@@ -1,0 +1,32 @@
+---
+layout: "page.njk"
+permalink: "contact.html"
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact LLM CFO · LLM CFO</title>
+  <meta name="description" content="Ask LLM CFO about an AI cost audit, Tidal Telemetry, or a partnership. Contact the team or book a call." />
+  <link rel="canonical" href="https://llmcfo.com/contact" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/assets/page.css" />
+  <script src="/assets/contact.js" defer></script>
+---
+<div class="eye">CONTACT</div>
+<h1 class="page-title">Tell us what you <em>need.</em></h1>
+<p class="lede">Ask about an audit, Tidal Telemetry, or working together. Do not include credentials, prompts, or confidential billing data in this form.</p>
+
+<form id="contact-form" action="/api/contact" method="post">
+  <p><label for="contact-name">Name</label><br><input id="contact-name" name="name" autocomplete="name" maxlength="120" required></p>
+  <p><label for="contact-email">Work email</label><br><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required></p>
+  <p><label for="contact-company">Company (optional)</label><br><input id="contact-company" name="company" autocomplete="organization" maxlength="120"></p>
+  <p><label for="contact-topic">What is this about?</label><br><select id="contact-topic" name="topic" required><option value="">Choose a topic</option><option value="audit">Cost audit</option><option value="telemetry">Tidal Telemetry</option><option value="partnership">Partnership</option><option value="other">Other</option></select></p>
+  <p><label for="contact-message">Message</label><br><textarea id="contact-message" name="message" rows="7" minlength="10" maxlength="4000" required></textarea></p>
+  <div class="contact-honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" tabindex="-1" autocomplete="off"></div>
+  <button type="submit">Send message</button>
+  <p id="contact-status" role="status" aria-live="polite"></p>
+</form>
+
+<div class="callout"><strong>Prefer a call?</strong> <a href="/book/schedule">Book a time</a>. You can also email <a href="mailto:hello@llmcfo.com">hello@llmcfo.com</a>; email delivery has not been verified end to end.</div>
+<p>Agents can use <a href="/openapi.json">the documented JSON contact API</a>. It delivers to the same team inbox and does not create a Tidal account.</p>
+<a class="back" href="/">← Back to llmcfo.com</a>

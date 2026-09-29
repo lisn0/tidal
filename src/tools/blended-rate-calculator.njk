@@ -1,0 +1,415 @@
+---
+permalink: "tools/blended-rate-calculator.html"
+layout: "page.njk"
+title: "Blended Rate Calculator — AI Cost Per Outcome"
+description: "Model your real blended $/1M token rate across a mixed model fleet, price per resolved outcome, and see how alias uncertainty widens your forecast."
+footerLinksHtml: "<a href=\"/privacy\">Privacy</a> · <a href=\"/terms\">Terms</a> · <a href=\"/security\">Security</a>"
+pageHead: |-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blended Rate Calculator · LLM CFO</title>
+  <meta name="description" content="Model your real blended $/1M token rate across a mixed model fleet, price per resolved outcome, and see how alias uncertainty widens your forecast." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://llmcfo.com/tools/blended-rate-calculator" />
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://llmcfo.com/tools/blended-rate-calculator" />
+  <meta property="og:title" content="Blended Rate Calculator · LLM CFO" />
+  <meta property="og:description" content="Model your real blended $/1M token rate across a mixed model fleet, price per resolved outcome, and see how alias uncertainty widens your forecast." />
+  <meta property="og:image" content="https://llmcfo.com/og.png" />
+  <meta property="og:site_name" content="LLM CFO" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@llmcfo" />
+  <meta name="twitter:title" content="Blended Rate Calculator · LLM CFO" />
+  <meta name="twitter:description" content="Model your real blended $/1M token rate across a mixed model fleet, price per resolved outcome, and see how alias uncertainty widens your forecast." />
+  <meta name="twitter:image" content="https://llmcfo.com/og.png" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Blended Rate Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","url":"https://llmcfo.com/tools/blended-rate-calculator","description":"Calculate your blended LLM token rate and cost per resolved outcome across a mixed model fleet.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"Blended Rate Calculator","item":"https://llmcfo.com/tools/blended-rate-calculator"}]}
+  </script>
+---
+
+<div class="eye">FREE TOOL</div>
+<h1 class="page-title">Blended Rate <em>Calculator.</em></h1>
+<p class="lede">Nobody budgets at list price. Nobody prices per request either. This turns a mixed model fleet into the two numbers a budget actually needs: a blended rate, and a cost per resolved outcome.</p>
+
+<div class="tool-container">
+  <div class="input-section">
+    <h2>Volume and shape</h2>
+
+    <div class="input-group">
+      <label for="requestsPerMonth">Requests per month</label>
+      <input type="number" id="requestsPerMonth" value="1000000" min="1">
+      <span class="hint">Total requests across every channel</span>
+    </div>
+
+    <div class="input-group">
+      <label for="inTokens">Input tokens per request</label>
+      <input type="number" id="inTokens" value="3000" min="0">
+      <span class="hint">Prompt, system, and retrieved context</span>
+    </div>
+
+    <div class="input-group">
+      <label for="outTokens">Output tokens per request</label>
+      <input type="number" id="outTokens" value="600" min="0">
+      <span class="hint">Completion length</span>
+    </div>
+
+    <div class="input-group">
+      <label for="cacheHitRate">Cache hit rate (%)</label>
+      <input type="number" id="cacheHitRate" value="40" min="0" max="100">
+      <span class="hint">Share of input tokens billed as cache reads</span>
+    </div>
+
+    <h2>Premium tier</h2>
+
+    <div class="input-group">
+      <label for="tierAShare">Share of traffic (%)</label>
+      <input type="number" id="tierAShare" value="70" min="0" max="100">
+    </div>
+
+    <div class="input-group">
+      <label for="tierAIn">Input $/1M tokens</label>
+      <input type="number" id="tierAIn" value="4.00" step="0.01" min="0">
+    </div>
+
+    <div class="input-group">
+      <label for="tierAOut">Output $/1M tokens</label>
+      <input type="number" id="tierAOut" value="16.00" step="0.01" min="0">
+    </div>
+
+    <h2>Mid tier</h2>
+
+    <div class="input-group">
+      <label for="tierBShare">Share of traffic (%)</label>
+      <input type="number" id="tierBShare" value="30" min="0" max="100">
+    </div>
+
+    <div class="input-group">
+      <label for="tierBIn">Input $/1M tokens</label>
+      <input type="number" id="tierBIn" value="1.00" step="0.01" min="0">
+    </div>
+
+    <div class="input-group">
+      <label for="tierBOut">Output $/1M tokens</label>
+      <input type="number" id="tierBOut" value="4.00" step="0.01" min="0">
+    </div>
+
+    <h2>Forecast confidence</h2>
+
+    <div class="input-group">
+      <label for="aliasUncertain">Traffic on unverified aliases (%)</label>
+      <input type="number" id="aliasUncertain" value="15" min="0" max="100">
+      <span class="hint">Requests where you cannot prove which model actually served them</span>
+    </div>
+
+    <h2>Denominator</h2>
+
+    <div class="input-group">
+      <label for="outcomesPerMonth">Resolved outcomes per month</label>
+      <input type="number" id="outcomesPerMonth" value="20000" min="1">
+      <span class="hint">Closed tickets, merged PRs, or approved documents</span>
+    </div>
+
+    <div class="input-group">
+      <label for="valuePerOutcome">Value per outcome ($)</label>
+      <input type="number" id="valuePerOutcome" value="12" step="0.01" min="0">
+      <span class="hint">Avoided cost or revenue attributed to one outcome</span>
+    </div>
+  </div>
+
+  <div class="results-section">
+    <h2>Your blended economics</h2>
+    <div class="results-grid" id="resultsGrid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="verdict" id="verdict">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<div class="methodology">
+  <h2>Why list price is the wrong number</h2>
+  <p>A fleet almost never runs at list price and never runs on one model. Vendors quietly route a share of your traffic to cheaper models, you route some yourself, and both moves happen without appearing on an invoice line. The result is that the rate in your budget is a number nobody can reproduce, which is exactly the failure mode that makes a forecast wrong before anyone notices.</p>
+  <p>Two things fix it. First, price the <strong>blended</strong> rate, weighted by actual traffic share, and re-derive it monthly from provider exports rather than from a procurement sheet. Second, divide by a denominator that means something outside the engineering team, so the number survives a budget conversation instead of a code review.</p>
+  <p>The <strong>unverified alias</strong> input is the honest part of the model. If part of your traffic is served by a model you cannot prove from the response, the true spend sits somewhere between two bounds rather than on a single figure. The band below is that uncertainty, not a confidence interval. Pinning down which model actually serves a request is worth more than any discount negotiation you can run afterwards.</p>
+  <h2>Method</h2>
+  <p>Blended input rate is the traffic-weighted average of your tiers. Cache reads are billed at 10% of list input, a standard long-TTL cache-read discount, so cached input tokens are discounted before the blend is applied. The band assumes unverified traffic resolves entirely to the cheaper tier at the low end and entirely to the premium tier at the high end. Cost per outcome is total monthly spend divided by the outcomes you declared. Change the denominator and you change the number, which is why the definition matters more than the figure.</p>
+</div>
+
+<style>
+.tool-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin: 40px 0;
+}
+
+@media (max-width: 900px) {
+  .tool-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-section {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 24px;
+  height: fit-content;
+}
+
+.input-section h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #e6edf3;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b949e;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  font-size: 16px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #5eead4;
+}
+
+.hint {
+  display: block;
+  font-size: 12px;
+  color: #6e7681;
+  margin-top: 4px;
+}
+
+.results-section h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #e6edf3;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.result-card {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.result-card h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #e6edf3;
+}
+
+.result-card .metric {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #8b949e;
+}
+
+.result-card .metric strong {
+  color: #e6edf3;
+}
+
+.result-card .savings {
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.result-card .warning {
+  color: #f85149;
+  font-weight: 600;
+}
+
+.verdict {
+  padding: 24px;
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #8b949e;
+  line-height: 1.6;
+}
+
+.verdict strong {
+  color: #e6edf3;
+}
+
+.verdict .go {
+  color: #5eead4;
+  font-weight: 600;
+}
+
+.verdict .no-go {
+  color: #f85149;
+  font-weight: 600;
+}
+
+.methodology {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid #21262d;
+  color: #8b949e;
+  font-size: 14px;
+}
+
+.methodology h2 {
+  color: #e6edf3;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.methodology strong {
+  color: #e6edf3;
+}
+</style>
+
+<script>
+const CACHE_READ_FACTOR = 0.10;
+const M = 1000000;
+
+function num(id, fallback) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? fallback : v;
+}
+
+function spendFor(inRate, outRate, req, inTok, outTok, hitRate) {
+  const billedIn = inTok * (1 - (hitRate / 100) * (1 - CACHE_READ_FACTOR));
+  return req * ((billedIn * inRate) / M + (outTok * outRate) / M);
+}
+
+function calculate() {
+  const req = num('requestsPerMonth', 0);
+  const inTok = num('inTokens', 0);
+  const outTok = num('outTokens', 0);
+  const hitRate = num('cacheHitRate', 0);
+
+  const aIn = num('tierAIn', 0), aOut = num('tierAOut', 0);
+  const bIn = num('tierBIn', 0), bOut = num('tierBOut', 0);
+
+  let aShare = Math.max(0, num('tierAShare', 0));
+  let bShare = Math.max(0, num('tierBShare', 0));
+  const shareTotal = aShare + bShare;
+  if (shareTotal === 0) aShare = bShare = 0;
+  else { aShare = (aShare / shareTotal) * 100; bShare = (bShare / shareTotal) * 100; }
+
+  const uncertain = Math.min(100, Math.max(0, num('aliasUncertain', 0)));
+  const outcomes = Math.max(1, num('outcomesPerMonth', 1));
+  const value = num('valuePerOutcome', 0);
+
+  const blendedIn = (aShare / 100) * aIn + (bShare / 100) * bIn;
+  const blendedOut = (aShare / 100) * aOut + (bShare / 100) * bOut;
+
+  const spend = spendFor(blendedIn, blendedOut, req, inTok, outTok, hitRate);
+
+  // Unverified traffic could resolve entirely to the cheap tier or entirely to the premium one.
+  const known = 1 - uncertain / 100;
+  const lowIn = (known * aShare) / 100 * aIn + ((1 - known) + (bShare / 100)) * bIn;
+  const lowOut = (known * aShare) / 100 * aOut + ((1 - known) + (bShare / 100)) * bOut;
+  const highIn = (known * bShare) / 100 * bIn + ((1 - known) + (aShare / 100)) * aIn;
+  const highOut = (known * bShare) / 100 * bOut + ((1 - known) + (aShare / 100)) * aOut;
+
+  const low = spendFor(Math.min(lowIn, highIn), Math.min(lowOut, highOut), req, inTok, outTok, hitRate);
+  const high = spendFor(Math.max(lowIn, highIn), Math.max(lowOut, highOut), req, inTok, outTok, hitRate);
+
+  const costPerOutcome = spend / outcomes;
+  const margin = value - costPerOutcome;
+  const marginPct = value > 0 ? (margin / value) * 100 : 0;
+  const bandPct = spend > 0 ? ((high - low) / spend) * 100 : 0;
+
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = `
+    <div class="result-card">
+      <h3>Blended rate</h3>
+      <div class="metric"><span>Input</span><strong>$${blendedIn.toFixed(2)}/1M</strong></div>
+      <div class="metric"><span>Output</span><strong>$${blendedOut.toFixed(2)}/1M</strong></div>
+      <div class="metric"><span>Mix</span><strong>${aShare.toFixed(0)}% premium / ${bShare.toFixed(0)}% mid</strong></div>
+    </div>
+    <div class="result-card">
+      <h3>Monthly spend</h3>
+      <div class="metric"><span>Total</span><strong>$${spend.toFixed(0)}</strong></div>
+      <div class="metric"><span>Per request</span><strong>$${(req > 0 ? spend / req : 0).toFixed(4)}</strong></div>
+      <div class="metric"><span>Unverified band</span><strong class="${bandPct > 10 ? 'warning' : 'savings'}">$${low.toFixed(0)} to $${high.toFixed(0)}</strong></div>
+    </div>
+    <div class="result-card">
+      <h3>Per outcome</h3>
+      <div class="metric"><span>Cost</span><strong>$${costPerOutcome.toFixed(2)}</strong></div>
+      <div class="metric"><span>Margin</span><strong class="${margin >= 0 ? 'savings' : 'warning'}">$${margin.toFixed(2)}</strong></div>
+      <div class="metric"><span>Margin %</span><strong class="${margin >= 0 ? 'savings' : 'warning'}">${marginPct.toFixed(1)}%</strong></div>
+    </div>
+  `;
+
+  const verdict = document.getElementById('verdict');
+  const healthy = margin > 0 && marginPct > 60;
+
+  const lines = [];
+  if (bandPct > 10) {
+    lines.push(`<span class="no-go">Your forecast is not one number.</span> With ${uncertain.toFixed(0)}% of traffic on unverified aliases, real spend could be anywhere in a ${bandPct.toFixed(0)}% band around <strong>$${spend.toFixed(0)}</strong>. Resolve which model serves those requests before you commit to a budget line.`);
+  } else {
+    lines.push(`<span class="go">Your forecast band is narrow.</span> Unverified aliases only move the number by ${bandPct.toFixed(0)}%, so <strong>$${spend.toFixed(0)}</strong> is defensible in a budget.`);
+  }
+
+  if (healthy) {
+    lines.push(`At <strong>$${costPerOutcome.toFixed(2)}</strong> per outcome against $${value.toFixed(2)} of value, this holds a ${marginPct.toFixed(0)}% margin. That is the number to put in front of a budget owner, not the token rate.`);
+  } else if (margin >= 0) {
+    lines.push(`At <strong>$${costPerOutcome.toFixed(2)}</strong> per outcome you are only keeping ${marginPct.toFixed(0)}% of the value. That is survivable, but it will not survive a bad quarter without a routing change.`);
+  } else {
+    lines.push(`<span class="no-go">This loses money as modelled.</span> <strong>$${costPerOutcome.toFixed(2)}</strong> per outcome against $${value.toFixed(2)} of value. Either the denominator is too generous, the value per outcome is too low, or the mix needs to move down a tier.`);
+  }
+
+  lines.push(`<strong>Definition:</strong> cost per outcome = $${spend.toFixed(0)} monthly AI spend ÷ ${outcomes.toLocaleString()} resolved outcomes. If your denominator counts something else, this number is not comparable to anyone else's.`);
+  verdict.innerHTML = lines.join('<br><br>');
+}
+
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', calculate);
+});
+
+calculate();
+</script>
+
+<h2>Related</h2>
+<ul>
+  <li><a href="/tools/llm-release-tracker">AI model release tracker</a> — what shipped in the last 45 days, and what is switching off</li>
+  <li><a href="/research/ai-finops-metric-definitions-that-survive-audit">Metric definitions that survive an audit</a> — why the denominator decides the argument</li>
+  <li><a href="/research/model-alias-mixing-breaks-ai-forecasts">Model alias mixing breaks forecasts</a> — find the unverified traffic this calculator charges you for</li>
+  <li><a href="/research/real-swe-cost-per-resolved-outcome">What a resolved issue actually costs</a> — building the denominator from real outcomes</li>
+  <li><a href="/research/cost-optimization-order-and-the-fine-tuning-trap">The order of cost reductions</a> — what to fix once you know which number is real</li>
+  <li><a href="/tools/cache-savings-calculator">Cache savings calculator</a> — size the single biggest caching lever</li>
+</ul>
+
+<a class="back" href="/">&larr; Back to llmcfo.com</a>
+<script src="/assets/consent.js" defer></script>

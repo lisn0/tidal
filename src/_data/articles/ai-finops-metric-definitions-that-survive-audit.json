@@ -1,0 +1,51 @@
+{
+  "slug": "ai-finops-metric-definitions-that-survive-audit",
+  "tags": [
+    "ai-spend-board-reporting",
+    "llm-cost-visibility-cfo",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Cost Metric Definitions That Survive an Audit",
+      "titleCore": "Cost metric definitions that survive audit",
+      "description": "A cost-per-request number with no written denominator is the most common finding in an AI cost review. Four definitions worth fixing first.",
+      "body": "<p>Ask three teams for cost per request and you will get three numbers. That is not a rounding disagreement; it is three different denominators, none of them written down. In a board pack the metric looks like a fact. In a cost review it turns out to be an opinion with a decimal point, and the exposure is that every optimisation decision taken on it inherits the ambiguity.</p><h2>Four definitions worth fixing first</h2><ol><li><strong>Cost per request &mdash; state what a request is.</strong> An HTTP call, a user-visible turn, or a logical task that involved eleven calls. These differ by an order of magnitude on agent workloads, and the agent case is exactly where the number gets quoted.</li><li><strong>Cost per outcome &mdash; state the denominator's owner.</strong> Cost per resolved issue, per merged change or per approved claim. The denominator has to be something a business system already counts, or it will be quietly redefined whenever the number looks bad.</li><li><strong>Blended rate &mdash; state the mix.</strong> An average input rate is a weighted average across models and cache states. Report the mix alongside it, because a blended rate with an unstated mix cannot be reproduced.</li><li><strong>Savings &mdash; state the baseline and the period.</strong> A saving measured against a pre-optimisation month that happened to include an incident is not a saving. Name the baseline window in the number itself.</li></ol><h2>Why this is a control, not a documentation chore</h2><p>A written definition is the cheapest control in AI cost management because it makes disagreement cheap. When the denominator is written down, a team arguing about a 20% improvement is having a real conversation about the work. When it is not, they are having a conversation about which definition to use, and that conversation is where optimisation spend goes to die.</p><p>It also survives contact with a vendor negotiation. A cost-per-outcome number with a written denominator is a number you can take into a renewal and hold a rate card against. A blended rate with no mix is not.</p><h2>Keep the definitions boring</h2><p>Four or five metrics, each one line long, each with a named source system and a named owner. Resist adding a sixth. Every additional metric is a definition to keep true, and a definition nobody owns is how a dashboard becomes a wall of numbers that nobody defends in a review.</p><h2>Bottom line</h2><p>Write the denominator, the mix and the baseline window next to every cost metric you report. It is the difference between a number that can be audited and one that has to be believed, and it costs an afternoon.</p>",
+      "faq": [
+        {
+          "question": "Why do teams report different cost per request numbers?",
+          "answer": "Because each is using a different denominator: an HTTP call, a user-visible turn, or a logical task spanning many calls. On agent workloads those differ by an order of magnitude, so the disagreement is definitional rather than arithmetic."
+        },
+        {
+          "question": "What makes a cost per outcome metric auditable?",
+          "answer": "A written denominator that a business system already counts, such as resolved issues or merged changes, with a named owner. Without that it can be quietly redefined whenever the number looks bad."
+        },
+        {
+          "question": "How many AI cost metrics should a board pack carry?",
+          "answer": "Four or five, each with a one-line written definition, a source system and a named owner. Every additional metric is a definition to keep true, and an unowned definition is how a dashboard stops being defensible."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-cost-visibility-cfo",
+          "label": "LLM cost visibility for CFOs"
+        },
+        {
+          "slug": "/research/ai-spend-board-reporting",
+          "label": "AI spend board reporting"
+        },
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Cost per profitable outcome"
+        },
+        {
+          "slug": "/research/llm-roi-calculation",
+          "label": "LLM ROI calculation for CFOs"
+        }
+      ]
+    }
+  }
+}

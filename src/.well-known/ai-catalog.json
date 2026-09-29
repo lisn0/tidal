@@ -1,0 +1,21 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "LLM CFO",
+    "identifier": "did:web:llmcfo.com"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:llmcfo.com:skill:research-llm-cost-optimization",
+      "displayName": "Research LLM Cost Optimization",
+      "type": "application/agent-skills+md",
+      "url": "https://llmcfo.com/.well-known/agent-skills/research-llm-cost-optimization.md",
+      "extensions": {
+        "com.llmcfo.representativeQueries": [
+          "Find research on LLM cost optimization and AI FinOps",
+          "Compare caching, routing, and budget guardrails for LLM spending"
+        ]
+      }
+    }
+  ]
+}

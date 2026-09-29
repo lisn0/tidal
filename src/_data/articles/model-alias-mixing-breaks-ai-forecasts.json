@@ -1,0 +1,51 @@
+{
+  "slug": "model-alias-mixing-breaks-ai-forecasts",
+  "tags": [
+    "ai-spend-forecasting",
+    "model-concentration-risk",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Model Alias Mixing Breaks Your AI Forecasts",
+      "titleCore": "Model alias mixing breaks AI forecasts",
+      "description": "The model endpoint you call is an alias, not a version. While it load-balances across versions, your unit rate, your forecast and your accruals are all blends.",
+      "body": "<p>Two labs cut prices on the same afternoon in September 2026: a reported 40% cheaper flagship tier and a reported 50% cut across two mid tiers. The finance-relevant footnote was buried in the launch notes. One of the flagship endpoints can serve requests from the previous model version during the transition window.</p><h2>The problem is not the price cut, it is the denominator</p><p>A model endpoint is an <strong>alias</strong>. During a transition it load-balances across versions. Both versions bill differently, produce different token counts, and take different amounts of human review. So the number that lands in your accrual is not a rate &mdash; it is a weighted average of two products, and the weights move without notice.</p><h2>Three things quietly go wrong</h2><ol><li><strong>The saving is smaller than the headline.</strong> A 40% cheaper-workload claim assumes a token-count reduction. If the older version is producing longer answers, the blended saving shrinks. The gap is usually version mixing, not a failed optimisation.</li><li><strong>The forecast is built on a rate that no longer exists.</strong> You built FY planning on the new tier's list rate. During the window you are paying a blend, and after the window you are paying whatever the surviving version costs.</li><li><strong>Unit economics are not reproducible.</strong> Any margin or cost-per-outcome figure computed mid-transition describes a product that shipped for weeks and then stopped existing.</li></ol><h2>The one control that matters</h2><p>Every major provider returns the resolved model in the response body. Log it on every request, and split every cost metric by resolved model rather than by the model you requested. This is one field and it is the difference between a forecast and a guess. Without it you cannot answer the question finance will eventually ask: <em>why does our cost per request not match the rate card?</em></p><h2>Three rules for the forecast</h2><ul><li><strong>Budget on blends, never on a single rate.</strong> Ask the vendor for the expected mix, or measure it from logged responses, and carry the blend into the plan.</li><li><strong>Pin a dated model ID for anything reported.</strong> A board number or a margin figure should be reproducible. Aliases are not reproducible.</li><li><strong>Re-baseline after the window closes.</strong> Weeks, not quarters &mdash; but confirm the end date and re-run the unit economics once the mix is single-version.</li></ul><h2>Bottom line</h2><p>A price cut and a silent downgrade can land in the same afternoon. The cut is the headline. The downgrade is what quietly invalidates last month's forecast, so log the resolved model and plan against the blend.</p>",
+      "faq": [
+        {
+          "question": "Can a request to a new model endpoint be served by an older version?",
+          "answer": "Yes. Model endpoints are aliases rather than version guarantees, and launch notes in September 2026 carried a footnote that some flagship requests could be served by the previous version during the transition window."
+        },
+        {
+          "question": "Why is our realised cost-per-request lower than the headline saving?",
+          "answer": "Usually version mixing. A headline saving such as 40% cheaper assumes a token-count reduction; if the older version is generating longer answers the blended saving is smaller and the gap is version mixing rather than a failed optimisation."
+        },
+        {
+          "question": "How do we forecast AI spend during a model transition?",
+          "answer": "Budget on a blended rate rather than a single list rate. Ask the vendor for the expected version mix or measure it from logged resolved-model fields, then carry that blend into the plan until the window closes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting for CFOs"
+        },
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "Model concentration risk"
+        },
+        {
+          "slug": "/research/falling-token-prices-rising-bills",
+          "label": "Token prices fell, bills rose"
+        },
+        {
+          "slug": "/research/provider-price-benchmark-cfo",
+          "label": "Provider price benchmarking"
+        }
+      ]
+    }
+  }
+}
