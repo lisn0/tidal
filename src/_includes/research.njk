@@ -48,10 +48,16 @@
 <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
 </head>
 <body>
-<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar"><div class="inner">
+  <a class="site-brand" href="/" aria-label="LLM CFO home"><span class="mark" aria-hidden="true">$</span><span class="brand">LLM CFO</span></a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="/">Home</a><a href="/research">Research</a><a href="/benchmarks">Benchmarks</a><a href="/about">About</a><a class="nav-cta" href="/book">Book audit <span aria-hidden="true">→</span></a>
+  </nav>
+</div></header>
 
-<main class="wrap">
-<aside class="callout"><strong>Auditing your own LLM spend?</strong> LLM CFO runs a free audit of your AI costs and shows which workloads are driving the bill. <a href="/book">Book a free audit &rarr;</a></aside>
+<main class="wrap" id="main" tabindex="-1">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/research">Research</a><span aria-hidden="true">/</span><span aria-current="page">{{ breadcrumbName | safe }}</span></nav>
 {{ content | updateVisibleDate(dateModified, datePublished) | safe }}
 {%- if faq and faq.length %}
 <section class="faq" aria-labelledby="faq-heading">

@@ -7,6 +7,7 @@
 {%- if not locale -%}
   {{ throw("Missing language " + lang + " for article: " + slug) }}
 {%- endif -%}
+{%- set ui = articleUi[lang] or articleUi.en -%}
 {%- set siteUrl = 'https://llmcfo.com' -%}
 {#- A "-v2" article is an A/B variant that canonicals to its control — but only
     the English control is actually published. Stripping "-v2" for a translated
@@ -87,7 +88,7 @@
 </script>
 {%- endif -%}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"{% if lang == 'ar' %}الرئيسية{% else %}Home{% endif %}","item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":"{% if lang == 'ar' %}أبحاث{% else %}Research{% endif %}","item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":"{{ locale.titleCore | safe }}","item":"{{ canonicalUrl }}"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":{{ ui.home | dump | safe }},"item":"https://llmcfo.com/"},{"@type":"ListItem","position":2,"name":{{ ui.research | dump | safe }},"item":"https://llmcfo.com/research"},{"@type":"ListItem","position":3,"name":{{ locale.titleCore | dump | safe }},"item":"{{ canonicalUrl }}"}]}
 </script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -120,18 +121,18 @@ A: {{ q.answer }}
 <script src="/assets/consent.js" defer></script><script src="/assets/attribution.js" defer></script>
 </head>
 <body>
-<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+<a class="skip-link" href="#main">{{ ui.skip }}</a>
+<header class="topbar"><div class="inner">
+  <a class="site-brand" href="/" aria-label="LLM CFO {{ ui.home }}"><span class="mark" aria-hidden="true">$</span><span class="brand">LLM CFO</span></a>
+  <nav class="site-nav" aria-label="{{ ui.navigation }}">
+    <a href="/">{{ ui.home }}</a><a href="/research" hreflang="en">{{ ui.research }}{% if lang != 'en' %} <span lang="en">(EN)</span>{% endif %}</a><a href="/benchmarks">{{ ui.benchmarks }}</a><a href="/about">{{ ui.about }}</a><a class="nav-cta" href="/book">{{ ui.auditButton }} <span aria-hidden="true">→</span></a>
+  </nav>
+</div></header>
 
-<main class="wrap">
-<aside class="callout"><strong>Auditing your own LLM spend?</strong> LLM CFO runs a free audit of your AI costs and shows which workloads are driving the bill. <a href="/book">Book a free audit &rarr;</a></aside>
+<main class="wrap" id="main" tabindex="-1">
+<nav class="breadcrumbs" aria-label="{{ ui.article }}"><a href="/">{{ ui.home }}</a><span aria-hidden="true">/</span><a href="/research" hreflang="en">{{ ui.research }}{% if lang != 'en' %} <span lang="en">(EN)</span>{% endif %}</a><span aria-hidden="true">/</span><span aria-current="page">{{ locale.titleCore | safe }}</span></nav>
 
-{%- if article.agentMode -%}
-<aside class="callout agent-summary" aria-label="Agent summary">
-  <strong>Quick answer:</strong> {{ locale.body | striptags | truncate(200) }}
-</aside>
-{%- endif -%}
-
-<nav class="langsw" aria-label="Language / Idioma" style="font-family:ui-monospace,monospace;font-size:13px;margin-bottom:20px">
+<nav class="langsw" aria-label="{{ ui.language }}" style="font-family:ui-monospace,monospace;font-size:13px;margin-bottom:20px">
 {%- for code in article.languages | keys -%}
   {%- set prefix = '/' + code if code != 'en' else '' -%}
   {%- set label = code | upper -%}
@@ -143,13 +144,18 @@ A: {{ q.answer }}
 </nav>
 
 <h1 class="page-title">{{ locale.titleCore | safe }}</h1>
-<p class="updated">{{ article.dateModified | formatDate }}</p>
-<p class="byline">By the LLM CFO team</p>
+<p class="updated">{{ ui.updated }}: {{ article.dateModified | formatDate }}</p>
+<p class="byline">{{ ui.byline }}</p>
+{%- if article.agentMode -%}
+<aside class="callout agent-summary" aria-label="{{ ui.quick }}">
+  <strong>{{ ui.quick }}:</strong> {{ locale.body | striptags | truncate(200) }}
+</aside>
+{%- endif -%}
 
 {{ locale.body | safe }}
 
 {%- if locale.related.length > 0 -%}
-<h2>Related</h2>
+<h2>{{ ui.related }}</h2>
 <ul>
 {%- for link in locale.related -%}
   <li><a href="{{ link.slug }}">{{ link.label }}</a></li>
@@ -157,14 +163,14 @@ A: {{ q.answer }}
 </ul>
 {%- endif -%}
 
-<a class="back" href="/">← Back to llmcfo.com</a>
+<a class="back" href="/">← {{ ui.back }}</a>
 
-<aside class="callout"><strong>Want this applied to your stack?</strong> Bring the provider bills, gateway logs, and top workflows; we will map the cost drivers and savings path. <a href="/book">Book a free audit &rarr;</a></aside>
+<aside class="callout"><strong>{{ ui.bottomLead }}</strong> {{ ui.bottomBody }} <a href="/book">{{ ui.auditButton }} &rarr;</a></aside>
 </main>
 
 <footer class="pagefoot">
   <span>// {{ article.copyrightSymbol or '©' }} 2026 LLM CFO, Inc.</span>
-  <span><a href="/privacy">Privacy</a> {{ article.footerSeparator or '·' }} <a href="/terms">Terms</a> {{ article.footerSeparator or '·' }} <a href="/security">Security</a></span>
+  <span><a href="/privacy">{{ ui.privacy }}</a> {{ article.footerSeparator or '·' }} <a href="/terms">{{ ui.terms }}</a> {{ article.footerSeparator or '·' }} <a href="/security">{{ ui.security }}</a></span>
 </footer>
 </body>
 </html>

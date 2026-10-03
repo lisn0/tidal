@@ -4,9 +4,15 @@
 {{ pageHead | safe }}
 </head>
 <body>
-<div class="topbar"><div class="inner"><div class="left"><span class="mark" aria-hidden="true">$</span><a class="brand" href="/">LLM CFO</a></div><a class="nav" href="/">&larr; home</a></div></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar"><div class="inner">
+  <a class="site-brand" href="/" aria-label="LLM CFO home"><span class="mark" aria-hidden="true">$</span><span class="brand">LLM CFO</span></a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="/">Home</a><a href="/research">Research</a><a href="/benchmarks">Benchmarks</a><a href="/about">About</a><a class="nav-cta" href="/book">Book audit <span aria-hidden="true">→</span></a>
+  </nav>
+</div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 {{ content | safe }}</main>
 
 <footer class="pagefoot">
