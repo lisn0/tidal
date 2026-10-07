@@ -1,0 +1,47 @@
+{
+  "slug": "free-tier-shadow-cost-cfo",
+  "tags": [
+    "ai-finance",
+    "unit-economics",
+    "forecasting",
+    "provider-risk"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "languages": {
+    "en": {
+      "title": "How should finance value a free AI tier?",
+      "titleCore": "How should finance value a free AI tier?",
+      "description": "Treat free AI usage as a temporary subsidy: price it at a shadow rate, model the paid run rate, and keep it out of durable product margin.",
+      "body": "<p class=\"lede\">Finance should record free AI usage at a shadow price in forecasts and unit economics, even when no invoice arrives. That makes the subsidy visible, shows whether a feature remains viable at paid rates, and gives teams a quantified exposure before trial terms, limits, or eligibility change.</p><h2>Why should a CFO assign a cost to free AI usage?</h2><p>A zero-dollar invoice describes cash paid today; it does not describe the cost of serving customers or the economics of a feature. A provider may offer credits, a free allowance, or preview access to encourage evaluation and adoption. The commercial terms can change, so finance should separate the current cash bill from the workload’s normalized cost.</p><p>Choose a shadow rate that reflects the closest paid service the team would actually use. Apply it to measured free usage by product, customer cohort, or internal team. Keep the shadow cost visible beside actual spend rather than blending the two. That creates a useful distinction between cash budget and economic cost.</p><h2>How can finance test whether a product depends on a subsidy?</h2><p>Calculate contribution margin under three cases: today’s observed free usage, a paid-rate baseline, and a higher-cost or lower-allowance scenario. Include the relevant model, storage, and support costs, and use the same output or customer unit in each case. If the feature only clears its margin in the free case, the forecast relies on a provider subsidy rather than a durable price.</p><p>Track the assumptions and owner for each credit or free allowance: eligible workloads, expiration or review date, shadow rate, and the paid alternative. Ask engineering to alert finance when the provider terms or usage pattern changes. This turns an uncertain future bill into a scenario that can be discussed during pricing and budget reviews.</p><h2>When should a team approve a move from free to paid capacity?</h2><p>Approve the spend when the expected customer or internal value justifies it and the workload still meets its margin or productivity hurdle at the paid rate. Compare the incremental benefit with the incremental cost, then record the decision owner and review date. A higher bill can be rational when it supports valuable demand; the key is to make the subsidy exit explicit.</p><h2>What should finance report about free-tier exposure?</h2><p>Report actual cash spend, shadow-priced usage, paid-rate scenario, and the share of product margin that depends on free access. Show those figures by workload or cohort so leaders can distinguish an evaluation subsidy from ongoing production economics.</p><h2>How was this article adapted?</h2><p>This CFO-focused article adapts <a href=\"https://finopsllm.com/research/free-tier-is-an-acquisition-cost\">“A free tier is an acquisition cost,” originally published September 1, 2026</a>. The original discusses provider acquisition economics; this version applies the idea to finance forecasts, margin scenarios, and approval decisions.</p>",
+      "faq": [
+        {
+          "question": "Should free AI usage count in product unit economics?",
+          "answer": "Yes. Include it at a shadow price based on the realistic paid alternative, while keeping actual cash spend separate. This shows whether the product remains viable when the subsidy is unavailable."
+        },
+        {
+          "question": "How should finance estimate the shadow price?",
+          "answer": "Use the closest paid service and rate that the workload would actually use, then apply it to measured usage. Document the rate and revisit it when the workload or provider terms change."
+        },
+        {
+          "question": "Does a free tier always lead to higher prices?",
+          "answer": "No. A free tier does not establish that terms will change. Finance should model the exposure as a scenario and avoid treating free access as a guaranteed long-term price."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/provider-price-benchmark-cfo",
+          "label": "Compare AI providers beyond list price"
+        },
+        {
+          "slug": "/research/ai-gross-margin-erosion",
+          "label": "Model AI gross-margin erosion"
+        },
+        {
+          "slug": "/research/ai-spend-variance-bridge-cfo",
+          "label": "Explain an AI budget variance"
+        }
+      ]
+    }
+  }
+}

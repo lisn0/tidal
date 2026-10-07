@@ -1,0 +1,51 @@
+{
+  "slug": "agent-capacity-buying-cfo",
+  "tags": [
+    "ai-agent-economics",
+    "ai-budgets",
+    "vendor-management",
+    "cfo"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "languages": {
+    "en": {
+      "title": "How should finance buy capacity for bursty AI agents?",
+      "titleCore": "How should finance buy capacity for bursty AI agents?",
+      "description": "Compare seats, pooled quotas, usage billing, commitments and hard caps when agent demand is uneven, and build a budget that protects both cost and service.",
+      "body": "<p>Finance should buy predictable capacity for steady AI use and keep bursty agent work variable until its demand and value are measured. Google Cloud’s August 26, 2026 billing update illustrates the trade-off: seats, pooled quotas, pay-as-you-go, savings commitments and hard caps can coexist, but each controls a different risk.</p>\n<h2>Why do AI agents make a seat-versus-usage decision harder?</h2>\n<p>A seat is easy to forecast because its fee is fixed. But an autonomous task can use a variable number of model calls, tools and delegated steps before it reaches a result. A seat quota may cover ordinary use and still be exhausted by a single long run. Pure usage billing fits that variability, but it transfers the forecast risk to the monthly invoice.</p>\n<p>The choice should follow the workload, not an organization-wide preference for fixed or variable spend. Employee assistance used consistently through the month is a candidate for seats. Customer-facing agents, coding bursts, and experiments have less certain volume and outcome, so they need separate measurement before finance commits to a floor.</p>\n<h2>What did Google’s August 2026 billing update change?</h2>\n<p>Google Cloud described a mix of per-user subscriptions, a pay-as-you-go Gemini Enterprise option, pooled quotas for eligible developer tools, Flexible Savings Plans, and hard monthly spend caps. It said the pay-as-you-go edition was available to select customers and rolling out broadly, while deferred execution pricing was still coming soon. These are product-specific terms; they are not a universal market rate card.</p>\n<p>The distinction matters for procurement. A pooled quota can reduce waste when light users leave capacity unused and bursty users need more, but it does not make consumption free: Google says overages can move to pay-as-you-go rates when allowed. Its Flexible Savings Plans promise 10% off with a one-year commitment or 20% with a three-year commitment, while deferred workloads were described as eligible for discounts of up to half. Availability and eligibility should be confirmed in the buyer’s own contract before including savings in a forecast. <a href=\"https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents-on-google-cloud\">Google Cloud’s announcement</a> also says admins can set monthly caps and estimate agent runtime costs.</p>\n<h2>How should a CFO match each pricing lever to a workload?</h2>\n<p>Use a workload-level decision rather than one blanket purchasing rule:</p>\n<ul>\n<li><strong>Seats for a stable baseline.</strong> Buy seats where the number of users and their normal usage are steady enough that predictable fees are worth paying for unused allowance.</li>\n<li><strong>Pooled quotas for uneven use inside a known team.</strong> Pooling can improve utilization when one team has complementary usage patterns. Track overages separately so the pooled allowance does not conceal a growing variable bill.</li>\n<li><strong>Pay-as-you-go for uncertain demand.</strong> Keep pilots, seasonal tasks and external agent traffic metered while adoption and cost per completed outcome are still uncertain.</li>\n<li><strong>Commitments only against a defensible floor.</strong> A discount is valuable only if eligible usage consumes the commitment. Use observed, recurring demand to set the floor; do not use a hoped-for adoption curve.</li>\n<li><strong>Hard caps for bounded experiments.</strong> A cap can limit financial exposure, but a cap that pauses an active customer service can create an operational incident. Give production workloads an alert, escalation and fallback policy before enabling a stop condition.</li>\n</ul>\n<p>This is consistent with Google Cloud’s <a href=\"https://cloud.google.com/blog/products/ai-machine-learning/how-agents-can-delegate-better\">August 21 guidance on agent delegation</a>: route simple subtasks to cheaper models where quality holds, verify delegated work, and limit the sensitive context given to each sub-agent. For finance, routing belongs in the cost model because it changes model mix and run cost; verification belongs in the value model because an unverified cheap answer is not a completed outcome.</p>\n<h2>What should the pilot measure before procurement commits?</h2>\n<p>Record cost per completed business outcome, not just cost per request. A request count treats a one-call answer and a multi-step agent run as equivalent. For each task family, capture total model and tool charges, retries and delegated calls, completion rate, human review time, and the share that required escalation. Keep failed and abandoned runs in the denominator of spend: they consumed budget even if they produced no usable work.</p>\n<p>Anthropic’s <a href=\"https://www.anthropic.com/research/economic-index-june-2026-report\">June 26, 2026 Economic Index report</a> says output type and task shape affect the autonomy involved, and reports that more compute is associated with more valuable artifacts in its sampled Claude usage. That is an observed association in Anthropic’s data, not proof that increasing spend causes business value. A CFO should test the relationship in the company’s own workflow rather than assume more tokens mean better productivity.</p>\n<p><strong>Hypothetical example:</strong> A finance team pilots an invoice exception agent. In month one it processes 2,000 cases at an average variable cost of $0.80 each, with 85% accepted without rework. The team should compare cost per accepted case—including failed runs and review time—with its current process. It should not convert the pilot into a three-year commitment until volume, acceptance and exception handling remain stable across more than one billing cycle.</p>\n<h2>How can finance keep savings and service risk visible?</h2>\n<p>Maintain two forecasts: a committed baseline and a variable agent envelope. The baseline covers steady seats or a conservative commitment. The envelope covers burst use, testing and customer demand, with a named owner and thresholds for review. Reconcile actual usage by project and purpose each month; otherwise pooled quotas and bundled developer access can obscure which team is consuming the capacity.</p>\n<p>Before a hard cap is enabled, document what happens at the threshold: who receives the alert, whether new work queues or stops, which tasks can fall back to a lower-cost model, and who can approve emergency headroom. Treat any vendor estimate of agent runtime as a planning input, then compare it with actuals. Long-running or multi-agent work can diverge from a typical run, so the control should protect the budget without silently failing a customer workflow.</p>\n<p>The purchasing rule is straightforward: stabilize and measure first, commit against the measured floor, and leave uncertain demand flexible. Review the discount, cap behavior and capacity eligibility in the contract, then renew or expand only when the cost per verified outcome supports it.</p>\n<h2>Which related research explains agent budgeting?</h2>\n<ul><li><a href=\"/research/three-agent-budgets-cfo\">Three budgets for AI agents</a></li><li><a href=\"/research/committed-use-agreements-cache-rates-and-true-ups\">Committed use, cache rates and true-ups</a></li><li><a href=\"/research/ai-spend-variance-bridge-cfo\">AI spend variance bridge for CFOs</a></li></ul>",
+      "faq": [
+        {
+          "question": "Should a company use seats or pay-as-you-go for AI agents?",
+          "answer": "Use seats for steady, predictable use where a fixed fee is worth the risk of unused allowance. Keep bursty or unproven agent workloads metered until demand and cost per verified outcome are known."
+        },
+        {
+          "question": "When is an AI savings commitment justified?",
+          "answer": "When recurring eligible usage is measured and reliably consumes the commitment. Size the floor from observed baseline demand, not expected adoption."
+        },
+        {
+          "question": "Are hard monthly AI spend caps safe in production?",
+          "answer": "They limit cost exposure but can pause service when reached. Pair production caps with alerts, escalation, queueing or fallback behavior, and an explicit owner."
+        },
+        {
+          "question": "What should finance measure in an agent pilot?",
+          "answer": "Measure total model and tool cost per completed outcome, including failed runs, retries, delegated work, completion rate and human review time."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/three-agent-budgets-cfo",
+          "label": "Three budgets for AI agents"
+        },
+        {
+          "slug": "/research/committed-use-agreements-cache-rates-and-true-ups",
+          "label": "Committed use, cache rates and true-ups"
+        },
+        {
+          "slug": "/research/ai-spend-variance-bridge-cfo",
+          "label": "AI spend variance bridge for CFOs"
+        }
+      ]
+    }
+  }
+}

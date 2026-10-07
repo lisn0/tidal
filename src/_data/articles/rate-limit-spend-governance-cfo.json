@@ -1,0 +1,47 @@
+{
+  "slug": "rate-limit-spend-governance-cfo",
+  "tags": [
+    "ai-finance",
+    "spend-governance",
+    "budgets",
+    "reliability"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "languages": {
+    "en": {
+      "title": "When should finance approve a higher AI rate limit?",
+      "titleCore": "When should finance approve a higher AI rate limit?",
+      "description": "Treat an AI rate-limit or capacity increase as a spending decision: distinguish customer demand from runaway usage and require a cost-per-outcome check.",
+      "body": "<p class=\"lede\">Finance should approve a higher AI rate limit only after the team identifies why the current limit is being reached and estimates the cost of added throughput. Genuine demand may support more capacity; retries, loops, or unbounded jobs may simply accelerate waste. Review cost per completed outcome before raising the spend ceiling.</p><h2>What does hitting an AI rate limit tell finance?</h2><p>It shows that requests are arriving faster than the current allowance permits, but it does not explain why. The cause may be customer growth, a launch, or a deliberate workload increase. It may also be duplicate retries, an agent that does not stop, an unthrottled backfill, or a test using production credentials.</p><p>Separate these causes using workload-level evidence: completed tasks, customer activity, retry counts, queue depth, and spend per successful outcome. A rise in total spend can be healthy when the underlying business unit grows at an acceptable cost. Spend that rises while completed outcomes stay flat needs investigation before capacity is increased.</p><h2>How should a team evaluate a rate-limit increase?</h2><p>Ask the service owner to provide the demand forecast, expected incremental spend, expected outcomes or revenue, and operational controls. Compare the current and proposed cost per successful outcome, and identify the budget owner who will monitor the change. Treat a provider tier upgrade as a commercial commitment that deserves the same review as other capacity purchases.</p><p>Before approval, check whether retries use backoff and jitter, whether each environment has an appropriate cap, and whether an alert can detect a rising cost per outcome. Preserve a controlled ceiling while the cause is uncertain. If evidence confirms valuable demand, raise capacity in a measured step and review the result against the forecast.</p><h2>How can finance budget for AI capacity controls?</h2><p>Keep provider limits, internal workload budgets, and escalation authority visible in the operating plan. Set separate thresholds for production and non-production workloads, with a named owner for exceptions. The provider limit is a boundary, while internal controls decide how much the company is willing to spend and what happens when usage reaches that point.</p><p>Review both service quality and unit cost after an increase. A lower error rate alone does not prove the change paid off; the workload should also deliver the expected completed outcomes within its approved cost range.</p><h2>How was this article adapted?</h2><p>This CFO-focused article adapts <a href=\"https://finopsllm.com/research/rate-limits-are-cost-control\">“Rate limits are a cost control,” originally published September 1, 2026</a>. The original focuses on operational safeguards; this version frames capacity increases as forecasted and owned spend decisions.</p>",
+      "faq": [
+        {
+          "question": "Should a team always raise a rate limit when it is reached?",
+          "answer": "No. First establish whether the limit reflects legitimate demand or wasteful behavior such as retry amplification or an unbounded job. Compare spend per successful outcome before approving more capacity."
+        },
+        {
+          "question": "What evidence should support a rate-limit increase?",
+          "answer": "Use workload demand, completed outcomes, retry volume, expected incremental spend, and the business value of the added throughput. Assign an owner and a post-change review date."
+        },
+        {
+          "question": "Why monitor cost per successful outcome?",
+          "answer": "It connects the spend increase to delivered work. If spend rises without more successful outcomes, the capacity change may be amplifying inefficient behavior rather than supporting growth."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/retry-loop-budget-tax",
+          "label": "Control the budget impact of retry loops"
+        },
+        {
+          "slug": "/research/subagent-concurrency-budget-caps",
+          "label": "Cap autonomous AI concurrency"
+        },
+        {
+          "slug": "/research/llm-cost-spike-runbook-cfo",
+          "label": "Respond to an AI cost spike"
+        }
+      ]
+    }
+  }
+}

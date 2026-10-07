@@ -1,0 +1,47 @@
+{
+  "slug": "embedding-lifecycle-budget-cfo",
+  "tags": [
+    "ai-finance",
+    "budgeting",
+    "retrieval",
+    "unit-economics"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "languages": {
+    "en": {
+      "title": "How should finance budget embedding and vector-store costs?",
+      "titleCore": "How should finance budget embedding and vector-store costs?",
+      "description": "Budget retrieval systems across ingestion, re-embedding, storage, and query serving so a migration estimate does not hide recurring AI costs.",
+      "body": "<p class=\"lede\">Finance should budget an embedding-based retrieval system across its full lifecycle: initial ingestion, ongoing content changes, possible re-embedding, vector storage, and query serving. A one-time migration estimate misses recurring operating costs and the temporary overlap that may occur during a model or pipeline change.</p><h2>Why are embedding costs recurring?</h2><p>New and revised source material creates ingestion work over time. Teams may also change chunking, preprocessing, metadata, or the embedding model as product requirements evolve. Each change can require some or all of a corpus to be processed again; the actual scope depends on the system design and migration plan.</p><p>Vector storage and retrieval infrastructure create separate operating costs. Their drivers can include corpus size, vector dimensions, index configuration, query volume, and service tier. Keep these cost categories distinct from the embedding API or compute charge so finance can understand which operational choice is moving the forecast.</p><h2>How should finance build a retrieval budget?</h2><p>Start with a baseline for new and changed content, then add explicit scenarios for a partial refresh and a full-corpus re-embedding. For each scenario, estimate processing cost, storage and query cost, engineering or migration effort, and any period when old and new indexes run together. Do not assume a full re-embedding is annual; use a cadence grounded in the team’s roadmap and data-change history.</p><p>For model selection, compare the expected lifecycle cost over a chosen planning period, not only the initial per-unit processing rate. Include quality requirements and the cost of operating the index. Ask engineering to document what changes invalidate existing vectors, whether the migration can be staged, and how queries behave during cutover.</p><h2>Which controls make embedding spend easier to forecast?</h2><p>Record corpus size and growth, refresh triggers, model and pipeline versions, index size, query volume, and current storage configuration. Set a named owner for each full refresh or migration scenario. Review actual processing and hosting costs after material changes, then update the planning assumptions.</p><p>When a complete refresh is latency-tolerant, compare synchronous and batch processing options available from the selected provider. Verify eligibility, service limits, and current prices before including a discount in the budget. The decision should reflect the provider’s current terms and the workload’s delivery requirements.</p><h2>How was this article adapted?</h2><p>This CFO-focused article adapts <a href=\"https://finopsllm.com/research/re-embedding-is-recurring\">“The recurring cost of embeddings and vector stores,” originally published September 1, 2026</a>. The original explains technical refresh drivers; this version turns them into lifecycle budget scenarios and migration controls.</p>",
+      "faq": [
+        {
+          "question": "What belongs in an embedding budget?",
+          "answer": "Include initial and incremental processing, refresh or re-embedding scenarios, vector storage, query serving, and any overlap during migration. Track engineering effort separately when it is material to the decision."
+        },
+        {
+          "question": "Should finance assume a full re-embedding every year?",
+          "answer": "Only when the team’s planned changes and refresh history support that cadence. Model full refresh as a scenario, and ask engineering which changes require partial or complete reprocessing."
+        },
+        {
+          "question": "Is the lowest embedding price always the lowest-cost choice?",
+          "answer": "No. Compare processing, hosting, querying, migration, and quality requirements over the planning period. A lower processing rate can be outweighed by other lifecycle costs."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/evals-cost-board",
+          "label": "Include evaluation spend in the AI budget"
+        },
+        {
+          "slug": "/research/cost-per-profitable-outcome",
+          "label": "Use cost per successful task in margin analysis"
+        },
+        {
+          "slug": "/research/ai-finops-metric-definitions-that-survive-audit",
+          "label": "Define AI cost metrics that survive audit"
+        }
+      ]
+    }
+  }
+}
