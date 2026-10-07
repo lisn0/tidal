@@ -1,0 +1,280 @@
+{
+  "slug": "cost-switching-llm-providers",
+  "tags": [
+    "provider-migration",
+    "model-routing",
+    "finops"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The real cost of switching LLM providers",
+      "titleCore": "The real cost of switching LLM providers",
+      "description": "A practical model for migration engineering, evaluation, dual-running, quality risk, and savings when changing LLM providers.",
+      "body": "<p>Switching LLM providers is not a price-sheet exercise. The business case includes migration engineering, prompt and schema changes, evaluation, dual-running, data transfer, support, and the risk of a quality regression. Compare those costs with the expected savings over the period in which the migration pays back.</p><h2>Count the migration work</h2><p>Inventory SDK calls, structured-output assumptions, tool schemas, rate limits, context behavior, safety controls, observability, and provider-specific error handling. Estimate the engineering and test hours for each. A gateway reduces future switching cost, but operating the gateway is itself a recurring cost.</p><h2>Price the quality work</h2><p>Run a fixed workload through old and new providers. Measure task success, p50 and p95 latency, retries, human repair, and evaluator agreement. Include the cost of building the test set and reviewing disagreements. A migration that saves tokens but adds review time has not yet saved money.</p><h2>Budget dual-running</h2><p>Run both providers long enough to observe production mix, failover, and seasonal behavior. Model the temporary double spend and the cost of keeping a warm fallback. If concentration risk is the reason for the move, include the standby cost in the baseline rather than treating it as waste.</p><h2>Calculate payback</h2><p>Use fully loaded monthly savings after migration, evaluation, and operating cost. Add a risk premium for uncertain quality and a rollback plan. The right choice may be a routing policy that keeps both providers, not a full replacement. Measure the result against invoices and successful-task cost.</p><p>Provider switching is an option with a price. Make that price visible before the renewal deadline, and the organization can choose deliberately instead of negotiating from fear.</p><h2>Related</h2><ul><li>Provider arbitrage</li><li>Model concentration risk</li><li>Model routing</li></ul>",
+      "faq": [
+        {
+          "question": "What costs are included when switching LLM providers?",
+          "answer": "Include migration engineering, prompt and schema work, evaluation, dual-running, data transfer, support, compliance, failover testing, and ongoing gateway costs."
+        },
+        {
+          "question": "How do you calculate provider-switching payback?",
+          "answer": "Compare fully loaded monthly savings after migration with one-time migration and evaluation costs, temporary dual-running, and ongoing operating cost."
+        },
+        {
+          "question": "Is switching always better than routing?",
+          "answer": "No. Routing can preserve both providers and reduce concentration risk when the cost of full replacement exceeds the savings."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/multi-provider-llm-finops",
+          "label": "Model concentration risk"
+        },
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing"
+        }
+      ]
+    },
+    "es": {
+      "title": "El coste real de cambiar de proveedor LLM",
+      "titleCore": "El coste real de cambiar de proveedor LLM",
+      "description": "Cómo modelar migración, evaluación, doble operación, riesgo de calidad y ahorro.",
+      "body": "<p>Cambiar de proveedor LLM no es solo comparar precios. Incluye ingeniería, cambios de prompts y esquemas, evaluación, doble operación, transferencia, soporte y riesgo de calidad.</p><h2>Cuenta el trabajo</h2><p>Inventaría SDK, herramientas, formatos, límites, contexto, seguridad, observabilidad y errores específicos. Estima horas de ingeniería y pruebas.</p><h2>Valora la calidad</h2><p>Ejecuta la misma carga en ambos proveedores y mide éxito, latencia, reintentos, reparación humana y acuerdo del evaluador. Incluye crear el conjunto de pruebas.</p><h2>Calcula el retorno</h2><p>Compara ahorro mensual total con migración, evaluación, doble operación y coste del gateway. A veces el routing entre proveedores es mejor que reemplazar uno.</p>",
+      "faq": [
+        {
+          "question": "¿Qué costes incluye cambiar de proveedor LLM?",
+          "answer": "Ingeniería, prompts, esquemas, evaluación, doble operación, transferencia, soporte, cumplimiento, failover y gateway."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraje entre proveedores"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Coût réel d’un changement de fournisseur LLM",
+      "titleCore": "Coût réel d’un changement de fournisseur LLM",
+      "description": "Modéliser migration, évaluation, double fonctionnement, qualité et économies.",
+      "body": "<p>Changer de fournisseur LLM ne consiste pas à comparer deux tarifs. Il faut compter ingénierie, prompts, schémas, évaluations, double fonctionnement, transfert, support et risque de qualité.</p><h2>Compter le travail</h2><p>Inventoriez SDK, outils, formats, limites, contexte, sécurité, observabilité et erreurs spécifiques. Estimez les heures d’ingénierie et de test.</p><h2>Mesurer la qualité</h2><p>Rejouez la même charge et mesurez réussite, latence, reprises, réparation humaine et accord des évaluateurs.</p><h2>Calculer le retour</h2><p>Comparez économies mensuelles complètes et coûts de migration, évaluation, double fonctionnement et passerelle. Le routage peut être préférable au remplacement.</p>",
+      "faq": [
+        {
+          "question": "Quels coûts inclure lors d’un changement de fournisseur LLM?",
+          "answer": "Ingénierie, prompts, schémas, évaluation, double fonctionnement, transfert, support, conformité, bascule et passerelle."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitrage entre fournisseurs"
+        }
+      ]
+    },
+    "de": {
+      "title": "Die tatsächlichen Kosten eines LLM-Anbieterwechsels",
+      "titleCore": "Die tatsächlichen Kosten eines LLM-Anbieterwechsels",
+      "description": "Ein Modell für Migration, Evaluation, Parallelbetrieb, Qualitätsrisiko und Einsparungen.",
+      "body": "<p>Ein LLM-Wechsel ist kein Preisvergleich. Zählen Sie Engineering, Prompt- und Schemaänderungen, Evaluation, Parallelbetrieb, Transfer, Support und Qualitätsrisiko.</p><h2>Arbeit erfassen</h2><p>Inventarisieren Sie SDK, Tools, Formate, Limits, Kontext, Sicherheit, Observability und Fehlerbehandlung. Schätzen Sie Engineering- und Teststunden.</p><h2>Qualität bepreisen</h2><p>Führen Sie denselben Workload durch beide Anbieter und messen Sie Erfolg, Latenz, Retries, Nacharbeit und Evaluator-Übereinstimmung.</p><h2>Amortisation berechnen</h2><p>Vergleichen Sie monatliche Vollkosteneinsparung mit Migration, Evaluation, Parallelbetrieb und Gateway. Routing kann sinnvoller sein als ein vollständiger Ersatz.</p>",
+      "faq": [
+        {
+          "question": "Welche Kosten gehören in einen LLM-Anbieterwechsel?",
+          "answer": "Engineering, Prompts, Schemas, Evaluation, Parallelbetrieb, Transfer, Support, Compliance, Failover und Gateway."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLM-Anbieterarbitrage"
+        }
+      ]
+    },
+    "ja": {
+      "title": "LLMプロバイダー切り替えの本当のコスト",
+      "titleCore": "LLMプロバイダー切り替えの本当のコスト",
+      "description": "移行、評価、二重運用、品質リスク、節約をモデル化する方法です。",
+      "body": "<p>LLMプロバイダーの変更は価格表の比較だけではありません。移行開発、プロンプトとスキーマ、評価、二重運用、転送、サポート、品質低下のリスクを含めます。</p><h2>作業を数える</h2><p>SDK、ツール、形式、制限、コンテキスト、安全性、監視、プロバイダー固有のエラー処理を棚卸しし、開発とテスト時間を見積もります。</p><h2>品質に値段を付ける</h2><p>同じワークロードを両方で実行し、成功率、遅延、リトライ、人手修正、評価者の一致を測ります。</p><h2>回収期間を計算する</h2><p>移行、評価、二重運用、ゲートウェイ費用後の月次節約と比較します。完全移行よりルーティングが適切な場合もあります。</p>",
+      "faq": [
+        {
+          "question": "LLM切り替えにはどのコストを含めますか？",
+          "answer": "移行開発、プロンプト、スキーマ、評価、二重運用、転送、サポート、切り替え試験、ゲートウェイ費用を含めます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLMプロバイダー間の裁定"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O custo real de mudar de fornecedor LLM",
+      "titleCore": "O custo real de mudar de fornecedor LLM",
+      "description": "Como modelar migração, avaliação, operação dupla, qualidade e poupança.",
+      "body": "<p>Mudar de fornecedor LLM não é apenas comparar preços. Inclui engenharia, prompts, esquemas, avaliação, operação dupla, transferência, suporte e risco de qualidade.</p><h2>Conte o trabalho</h2><p>Faça o inventário de SDK, ferramentas, formatos, limites, contexto, segurança, observabilidade e erros específicos. Estime horas de engenharia e testes.</p><h2>Meça a qualidade</h2><p>Execute a mesma carga nos dois fornecedores e meça sucesso, latência, retries, reparação humana e concordância dos avaliadores.</p><h2>Calcule o retorno</h2><p>Compare poupança mensal total com migração, avaliação, operação dupla e gateway. Routing pode ser melhor do que substituir totalmente.</p>",
+      "faq": [
+        {
+          "question": "Que custos entram numa mudança de fornecedor LLM?",
+          "answer": "Engenharia, prompts, esquemas, avaliação, operação dupla, transferência, suporte, conformidade, failover e gateway."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitragem entre fornecedores"
+        }
+      ]
+    },
+    "it": {
+      "title": "Il vero costo di cambiare fornitore LLM: migrazione e…",
+      "titleCore": "Il vero costo di cambiare fornitore LLM: migrazione e…",
+      "description": "Un modello pratico per quantificare ingegneria di migrazione, benchmark di qualità, doppio esercizio e risparmio effettivo tra provider.",
+      "body": "<p>Cambiare fornitore LLM non è un semplice confronto di listini. Il business case include l'ingegnerizzazione del codice, l'adattamento di prompt e schemi strutturati, benchmark di valutazione, doppio esercizio temporaneo, costi di trasferimento dati e il rischio di regressioni qualitative. Valutate questi costi a fronte del periodo di recupero dell'investimento.</p><h2>Quantificare il carico ingegneristico</h2><p>Mappate chiamate SDK, schemi JSON di output, tool definition, rate limit, gestione del contesto e formati di errore specifici. Calcolate le ore uomo necessarie per sviluppo e collaudo prima di decidere la transizione.</p><h2>Valutare la qualità dell'output</h2><p>Eseguite un dataset di test identico su entrambi i provider. Misurate percentuale di successo del task, latenza p50/p95, retry necessari e concordanza dei giudici automatici o umani. Un risparmio nominale sui token che richiede più revisione manuale aumenta i costi operativi complessivi.</p><h2>Pianificare il periodo di affiancamento</h2><p>Mantenete entrambi i provider in produzione per un periodo sufficiente a osservare carichi di punta e failover. Il ROI si ottiene calcolando i risparmi netti al netto dei costi fissi del gateway e dell'infrastruttura di supporto.</p>",
+      "faq": [
+        {
+          "question": "Quali costi considerare nel cambio di fornitore LLM?",
+          "answer": "Ingegnerizzazione del codice, riscrittura prompt e schemi, suite di test, doppio esercizio, conformità, failover e gestione del gateway."
+        },
+        {
+          "question": "Come si calcola il periodo di recupero dell'investimento?",
+          "answer": "Confrontando il risparmio mensile netto a regime con le spese una tantum di migrazione, validazione qualitativa e affiancamento temporaneo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraggio tra provider"
+        }
+      ]
+    },
+    "ko": {
+      "title": "LLM 공급업체 전환의 실제 비용: 엔지니어링과 품질 리스크",
+      "titleCore": "LLM 공급업체 전환의 실제 비용: 엔지니어링과 품질 리스크",
+      "description": "LLM 공급업체 변경 시 발생하는 마이그레이션 개발, 스키마 변환, 벤치마크 평가, 이중 운영 및 품질 위험을 모델링하는 실무 가이드.",
+      "body": "<p>LLM 공급업체 전환은 단순한 단가 비교 작업이 아닙니다. SDK 재작성, 프롬프트 엔지니어링, 구조화된 출력 스키마 수정, 평가 파이프라인, 이중 운영, 데이터 전송 및 모델 품질 저하 위험을 모두 합산해야 합니다. 이러한 실질 비용을 예상 월 절감액과 대조하여 투자 회수 기간을 검증하십시오.</p><h2>엔지니어링 전환 공수 산정</h2><p>SDK 호출, JSON 구조화 출력 규격, 툴 바인딩, 속도 제한 처리, 컨텍스트 처리 방식 및 에러 응답 로직을 전수 조사하십시오. 개발 및 테스트 공수를 정확히 측정해야 예기치 못한 비용 초과를 방지할 수 있습니다.</p><h2>출력 품질과 검증 비용</h2><p>동일한 테스트셋으로 두 공급업체를 벤치마크하십시오. 작업 성공률, p50/p95 지연 시간, 재시도 횟수, 사람의 검토 개입 시간을 측정합니다. 토큰 단가는 저렴하지만 작업 실패율이 높아져 재시도가 증가하면 전체 비용은 상승합니다.</p><h2>병행 운영 및 회수 기간</h2><p>프로덕션 트래픽과 장애 복구를 검증하기 위해 충분한 기간 동안 두 프로바이더를 병행 운영하십시오. 게이트웨이 운영비와 위험 프리미엄을 반영한 순 절감액을 기준으로 의사결정을 내려야 합니다.</p>",
+      "faq": [
+        {
+          "question": "LLM 공급업체 전환 시 어떤 비용 항목을 포함해야 하나요?",
+          "answer": "엔지니어링 개발비, 프롬프트/스키마 수정, 평가 벤치마크 구축, 이중 운영비, 데이터 전송비, 규정 준수 및 게이트웨이 운영비입니다."
+        },
+        {
+          "question": "공급업체 전환의 투자 회수 기간은 어떻게 계산하나요?",
+          "answer": "전환 완료 후 발생하는 월 순절감액으로 일회성 마이그레이션 비용과 일시적 병행 운영비를 회수하는 데 걸리는 개월 수를 계산합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "공급업체 차익거래"
+        }
+      ]
+    },
+    "zh": {
+      "title": "切换LLM供应商的真实成本与投资回收测算",
+      "titleCore": "切换LLM供应商的真实成本与投资回收测算",
+      "description": "全面量化LLM迁移工程、Prompt与Schema重构、质量评估、双轨运行及真实降本回收期。",
+      "body": "<p>切换LLM供应商绝不仅是价目表的对比。真实的商业论证必须计入工程迁移、Prompt与Schema调整、评测验证、双轨运行、数据传输及输出质量下降风险。将这些综合支出与迁移回收期内的预期月度节省进行严格比对。</p><h2>清点工程迁移工作量</h2><p>全面盘点SDK调用、结构化输出格式、工具声明、速率限制、上下文窗口表现与错误处理机制，精确评估研发与测试工时。API网关虽能降低未来切换阻力，但其自身运行亦是持续成本。</p><h2>量化质量评估成本</h2><p>在旧与新模型上运行固定测试集，精确度量任务成功率、p50与p95延迟、重试次数及人工介入审查时间。若节省了Token单价却增加了人工修正成本，实际上并未降低开销。</p><h2>双轨运行与回滚预算</h2><p>在生产环境维持双供应商并行运行，充分验证故障切换与流量峰值表现，测算过渡期的双重计费预算。若切换动机是防范单点依赖，备用通道的待机成本应作为基础预算而非浪费。</p><h2>计算回收周期与决策</h2><p>依据全口径月度净节省计算投资回收周期，加入质量不确定性风险溢价。在很多情况下，基于网关的双供应商动态路由优于推倒重来的全面替换。</p>",
+      "faq": [
+        {
+          "question": "切换LLM供应商需要计入哪些主要成本？",
+          "answer": "包含工程研发、Prompt与Schema调整、评测集构建、双轨并行运行、数据传输、合规验证以及网关运维成本。"
+        },
+        {
+          "question": "如何准确计算供应商切换的投资回收期？",
+          "answer": "以迁移完成后每月的全口径真实净节省，测算覆盖一次性工程改造、评测及过渡期双轨运行支出所需的月数。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "供应商间套利"
+        },
+        {
+          "slug": "https://finopsllm.com/research/multi-provider-llm-finops",
+          "label": "模型集中度风险"
+        },
+        {
+          "slug": "https://finopsllm.com/research/model-routing",
+          "label": "模型路由"
+        }
+      ]
+    },
+    "nl": {
+      "title": "De werkelijke kosten van wisselen van LLM-provider",
+      "titleCore": "De werkelijke kosten van wisselen van LLM-provider",
+      "description": "Een praktisch model voor engineering, evaluatiesets, parallel draaien, kwaliteitsrisico's en besparingen bij een overstap.",
+      "body": "<p>Het wisselen van LLM-provider is meer dan een tarievenvergelijking. De businesscase omvat migratie-engineering, prompt- en schema-aanpassingen, evaluatietests, parallel draaien, datatransfer, support en kwaliteitsrisico's. Weeg deze kosten af tegen de structurele besparing over de terugverdientijd.</p><h2>Breng het migratiewerk in kaart</h2><p>Inventariseer SDK-aanroepen, JSON-schema's, tool-bindingen, rate limits, contextgedrag en foutafhandeling. Schat de uren voor ontwikkeling en testen nauwkeurig in. Een gateway verlaagt toekomstige overstapkosten, maar brengt zelf ook beheerkosten met zich mee.</p><h2>Prijs kwaliteitsborging</h2><p>Test vaste workloads op beide providers. Meet taaksucces, p50/p95-latentie, retries en handmatige reviewtijd. Een migratie die tokens bespaart maar menselijke controle vermeerdert, levert per saldo geen winst op.</p><h2>Budgetteer parallel draaien</h2><p>Laat beide providers lang genoeg gelijktijdig draaien om piekmix en failover te valideren. Modelleer de tijdelijke dubbele kosten. Dient de overstap om leveranciersafhankelijkheid te verlagen, beschouw stand-by capaciteit dan als strategische investering.</p><h2>Bereken de terugverdientijd</h2><p>Reken met de netto maandelijkse besparing na aftrek van operationele kosten en voeg een risicopremie toe voor kwaliteitsvariatie. Vaak is een routeringsbeleid tussen beide providers voordeliger dan een totale vervanging.</p>",
+      "faq": [
+        {
+          "question": "Welke kostenposten horen bij het wisselen van LLM-provider?",
+          "answer": "Migratie-engineering, prompt- en schemabewerking, evaluatietests, parallel draaien, datatransfer, support en gateway-beheer."
+        },
+        {
+          "question": "Hoe berekent u de terugverdientijd van een providerwissel?",
+          "answer": "Vergelijk de structurele maandelijkse nettobesparing met de eenmalige engineering-, test- en tijdelijke dubbele operationele kosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Provider-arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/multi-provider-llm-finops",
+          "label": "Modelconcentratierisico"
+        },
+        {
+          "slug": "https://finopsllm.com/research/model-routing",
+          "label": "Modelroutering"
+        }
+      ]
+    },
+    "ar": {
+      "title": "التكلفة الحقيقية للتبديل بين مزودي النماذج",
+      "titleCore": "التكلفة الحقيقية للتبديل بين مزودي النماذج",
+      "description": "نموذج عملي لهندسة الترحيل والتقييم والتشغيل المزدوج ومخاطر الجودة والوفورات الفعلية عند تغيير مزودي نماذج اللغة الكبيرة.",
+      "body": "<p>قد يبدو التحول إلى مزود جديد يقدم أسعاراً أقل للرموز بنسبة 50% قراراً هندسياً بديهياً. ومع ذلك، في الأنظمة المؤسسية، نادراً ما تتحول التخفيضات النظرية إلى وفورات صافية فورية بسبب التكاليف الخفية لعملية الترحيل الهندسي والتشغيل المزدوج ومخاطر انحدار الجودة.</p>\n\n<h2>حساب أعباء وتكاليف الهجرة الهندسية</h2>\n<p>يتطلب نقل عبء عمل إنتاجي من مزود إلى آخر جهداً هندسياً مكثفاً يشمل:</p>\n<ul>\n  <li>إعادة هندسة المطالبات (Prompt Adaptation) لتناسب حساسية وتنسيقات النموذج الجديد.</li>\n  <li>تحديث مخططات الأدوات ومحللات مخرجات JSON البرمجية.</li>\n  <li>بناء خطوط تقييم معياري شاملة للتأكد من مطابقة الأداء والامتثال للأمان والخصوصية.</li>\n</ul>\n\n<h2>تكاليف التشغيل المزدوج ومخاطر الجودة</h2>\n<p>لا يمكن استبدال المزود في بيئة الإنتاج بضغطة زر واحدة. يتطلب الانتقال الآمن فترة تشغيل متزامن (Dual-Running) لعدة أسابيع، حيث تُرسل الطلبات لكلا المزودين لمقارنة النتائج والكمون، مما يضاعف تكلفة الاستدلال مؤقتاً. كما يجب احتساب تكلفة تراجع الجودة المحتمل في حال زيادة الشكاوى أو الحاجة لمراجعات بشرية.</p>\n\n<h2>معادلة استرداد تكلفة التحول</h2>\n<p>تُحسب جدوى القرار بقسمة تكاليف الهندسة والتشغيل المزدوج على صافي التوفير الشهري الحقيقي. إذا كانت المدة تتجاوز دورة حياة استقرار أسعار السوق الحالية، فإن الاستثمار في طبقة توجيه ديناميكية (Model Routing Layer) تدعم عدة مزودين في نفس الوقت هو الخيار الأكثر كفاءة ومرونة للمؤسسة.</p>",
+      "faq": [
+        {
+          "question": "ما هي التكاليف المتضمنة عند تبديل مزود النماذج اللغوية؟",
+          "answer": "تشمل إعادة صياغة المطالبات، واختبارات التقييم، وتكاليف التشغيل المزدوج المتزامن، وتعديل المخططات البرمجية."
+        },
+        {
+          "question": "كيف تحسب فترة استرداد تكلفة التحول إلى مزود جديد؟",
+          "answer": "بقسمة إجمالي تكاليف الانتقال والهندسة على الوفورات الشهرية الصافية المتوقعة في تكاليف الاستدلال التشغيلية."
+        },
+        {
+          "question": "هل التبديل الكامل أفضل دائماً من التوجيه المتعدد؟",
+          "answer": "غالباً ما يكون التوجيه الديناميكي أكثر كفاءة وأقل مخاطرة مقارنة بنقل كامل البنية التحتية لمزود واحد بعينه."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "الموازحة بين مزودي خدمات الذكاء"
+        },
+        {
+          "slug": "https://finopsllm.com/research/multi-provider-llm-finops",
+          "label": "إدارة مخاطر تركز المزودين"
+        },
+        {
+          "slug": "https://finopsllm.com/research/model-routing",
+          "label": "التوجيه الديناميكي للنماذج"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/cost-switching-llm-providers"
+  }
+}

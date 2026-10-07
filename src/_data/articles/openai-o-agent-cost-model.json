@@ -1,0 +1,61 @@
+{
+  "slug": "openai-o-agent-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization",
+    "agent-economics",
+    "openai"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "OpenAI O / AON always-on agent cost model",
+      "titleCore": "OpenAI O / AON always-on agent cost model",
+      "description": "What an always-on agent costs per week at OpenAI O tier rates, and the concurrency controls that keep the bill bounded.",
+      "body": "<p>Leaked references reveal OpenAI's \"O\" (codename AON) — an always-on assistant designed for long-horizon tasks. Unlike chat models that respond and stop, O gets its own cloud environment, can set up execution contexts, write code, research, and operate continuously for <strong>hours, days, or potentially weeks</strong>. It may involve multiple agents communicating on the same task. Expected reveal: OpenAI Dev Day, September 29, 2026.</p><h2>What changes for cost modeling</h2><p>Traditional LLM cost: per-request tokens × rate. O/AON cost: <strong>time × allocated compute + token throughput</strong>.</p><table><thead><tr><th>Dimension</th><th>Chat/Completion API</th><th>O / AON (projected)</th></tr></thead><tbody><tr><td>Billing unit</td><td>Per 1M tokens</td><td>Per hour (compute) + per 1M tokens</td></tr><tr><td>Idle cost</td><td>$0</td><td>>$0 (environment reservation)</td></tr><tr><td>Max duration</td><td>Minutes (timeout)</td><td>Days/weeks</td></tr><tr><td>Parallelism</td><td>Sequential requests</td><td>Multi-agent swarms</td></tr><tr><td>State</td><td>Passed in context</td><td>Persistent environment</td></tr></tbody></table><h2>Projected cost model (speculative, based on leak patterns)</h2><p>OpenAI hasn't published pricing. Two likely structures:</p><h3>Option A: Compute-hour + tokens (like Codespaces)</h3><ul><li>Environment reservation: ~$0.50-2.00/hour (CPU + memory + storage)</li><li>Token throughput: standard GPT-5 rates on top</li><li>Ultra fast tier: 5-10x token multiplier when enabled</li></ul><p>A 24-hour agent run with 5M input / 2M output tokens:</p><table><thead><tr><th>Component</th><th>Cost (low)</th><th>Cost (high)</th></tr></thead><tbody><tr><td>24h environment ($1/hr)</td><td>$24</td><td>$48</td></tr><tr><td>5M input @ $5/MTok</td><td>$25</td><td>$25</td></tr><tr><td>2M output @ $15/MTok</td><td>$30</td><td>$30</td></tr><tr><td><strong>Total</strong></td><td><strong>$79</strong></td><td><strong>$103</strong></td></tr></tbody></table><h3>Option B: Flat subscription (Pro Max bundle)</h3><ul><li>$500/mo ChatGPT Pro Max includes O/AON access + ultra fast quota</li><li>Effective hourly: $500 / 720h = $0.69/hr (if 24/7)</li><li>Break-even vs Option A: ~15 hours/day sustained usage</li></ul><h2>Cost optimization strategies for always-on agents</h2><ol><li><strong>Hibernate, don't terminate.</strong> If the environment persists, pause the agent loop during idle periods instead of spinning down — cold start costs more than idle reservation.</li><li><strong>Batch subtask tokens.</strong> Accumulate subtask results and write context in larger chunks to improve cache hit rates on the persistent environment.</li><li><strong>Route subtasks to cheaper models.</strong> O/AON orchestrates; delegate coding to Sonnet 5.5, research to Flash models, only escalate to premium for critical decisions.</li><li><strong>Set hard time/money budgets per objective.</strong> \"Solve this bug, max $10 / 2 hours\" — enforce via orchestrator, not hope.</li></ol><h2>When to use O/AON vs Opus 5.5 long-running</h2><ul><li><strong>O/AON:</strong> Multi-day research, continuous monitoring, multi-agent coordination, tasks needing persistent environment state</li><li><strong>Opus 5.5 agent loop:</strong> Single-objective coding tasks (hours, not days), well-defined deliverables, one-shot execution</li></ul><h2>Related reading</h2><p>See <a href=\"/research/chatgpt-pro-max-economics\">ChatGPT Pro Max economics</a>, <a href=\"/research/openai-ultra-fast-api-pricing\">OpenAI Ultra Fast API pricing</a>, <a href=\"/research/opus-5-5-long-running-agent-cost-analysis\">Opus 5.5 25-hour agent cost</a>, and <a href=\"/research/agent-economics\">agent economics</a>.</p>",
+      "faq": [
+        {
+          "question": "Is OpenAI O / AON confirmed?",
+          "answer": "Leaked in ChatGPT code (lowercase 'o' as product name, 'AON' as codename, 'negative o' email suffix). Tibor (OpenAI product lead) teased on X. Not officially announced. Dev Day (Sept 29) is the likely reveal."
+        },
+        {
+          "question": "How is it billed — per hour or per token?",
+          "answer": "Unknown. Leaks suggest persistent cloud environment → likely compute-hour + token throughput. Could be bundled in Pro Max ($500/mo)."
+        },
+        {
+          "question": "What's the cost of a week-long agent run?",
+          "answer": "Projected $500-1,500 depending on environment tier and token volume. Pro Max flat rate wins if you run >15 hrs/day sustained."
+        },
+        {
+          "question": "Can I build this myself with Opus 5.5 + a loop?",
+          "answer": "Yes — the 25-hour Minecraft clone demo proves long-horizon agents work today. O/AON's differentiator: managed environment, multi-agent coordination, and email/task execution integrations."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/chatgpt-pro-max-economics",
+          "label": "ChatGPT Pro Max economics"
+        },
+        {
+          "slug": "/research/openai-ultra-fast-api-pricing",
+          "label": "OpenAI Ultra Fast API pricing"
+        },
+        {
+          "slug": "/research/opus-5-5-long-running-agent-cost-analysis",
+          "label": "Opus 5.5 25-hour agent cost"
+        },
+        {
+          "slug": "/research/agent-economics",
+          "label": "Agent economics"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-o-agent-cost-model"
+  }
+}

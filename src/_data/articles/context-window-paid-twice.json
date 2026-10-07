@@ -1,0 +1,143 @@
+{
+  "slug": "context-window-paid-twice",
+  "tags": [
+    "finops",
+    "unit-economics",
+    "cost-optimization",
+    "architecture"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Paying for the context window twice",
+      "titleCore": "Paying for the context window twice",
+      "description": "Once to put the context in, and again on every turn it stays there. Long conversations are the most common unbudgeted line item in an LLM bill.",
+      "body": "<p>A context window is advertised as capacity: 200,000 tokens, a million tokens, room for whatever you need. Capacity is not the billing unit. You are charged for what you <em>send</em>, and in a multi-turn conversation you send most of it again every single turn.</p><p>That is the second payment. A 30,000-token document loaded at the start of a twenty-turn conversation is not 30,000 input tokens. It is closer to 600,000, because turn two re-sends it, and so does turn twenty.</p><h2>The arithmetic nobody runs</h2><p>Cost scales with the square of conversation length, not linearly. Doubling the number of turns roughly quadruples the input tokens, assuming context keeps accumulating. Teams that model &quot;cost per message&quot; and multiply by message count under-forecast long sessions badly, and the error grows with exactly the users you most want to keep.</p><p>There is often a third charge on top: many providers price requests above a long-context threshold at a premium rate. One extra attachment can push a request across that line and reprice the entire call, input and output, not just the tokens that crossed it.</p><h2>What to measure</h2><p>Track <strong>context utilisation</strong>: tokens sent versus tokens the model actually needed. It is the closest thing to a waste metric this domain has. Track input tokens per <em>conversation</em>, not per request, and watch the p99 &mdash; that is where the sessions live that cost twenty times the median.</p><p>Alert on requests crossing the long-context price threshold. It is a step change, not a gradient, and it will not look like anything in a daily total.</p><h2>Three fixes, cheapest first</h2><p><strong>Cache the stable prefix.</strong> If the system prompt and loaded documents do not change during a conversation, prompt caching turns the repeated cost into a fraction of it. This is the single highest-return change for any multi-turn product.</p><p><strong>Trim history deliberately.</strong> Older turns rarely earn their re-send price. Summarise the earlier part of a long conversation and drop the raw turns; you keep the thread and stop paying full freight for it.</p><p><strong>Send the excerpt, not the corpus.</strong> Retrieval exists for exactly this. The window being large enough to hold a whole document is not an argument for putting a whole document in it.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/prompt-caching-economics\">Prompt caching economics</a></li><li><a href=\"https://finopsllm.com/research/long-context-vs-rag-cost\">Long context vs RAG cost</a></li><li><a href=\"https://finopsllm.com/research/cost-per-request-kpi\">Cost per request as a KPI</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why does a long conversation cost more than the token count suggests?",
+          "answer": "Because context is re-sent. Each turn includes the whole conversation so far as input, so a document loaded at the start is billed again on every subsequent turn. Cost grows roughly with the square of conversation length, not linearly."
+        },
+        {
+          "question": "What is context utilisation?",
+          "answer": "Tokens sent versus tokens the model actually needed to answer. It is the nearest thing to a waste metric in LLM cost work, and it is what tells you whether you are paying to re-send material that never influences the output."
+        },
+        {
+          "question": "What is the highest-return fix?",
+          "answer": "Prompt caching on the stable prefix. If the system prompt and loaded documents do not change during a conversation, caching turns the largest repeated charge into a fraction of itself with no change to output quality."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/long-context-vs-rag-cost",
+          "label": "Long context vs RAG cost"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "Cost per request as a KPI"
+        }
+      ]
+    },
+    "es": {
+      "title": "Pagar dos veces la ventana de contexto",
+      "titleCore": "Pagar dos veces la ventana de contexto",
+      "description": "Una vez por meter el contexto y otra en cada turno que sigue ahí. Las conversaciones largas son la partida no presupuestada más común.",
+      "body": "<p>Una ventana de contexto se anuncia como capacidad: 200.000 tokens, un millón, sitio para lo que haga falta. La capacidad no es la unidad de facturación. Te cobran por lo que <em>envías</em>, y en una conversación de varios turnos vuelves a enviar casi todo en cada turno.</p><p>Ese es el segundo pago. Un documento de 30.000 tokens cargado al inicio de una conversación de veinte turnos no son 30.000 tokens de entrada: son unos 600.000.</p><h2>La cuenta que nadie hace</h2><p>El coste crece con el cuadrado de la longitud de la conversación, no linealmente. Duplicar los turnos casi cuadruplica los tokens de entrada. Quien modela &quot;coste por mensaje&quot; y multiplica infravalora mucho las sesiones largas.</p><p>Suele haber un tercer cargo: muchos proveedores aplican una tarifa premium por encima de cierto umbral de contexto largo. Un adjunto extra puede cruzar esa línea y reencarecer toda la llamada.</p><h2>Qué medir</h2><p>Sigue la <strong>utilización del contexto</strong>: tokens enviados frente a tokens que el modelo realmente necesitaba. Mide tokens de entrada por <em>conversación</em>, no por petición, y vigila el p99.</p><h2>Tres arreglos, del más barato al menos</h2><p><strong>Cachea el prefijo estable.</strong> Es el cambio de mayor retorno en cualquier producto multiturno.</p><p><strong>Recorta el historial a propósito.</strong> Resume la parte antigua y descarta los turnos en bruto.</p><p><strong>Envía el extracto, no el corpus.</strong> Que la ventana quepa entero no es motivo para meterlo entero.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué una conversación larga cuesta más de lo que parece?",
+          "answer": "Porque el contexto se reenvía. Cada turno incluye toda la conversación previa como entrada, así que un documento cargado al principio se factura otra vez en cada turno posterior. El coste crece con el cuadrado de la longitud."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economía del caché de prompts"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Payer deux fois la fenêtre de contexte",
+      "titleCore": "Payer deux fois la fenêtre de contexte",
+      "description": "Une fois pour y mettre le contexte, puis à chaque tour où il y reste. Les longues conversations sont le poste non budgété le plus courant.",
+      "body": "<p>Une fenêtre de contexte est annoncée comme une capacité : 200 000 tokens, un million, de la place pour tout. La capacité n’est pas l’unité de facturation. On vous facture ce que vous <em>envoyez</em>, et dans une conversation multi-tours vous renvoyez presque tout à chaque tour.</p><p>C’est le second paiement. Un document de 30 000 tokens chargé au début d’une conversation de vingt tours, ce n’est pas 30 000 tokens d’entrée : c’est près de 600 000.</p><h2>Le calcul que personne ne fait</h2><p>Le coût croît avec le carré de la longueur de la conversation, pas linéairement. Doubler les tours quadruple à peu près les tokens d’entrée. Modéliser un « coût par message » et multiplier sous-estime lourdement les sessions longues.</p><p>Un troisième frais s’ajoute souvent : beaucoup de fournisseurs facturent au-delà d’un seuil de contexte long à un tarif majoré. Une pièce jointe de plus peut franchir cette ligne et retarifer tout l’appel.</p><h2>Quoi mesurer</h2><p>Suivez le <strong>taux d’utilisation du contexte</strong> : tokens envoyés contre tokens réellement nécessaires. Mesurez les tokens d’entrée par <em>conversation</em>, pas par requête, et surveillez le p99.</p><h2>Trois correctifs, du moins cher au plus</h2><p><strong>Mettez en cache le préfixe stable</strong> &mdash; le meilleur rendement pour tout produit multi-tours.</p><p><strong>Élaguez l’historique délibérément</strong> : résumez le début et jetez les tours bruts.</p><p><strong>Envoyez l’extrait, pas le corpus.</strong> Que la fenêtre puisse contenir un document entier n’est pas une raison de l’y mettre.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi une longue conversation coûte-t-elle plus que prévu?",
+          "answer": "Parce que le contexte est renvoyé. Chaque tour inclut toute la conversation précédente en entrée, donc un document chargé au début est refacturé à chaque tour suivant. Le coût croît avec le carré de la longueur."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Économie du cache de prompts"
+        }
+      ]
+    },
+    "de": {
+      "title": "Das Kontextfenster zweimal bezahlen",
+      "titleCore": "Das Kontextfenster zweimal bezahlen",
+      "description": "Einmal fürs Hineinlegen und dann in jedem Zug, in dem es dort bleibt. Lange Konversationen sind der häufigste nicht budgetierte Posten.",
+      "body": "<p>Ein Kontextfenster wird als Kapazität beworben: 200.000 Tokens, eine Million, Platz für alles. Kapazität ist nicht die Abrechnungseinheit. Berechnet wird, was Sie <em>senden</em> &mdash; und in einer mehrstufigen Konversation senden Sie fast alles in jedem Zug erneut.</p><p>Das ist die zweite Zahlung. Ein 30.000-Token-Dokument am Anfang einer Konversation mit zwanzig Zügen sind nicht 30.000 Eingabe-Tokens, sondern eher 600.000.</p><h2>Die Rechnung, die niemand macht</h2><p>Die Kosten wachsen mit dem Quadrat der Konversationslänge, nicht linear. Doppelte Zuganzahl heißt rund vierfache Eingabe-Tokens. Wer &quot;Kosten je Nachricht&quot; modelliert und multipliziert, unterschätzt lange Sitzungen deutlich.</p><p>Oft kommt ein dritter Posten hinzu: viele Anbieter berechnen oberhalb einer Long-Context-Schwelle einen Aufpreis. Ein zusätzlicher Anhang kann die ganze Anfrage über diese Linie schieben.</p><h2>Was zu messen ist</h2><p>Verfolgen Sie die <strong>Kontextauslastung</strong>: gesendete Tokens gegenüber tatsächlich benötigten. Messen Sie Eingabe-Tokens je <em>Konversation</em>, nicht je Anfrage, und beobachten Sie den p99.</p><h2>Drei Korrekturen</h2><p><strong>Cachen Sie das stabile Präfix</strong> &mdash; die ertragreichste Änderung für jedes mehrstufige Produkt.</p><p><strong>Kürzen Sie den Verlauf bewusst:</strong> den älteren Teil zusammenfassen, die Rohzüge verwerfen.</p><p><strong>Senden Sie den Auszug, nicht das Korpus.</strong></p>",
+      "faq": [
+        {
+          "question": "Warum kostet eine lange Konversation mehr als erwartet?",
+          "answer": "Weil der Kontext erneut gesendet wird. Jeder Zug enthält die gesamte bisherige Konversation als Eingabe, ein zu Beginn geladenes Dokument wird also in jedem folgenden Zug erneut berechnet. Die Kosten wachsen quadratisch mit der Länge."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Ökonomie des Prompt-Cachings"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Pagar duas vezes a janela de contexto",
+      "titleCore": "Pagar duas vezes a janela de contexto",
+      "description": "Uma vez para lá pôr o contexto e outra em cada turno em que ele fica. As conversas longas são a rubrica não orçamentada mais comum.",
+      "body": "<p>Uma janela de contexto é anunciada como capacidade: 200.000 tokens, um milhão, espaço para o que precisar. A capacidade não é a unidade de faturação. Cobram-lhe o que <em>envia</em>, e numa conversa de vários turnos volta a enviar quase tudo em cada turno.</p><p>É esse o segundo pagamento. Um documento de 30.000 tokens carregado no início de uma conversa de vinte turnos não são 30.000 tokens de entrada: são perto de 600.000.</p><h2>A conta que ninguém faz</h2><p>O custo cresce com o quadrado do comprimento da conversa, não linearmente. Duplicar os turnos quase quadruplica os tokens de entrada. Quem modela &quot;custo por mensagem&quot; e multiplica subestima muito as sessões longas.</p><p>Costuma haver uma terceira cobrança: muitos fornecedores aplicam um preço superior acima de um limiar de contexto longo. Um anexo a mais pode atravessar essa linha e reencarecer a chamada inteira.</p><h2>O que medir</h2><p>Acompanhe a <strong>utilização do contexto</strong>: tokens enviados versus tokens realmente necessários. Meça tokens de entrada por <em>conversa</em>, não por pedido, e vigie o p99.</p><h2>Três correções</h2><p><strong>Coloque o prefixo estável em cache</strong> &mdash; o maior retorno em qualquer produto de vários turnos.</p><p><strong>Corte o histórico deliberadamente:</strong> resuma a parte antiga e descarte os turnos em bruto.</p><p><strong>Envie o excerto, não o corpus.</strong></p>",
+      "faq": [
+        {
+          "question": "Porque custa uma conversa longa mais do que parece?",
+          "answer": "Porque o contexto é reenviado. Cada turno inclui toda a conversa anterior como entrada, pelo que um documento carregado no início volta a ser faturado em cada turno seguinte. O custo cresce com o quadrado do comprimento."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economia da cache de prompts"
+        }
+      ]
+    },
+    "ja": {
+      "title": "コンテキストウィンドウへの二重支払い",
+      "titleCore": "コンテキストウィンドウへの二重支払い",
+      "description": "入れるときに一度、そこに残り続ける各ターンでもう一度。長い会話は、予算に載っていない費用として最もよくある項目です。",
+      "body": "<p>コンテキストウィンドウは容量として宣伝されます。20 万トークン、100 万トークン、必要なだけ入る、と。しかし課金単位は容量ではありません。請求されるのは<em>送信した</em>分であり、複数ターンの会話ではそのほとんどを毎ターン送り直しています。</p><p>それが二度目の支払いです。20 ターンの会話の冒頭で読み込んだ 3 万トークンの文書は、入力 3 万トークンではなく、60 万トークン近くになります。</p><h2>誰も計算しない算数</h2><p>コストは会話の長さに対して線形ではなく、二乗で増えます。ターン数が倍になれば入力トークンはおよそ 4 倍です。「メッセージあたりの費用」に件数を掛ける見積もりは、長いセッションを大きく過小評価します。</p><p>さらに三つ目の課金があることも多いです。多くのプロバイダーは長文脈のしきい値を超えたリクエストに割増料金を適用します。添付ひとつでその線を越え、呼び出し全体が再価格付けされます。</p><h2>測るべきもの</h2><p><strong>コンテキスト利用率</strong>、つまり送信したトークンと実際に必要だったトークンの比を追ってください。入力トークンはリクエスト単位ではなく<em>会話</em>単位で測り、p99 を見ます。</p><h2>3 つの対策</h2><p><strong>安定した接頭辞をキャッシュする。</strong>複数ターンの製品では最も効果の大きい変更です。</p><p><strong>履歴を意図的に削る。</strong>古い部分は要約し、生のターンは捨てます。</p><p><strong>コーパスではなく抜粋を送る。</strong></p>",
+      "faq": [
+        {
+          "question": "長い会話がトークン数以上に高くつくのはなぜですか？",
+          "answer": "コンテキストが再送されるからです。各ターンはそれまでの会話全体を入力として含むため、冒頭で読み込んだ文書は以降のターンごとに再び課金されます。コストは会話の長さの二乗で増えます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "プロンプトキャッシュの経済性"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/context-window-paid-twice"
+  }
+}

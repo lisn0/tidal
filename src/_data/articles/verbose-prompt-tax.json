@@ -1,0 +1,143 @@
+{
+  "slug": "verbose-prompt-tax",
+  "tags": [
+    "finops",
+    "cost-optimization",
+    "unit-economics",
+    "quality"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "How prompting style shows up on the bill",
+      "titleCore": "How prompting style shows up on the bill",
+      "description": "Politeness, repetition and defensive instructions all cost tokens on every single call. Prompt style is a recurring line item, not a stylistic preference.",
+      "body": "<p>Prompts grow the way configuration files grow. Someone adds an instruction to fix a failure mode. Someone else adds an example. A third person adds a paragraph explaining why the second instruction matters. Nothing is ever removed, because removing it might reintroduce a bug nobody can reproduce. Six months later the system prompt is three thousand tokens and no one can say which two hundred of them are load-bearing.</p><h2>Why it compounds</h2><p>Unlike output, which varies with the task, prompt overhead is paid on <em>every single request</em>, identically, forever. A thousand wasted tokens on a feature serving ten million calls a month is ten billion tokens a month of pure formatting.</p><p>In multi-turn conversations it is worse: the system prompt is resent on every turn, so its cost scales with turn count, not request count. And in agent loops, where a single user action can trigger a dozen model calls, the same bloated preamble is billed a dozen times for one piece of work.</p><h2>What is actually wasteful</h2><p>Not politeness, which is a handful of tokens and occasionally improves compliance. The real weight sits in: <strong>redundant instructions</strong> that restate the same rule three ways, <strong>defensive boilerplate</strong> added for a model generation that no longer needs it, <strong>examples that duplicate</strong> rather than cover distinct cases, and <strong>explanations aimed at human readers</strong> of the prompt file rather than at the model.</p><p>That third category is the largest in practice. Few-shot examples are expensive per token and teams rarely revisit whether five are doing work that two would do.</p><h2>Treat the prompt as code with a budget</h2><p>Measure the fixed prompt overhead as a share of average request size &mdash; if it is over half, it is a cost problem, not a style question. Put the stable part first so caching applies, which makes the remaining bloat far cheaper without deleting anything. Then run an ablation: remove one block, run your evals, keep the removal if quality holds. Prompt trimming without an eval suite is guesswork, and the failure mode &mdash; a quality regression discovered by customers &mdash; costs more than the tokens saved.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/prompt-caching-economics\">Prompt caching economics</a></li><li><a href=\"/research/evals-cost-control\">Evals as cost control</a></li><li><a href=\"https://finopsllm.com/research/token-budget-implementation\">Token budget implementation</a></li></ul>",
+      "faq": [
+        {
+          "question": "Does saying please to an LLM cost money?",
+          "answer": "A handful of tokens per call, which is real but trivial. The expensive parts of a prompt are redundant instructions, stale defensive boilerplate and duplicated few-shot examples, not courtesy."
+        },
+        {
+          "question": "Why is prompt bloat worse in agents?",
+          "answer": "A single user action can trigger many model calls, and the system prompt is resent on each one. The same fixed overhead is billed once per call rather than once per task."
+        },
+        {
+          "question": "How do you safely trim a prompt?",
+          "answer": "Run an ablation against an eval suite: remove one block at a time, re-run the evals, and keep the removal only if quality holds. Trimming without evals risks a regression that costs more than the tokens saved."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals as cost control"
+        },
+        {
+          "slug": "https://finopsllm.com/research/token-budget-implementation",
+          "label": "Token budget implementation"
+        }
+      ]
+    },
+    "es": {
+      "title": "Cómo el estilo de prompt aparece en la factura",
+      "titleCore": "Cómo el estilo de prompt aparece en la factura",
+      "description": "Cortesía, repetición e instrucciones defensivas cuestan tokens en cada llamada. El estilo del prompt es una partida recurrente, no una preferencia estética.",
+      "body": "<p>Los prompts crecen como los ficheros de configuración: alguien añade una instrucción por un fallo, otro añade un ejemplo, un tercero explica por qué. Nada se quita nunca. Seis meses después el system prompt tiene tres mil tokens y nadie sabe cuáles doscientos sostienen el edificio.</p><h2>Por qué se acumula</h2><p>A diferencia de la salida, el sobrecoste del prompt se paga en <em>cada petición</em>, igual, para siempre. Mil tokens desperdiciados en una función con diez millones de llamadas al mes son diez mil millones de tokens mensuales de puro formato.</p><p>En conversaciones multivuelta es peor: el system prompt se reenvía en cada turno. En bucles de agente, una sola acción del usuario puede facturar el mismo preámbulo una docena de veces.</p><h2>Qué desperdicia de verdad</h2><p>No la cortesía. El peso está en instrucciones redundantes, boilerplate defensivo escrito para una generación de modelos anterior, ejemplos que se duplican en vez de cubrir casos distintos, y explicaciones dirigidas a humanos que leen el fichero.</p><h2>Trátalo como código con presupuesto</h2><p>Mide el prompt fijo como porcentaje del tamaño medio de petición. Pon la parte estable primero para que cachee. Y recorta por ablación contra tus evals: quita un bloque, mide, consérvalo fuera si la calidad aguanta.</p>",
+      "faq": [
+        {
+          "question": "¿Ser educado con un LLM cuesta dinero?",
+          "answer": "Unos pocos tokens por llamada: real pero trivial. Lo caro son las instrucciones redundantes, el boilerplate defensivo obsoleto y los ejemplos duplicados, no la cortesía."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economía del caché de prompts"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le style de prompt sur la facture",
+      "titleCore": "Le style de prompt sur la facture",
+      "description": "Politesse, répétitions et consignes défensives coûtent des tokens à chaque appel. Le style de prompt est une ligne récurrente, pas une préférence esthétique.",
+      "body": "<p>Les prompts grossissent comme les fichiers de configuration : quelqu’un ajoute une consigne après un bug, un autre un exemple, un troisième un paragraphe d’explication. On ne retire jamais rien. Six mois plus tard, le system prompt fait trois mille tokens et personne ne sait lesquels portent la structure.</p><h2>Pourquoi cela s’accumule</h2><p>Contrairement à la sortie, le surcoût du prompt se paie à <em>chaque requête</em>, à l’identique, indéfiniment. Mille tokens gaspillés sur dix millions d’appels mensuels, ce sont dix milliards de tokens de pure mise en forme par mois.</p><p>En conversation multi-tours c’est pire : le system prompt est renvoyé à chaque tour. Dans une boucle d’agent, une seule action utilisateur facture le même préambule une dizaine de fois.</p><h2>Ce qui gaspille vraiment</h2><p>Pas la politesse. Le poids est dans les consignes redondantes, le boilerplate défensif écrit pour une génération de modèles révolue, les exemples qui se dupliquent, et les explications destinées aux humains qui lisent le fichier.</p><h2>Traitez-le comme du code avec un budget</h2><p>Mesurez le prompt fixe en part de la requête moyenne. Placez la partie stable en tête pour le cache. Puis élaguez par ablation contre vos évaluations : retirez un bloc, mesurez, gardez le retrait si la qualité tient.</p>",
+      "faq": [
+        {
+          "question": "Dire s’il vous plaît à un LLM coûte-t-il de l’argent?",
+          "answer": "Quelques tokens par appel : réel mais négligeable. Le coûteux, ce sont les consignes redondantes, le boilerplate défensif obsolète et les exemples dupliqués, pas la courtoisie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Économie du cache de prompts"
+        }
+      ]
+    },
+    "de": {
+      "title": "Wie Prompt-Stil auf der Rechnung erscheint",
+      "titleCore": "Wie Prompt-Stil auf der Rechnung erscheint",
+      "description": "Höflichkeit, Wiederholung und defensive Anweisungen kosten bei jedem Aufruf Tokens. Prompt-Stil ist eine laufende Position, keine Geschmacksfrage.",
+      "body": "<p>Prompts wachsen wie Konfigurationsdateien: jemand ergänzt eine Anweisung wegen eines Fehlers, jemand ein Beispiel, ein Dritter einen erklärenden Absatz. Entfernt wird nie etwas. Ein halbes Jahr später hat der System-Prompt dreitausend Tokens und niemand weiß, welche zweihundert davon tragen.</p><h2>Warum sich das aufsummiert</h2><p>Anders als die Ausgabe wird der Prompt-Overhead bei <em>jeder Anfrage</em> identisch bezahlt, dauerhaft. Tausend verschwendete Tokens bei zehn Millionen Aufrufen im Monat sind zehn Milliarden Tokens reiner Formatierung pro Monat.</p><p>In Mehrturn-Dialogen ist es schlimmer: Der System-Prompt geht bei jedem Turn erneut mit. In Agenten-Schleifen wird derselbe aufgeblähte Vorspann für eine Nutzeraktion ein Dutzend Mal abgerechnet.</p><h2>Was wirklich verschwendet</h2><p>Nicht die Höflichkeit. Das Gewicht liegt in redundanten Anweisungen, defensivem Boilerplate für eine längst abgelöste Modellgeneration, sich duplizierenden Beispielen und Erklärungen für menschliche Leser der Datei.</p><h2>Als Code mit Budget behandeln</h2><p>Messen Sie den festen Prompt als Anteil der durchschnittlichen Anfrage. Stabilen Teil nach vorn, damit Caching greift. Dann per Ablation kürzen: einen Block entfernen, Evals laufen lassen, streichen wenn die Qualität hält.</p>",
+      "faq": [
+        {
+          "question": "Kostet Höflichkeit gegenüber einem LLM Geld?",
+          "answer": "Ein paar Tokens pro Aufruf: real, aber trivial. Teuer sind redundante Anweisungen, veraltetes defensives Boilerplate und duplizierte Beispiele, nicht die Höflichkeit."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Ökonomie des Prompt-Caching"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Como o estilo de prompt aparece na fatura",
+      "titleCore": "Como o estilo de prompt aparece na fatura",
+      "description": "Cortesia, repetição e instruções defensivas custam tokens em cada chamada. O estilo do prompt é uma rubrica recorrente, não uma preferência estética.",
+      "body": "<p>Os prompts crescem como ficheiros de configuração: alguém acrescenta uma instrução por causa de um erro, outro um exemplo, um terceiro um parágrafo a explicar. Nunca se retira nada. Seis meses depois o system prompt tem três mil tokens e ninguém sabe quais duzentos sustentam o edifício.</p><h2>Porque acumula</h2><p>Ao contrário da saída, o custo do prompt paga-se em <em>cada pedido</em>, igual, para sempre. Mil tokens desperdiçados numa funcionalidade com dez milhões de chamadas por mês são dez mil milhões de tokens mensais de pura formatação.</p><p>Em conversas de vários turnos é pior: o system prompt é reenviado em cada turno. Em ciclos de agente, uma única ação do utilizador fatura o mesmo preâmbulo uma dúzia de vezes.</p><h2>O que desperdiça de facto</h2><p>Não a cortesia. O peso está em instruções redundantes, boilerplate defensivo escrito para uma geração de modelos anterior, exemplos que se duplicam, e explicações dirigidas a humanos que leem o ficheiro.</p><h2>Trate-o como código com orçamento</h2><p>Meça o prompt fixo como fração do pedido médio. Ponha a parte estável primeiro para haver cache. Depois corte por ablação contra as suas avaliações: retire um bloco, meça, mantenha o corte se a qualidade aguentar.</p>",
+      "faq": [
+        {
+          "question": "Ser educado com um LLM custa dinheiro?",
+          "answer": "Alguns tokens por chamada: real mas trivial. O caro são as instruções redundantes, o boilerplate defensivo obsoleto e os exemplos duplicados, não a cortesia."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economia da cache de prompts"
+        }
+      ]
+    },
+    "ja": {
+      "title": "プロンプトの書き方が請求書に出る仕組み",
+      "titleCore": "プロンプトの書き方が請求書に出る仕組み",
+      "description": "丁寧語も繰り返しも防御的な指示も、すべて毎回の呼び出しでトークンを消費します。プロンプトの文体は好みではなく、継続的な費目です。",
+      "body": "<p>プロンプトは設定ファイルと同じように太ります。誰かが不具合対策の指示を足し、別の誰かが例を足し、三人目がその理由を説明する段落を足す。何も削られません &mdash; 削ると誰も再現できないバグが戻るかもしれないからです。半年後、システムプロンプトは 3,000 トークンになり、そのうちどの 200 トークンが効いているのか誰も言えません。</p><h2>なぜ積み上がるのか</h2><p>タスクごとに変動する出力と違い、プロンプトのオーバーヘッドは<em>毎リクエスト</em>、同じ量だけ、永久に支払われます。月 1,000 万回の機能で 1,000 トークンの無駄は、月 100 億トークンの純粋な書式代です。</p><p>マルチターンではさらに悪化します。システムプロンプトは毎ターン再送されるので、コストはリクエスト数ではなくターン数に比例します。エージェントループでは、1 回のユーザー操作で十数回の呼び出しが走り、同じ肥大した前置きが十数回課金されます。</p><h2>本当に無駄なもの</h2><p>丁寧語ではありません。重いのは、同じ規則を三通りに言い換えた<strong>重複指示</strong>、もう必要のない世代向けに書かれた<strong>防御的な定型文</strong>、異なるケースを覆わず<strong>重複しているだけの例示</strong>、そしてモデルではなく<strong>ファイルを読む人間に向けた説明</strong>です。</p><p>実務では三つ目が最大です。few-shot はトークン単価が高く、5 件が 2 件で足りるかを見直すチームは多くありません。</p><h2>予算のあるコードとして扱う</h2><p>固定プロンプトが平均リクエストに占める割合を測ってください。半分を超えるならスタイルではなくコストの問題です。安定部分を先頭に置けばキャッシュが効き、残りの肥大も安くなります。そのうえでアブレーション &mdash; 1 ブロック削って評価を回し、品質が保てれば削除を残す。評価基盤なしの削減は当て推量で、顧客が見つける品質劣化は節約したトークンより高くつきます。</p>",
+      "faq": [
+        {
+          "question": "LLM に「お願いします」と言うとお金がかかりますか？",
+          "answer": "1 回あたり数トークンで、実在はしますが些細です。高いのは重複した指示、古い防御的な定型文、重複した few-shot 例であって、丁寧さではありません。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "プロンプトキャッシュの経済学"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/verbose-prompt-tax"
+  }
+}

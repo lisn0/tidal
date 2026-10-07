@@ -1,0 +1,49 @@
+{
+  "slug": "sonnet-5-5-pricing-agent-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization",
+    "anthropic",
+    "agent-economics"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-28",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Claude Sonnet 5.5 pricing: what changes, what does not",
+      "titleCore": "Claude Sonnet 5.5 pricing: what changes, what does not",
+      "description": "Sonnet 5.5 keeps Sonnet 5's $2/$10 API rates. Anthropic says token efficiency can lower cost per task by up to 30%; model your own workload before switching.",
+      "body": "<p><strong>Claude Sonnet 5.5 costs $2 per million input tokens and $10 per million output tokens</strong> on the Anthropic API, the same list price as Sonnet 5. The economic change is efficiency: Anthropic says Sonnet 5.5 can cost up to 30% less per task because it uses fewer tokens, while generating output more than 30% faster. That is a vendor-reported maximum, not a guaranteed discount on every workload.</p><p>For a budget forecast, keep the token rates fixed and model the possible reduction in tokens and agent steps separately. Measure your own task mix before applying any savings assumption.</p><h2>Sonnet 5.5 API prices</h2><table><thead><tr><th>Token type</th><th>Price per million</th></tr></thead><tbody><tr><td>Input</td><td>$2.00</td></tr><tr><td>Output</td><td>$10.00</td></tr><tr><td>5-minute cache write</td><td>$2.50</td></tr><tr><td>1-hour cache write</td><td>$4.00</td></tr><tr><td>Cache read</td><td>$0.20</td></tr></tbody></table><p>Anthropic lists these rates in its <a href=\"https://www.anthropic.com/claude-sonnet-5-5\">Sonnet 5.5 launch announcement</a>. Do not interpret “up to 30% less per task” as a 30% reduction in per-token rates: the input and output prices are unchanged from Sonnet 5. Sonnet 5's $2/$10 price is also now standard, after Anthropic cancelled its planned September increase.</p><h2>Example: token efficiency versus rate changes</h2><p>Consider a task that uses 100,000 input tokens and 10,000 output tokens, without caching. At Sonnet 5.5's published rates, that is $0.20 for input plus $0.10 for output, or <strong>$0.30 per task</strong>. If the same task used 30% fewer tokens in both categories, its modeled cost would be $0.21. This is an illustration of the arithmetic, not a promise that every task will use 30% fewer tokens.</p><p>For a workload of 10,000 such tasks per month, the baseline is $3,000. A 30% reduction in token volume would save $900, taking the modeled monthly bill to $2,100. Actual results vary with prompt length, cache reuse, output length, reasoning effort, retries, and tool calls.</p><h2>What the launch benchmarks do and do not show</h2><p>Anthropic reports gains on its coding and knowledge-work evaluations, including Terminal-Bench 4.0 and CursorBench. The company also reports that Sonnet 5.5 generates output more than 30% faster than Sonnet 5, and that in several benchmark comparisons it reaches previous Sonnet 5 scores at a fraction of the per-task cost. Those results are useful hypotheses for an evaluation plan, but they are vendor-published measurements rather than independent production cost data.</p><p>One practical caveat: a faster model does not automatically lower a token-metered API bill. The bill falls when usage per completed task falls, or when fewer tasks need retries or escalation. Faster generation may instead improve throughput or reduce latency while leaving token spend unchanged.</p><h2>A safe way to forecast adoption</h2><ol><li><strong>Keep the rate card constant.</strong> Use $2/$10 per million input/output tokens as the starting point for Sonnet 5 and 5.5.</li><li><strong>Measure completed work.</strong> Compare cost per accepted task, not only tokens per request. Include retries, tool calls, and human rework where you can.</li><li><strong>Split by workload.</strong> Evaluate coding, support, extraction, and long-context tasks separately; a single blended savings rate can hide regressions.</li><li><strong>Use a range.</strong> Budget with 0% savings until internal tests provide evidence, then add measured scenarios. Treat Anthropic's “up to 30%” as an upper bound claim, not your forecast.</li><li><strong>Recheck quality and latency.</strong> A lower token bill is not a saving if acceptance drops or more expensive fallback models are needed.</li></ol><h2>FAQ</h2><h3>Did Sonnet 5.5 get cheaper per token?</h3><p>No. Anthropic lists the same $2 input and $10 output per million token rates as Sonnet 5. Its cost-per-task claim comes from using fewer tokens to do comparable work.</p><h3>Is 30% savings guaranteed?</h3><p>No. Anthropic describes cost reductions of up to 30% for most work in its launch materials. Your result depends on workload, prompt caching, effort settings, and task completion quality.</p><h3>What does a cached request cost?</h3><p>Anthropic lists cache reads at $0.20 per million tokens, 5-minute writes at $2.50, and 1-hour writes at $4.00. Check the current <a href=\"https://platform.claude.com/docs/en/about-claude/pricing\">Claude API pricing documentation</a> before committing a forecast.</p><h3>Should we switch production traffic immediately?</h3><p>Run a representative evaluation first. Shadow or canary the model, compare cost per accepted result and latency, and keep a rollback route for workloads that regress.</p><h2>Sources and related reading</h2><ul><li><a href=\"https://www.anthropic.com/claude-sonnet-5-5\">Anthropic: Introducing Claude Sonnet 5.5</a></li><li><a href=\"https://platform.claude.com/docs/en/about-claude/pricing\">Anthropic API pricing documentation</a></li><li><a href=\"/research/claude-opus-5-5-cost-model\">Claude Opus 5.5 cost model</a></li></ul>",
+      "faq": [
+        {
+          "question": "Did Sonnet 5.5 get cheaper per token?",
+          "answer": "No. Anthropic lists $2 per million input tokens and $10 per million output tokens, the same as Sonnet 5. Its per-task savings claim comes from using fewer tokens to do comparable work."
+        },
+        {
+          "question": "Is 30% savings guaranteed?",
+          "answer": "No. Anthropic says up to 30% less per task for most work. Measure your own task mix, acceptance rate, retries, cache use, and effort settings."
+        },
+        {
+          "question": "What does a cached request cost?",
+          "answer": "The launch rate card lists cache reads at $0.20 per million tokens, 5-minute writes at $2.50, and 1-hour writes at $4.00."
+        },
+        {
+          "question": "Should we switch production traffic immediately?",
+          "answer": "Evaluate a representative workload first, compare cost per accepted result and latency, then canary traffic with a rollback route."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/sonnet-5-5-pricing-agent-cost-model"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "slug": "how-to-use-jev-in-an-agent",
+  "tags": [
+    "agents",
+    "jev",
+    "model-routing",
+    "implementation",
+    "finops"
+  ],
+  "datePublished": "2026-09-21",
+  "dateModified": "2026-09-21",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "How to use Jev in an AI agent",
+      "titleCore": "How to use Jev in an AI agent",
+      "description": "Use Jev for a bounded agent decision: supply shared state, define typed questions, read the probabilities, then let application code choose the next action.",
+      "body": "<p>Use Jev when an agent needs to choose, score, classify, or gate—not when it needs to write. The smallest useful integration is one decision with a fixed answer space. Give Jev the state already available to the workflow, define the choices your code can handle, and branch on the returned answer and confidence.</p><p>Vercel exposes Jev as <code>typesafe-ai/jev</code> in AI Gateway and documents it through AI SDK's experimental <code>evaluate</code> API. Its <a href=\"https://vercel.com/ai-gateway/models/jev\">model page</a> uses a Boolean question to determine whether a refund was issued. The same request shape works for routing, scoring, and guardrails.</p><h2>1. Start with one bounded question</h2><p>Good first questions have a finite answer space and an obvious next action. “Which queue owns this ticket?” is good: Billing, Technical, Sales, or Review. “What should we do?” is too broad; it asks Jev to plan rather than decide.</p><h2>2. Supply state and typed questions</h2><p>Send the ticket, relevant account facts, and the policy excerpt the decision needs. Then declare the questions, for example: <code>queue: Choice(Billing, Technical, Sales, Review)</code> and <code>urgent: Boolean</code>. Every question shares the same state, so avoid unrelated history and include the facts that a capable human reviewer would need.</p><h2>3. Make confidence change the path</h2><p>Use an explicit route for each result. A high-confidence, low-risk routing result may continue immediately. A medium-confidence case can go to a stronger model with the same evidence. A high-impact or low-confidence case can go to review. Do not use one global threshold: a mistaken topic tag and a mistaken payment action have different consequences.</p><h2>4. Ask more questions before making more calls</h2><p>Jev can evaluate several typed questions against the same state. Ask for queue, urgency, and whether the evidence is sufficient in one decision call when all three change the next step. Add questions only when they change behaviour; free output is not a reason to create unused judgments.</p><h2>5. Keep authority in code</h2><p>Vercel's <a href=\"https://vercel.com/i/jev-agent-control\">agent-control guide</a> keeps permissions, argument validation, retry policy, and tool execution in application code. Jev evaluates the state; your application decides what it is allowed to do. Store the state version, question version, answer, probability, route, and final outcome so that you can tune the threshold and measure cost per resolved task.</p><p>Jev is easiest to adopt when it replaces one awkward LLM decision in an existing agent. Prove the pattern on that decision, then expand to other repeated forks in the workflow.</p>",
+      "faq": [
+        {
+          "question": "What is the first Jev use case to build?",
+          "answer": "Start with a high-volume, bounded decision such as routing a support ticket or deciding whether a proposed tool call needs review."
+        },
+        {
+          "question": "What does Jev need as input?",
+          "answer": "Provide the state relevant to the decision and typed questions with a finite answer space. Every question in a call shares the same state."
+        },
+        {
+          "question": "Should Jev call tools itself?",
+          "answer": "No. Let Jev evaluate the state, then keep authorization, argument validation, retry policy, and tool execution in application code."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/jev-agent-controls-and-budgets",
+          "label": "Where Jev belongs in an agent workflow"
+        },
+        {
+          "slug": "/research/benchmark-jev-against-llm-routing",
+          "label": "What independent Jev tests say about cost"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    },
+    "es": {
+      "title": "Cómo usar Jev en un agente de IA",
+      "titleCore": "Cómo usar Jev en un agente de IA",
+      "description": "Use Jev para una decisión acotada: entregue el estado, defina preguntas tipadas y deje que el código decida la siguiente acción.",
+      "body": "<p>Use Jev cuando un agente necesita elegir, puntuar, clasificar o bloquear una acción; no cuando necesita redactar. La integración más útil empieza con una decisión y un conjunto fijo de respuestas. Entregue a Jev el estado disponible en el flujo, defina las opciones que su código puede manejar y actúe según la respuesta y su confianza.</p><p>Vercel expone Jev como <code>typesafe-ai/jev</code> en AI Gateway y documenta su uso mediante la API experimental <code>evaluate</code> de AI SDK. Consulte la <a href=\"https://vercel.com/ai-gateway/models/jev\">página del modelo</a> para la forma actual de la llamada.</p><h2>1. Empiece con una pregunta acotada</h2><p>Una buena primera pregunta tiene opciones finitas y una acción clara: «¿Qué equipo es propietario de este ticket: Facturación, Técnico, Ventas o Revisión?». «¿Qué deberíamos hacer?» pide planificación y no es una buena tarea para Jev.</p><h2>2. Envíe estado y preguntas tipadas</h2><p>Incluya el ticket, los hechos de cuenta relevantes y el fragmento de política que necesita la decisión. Declare preguntas como una elección de equipo, una puntuación de urgencia o un booleano de evidencia suficiente. Todas comparten el mismo estado.</p><h2>3. Haga que la confianza cambie la ruta</h2><p>Una clasificación de bajo riesgo y alta confianza puede continuar automáticamente. Un caso de confianza media puede pasar a un modelo más capaz con la misma evidencia. Un caso de alto impacto o baja confianza debe ir a revisión. Ajuste los umbrales por consecuencia, no con una regla global.</p><h2>4. Mantenga la autoridad en el código</h2><p>El modelo evalúa el estado; el código valida argumentos, aplica permisos, limita reintentos y ejecuta herramientas. Guarde la versión del estado, la pregunta, la respuesta, la probabilidad, la ruta y el resultado final. Así podrá ajustar el umbral y calcular el coste por tarea resuelta.</p>",
+      "faq": [
+        {
+          "question": "¿Cuál es un buen primer uso de Jev?",
+          "answer": "Una decisión frecuente y acotada, como enrutar un ticket de soporte o decidir si una llamada de herramienta necesita revisión."
+        },
+        {
+          "question": "¿Qué debe permanecer en el código?",
+          "answer": "Permisos, validación de argumentos, política de reintentos y ejecución de herramientas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/jev-agent-controls-and-budgets",
+          "label": "Dónde encaja Jev en un flujo de agentes"
+        },
+        {
+          "slug": "/es/research/jev-use-cases-that-fit",
+          "label": "Seis casos de uso de Jev"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Como usar Jev em um agente de IA",
+      "titleCore": "Como usar Jev em um agente de IA",
+      "description": "Use Jev para uma decisão delimitada: envie o estado, defina perguntas tipadas e deixe o código escolher a próxima ação.",
+      "body": "<p>Use Jev quando um agente precisa escolher, pontuar, classificar ou bloquear uma ação; não quando precisa escrever. A integração mais útil começa com uma decisão e um conjunto fixo de respostas. Passe a Jev o estado já disponível no fluxo, defina as opções que o código sabe tratar e use a resposta e a confiança para escolher a rota.</p><p>A Vercel disponibiliza Jev como <code>typesafe-ai/jev</code> no AI Gateway e documenta o uso pela API experimental <code>evaluate</code> do AI SDK. Consulte a <a href=\"https://vercel.com/ai-gateway/models/jev\">página do modelo</a> para a forma atual da chamada.</p><h2>1. Comece com uma pergunta delimitada</h2><p>Uma boa primeira pergunta tem opções finitas e uma ação clara: «Qual equipa é responsável por este ticket: Faturação, Técnica, Vendas ou Revisão?». «O que devemos fazer?» pede planeamento e não é uma boa tarefa para Jev.</p><h2>2. Envie estado e perguntas tipadas</h2><p>Inclua o ticket, os factos relevantes da conta e a parte da política de que a decisão precisa. Declare perguntas como escolha de equipa, pontuação de urgência ou booleano de evidência suficiente. Todas partilham o mesmo estado.</p><h2>3. Faça a confiança mudar a rota</h2><p>Uma classificação de baixo risco e alta confiança pode seguir automaticamente. Um caso de confiança média pode ir para um modelo mais forte com a mesma evidência. Um caso de alto impacto ou baixa confiança deve ir para revisão. Ajuste limiares por consequência, não com uma regra global.</p><h2>4. Mantenha a autoridade no código</h2><p>O modelo avalia o estado; o código valida argumentos, aplica permissões, limita tentativas e executa ferramentas. Guarde versão do estado, pergunta, resposta, probabilidade, rota e resultado final. Assim poderá ajustar o limiar e medir o custo por tarefa resolvida.</p>",
+      "faq": [
+        {
+          "question": "Qual é um bom primeiro uso de Jev?",
+          "answer": "Uma decisão frequente e delimitada, como encaminhar um ticket de suporte ou decidir se uma chamada de ferramenta precisa de revisão."
+        },
+        {
+          "question": "O que deve continuar no código?",
+          "answer": "Permissões, validação de argumentos, política de tentativas e execução de ferramentas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/jev-agent-controls-and-budgets",
+          "label": "Onde Jev entra num fluxo de agentes"
+        },
+        {
+          "slug": "/pt/research/jev-use-cases-that-fit",
+          "label": "Seis casos de uso de Jev"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/how-to-use-jev-in-an-agent"
+  }
+}

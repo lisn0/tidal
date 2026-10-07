@@ -1,0 +1,367 @@
+{
+  "slug": "deepseek-harness-defensive-patterns",
+  "tags": [
+    "deepseek-harness",
+    "reliability",
+    "security"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "Sieben Defensivmuster aus der DeepSeek-Harness-Dokumentation",
+      "titleCore": "Sieben Defensivmuster aus der DeepSeek-Harness-Dokumentation",
+      "description": "Sieben Defensivmuster aus den DeepSeek-Harness-Docs: orthogonale Ergebnisse, Vertragsnormalisierung, echte Ruhe beim Dispose und Umgebungsbereinigung.",
+      "body": "<p><a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> liefert ein kurzes Dokument mit Defensivmustern, jedes als allgemeine Regel formuliert und mit dem konkreten Fehler, der sie ausgelöst hat. Es ist die übertragbarste Datei im Repository: Nichts davon setzt voraus, dass man das Harness übernimmt, und jeder Punkt entspricht einem Fehlermodus, der in selbstgebauten Agentenlaufzeiten auftaucht.</p>\n\n<h2>1. Orthogonale Ergebnisse getrennt melden</h2>\n<p>Niemals die Meldung eines Flags in die Bedingung eines anderen verschachteln. Ein Prozess kann in ein Timeout laufen <em>und</em> mit Null beenden, weil er das Signal abgefangen und sauber heruntergefahren hat. Wird das Timeout nur im Zweig für Nicht-Null-Exit gemeldet, verschwindet dieser Ausgang. Timeout, Signal und Exit-Code sind unabhängige Fakten und brauchen unabhängige Felder.</p>\n<p>Kostenrelevanz: still verschluckte Timeouts sind die Art, wie Retry-Schleifen entstehen. Der Aufrufer sieht Erfolg, bekommt nichts Brauchbares und versucht es erneut.</p>\n\n<h2>2. Öffentliche Verträge auf beiden Seiten einhalten</h2>\n<p>Wo ein Ergebnis mehrere gültige Darstellungen hat, normalisieren Sie sie, bevor Sie sie nach außen geben. Das Beispiel sind Fehler bei Modellanfragen: Implementierungen können werfen oder einen Fehler-Finish-Chunk senden, und die API-Grenze normalisiert alles auf einen terminalen Finish-Chunk. Ohne das kann ein Aufrufer, der eine Ausnahme fängt, nicht unterscheiden, ob sie vom Anbieter, von Middleware, vom Logging oder aus eigenem Code stammt.</p>\n\n<h2>3. Asynchroner Zustand ist kein synchroner Zustand</h2>\n<p>Statusabfragen sind nicht kausal an bestimmte asynchrone Operationen gekoppelt. Auf den Idle-Zustand eines Agenten als Abschlusssignal für eine Nachricht zu warten, ist falsch, weil mehrere eingereihte Operationen sich Ausführungsintervalle teilen — Idle kann eintreten, bevor die eigene lief, oder nachdem die eines anderen lief.</p>\n<p>Der vorgeschriebene Weg: Ein Automatisierungsaufrufer, dem ein Lauf gehört, definiert sein Intervall explizit, vom Eingang im Posteingang bis zum nächsten ganzheitlichen Idle des Agenten, und ordnet Ausgaben diesem Intervall zu statt einzelnen Nachrichten. Behandeln Sie auch den Zweig, in dem es nichts zu warten gibt, sonst hängt der Aufrufer endlos.</p>\n\n<p class=\"agent-summary\">Ein Automatisierungs-Harness, das auf das falsche Idle-Signal wartet, hält eine Sitzung und ihre Kinder am Leben. Die Rechnung dafür ist nicht das Hängen, sondern alles, was dahinter noch läuft.</p>\n\n<h2>4. Dispose muss Ruhe erreichen, nicht nur anfordern</h2>\n<p>Terminierung anzufordern heißt nicht, sie zu erreichen. Dispose wartet auf die tatsächliche Beendigung der Kinder, bevor es zurückkehrt. Und Listener-Registries schließen <em>vor</em> dem Senden der Kill-Signale, damit späte Abschlüsse still landen statt in ein halb abgebautes System zu feuern.</p>\n<p>Das ist das Muster mit der klarsten finanziellen Kante. Ein Dispose, das zu früh zurückkehrt, lässt verwaiste Subprozesse und ungeschlossene Sandboxes laufen, und abgerechnete Rechenzeit hört nicht auf, nur weil ihr Elternteil sie vergessen hat.</p>\n\n<h2>5. Callback-Ausnahmen im Dispatcher einfangen</h2>\n<p>Umschließen Sie Dispatch-Schleifen mit try/catch. Ein fehlschlagender Abonnent darf das Dispatch-Promise nicht ablehnen oder die dahinter eingereihten Listener aushungern. In einer Agentenlaufzeit ist der ausgehungerte Listener häufig genau der, der abrechnet — so verschwinden Nutzungsdaten, ohne dass ein Fehler sichtbar wird.</p>\n\n<h2>6. Nie die Umgebung oder vorhersagbare Pfade an nicht vertrauenswürdige Ausgaben geben</h2>\n<p>Die stärkste Regel des Dokuments und die zuerst zu übernehmende. Bereinigen Sie die Umgebung gestarteter Kommandos: Entfernen Sie vor dem Start Variablen, die auf key, secret, token und password passen. Nutzen Sie private Verzeichnisse mit Rechten nur für den Eigentümer, zufällige Dateinamen und exklusive Öffnungen statt vorhersagbarer Pfade.</p>\n<p>Zwei verschiedene Bedrohungen. Die Bereinigung verhindert, dass Harness-Zugangsdaten in Subprozess-Ausgaben lecken, die das Modell dann liest — und einmal gelesen, stehen sie im Sitzungsprotokoll und im Kontextfenster. Zufällige Namen und exklusives Anlegen schließen Symlink-Rennen in gemeinsamen Temp-Verzeichnissen.</p>\n\n<h2>7. Link-förmige Pfade entlinken</h2>\n<p>Prüfen Sie vor dem Löschen, ob ein Pfad ein symbolischer Link ist, und löschen Sie den Link, statt ihm zu folgen. Rekursives Entfernen bleibt bestätigten echten Verzeichnissen vorbehalten, weil es über Symlinks in deren Ziele laufen kann und an Junctions wirft. Aufräumcode, der mehr löscht als er angelegt hat, ist ein Fehlermodus ohne obere Schadensgrenze.</p>\n\n<h2>Wie man diese Liste nutzt</h2>\n<ol>\n<li>Nehmen Sie Muster 1 und 4 heute in Ihren Subprozess- und Sandbox-Abbau. Dort leckt das Geld.</li>\n<li>Nehmen Sie Muster 6 überall dorthin, wo Sie einen Prozess starten, dessen Ausgabe das Modell liest.</li>\n<li>Nehmen Sie Muster 3 in Ihre Automatisierungsschicht, besonders dort, wo ein Warten als \"bis der Agent idle ist\" formuliert ist.</li>\n<li>Nehmen Sie Muster 5 in Ihre Telemetrie-Pipeline und prüfen Sie, dass ein fehlschlagender Listener den abrechnenden nicht aushungern kann.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Warum müssen Timeout und Exit-Code unabhängig gemeldet werden?",
+          "answer": "Weil ein Prozess in ein Timeout laufen und trotzdem mit Null beenden kann, wenn er das Terminierungssignal abgefangen und sauber heruntergefahren hat. Die Timeout-Meldung in einen Exit-Code-Zweig zu verschachteln macht diesen Ausgang unsichtbar."
+        },
+        {
+          "question": "Was heißt es, dass Dispose Ruhe erreichen muss?",
+          "answer": "Terminierung anzufordern ist nicht dasselbe wie sie zu erreichen. Dispose muss vor der Rückkehr die tatsächliche Beendigung der Kinder abwarten und Listener-Registries schließen, bevor Kill-Signale gehen, damit späte Abschlüsse still statt in ein abgebautes System laufen."
+        },
+        {
+          "question": "Wie sollte ein Agenten-Harness Subprozess-Umgebungen behandeln?",
+          "answer": "Indem es sie bereinigt. Die dokumentierte Regel lautet, vor dem Start Variablen zu entfernen, die auf key, secret, token und password passen, und private Verzeichnisse, zufällige Dateinamen und exklusive Öffnungen nur für den Eigentümer statt vorhersagbarer Pfade zu nutzen."
+        },
+        {
+          "question": "Warum ist das Warten auf Agent-Idle ein unzuverlässiges Signal?",
+          "answer": "Weil der Status eine Eigenschaft des ganzen Agenten ist, nicht einer einzelnen Nachricht. Mehrere eingereihte Operationen teilen sich Ausführungsintervalle, also kann Idle vor oder nach der eigenen Nachricht eintreten. Ein Aufrufer muss sein Intervall explizit definieren."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Ausgaben-Leitplanken im Harness (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-subagents",
+          "label": "Subagenten und Delegationstiefe (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "Siete patrones defensivos de la documentación de DeepSeek…",
+      "titleCore": "Siete patrones defensivos de la documentación de DeepSeek…",
+      "description": "Siete patrones defensivos de los docs de DeepSeek Harness: resultados ortogonales, normalización de contratos, quiescencia real al liberar y limpieza de entorno.",
+      "body": "<p><a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> incluye un documento breve de patrones defensivos, cada uno escrito como regla general junto al bug concreto que lo motivó. Es el archivo más transferible del repositorio: nada de ello exige adoptar el harness, y cada punto corresponde a un modo de fallo que aparece en runtimes de agentes caseros.</p>\n\n<h2>1. Reporte los resultados ortogonales por separado</h2>\n<p>Nunca anide el reporte de una bandera dentro del condicional de otra. Un proceso puede agotar el tiempo <em>y</em> salir con cero, porque atrapó la señal y se apagó limpiamente. Si el timeout solo se reporta dentro de la rama de salida distinta de cero, ese resultado desaparece. Timeout, señal y código de salida son hechos independientes y necesitan campos independientes.</p>\n<p>Relevancia de coste: los timeouts tragados en silencio son cómo se forman los bucles de reintento. El llamador ve éxito, no obtiene nada útil y vuelve a intentarlo.</p>\n\n<h2>2. Honre los contratos públicos por ambos lados</h2>\n<p>Cuando un resultado tiene varias representaciones válidas, normalícelas antes de exponerlas. El ejemplo trabajado son los fallos de petición al modelo: las implementaciones pueden lanzar o emitir un chunk de finalización con error, y la frontera de la API lo normaliza todo a un chunk terminal. Sin eso, un llamador que captura una excepción no puede saber si vino del proveedor, del middleware, del logging o de su propio código.</p>\n\n<h2>3. El estado asíncrono no es estado síncrono</h2>\n<p>Las consultas de estado no están causalmente ligadas a operaciones asíncronas concretas. Esperar el estado idle de un agente como señal de finalización de un mensaje es un error, porque varias operaciones en cola comparten intervalos de ejecución: el idle puede llegar antes de que corriera el suyo, o después del de otro.</p>\n<p>La corrección prescrita: un llamador de automatización dueño de una ejecución define su intervalo explícitamente, desde la recepción en la bandeja hasta el siguiente idle del agente completo, y atribuye salidas a ese intervalo en vez de a mensajes sueltos. Cubra también la rama de nada-que-esperar, o el llamador cuelga indefinidamente.</p>\n\n<p class=\"agent-summary\">Un harness de automatización que se cuelga esperando la señal de idle equivocada mantiene residentes una sesión y sus hijos. La factura de eso no es el cuelgue: es todo lo que sigue vivo detrás.</p>\n\n<h2>4. Liberar debe alcanzar la quiescencia, no solo pedirla</h2>\n<p>Pedir la terminación no es lograrla. El dispose espera la terminación real de los hijos antes de retornar. Y los registros de escuchas se cierran <em>antes</em> de enviar las señales de kill, para que las finalizaciones tardías aterricen en silencio en vez de disparar callbacks contra un sistema a medio desmontar.</p>\n<p>Este es el patrón con el filo financiero más claro. Un dispose que retorna pronto deja subprocesos huérfanos y sandboxes sin cerrar corriendo, y el cómputo medido no se detiene porque su padre se olvidara de él.</p>\n\n<h2>5. Contenga las excepciones de callback en el despachador</h2>\n<p>Envuelva los bucles de despacho en try/catch. Un suscriptor que falla no debe rechazar la promesa de despacho ni matar de hambre a las escuchas encoladas detrás. En un runtime de agentes, la escucha hambrienta suele ser justo la que hace la contabilidad, y así los registros de uso desaparecen sin que aflore ningún error.</p>\n\n<h2>6. Nunca dé a una salida no confiable el entorno ambiental ni rutas predecibles</h2>\n<p>La regla más fuerte del documento y la primera a adoptar. Limpie el entorno de los comandos lanzados: elimine variables que casen con key, secret, token y password antes de que arranque el subproceso. Use directorios privados creados con permisos solo para el dueño, nombres de archivo aleatorios y aperturas exclusivas en vez de rutas predecibles.</p>\n<p>Dos amenazas distintas. La limpieza de entorno evita que las credenciales del harness se filtren en la salida del subproceso que luego lee el modelo, y una vez leída esa salida está en el registro de sesión y en la ventana de contexto. Los nombres aleatorios y la creación exclusiva cierran carreras de symlink en directorios temporales compartidos.</p>\n\n<h2>7. Desenlace las rutas con forma de enlace</h2>\n<p>Compruebe si una ruta es un enlace simbólico antes de borrarla, y borre el enlace en lugar de seguirlo. El borrado recursivo se reserva a directorios reales confirmados, porque puede atravesar symlinks hacia sus destinos y lanza sobre junctions. Código de limpieza que borra más de lo que creó es un modo de fallo sin techo de daño.</p>\n\n<h2>Cómo usar esta lista</h2>\n<ol>\n<li>Lleve hoy los patrones 1 y 4 a su código de desmontaje de subprocesos y sandboxes. Ahí es donde se fuga el dinero.</li>\n<li>Lleve el patrón 6 a cualquier sitio donde lance un proceso cuya salida vaya a leer el modelo.</li>\n<li>Lleve el patrón 3 a su capa de automatización, sobre todo donde una espera se exprese como \"hasta que el agente esté idle\".</li>\n<li>Lleve el patrón 5 a su pipeline de telemetría y compruebe que una escucha que falla no puede matar de hambre a la de contabilidad.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "¿Por qué timeout y código de salida deben reportarse aparte?",
+          "answer": "Porque un proceso puede agotar el tiempo y aun así salir con cero, si atrapó la señal de terminación y se apagó limpiamente. Anidar el reporte del timeout dentro de una rama de código de salida vuelve invisible ese resultado."
+        },
+        {
+          "question": "¿Qué significa que el dispose alcance la quiescencia?",
+          "answer": "Pedir la terminación no es lo mismo que lograrla. El dispose debe esperar la terminación real de los hijos antes de retornar, y cerrar los registros de escuchas antes de mandar señales de kill para que las finalizaciones tardías lleguen en silencio."
+        },
+        {
+          "question": "¿Cómo debe tratar un harness los entornos de subproceso?",
+          "answer": "Limpiándolos. La regla documentada es eliminar variables que casen con patrones de key, secret, token y password antes de lanzar, y usar directorios privados, nombres de archivo aleatorios y aperturas exclusivas solo para el dueño en lugar de rutas predecibles."
+        },
+        {
+          "question": "¿Por qué esperar el idle del agente es una señal poco fiable?",
+          "answer": "Porque el estado es una propiedad del agente entero, no de un mensaje concreto. Varias operaciones en cola comparten intervalos de ejecución, así que el idle puede llegar antes o después del suyo. El llamador debe definir su propio intervalo de forma explícita."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Límites de gasto en el harness (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-subagents",
+          "label": "Subagentes y profundidad de delegación (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Sept motifs défensifs tirés de la documentation DeepSeek…",
+      "titleCore": "Sept motifs défensifs tirés de la documentation DeepSeek…",
+      "description": "Sept motifs défensifs des docs DeepSeek Harness : résultats orthogonaux, normalisation des contrats, quiescence réelle au dispose et nettoyage de l'environnement.",
+      "body": "<p><a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> livre un court document de motifs défensifs, chacun écrit comme une règle générale accompagnée du bug précis qui l'a motivée. C'est le fichier le plus transposable du dépôt : rien n'y dépend de l'adoption du harness, et chaque point correspond à un mode de défaillance qui apparaît dans les runtimes d'agents maison.</p>\n\n<h2>1. Rapporter séparément les résultats orthogonaux</h2>\n<p>Ne jamais imbriquer le rapport d'un drapeau dans la condition d'un autre. Un processus peut dépasser le délai <em>et</em> sortir avec zéro, parce qu'il a intercepté le signal et s'est arrêté proprement. Si le dépassement n'est rapporté que dans la branche de sortie non nulle, ce résultat disparaît. Délai dépassé, signal et code de sortie sont des faits indépendants et exigent des champs indépendants.</p>\n<p>Pertinence économique : les dépassements avalés en silence sont la façon dont naissent les boucles de retry. L'appelant voit un succès, n'obtient rien d'utile, et recommence.</p>\n\n<h2>2. Honorer les contrats publics des deux côtés</h2>\n<p>Quand un résultat a plusieurs représentations valides, normalisez-les avant de les exposer. L'exemple traité est l'échec de requête modèle : les implémentations peuvent lever une exception ou émettre un chunk de fin en erreur, et la frontière d'API normalise tout en un chunk terminal. Sans cela, un appelant qui attrape une exception ne peut savoir si elle vient du fournisseur, du middleware, du logging ou de son propre code.</p>\n\n<h2>3. L'état asynchrone n'est pas un état synchrone</h2>\n<p>Les requêtes de statut ne sont pas causalement liées à des opérations asynchrones précises. Attendre l'état idle d'un agent comme signal d'achèvement d'un message est faux, car plusieurs opérations en file partagent des intervalles d'exécution : l'idle peut arriver avant que la vôtre ne tourne, ou après celle d'un autre.</p>\n<p>Le correctif prescrit : un appelant d'automatisation propriétaire d'une exécution définit son intervalle explicitement, de la réception en boîte jusqu'au prochain idle de l'agent entier, et attribue les sorties à cet intervalle plutôt qu'à des messages isolés. Traitez aussi la branche rien-à-attendre, sinon l'appelant se bloque indéfiniment.</p>\n\n<p class=\"agent-summary\">Un harness d'automatisation bloqué à attendre le mauvais signal d'idle garde une session et ses enfants résidents. La facture, ce n'est pas le blocage : c'est tout ce qui reste vivant derrière.</p>\n\n<h2>4. Le dispose doit atteindre la quiescence, pas seulement la demander</h2>\n<p>Demander la terminaison n'est pas l'obtenir. Le dispose attend la terminaison réelle des enfants avant de rendre la main. Et les registres d'écouteurs se ferment <em>avant</em> l'envoi des signaux de kill, pour que les fins tardives atterrissent en silence au lieu de déclencher des callbacks dans un système à demi démonté.</p>\n<p>C'est le motif au tranchant financier le plus net. Un dispose qui rend la main trop tôt laisse tourner des sous-processus orphelins et des bacs à sable non fermés, et le calcul facturé ne s'arrête pas parce que son parent l'a oublié.</p>\n\n<h2>5. Contenir les exceptions de callback dans le dispatcher</h2>\n<p>Enveloppez les boucles de dispatch dans try/catch. Un abonné en échec ne doit pas rejeter la promesse de dispatch ni affamer les écouteurs en file derrière lui. Dans un runtime d'agents, l'écouteur affamé est souvent justement celui qui fait la comptabilité, et c'est ainsi que des relevés d'usage disparaissent sans qu'aucune erreur ne remonte.</p>\n\n<h2>6. Ne jamais donner à une sortie non fiable l'environnement ambiant ni des chemins prévisibles</h2>\n<p>La règle la plus forte du document, et la première à adopter. Nettoyez l'environnement des commandes lancées : retirez les variables correspondant à key, secret, token et password avant le démarrage du sous-processus. Utilisez des répertoires privés créés avec des permissions propriétaire uniquement, des noms de fichiers aléatoires et des ouvertures exclusives plutôt que des chemins prévisibles.</p>\n<p>Deux menaces distinctes. Le nettoyage empêche les identifiants du harness de fuir dans la sortie du sous-processus que le modèle lit ensuite — et une fois lue, cette sortie est dans le journal de session et dans la fenêtre de contexte. Noms aléatoires et création exclusive ferment les courses de liens symboliques sur les répertoires temporaires partagés.</p>\n\n<h2>7. Délier les chemins en forme de lien</h2>\n<p>Vérifiez si un chemin est un lien symbolique avant de le supprimer, et supprimez le lien plutôt que de le suivre. La suppression récursive est réservée aux vrais répertoires confirmés, car elle peut traverser des liens jusqu'à leurs cibles et échoue sur les jonctions. Un code de nettoyage qui supprime plus qu'il n'a créé est un mode de défaillance sans plafond de dégâts.</p>\n\n<h2>Comment se servir de cette liste</h2>\n<ol>\n<li>Portez dès aujourd'hui les motifs 1 et 4 dans votre code de démontage des sous-processus et bacs à sable. C'est là que l'argent fuit.</li>\n<li>Portez le motif 6 partout où vous lancez un processus dont le modèle lira la sortie.</li>\n<li>Portez le motif 3 dans votre couche d'automatisation, surtout là où une attente s'exprime en « jusqu'à ce que l'agent soit idle ».</li>\n<li>Portez le motif 5 dans votre pipeline de télémétrie et vérifiez qu'un écouteur en échec ne peut pas affamer celui de la comptabilité.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Pourquoi séparer le rapport du délai et du code de sortie ?",
+          "answer": "Parce qu'un processus peut dépasser le délai et pourtant sortir avec zéro, s'il a intercepté le signal de terminaison et s'est arrêté proprement. Imbriquer le rapport du dépassement dans une branche de code de sortie rend ce résultat invisible."
+        },
+        {
+          "question": "Que veut dire atteindre la quiescence au dispose ?",
+          "answer": "Demander la terminaison n'est pas l'obtenir. Le dispose doit attendre la terminaison réelle des enfants avant de rendre la main, et fermer les registres d'écouteurs avant d'envoyer les signaux de kill pour que les fins tardives arrivent en silence."
+        },
+        {
+          "question": "Comment traiter les environnements de sous-processus ?",
+          "answer": "En les nettoyant. La règle documentée est de retirer les variables correspondant aux motifs key, secret, token et password avant le lancement, et d'utiliser des répertoires privés, des noms de fichiers aléatoires et des ouvertures exclusives propriétaire plutôt que des chemins prévisibles."
+        },
+        {
+          "question": "Pourquoi attendre l'idle de l'agent est-il un signal peu fiable ?",
+          "answer": "Parce que le statut est une propriété de l'agent entier, pas d'un message donné. Plusieurs opérations en file partagent des intervalles d'exécution, donc l'idle peut arriver avant ou après le vôtre. L'appelant doit définir son propre intervalle explicitement."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Garde-fous de dépense dans le harness (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-subagents",
+          "label": "Sous-agents et profondeur de délégation (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessドキュメントに学ぶ七つの防御パターン",
+      "titleCore": "DeepSeek Harnessドキュメントに学ぶ七つの防御パターン",
+      "description": "DeepSeek Harnessの防御パターン七つ：直交する結果の独立報告、契約の正規化、disposeでの実際の静止、そして環境変数のスクラブについて解説します。",
+      "body": "<p><a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> には短い防御パターン集があり、各項目が一般則として書かれ、それを生んだ具体的なバグが添えられています。リポジトリの中で最も転用しやすいファイルです。どれもハーネスの採用を前提とせず、各項目が自作のエージェントランタイムで実際に現れる失敗モードに対応します。</p>\n\n<h2>1. 直交する結果は独立に報告する</h2>\n<p>あるフラグの報告を別のフラグの条件分岐の中に入れ子にしてはいけません。プロセスはタイムアウトし<em>かつ</em>ゼロで終了しうる。シグナルを捕捉して綺麗に終了した場合です。タイムアウトを非ゼロ終了の分岐でしか報告しなければ、その結末は消えます。タイムアウト、シグナル、終了コードは独立した事実であり、独立したフィールドが必要です。</p>\n<p>コストへの含意：黙って飲み込まれたタイムアウトはリトライループの温床です。呼び出し側は成功と見なし、有用な結果を得られず、また試します。</p>\n\n<h2>2. 公開契約を両側で守る</h2>\n<p>結果に複数の妥当な表現がある場合は、公開する前に正規化します。例として挙がるのはモデルリクエストの失敗です。実装は例外を投げることもエラーの finish チャンクを出すこともあり、API 境界はすべてを終端の finish チャンクへ正規化します。そうしないと、例外を捕まえた呼び出し側は、それがプロバイダ由来か、ミドルウェア由来か、ロギング由来か、自分のコード由来か判別できません。</p>\n\n<h2>3. 非同期状態は同期状態ではない</h2>\n<p>ステータス照会は特定の非同期操作と因果的に結びついていません。ある一通のメッセージの完了信号としてエージェントの idle 状態を待つのは誤りです。キューに並んだ複数の操作が実行区間を共有するため、idle は自分の処理が走る前にも、他人の処理の後にも訪れうるからです。</p>\n<p>示されている対処は、実行を所有する自動化の呼び出し側が自分の区間を明示的に定義することです。受信箱への到着から次のエージェント全体の idle までを区間とし、出力を個々のメッセージではなくその区間に帰属させます。待つものが何もない分岐も扱ってください。さもないと呼び出し側は永久にハングします。</p>\n\n<p class=\"agent-summary\">誤った idle 信号を待ってハングする自動化ハーネスは、セッションとその子を常駐させ続けます。請求されるのはハングそのものではなく、その背後で生き続けているすべてです。</p>\n\n<h2>4. dispose は静止を要求するのではなく到達する</h2>\n<p>終了を要求することは終了を達成することではありません。dispose は戻る前に子の実際の終了を待ちます。さらにリスナーレジストリは kill シグナルの送信<em>前</em>に閉じ、遅れて届く完了が半ば解体されたシステムへコールバックを撃ち込むのではなく静かに落ちるようにします。</p>\n<p>財務的な切れ味が最も明快なパターンです。早期に戻る dispose は、孤児となったサブプロセスと閉じられていないサンドボックスを走らせたままにします。従量課金の計算資源は、親が忘れたからといって止まりません。</p>\n\n<h2>5. コールバック例外はディスパッチャで封じ込める</h2>\n<p>ディスパッチループを try/catch で包みます。一つの購読者の失敗が、ディスパッチの Promise を reject したり、後ろに並ぶリスナーを飢えさせたりしてはいけません。エージェントランタイムでは、飢えるリスナーがしばしば会計処理を担う当のリスナーです。こうして利用実績が、何のエラーも表に出ないまま失われます。</p>\n\n<h2>6. 信頼できない出力に環境や予測可能なパスを渡さない</h2>\n<p>文書中で最も強い規則であり、最初に採用すべきものです。起動するコマンドの環境をスクラブしてください。サブプロセスの開始前に key、secret、token、password に一致する変数を取り除きます。予測可能なパスではなく、所有者のみの権限で作った専用ディレクトリ、ランダムなファイル名、排他的な所有者専用オープンを使います。</p>\n<p>脅威は二つあります。環境のスクラブは、ハーネスの資格情報がサブプロセス出力へ漏れ、それをモデルが読むことを防ぎます。いったん読まれれば、その出力はセッションログとコンテキストウィンドウの中です。ランダムな名前と排他生成は、共有一時ディレクトリでのシンボリックリンク競合を塞ぎます。</p>\n\n<h2>7. リンク状のパスは unlink する</h2>\n<p>削除前にパスがシンボリックリンクかを確認し、辿らずにリンクそのものを削除します。再帰削除は実在すると確認できたディレクトリに限ります。リンクを辿って対象へ入り込むことがあり、ジャンクションでは例外を投げるためです。自分が作った以上のものを消すクリーンアップコードは、被害に上限のない失敗モードです。</p>\n\n<h2>このリストの使い方</h2>\n<ol>\n<li>パターン 1 と 4 を今日、サブプロセスとサンドボックスの後始末コードへ持ち込む。金が漏れるのはそこです。</li>\n<li>パターン 6 を、モデルが出力を読むプロセスを起動するあらゆる箇所へ持ち込む。</li>\n<li>パターン 3 を自動化層へ、とくに待機が「エージェントが idle になるまで」と表現されている箇所へ持ち込む。</li>\n<li>パターン 5 をテレメトリ基盤へ持ち込み、失敗するリスナーが会計用リスナーを飢えさせないことを確認する。</li>\n</ol>",
+      "faq": [
+        {
+          "question": "なぜタイムアウトと終了コードを独立に報告するのですか？",
+          "answer": "プロセスは終了シグナルを捕捉して綺麗に終了した場合、タイムアウトしつつゼロで終了しうるからです。タイムアウトの報告を終了コードの分岐に入れ子にすると、その結末が見えなくなります。直交する結果には独立したフィールドが必要です。"
+        },
+        {
+          "question": "dispose が静止に到達するとはどういう意味ですか？",
+          "answer": "終了を要求することと達成することは同じではありません。dispose は戻る前に子の実際の終了を待ち、kill シグナルを送る前にリスナーレジストリを閉じて、遅れて届く完了が解体途中のシステムを撃たず静かに落ちるようにします。"
+        },
+        {
+          "question": "サブプロセスの環境変数はどう扱うべきですか？",
+          "answer": "スクラブするべきです。文書化された規則は、起動前に key、secret、token、password のパターンに一致する変数を取り除き、予測可能なパスではなく専用ディレクトリ、ランダムなファイル名、所有者限定の排他オープンを使うことです。"
+        },
+        {
+          "question": "なぜ idle を待つのは信頼できない完了信号なのですか？",
+          "answer": "ステータスは個々のメッセージではなくエージェント全体の性質だからです。キューに並ぶ複数の操作が実行区間を共有するため、idle は自分の処理の前にも他人の処理の後にも来ます。呼び出し側は自分の区間を明示的に定義し、出力をその区間に帰属させる必要があります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "ハーネスの支出ガードレール（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-subagents",
+          "label": "サブエージェントと委譲の深さ（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Sete padrões defensivos da documentação do DeepSeek Harness",
+      "titleCore": "Sete padrões defensivos da documentação do DeepSeek Harness",
+      "description": "Sete padrões defensivos dos docs do DeepSeek Harness: resultados ortogonais, normalização de contratos, quiescência real no dispose e limpeza de ambiente.",
+      "body": "<p>O <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> traz um documento curto de padrões defensivos, cada um escrito como regra geral acompanhada do bug específico que a motivou. É o arquivo mais transferível do repositório: nada ali depende de adotar o harness, e cada item corresponde a um modo de falha que aparece em runtimes de agente caseiros.</p>\n\n<h2>1. Relate resultados ortogonais de forma independente</h2>\n<p>Nunca aninhe o relato de uma flag dentro do condicional de outra. Um processo pode estourar o tempo <em>e</em> sair com zero, porque capturou o sinal e desligou limpo. Se o timeout só é relatado dentro do ramo de saída diferente de zero, esse desfecho some. Timeout, sinal e código de saída são fatos independentes e precisam de campos independentes.</p>\n<p>Relevância de custo: timeouts engolidos em silêncio são como surgem os laços de retentativa. O chamador vê sucesso, não obtém nada útil e tenta de novo.</p>\n\n<h2>2. Honre os contratos públicos dos dois lados</h2>\n<p>Quando um desfecho tem várias representações válidas, normalize-as antes de expô-las. O exemplo trabalhado são as falhas de requisição ao modelo: implementações podem lançar ou emitir um chunk de finalização com erro, e a fronteira da API normaliza tudo para um chunk terminal. Sem isso, um chamador que captura uma exceção não sabe se ela veio do provedor, do middleware, do logging ou do próprio código.</p>\n\n<h2>3. Estado assíncrono não é estado síncrono</h2>\n<p>Consultas de status não são causalmente ligadas a operações assíncronas específicas. Esperar o estado idle de um agente como sinal de conclusão de uma mensagem é errado, porque múltiplas operações na fila compartilham intervalos de execução — o idle pode chegar antes da sua rodar, ou depois da de outro.</p>\n<p>A correção prescrita: um chamador de automação dono de uma execução define seu intervalo explicitamente, do recebimento na caixa até o próximo idle do agente inteiro, e atribui saídas a esse intervalo em vez de a mensagens isoladas. Trate também o ramo de nada-a-esperar, ou o chamador trava indefinidamente.</p>\n\n<p class=\"agent-summary\">Um harness de automação que trava esperando o sinal de idle errado mantém uma sessão e seus filhos residentes. A conta disso não é o travamento: é tudo que segue vivo por trás.</p>\n\n<h2>4. O dispose deve alcançar a quiescência, não apenas pedi-la</h2>\n<p>Pedir a terminação não é alcançá-la. O dispose aguarda a terminação real dos filhos antes de retornar. E os registros de ouvintes fecham <em>antes</em> do envio dos sinais de kill, para que finalizações tardias aterrissem em silêncio em vez de disparar callbacks num sistema meio desmontado.</p>\n<p>É o padrão com a borda financeira mais clara. Um dispose que retorna cedo deixa subprocessos órfãos e sandboxes não fechadas rodando, e computação medida não para porque o pai esqueceu dela.</p>\n\n<h2>5. Contenha exceções de callback no despachante</h2>\n<p>Envolva os laços de despacho em try/catch. Um assinante que falha não pode rejeitar a promessa de despacho nem matar de fome os ouvintes enfileirados atrás. Num runtime de agentes, o ouvinte faminto costuma ser justamente o que faz a contabilidade, e é assim que registros de uso somem sem nenhum erro aflorar.</p>\n\n<h2>6. Nunca entregue a saída não confiável o ambiente ambiente ou caminhos previsíveis</h2>\n<p>A regra mais forte do documento e a primeira a adotar. Limpe o ambiente dos comandos lançados: remova variáveis que casem com key, secret, token e password antes de o subprocesso iniciar. Use diretórios privados criados com permissões só do dono, nomes de arquivo aleatórios e aberturas exclusivas em vez de caminhos previsíveis.</p>\n<p>São duas ameaças distintas. A limpeza de ambiente impede que credenciais do harness vazem na saída do subprocesso que o modelo depois lê — e, uma vez lida, essa saída está no log de sessão e na janela de contexto. Nomes aleatórios e criação exclusiva fecham corridas de symlink em diretórios temporários compartilhados.</p>\n\n<h2>7. Desfaça o vínculo de caminhos em forma de link</h2>\n<p>Verifique se um caminho é um link simbólico antes de removê-lo, e apague o link em vez de segui-lo. Remoção recursiva fica reservada a diretórios reais confirmados, porque pode atravessar symlinks até seus alvos e lança em junctions. Código de limpeza que apaga mais do que criou é um modo de falha sem teto de dano.</p>\n\n<h2>Como usar esta lista</h2>\n<ol>\n<li>Leve hoje os padrões 1 e 4 ao seu código de desmontagem de subprocessos e sandboxes. É ali que o dinheiro vaza.</li>\n<li>Leve o padrão 6 a qualquer lugar onde você lança um processo cuja saída o modelo vai ler.</li>\n<li>Leve o padrão 3 à sua camada de automação, sobretudo onde uma espera é expressa como \"até o agente ficar idle\".</li>\n<li>Leve o padrão 5 ao seu pipeline de telemetria e confira que um ouvinte falho não consegue matar de fome o da contabilidade.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Por que timeout e código de saída devem ser relatados à parte?",
+          "answer": "Porque um processo pode estourar o tempo e ainda assim sair com zero, se capturou o sinal de terminação e desligou limpo. Aninhar o relato do timeout dentro de um ramo de código de saída torna esse desfecho invisível."
+        },
+        {
+          "question": "O que significa o dispose alcançar quiescência?",
+          "answer": "Pedir a terminação não é o mesmo que alcançá-la. O dispose deve aguardar a terminação real dos filhos antes de retornar, e fechar os registros de ouvintes antes de enviar sinais de kill para que finalizações tardias cheguem em silêncio."
+        },
+        {
+          "question": "Como um harness deve tratar ambientes de subprocesso?",
+          "answer": "Limpando-os. A regra documentada é remover variáveis que casem com padrões de key, secret, token e password antes de lançar, e usar diretórios privados, nomes de arquivo aleatórios e aberturas exclusivas só do dono em vez de caminhos previsíveis."
+        },
+        {
+          "question": "Por que esperar o idle do agente é um sinal pouco confiável?",
+          "answer": "Porque o status é propriedade do agente inteiro, não de uma mensagem específica. Múltiplas operações enfileiradas compartilham intervalos de execução, então o idle pode chegar antes ou depois da sua. O chamador precisa definir seu próprio intervalo explicitamente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Limites de gasto no harness (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-subagents",
+          "label": "Subagentes e profundidade de delegação (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "سبعة أنماط دفاعية في DeepSeek Harness",
+      "titleCore": "سبعة أنماط دفاعية في DeepSeek Harness",
+      "description": "أنماط دفاعية في DeepSeek Harness: النتائج المتعامدة، ومطابقة العقود، والتخلص الآمن من الموارد، وتنظيف البيئة لمنع انهيار الوكلاء.",
+      "body": "<p>توثق الشفرة المصدرية لـ DeepSeek Harness مجموعة من الأنماط الدفاعية الأساسية في هندسة برمجيات الوكلاء المستقلين لمنع تسرب الموارد وانهيار الجلسات الطويلة واستنزاف الرموز عند حدوث أخطاء غير متوقعة.</p>\n\n<h2>1. الإبلاغ المنفصل عن النتائج المتعامدة</h2>\n<p>فصل حالة نجاح المهمة عن حالة استهلاك الموارد؛ يجب أن يُسجل استهلاك الرموز والوقت حتى لو انتهت المهمة بفشل منطقي، لضمان عدم ضياع بيانات الفوترة والقياس المالي.</p>\n\n<h2>2. الالتزام الصارم بالعقود البرمجية للواجهات</h2>\n<p>التحقق الصارم من صحة المدخلات والمخرجات على طرفي الاستدعاء قبل تمرير البيانات للنموذج أو تنفيذ نصوص الأدوات، مما يحمي النظام من حقن التعليمات الخبيثة أو التنسيقات المشوهة.</p>\n\n<h2>3. التمييز بين الحالة المتزامنة وغير المتزامنة</h2>\n<p>عدم افتراض اكتمال العمليات غير المتزامنة فوراً؛ إدارة دورة حياة الوكلاء وحفظ الحالة في سجل الأحداث قبل الانتقال للخطوة التالية لتفادي التعارض وتلف البيانات.</p>\n\n<h2>4. التخلص الفعلي والآمن من الموارد (Resource Disposal)</h2>\n<p>عند إغلاق الجلسة أو إلغاء مهمة وكيل، يجب ضمان إيقاف العمليات الفرعية وإغلاق اتصالات الشبكة وتحرير الذاكرة بدلاً من مجرد طلب الإلغاء الشكلي.</p>\n\n<h2>5. احتواء استثناءات ردود النداء (Callbacks) في الموزع</h2>\n<p>عزل استثناءات الأدوات والإضافات الخارجية بحيث لا يتسبب خطأ في إضافة فرعية بانهيار حلقة الوكيل الرئيسية أو فقدان سجل الجلسة بأكمله.</p>\n\n<h2>6. حماية مسارات البيئة الحساسة من المخرجات غير الموثوقة</h2>\n<p>منع تسريب مسارات النظام أو مفاتيح البيئة إلى مخرجات النماذج أو واجهات المستخدم لمنع الثغرات الأمنية والوصول غير المصرح به.</p>\n\n<h2>7. إلغاء ربط المسارات الرمزية المشبوهة (Symlinks)</h2>\n<p>التحقق من المسارات الفعلية للملفات لمنع الوكلاء المستقلين من تجاوز مساحة العمل المحددة والوصول لملفات النظام الحساسة خارج المشروع.</p>",
+      "faq": [
+        {
+          "question": "ما هي الأنماط الدفاعية في DeepSeek Harness؟",
+          "answer": "هي قواعد معمارية تحكم عزل الأخطاء وإدارة الموارد والتحقق من العقود لضمان استقرار الوكلاء المستقلين أثناء العمليات المعقدة."
+        },
+        {
+          "question": "لماذا يعد تحرير الموارد أمراً حاسماً في بيئات الوكلاء؟",
+          "answer": "لأن ترك اتصالات وعمليات خلفية مفتوحة يؤدي إلى استنزاف الذاكرة والحوسبة واستمرار استهلاك رموز الاستدلال دون جدوى."
+        },
+        {
+          "question": "كيف يحمي النظام مساحة العمل من التجاوزات الأمنية؟",
+          "answer": "بالتحقق الصارم من المسارات الحقيقية للملفات وإلغاء الروابط الرمزية المشبوهة وعزل صلاحيات الأدوات داخل نطاق محدد."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-guardrails",
+          "label": "حواجز الإنفاق في DeepSeek Harness"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-session-log",
+          "label": "سجل الجلسة كمصدر وحيد للحقيقة"
+        }
+      ]
+    },
+    "zh": {
+      "title": "DeepSeek Harness 中的七大防御性架构模式",
+      "titleCore": "DeepSeek Harness 中的七大防御性架构模式",
+      "description": "DeepSeek Harness 源码中的七大工程防御模式：正交结果分离、契约双向校验、真实资源释放与运行环境沙盒化隔离。",
+      "body": "<p>在复杂的自主智能体系统中，微小的错误往往会导致死循环、资源泄漏与巨额 Token 账单。DeepSeek Harness 源码沉淀了七大防御性模式：</p>\n\n<h2>1. 正交结果独立上报</h2>\n<p>将业务任务成功与否同资源消耗统计彻底解耦。即使任务失败，Token 消耗与执行耗时也必须完整记录并上报财务网关。</p>\n\n<h2>2. 契约双向严格校验</h2>\n<p>调用前和输出后均对参数结构和类型进行严格断言，防止提示词注入攻击与畸形 JSON 破坏后续流程。</p>\n\n<h2>3. 异步状态严禁同步化假设</h2>\n<p>所有的智能体状态变更均持久化在事件流日志中，避免在多步骤并发中发生数据冲突或竞态丢失。</p>\n\n<h2>4. 彻底释放运行资源 (Dispose)</h2>\n<p>取消或结束任务时，必须实质性终止子进程、关闭网络连接并清理临时文件，而不仅仅发出取消信号。</p>\n\n<h2>5. 分发器全面捕获插件异常</h2>\n<p>任何工具或插件的报错均被隔离在本地调用栈中，不得引发核心智能体控制循环的奔溃。</p>\n\n<h2>6. 严禁向不可信输出暴露环境敏感信息</h2>\n<p>过滤系统环境变量与路径信息，防止大模型在生成代码或分析报告时泄漏企业凭证。</p>\n\n<h2>7. 符号链接穿透校验</h2>\n<p>严格解析真实文件路径，阻止智能体通过软链接越界访问项目工作区之外的敏感文件。</p>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness 防御模式的核心作用是什么？",
+          "answer": "通过契约校验、异常隔离和资源清理，防止自主智能体陷入无限死循环并杜绝意外的 Token 浪费。"
+        },
+        {
+          "question": "为什么任务失败时仍需记录 Token 消耗？",
+          "answer": "正交结果原则要求无论业务成败，模型推理成本都必须精确核算并记账，以保障 FinOps 归因真实。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "什么是 DeepSeek Harness？"
+        },
+        {
+          "slug": "/zh/research/deepseek-harness-guardrails",
+          "label": "支出与安全护栏"
+        }
+      ]
+    },
+    "it": {
+      "title": "Sette pattern difensivi in DeepSeek Harness",
+      "titleCore": "Sette pattern difensivi in DeepSeek Harness",
+      "description": "I pattern difensivi nel codice di DeepSeek Harness: separazione ortogonale, contratti, rilascio reale delle risorse e isolamento ambientale.",
+      "body": "<p>Sette principi architetturali adottati da DeepSeek Harness per prevenire crash, leak di memoria e sprechi di token durante l'esecuzione autonoma degli agenti.</p>\n<h2>1. Risultati ortogonali e contratti</h2><p>Separare l'esito della task dal monitoraggio dei consumi: i token spesi vanno tracciati anche se la task fallisce.</p>\n<h2>2. Smaltimento reale delle risorse</h2><p>All'arresto di un agente, tutti i processi e le connessioni devono essere terminati esplicitamente.</p>",
+      "faq": [
+        {
+          "question": "Qual è lo scopo dei pattern difensivi?",
+          "answer": "Evitare loop infiniti, garantire la chiusura delle risorse e proteggere i budget di inferenza dai crash."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "DeepSeek Harness의 7가지 방어적 설계 패턴",
+      "titleCore": "DeepSeek Harness의 7가지 방어적 설계 패턴",
+      "description": "DeepSeek Harness 소스코드 분석: 직교 결과 분리, 엄격한 계약 검증, 리소스 완전 해제 및 샌드박스 환경 격리.",
+      "body": "<p>자율 에이전트 실행 중 리소스 누수와 무한 루프를 방지하기 위해 DeepSeek Harness가 적용한 7가지 방어 패턴입니다.</p>\n<h2>1. 결과와 비용의 직교 분리</h2><p>작업 성공 여부와 관계없이 토큰 사용량과 실행 메트릭을 반드시 기록하여 비용 추적성을 유지합니다.</p>\n<h2>2. 완전한 리소스 정리 (Dispose)</h2><p>작업 중단 시 백그라운드 프로세스와 네트워크 소켓을 강제 종료하여 유휴 토큰 과금을 방지합니다.</p>",
+      "faq": [
+        {
+          "question": "방어적 패턴이 왜 필요한가요?",
+          "answer": "에이전트 장애와 무한 재시도 루프로 인한 토큰 비용 폭증을 방지하고 시스템 안정성을 유지하기 위함입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness 개요"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Zeven defensieve patronen in DeepSeek Harness",
+      "titleCore": "Zeven defensieve patronen in DeepSeek Harness",
+      "description": "Defensieve patronen in DeepSeek Harness: orthogonale resultaten, contractvalidatie, veilige opschoning en sandboxing.",
+      "body": "<p>Zeven essentiële ontwerppatronen uit DeepSeek Harness om oneindige lussen en onverwachte tokenkosten te voorkomen.</p>\n<h2>1. Orthogonale registratie</h2><p>Registreer tokenverbruik altijd, ongeacht of de taak slaagde of faalde.</p>\n<h2>2. Grondige afvoer van resources</h2><p>Zorg dat subprocessen en netwerkverbindingen direct sluiten bij beëindiging.</p>",
+      "faq": [
+        {
+          "question": "Wat is het voordeel van deze patronen?",
+          "answer": "Ze garanderen robuuste foutisolatie en voorkomen dat falende agents oneindig tokens blijven verbruiken."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        }
+      ]
+    },
+    "en": {
+      "title": "Seven defensive patterns from the DeepSeek Harness docs",
+      "titleCore": "Seven defensive patterns from the DeepSeek Harness docs",
+      "description": "Seven defensive patterns from the DeepSeek Harness docs: orthogonal outcomes, contract normalisation, real quiescence on dispose, and environment scrubbing.",
+      "body": "<p><a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> ships a short document of defensive patterns, each written as a general rule with the specific bug that motivated it. It is the most transferable file in the repository: none of it depends on adopting the harness, and every item corresponds to a failure mode that shows up in homegrown agent runtimes.</p>\n\n<h2>1. Report orthogonal outcomes independently</h2>\n<p>Never nest one flag's report inside another flag's conditional. A process can time out <em>and</em> exit zero, because it trapped the signal and shut down cleanly. If the timeout is only reported inside a non-zero-exit branch, that outcome disappears. Timed-out, signal, and exit code are independent facts and need independent fields.</p>\n<p>Cost relevance: silently swallowed timeouts are how retry loops form. The caller sees success, gets nothing useful, and tries again.</p>\n\n<h2>2. Honour public contracts on both sides</h2>\n<p>Where an outcome has multiple valid representations, normalise them before exposing them. The worked example is model-request failures: implementations may throw or emit an error finish chunk, and the API boundary normalises everything to a terminal finish chunk. Without that, a caller catching an exception cannot tell whether it came from the provider, from middleware, from logging, or from its own code.</p>\n\n<h2>3. Async state is not synchronous state</h2>\n<p>Status queries are not causally tied to specific async operations. Awaiting an agent's idle state as a completion signal for one message is wrong, because multiple queued operations share execution intervals — idle may arrive before yours ran, or after someone else's did.</p>\n<p>The prescribed fix: an automation caller owning a run defines its interval explicitly, from inbox receipt through the next whole-agent idle, and attributes outputs to that interval rather than to individual messages. Handle the nothing-to-wait-for branch too, or the caller hangs indefinitely.</p>\n\n<div class=\"callout\">An automation harness that hangs waiting for the wrong idle signal keeps a session and its children resident. The bill for that is not the hang; it is everything still alive behind it.</div>\n\n<h2>4. Dispose must reach quiescence, not just request it</h2>\n<p>Requesting termination is not achieving it. Dispose awaits children's actual termination before returning. And listener registries close <em>before</em> kill signals are sent, so late completions land silently instead of firing callbacks into a half-torn-down system.</p>\n<p>This is the pattern with the clearest financial edge. A dispose that returns early leaves orphaned subprocesses and unclosed sandboxes running, and metered compute does not stop because its parent forgot about it.</p>\n\n<h2>5. Contain callback exceptions in the dispatcher</h2>\n<p>Wrap dispatch loops in try/catch. One failing subscriber must not reject the dispatch promise or starve the listeners queued behind it. In an agent runtime the starved listener is frequently the one doing accounting, which is how usage records go missing without any error surfacing.</p>\n\n<h2>6. Never hand untrusted output the ambient environment or predictable paths</h2>\n<p>The strongest rule in the document, and the one to adopt first. Scrub spawned command environments: remove variables matching key, secret, token, and password patterns before the subprocess starts. Use private directories created with owner-only permissions, random file names, and exclusive owner-only opens rather than predictable paths.</p>\n<p>Two distinct threats. Environment scrubbing stops harness credentials leaking into subprocess output that the model then reads — and, once read, that output is in the session log and the context window. Random names and exclusive creation close symlink races on shared temporary directories.</p>\n\n<h2>7. Unlink link-shaped paths</h2>\n<p>Check whether a path is a symbolic link before unlinking, and delete the link rather than following it. Recursive removal is reserved for confirmed real directories, because it can traverse symlinks into their targets and throws on junctions. Cleanup code that deletes more than it created is a failure mode with no upper bound on the damage.</p>\n\n<h2>How to use this list</h2>\n<ol>\n<li>Take patterns 1 and 4 to your subprocess and sandbox teardown code today. Those two are where money leaks.</li>\n<li>Take pattern 6 to any place you spawn a process whose output the model will read.</li>\n<li>Take pattern 3 to your automation layer, especially anywhere a wait is expressed as \"until the agent is idle\".</li>\n<li>Take pattern 5 to your telemetry pipeline and check that a failing listener cannot starve the accounting one.</li>\n</ol>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — the enforcement points.</li>\n<li><a href=\"/research/deepseek-harness-subagents\">DeepSeek Harness subagents and delegation depth</a> — where dispose actually matters.</li>\n<li><a href=\"/research/deepseek-harness-tool-scopes\">DeepSeek Harness tool scopes and restrictions</a> — narrowing the blast radius.</li>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — what gets recorded.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "Why must a process report timeout and exit code independently?",
+          "answer": "Because a process can time out and still exit zero, if it trapped the termination signal and shut down cleanly. Nesting the timeout report inside an exit-code branch makes that outcome invisible. Orthogonal outcomes need independent fields."
+        },
+        {
+          "question": "What does it mean that dispose must reach quiescence?",
+          "answer": "Requesting termination is not the same as achieving it. Dispose must await children's actual termination before returning, and close listener registries before sending kill signals so that late completions arrive silently rather than firing into a torn-down system."
+        },
+        {
+          "question": "How should an agent harness handle subprocess environments?",
+          "answer": "By scrubbing them. The documented rule is to remove variables matching key, secret, token, and password patterns before spawning, and to use private directories, random file names, and exclusive owner-only file opens rather than predictable paths."
+        },
+        {
+          "question": "Why is awaiting agent idle an unreliable completion signal?",
+          "answer": "Because status is a property of the whole agent, not of one message. Multiple queued operations share execution intervals, so idle can arrive before your message ran or after someone else's did. A caller must define its own interval explicitly and attribute outputs to that interval."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-defensive-patterns"
+  }
+}

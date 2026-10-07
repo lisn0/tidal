@@ -1,0 +1,65 @@
+{
+  "slug": "system-one-models-jev-calibration-routing",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "routing",
+    "cost-optimization",
+    "agents"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "System One Models and Jev cost optimization",
+      "titleCore": "System One Models and Jev cost optimization",
+      "description": "Calibration-based routing cuts agent cost 76% vs always-Astra at near-Astra accuracy. How confidence-gated escalation works.",
+      "body": "<p>Announced in September 2026, <strong>System One Models</strong> and <strong>Jev</strong> form a calibration-based routing layer for LLM agents. Instead of routing by task type or static rules, Jev routes by <em>calibration</em>: a cheap model (System One) answers first; if its confidence is below threshold, the request escalates to a premium model. For FinOps, this means paying for reasoning only when the cheap model genuinely doesn't know.</p><h2>How it works</h2><ol><li><strong>System One Model</strong> (small, fast, cheap) generates an answer + calibrated confidence score.</li><li><strong>Jev gateway</strong> checks: is confidence >= threshold (e.g., 0.9)?</li><li><strong>If yes:</strong> Return System One answer. Cost: ~$0.10/1M tokens.</li><li><strong>If no:</strong> Escalate to premium model (Astra, Opus 5.5, etc.). Cost: $10-50/1M tokens.</li></ol><h2>Cost comparison</h2><table><thead><tr><th>Strategy</th><th>Avg cost/task</th><th>Accuracy</th></tr></thead><tbody><tr><td>Always Astra (max effort)</td><td>$1.73</td><td>50.9</td></tr><tr><td>Always Sol</td><td>$0.28</td><td>44.2</td></tr><tr><td>Static routing (easy→Sol, hard→Astra)</td><td>$0.94</td><td>48.1</td></tr><tr><td>Jev calibration routing (threshold 0.9)</td><td>$0.41</td><td>49.8</td></tr></tbody></table><p>Data from Jev benchmarks on Artificial Analysis Intelligence Index. Calibration routing achieves near-Astra accuracy at 24% of the cost.</p><h2>Why calibration beats static routing</h2><p>Static routing misclassifies 15-20% of tasks (easy tasks flagged hard, hard tasks flagged easy). Calibration is self-correcting: the model <em>knows when it doesn't know</em>. Jev's threshold is tunable — raise it for higher accuracy, lower it for lower cost.</p><h2>FinOps implementation</h2><ul><li><strong>Deploy Jev as a gateway:</strong> All agent traffic passes through Jev; System One is the default.</li><li><strong>Set thresholds per workflow:</strong> Customer-facing chat = 0.95; background batch = 0.85.</li><li><strong>Track escalation rate:</strong> Target 10-20% escalation. Higher means System One is undertrained; lower means you're overpaying.</li><li><strong>Budget the premium tier:</strong> Cap monthly escalation spend; alert at 80%.</li></ul><h2>Integration with existing agents</h2><p>Jev wraps any OpenAI-compatible endpoint. Existing agents call Jev instead of the model directly. No code changes to agent logic — only the base URL and API key change.</p><h2>Bottom line</h2><p>Calibration-based routing is the first FinOps primitive that optimizes at inference time, not design time. System One + Jev turns \"which model?\" from a static architecture decision into a dynamic, per-request cost control.</p>",
+      "faq": [
+        {
+          "question": "What are System One Models and Jev?",
+          "answer": "System One is a small, fast, calibrated model. Jev is a routing gateway that checks System One's confidence and escalates to premium models only when confidence is below a threshold. Announced September 2026."
+        },
+        {
+          "question": "How much can calibration routing save?",
+          "answer": "Jev benchmarks show 76% cost reduction vs always-Astra (from $1.73 to $0.41 per task) while maintaining 98% of Astra's accuracy on the Artificial Analysis index."
+        },
+        {
+          "question": "Does calibration routing add latency?",
+          "answer": "System One responds in ~200ms. Escalation adds one extra round-trip (~400ms total). For 80% of requests that don't escalate, latency is lower than calling Astra directly."
+        },
+        {
+          "question": "Can I use Jev with my existing agent framework?",
+          "answer": "Yes. Jev exposes an OpenAI-compatible API. Change the base URL to Jev's endpoint; agents work unchanged. System One is the default model; premium models are configured in Jev's routing table."
+        },
+        {
+          "question": "What's the right confidence threshold?",
+          "answer": "Start at 0.90. Measure escalation rate and accuracy. Raise to 0.95 for customer-facing; lower to 0.85 for batch workloads where errors are cheaper."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/jev-agent-controls-and-budgets",
+          "label": "Jev agent controls and budgets"
+        },
+        {
+          "slug": "/research/jev-ai-finops-decision-economics",
+          "label": "Jev AI FinOps decision economics"
+        },
+        {
+          "slug": "/research/gpt-6-astra-cost-model",
+          "label": "GPT-6 Astra cost model"
+        },
+        {
+          "slug": "/research/model-price-cuts-routing-budget",
+          "label": "Model price cuts and routing budgets"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/system-one-models-jev-calibration-routing"
+  }
+}

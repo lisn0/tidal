@@ -1,0 +1,335 @@
+{
+  "slug": "deepseek-harness-guardrails",
+  "tags": [
+    "deepseek-harness",
+    "guardrails",
+    "budget"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "Wo Ausgaben-Leitplanken in DeepSeek Harness hingehören",
+      "titleCore": "Wo Ausgaben-Leitplanken in DeepSeek Harness hingehören",
+      "description": "DeepSeek Harness bietet zwei Waterfall-Hooks, agent/pre-step und tools/pre-execute. Ein Leitfaden, sie als Budget- und Policy-Durchsetzungspunkte zu nutzen.",
+      "body": "<p>Ein Agent, der sein Budget erst aus der Monatsrechnung erfährt, hat kein Budget. Er hat einen Post-mortem-Bericht. Die nützliche Frage an jedes Harness lautet: Wo kann man sich in die Schleife stellen und Nein sagen? DeepSeek Harness beantwortet das mit zwei benannten Waterfall-Erweiterungspunkten.</p>\n\n<h2>Zuerst die Form der Schleife</h2>\n<p>Das Harness nutzt ein Zug-und-Schritt-Modell. Ein <strong>Schritt</strong> ist eine Modellanfrage plus die Werkzeugaufrufe, die sie erzeugt. Ein <strong>Zug</strong> enthält null oder mehr Schritte. Der Ablauf eines Zuges lautet grob: Eingabe übernehmen, Prompt zusammenbauen, <code>agent/pre-step</code>, LLM-Stream, Werkzeugausführung, Schrittabschluss, Zugabschluss.</p>\n<p>Zwei Ereignisströme laufen nebeneinander. <code>session/event</code> trägt dauerhafte Replay-Fakten — Chunks, Nachrichten, Werkzeugaufrufe, Ergebnisse. <code>agent/*</code> trägt Live-Koordinationssignale — Status, Inbox, Anfrage-Interception. Leitplanken gehören in den zweiten Strom, die Abrechnung in den ersten.</p>\n\n<h2>Abfangpunkt 1: <code>agent/pre-step</code></h2>\n<p>Das ist der Kontrollpunkt, bevor die Modellanfrage hinausgeht. Die Dokumentation hält fest, dass die zurückgegebene <code>agent/pre-step</code>-Entscheidung autoritativ ist und dass Listener, die <code>next()</code> umschließen, nachgelagerte Nachrichten erhalten, sofern ein Ersetzen nicht beabsichtigt ist. Genau diese Eigenschaft macht den Hook als Budget-Gate brauchbar: Ein Listener kann einen vorgeschlagenen Schritt ablehnen oder verändern, und die Entscheidung hält.</p>\n<p>Was hierher gehört:</p>\n<ul>\n<li><strong>Schrittobergrenzen pro Zug.</strong> Der Ausreißer-Fehlermodus ist ein Zug, der nie konvergiert. Eine harte Schrittdecke macht aus einer unbegrenzten Rechnung eine begrenzte.</li>\n<li><strong>Kumulative Token-Budgets.</strong> Summieren Sie den bisherigen Verbrauch aus dem Sitzungsprotokoll und verweigern Sie den nächsten Schritt jenseits der Schwelle.</li>\n<li><strong>Modell-Downshift.</strong> Schreiben Sie den Schritt auf eine günstigere Route um, sobald ein Zug eine weiche Schwelle überschritten hat, statt ihn rundweg abzulehnen.</li>\n<li><strong>Kontextgrößen-Limits.</strong> Der Prompt wird vor diesem Hook zusammengebaut, die fertige Anfrage ist hier also sichtbar und messbar.</li>\n</ul>\n\n<h2>Abfangpunkt 2: <code>tools/pre-execute</code></h2>\n<p>Die Werkzeugausführung ist eine dreiphasige Pipeline. Zuerst läuft der <code>tools/pre-execute</code>-Waterfall, dann die monotonen Guards, und erst danach der Werkzeugrumpf — sandboxed, mit Dateisystem-Gatekeeping. Anschließend kann ein Post-execute-Waterfall das Ergebnis annehmen, blockieren, ersetzen oder um Kontext ergänzen, und <code>ToolDefinition.finalizeContent</code> setzt Inhaltsinvarianten synchron durch.</p>\n<p>Die Berechtigungsschicht ist bewusst asymmetrisch. Registrierte monotone Guards verweigern oder enthalten sich, mit geschützter Identität — sie gewähren nie. Verweigert ein Guard, oder fehlt der One-Shot-Prompt von <code>ctx.approval</code> beziehungsweise bleibt er unbeantwortbar, ist das Ergebnis Verweigerung und der Werkzeugrumpf wird übersprungen. Fail closed, nicht fail open.</p>\n<p>Dateisystem-Mutationen sind separat abgesichert: Nur <code>fs/write-intent</code>- oder <code>fs/edit-intent</code>-Mutationen kommen durch. Schreibvorgänge sind kein beiläufiger Nebeneffekt eines laufenden Werkzeugs.</p>\n\n<p class=\"agent-summary\">Zwei Eigenschaften machen diese Pipeline als Kontrollpunkt vertrauenswürdig: Guards können nur verweigern, und ein unbeantwortbarer Freigabe-Prompt verweigert. Die meisten selbstgebauten Policy-Schichten für Agenten fallen offen aus, wenn der Freigabekanal fehlt — also genau dann, wenn man sie gebraucht hätte.</p>\n\n<h2>Was die Pipeline aufzeichnet</h2>\n<p>Drei Sitzungsereignisse ergeben den Prüfpfad: <code>tool/call</code> vor der Ausführung, <code>tool/code-dispatch</code> für Unteraufrufe und <code>tool/result</code> als endgültiges, autoritatives Ergebnis. Dass Unteraufrufe separat protokolliert werden, ist wichtig — ein einzelner modellsichtbarer Werkzeugaufruf, der sich intern auffächert, verbirgt sein Fan-out nicht.</p>\n\n<h2>Ein praxistauglicher Leitplankensatz</h2>\n<table>\n<thead><tr><th>Kontrolle</th><th>Hook</th><th>Verhindert</th></tr></thead>\n<tbody>\n<tr><td>Maximale Schritte pro Zug</td><td><code>agent/pre-step</code></td><td>Nicht konvergierende Schleifen</td></tr>\n<tr><td>Kumulative Token-Obergrenze</td><td><code>agent/pre-step</code></td><td>Schleichende Mehrausgaben</td></tr>\n<tr><td>Route-Downshift ab Schwelle</td><td><code>agent/pre-step</code></td><td>Frontier-Preise für billige Arbeit</td></tr>\n<tr><td>Werkzeug-Allowlist nach Kostenklasse</td><td>Monotoner Guard</td><td>Teure Werkzeuge in billigen Kontexten</td></tr>\n<tr><td>Subprozess- und Netzwerksperre</td><td><code>ctx.sandbox</code>-Policy</td><td>Ungemessenen Egress</td></tr>\n<tr><td>Write-Intent-Gating</td><td><code>ctx.fs</code>-Naht</td><td>Ungeprüfte Änderungen</td></tr>\n</tbody>\n</table>\n\n<h2>Der Vorbehalt</h2>\n<p>DeepSeek Harness ist im Developer Preview und die eigene README warnt vor kompatibilitätsbrechenden Änderungen. Diese Hook-Namen und -Semantiken sind der heute dokumentierte Stand; behandeln Sie dagegen gebaute Leitplanken-Plugins als Code, den Sie erneut anfassen werden, und pinnen Sie die Version, gegen die Sie gebaut haben.</p>",
+      "faq": [
+        {
+          "question": "Wo lässt sich in DeepSeek Harness eine Ausgaben-Policy durchsetzen?",
+          "answer": "An zwei Waterfall-Erweiterungspunkten. agent/pre-step läuft, bevor eine Modellanfrage abgeschickt wird, und seine zurückgegebene Entscheidung ist autoritativ. tools/pre-execute läuft vor jedem Werkzeugrumpf, noch vor den monotonen Berechtigungs-Guards."
+        },
+        {
+          "question": "Was ist ein Waterfall-Hook in DeepSeek Harness?",
+          "answer": "Ein Waterfall ist eine geordnete Kette von Listenern, in der jeder next() aufrufen muss, um nach unten zu delegieren. Listener, die next() umschließen, erhalten nachgelagerte Nachrichten, sofern ein Ersetzen nicht beabsichtigt ist — ein Guard kann so einen Schritt prüfen, ändern oder abbrechen."
+        },
+        {
+          "question": "Was ist ein monotoner Guard?",
+          "answer": "Ein monotoner Guard bewertet Werkzeugberechtigungen, ohne sie zu verändern: Er kann verweigern oder sich enthalten, aber nie gewähren. Guards laufen nach dem tools/pre-execute-Waterfall, und wenn ein Guard verweigert oder die Freigabe unbeantwortbar ist, wird der Werkzeugrumpf übersprungen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-plugin-architecture",
+          "label": "Alles ist ein Plugin: die Architektur (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Ausgaben-Leitplanken für Agenten (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "Dónde poner los límites de gasto en DeepSeek Harness",
+      "titleCore": "Dónde poner los límites de gasto en DeepSeek Harness",
+      "description": "DeepSeek Harness expone dos hooks en cascada, agent/pre-step y tools/pre-execute. Guía para usarlos como puntos de aplicación de presupuesto y política.",
+      "body": "<p>Un agente que descubre su presupuesto en la factura mensual no tiene presupuesto: tiene un post-mortem. La pregunta útil sobre cualquier harness es dónde puede uno plantarse dentro del bucle y decir que no, y DeepSeek Harness la responde con dos puntos de extensión en cascada con nombre propio.</p>\n\n<h2>Primero, la forma del bucle</h2>\n<p>El harness usa un modelo de turno y paso. Un <strong>paso</strong> es una petición al modelo más las llamadas a herramientas que produce. Un <strong>turno</strong> contiene cero o más pasos. El flujo de un turno es, a grandes rasgos: reclamo de entrada, ensamblado del prompt, <code>agent/pre-step</code>, stream del LLM, ejecución de herramientas, cierre del paso y cierre del turno.</p>\n<p>Dos flujos de eventos corren en paralelo. <code>session/event</code> lleva hechos duraderos de replay: chunks, mensajes, llamadas a herramientas, resultados. <code>agent/*</code> lleva señales vivas de coordinación: estado, buzón, interceptación de peticiones. Los límites pertenecen al segundo; la contabilidad, al primero.</p>\n\n<h2>Punto de intercepción 1: <code>agent/pre-step</code></h2>\n<p>Es el control previo a que salga la petición al modelo. La documentación afirma que la decisión devuelta por <code>agent/pre-step</code> es autoritativa y que los listeners que envuelven <code>next()</code> preservan los mensajes aguas abajo salvo que la sustitución sea intencionada. Esa es la propiedad que lo hace utilizable como puerta de presupuesto: un listener puede rechazar un paso propuesto, o modificarlo, y la decisión se mantiene.</p>\n<p>Lo que corresponde aquí:</p>\n<ul>\n<li><strong>Topes de pasos por turno.</strong> El modo de fallo del agente descontrolado es un turno que nunca converge. Un techo duro de pasos convierte una factura ilimitada en una acotada.</li>\n<li><strong>Presupuestos acumulados de tokens.</strong> Sume el uso registrado hasta ahora en el log de sesión y rechace el siguiente paso pasado el umbral.</li>\n<li><strong>Bajada de modelo.</strong> Reescriba el paso hacia una ruta más barata cuando el turno haya superado un umbral blando, en vez de rechazarlo sin más.</li>\n<li><strong>Límites de tamaño de contexto.</strong> El prompt se ensambla antes de este hook, así que la petición ya montada es visible y medible aquí.</li>\n</ul>\n\n<h2>Punto de intercepción 2: <code>tools/pre-execute</code></h2>\n<p>La ejecución de herramientas es una tubería de tres fases. Primero corre la cascada <code>tools/pre-execute</code>, después los guardas monótonos y solo entonces el cuerpo de la herramienta, en sandbox y con control de acceso al sistema de archivos. Luego una cascada post-execute puede aceptar, bloquear, sustituir o añadir contexto al resultado, y <code>ToolDefinition.finalizeContent</code> impone invariantes de contenido de forma síncrona.</p>\n<p>La capa de permisos es deliberadamente asimétrica. Los guardas monótonos registrados deniegan o se abstienen, con identidad protegida: nunca conceden. Si un guarda deniega, o si el prompt de un solo uso de <code>ctx.approval</code> falta o resulta incontestable, el resultado es denegación y el cuerpo de la herramienta se omite. Falla cerrado, no abierto.</p>\n<p>Las mutaciones del sistema de archivos se controlan aparte: solo pasan las mutaciones <code>fs/write-intent</code> o <code>fs/edit-intent</code>. Escribir no es un efecto colateral incidental de ejecutar una herramienta.</p>\n\n<p class=\"agent-summary\">Dos propiedades hacen fiable esta tubería como punto de control: los guardas solo pueden denegar, y un prompt de aprobación incontestable deniega. La mayoría de capas caseras de política para agentes fallan en abierto cuando falta el canal de aprobación, que es justo cuando las necesitaba.</p>\n\n<h2>Qué registra la tubería</h2>\n<p>Tres eventos de sesión le dan el rastro de auditoría: <code>tool/call</code> antes de ejecutar, <code>tool/code-dispatch</code> para subllamadas y <code>tool/result</code> como resultado final autoritativo. Que las subllamadas se registren aparte importa: una única llamada a herramienta visible para el modelo que se ramifica internamente no esconde su ramificación.</p>\n\n<h2>Un conjunto práctico de límites</h2>\n<table>\n<thead><tr><th>Control</th><th>Hook</th><th>Frena</th></tr></thead>\n<tbody>\n<tr><td>Máximo de pasos por turno</td><td><code>agent/pre-step</code></td><td>Bucles que no convergen</td></tr>\n<tr><td>Techo acumulado de tokens</td><td><code>agent/pre-step</code></td><td>Sobregasto a fuego lento</td></tr>\n<tr><td>Bajada de ruta pasado el umbral</td><td><code>agent/pre-step</code></td><td>Precios de frontera para trabajo barato</td></tr>\n<tr><td>Lista blanca de herramientas por clase de coste</td><td>Guarda monótono</td><td>Herramientas caras en contextos baratos</td></tr>\n<tr><td>Denegación de subprocesos y red</td><td>Política de <code>ctx.sandbox</code></td><td>Salida de red sin medir</td></tr>\n<tr><td>Control de write-intent</td><td>Costura <code>ctx.fs</code></td><td>Mutaciones sin revisar</td></tr>\n</tbody>\n</table>\n\n<h2>La salvedad</h2>\n<p>DeepSeek Harness está en developer preview y su propio README advierte de cambios que rompen compatibilidad. Estos nombres y semánticas de hooks son los documentados hoy; trate los plugins de límites construidos sobre ellos como código que revisitará, y fije la versión contra la que construyó.</p>",
+      "faq": [
+        {
+          "question": "¿Dónde se puede aplicar una política de gasto en DeepSeek Harness?",
+          "answer": "En dos puntos de extensión en cascada. agent/pre-step corre antes de emitir una petición al modelo y su decisión devuelta es autoritativa. tools/pre-execute corre antes de que se ejecute el cuerpo de cualquier herramienta, por delante de los guardas monótonos de permisos."
+        },
+        {
+          "question": "¿Qué es un hook en cascada en DeepSeek Harness?",
+          "answer": "Una cascada es una cadena ordenada de listeners donde cada uno debe llamar a next() para delegar aguas abajo. Los listeners que envuelven next() preservan los mensajes posteriores salvo que la sustitución sea intencionada, de modo que un guarda puede inspeccionar, modificar o cortar un paso."
+        },
+        {
+          "question": "¿Qué es un guarda monótono?",
+          "answer": "Un guarda monótono evalúa permisos de herramientas sin modificarlos: puede denegar o abstenerse, pero nunca conceder. Los guardas corren tras la cascada tools/pre-execute, y si un guarda deniega o la aprobación resulta incontestable, el cuerpo de la herramienta se omite."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-plugin-architecture",
+          "label": "Todo es un plugin: la arquitectura (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Límites de gasto para agentes (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Où placer les garde-fous de dépense dans DeepSeek Harness",
+      "titleCore": "Où placer les garde-fous de dépense dans DeepSeek Harness",
+      "description": "DeepSeek Harness expose deux hooks en cascade, agent/pre-step et tools/pre-execute. Comment s'en servir comme points d'application de budget et de politique.",
+      "body": "<p>Un agent qui découvre son budget sur la facture mensuelle n'a pas de budget : il a un post-mortem. La question utile à poser à un harness est : où peut-on se placer dans la boucle et dire non ? DeepSeek Harness y répond avec deux points d'extension en cascade nommés.</p>\n\n<h2>D'abord, la forme de la boucle</h2>\n<p>Le harness emploie un modèle tour et étape. Une <strong>étape</strong> est une requête modèle plus les appels d'outils qu'elle produit. Un <strong>tour</strong> contient zéro étape ou plus. Le déroulé d'un tour est en gros : prise de l'entrée, assemblage du prompt, <code>agent/pre-step</code>, flux LLM, exécution des outils, clôture de l'étape, clôture du tour.</p>\n<p>Deux flux d'événements avancent en parallèle. <code>session/event</code> porte les faits durables de relecture — chunks, messages, appels d'outils, résultats. <code>agent/*</code> porte les signaux de coordination en direct — statut, boîte de réception, interception de requêtes. Les garde-fous appartiennent au second ; la comptabilité au premier.</p>\n\n<h2>Point d'interception 1 : <code>agent/pre-step</code></h2>\n<p>C'est le point de contrôle avant l'envoi de la requête modèle. La documentation précise que la décision renvoyée par <code>agent/pre-step</code> fait autorité et que les listeners qui enveloppent <code>next()</code> préservent les messages en aval sauf remplacement intentionnel. C'est cette propriété qui en fait une porte budgétaire utilisable : un listener peut refuser une étape proposée, ou la modifier, et la décision tient.</p>\n<p>Ce qui a sa place ici :</p>\n<ul>\n<li><strong>Plafonds d'étapes par tour.</strong> Le mode de défaillance de l'agent emballé est un tour qui ne converge jamais. Un plafond dur transforme une facture non bornée en facture bornée.</li>\n<li><strong>Budgets cumulés de tokens.</strong> Additionnez l'usage déjà consigné dans le journal de session et refusez l'étape suivante au-delà du seuil.</li>\n<li><strong>Rétrogradation de modèle.</strong> Réécrivez l'étape vers une route moins chère dès qu'un tour a dépassé un seuil souple, plutôt que de la refuser sèchement.</li>\n<li><strong>Limites de taille de contexte.</strong> L'assemblage du prompt a lieu avant ce hook : la requête assemblée est donc visible et mesurable ici.</li>\n</ul>\n\n<h2>Point d'interception 2 : <code>tools/pre-execute</code></h2>\n<p>L'exécution d'outils est un pipeline en trois phases. La cascade <code>tools/pre-execute</code> passe d'abord, les gardes monotones ensuite, et seulement alors le corps de l'outil s'exécute — en bac à sable, avec filtrage du système de fichiers. Ensuite une cascade post-execute peut accepter, bloquer, remplacer ou enrichir le résultat, et <code>ToolDefinition.finalizeContent</code> impose des invariants de contenu de façon synchrone.</p>\n<p>La couche de permissions est délibérément asymétrique. Les gardes monotones enregistrés refusent ou s'abstiennent, identité protégée : ils n'accordent jamais. Si un garde refuse, ou si l'invite unique de <code>ctx.approval</code> est absente ou sans réponse possible, le résultat est un refus et le corps de l'outil est ignoré. Échec fermé, pas ouvert.</p>\n<p>Les mutations du système de fichiers sont filtrées à part : seules les mutations <code>fs/write-intent</code> ou <code>fs/edit-intent</code> passent. Écrire n'est pas un effet de bord incident de l'exécution d'un outil.</p>\n\n<p class=\"agent-summary\">Deux propriétés rendent ce pipeline digne de confiance comme point de contrôle : les gardes ne peuvent que refuser, et une invite d'approbation sans réponse possible refuse. La plupart des couches de politique maison échouent en ouvert quand le canal d'approbation manque, c'est-à-dire précisément quand on en avait besoin.</p>\n\n<h2>Ce que le pipeline consigne</h2>\n<p>Trois événements de session forment la piste d'audit : <code>tool/call</code> avant exécution, <code>tool/code-dispatch</code> pour les sous-appels et <code>tool/result</code> comme résultat final faisant autorité. Que les sous-appels soient consignés séparément compte : un unique appel d'outil visible du modèle qui se ramifie en interne ne cache pas sa ramification.</p>\n\n<h2>Un jeu de garde-fous pratique</h2>\n<table>\n<thead><tr><th>Contrôle</th><th>Hook</th><th>Empêche</th></tr></thead>\n<tbody>\n<tr><td>Étapes maximum par tour</td><td><code>agent/pre-step</code></td><td>Boucles qui ne convergent pas</td></tr>\n<tr><td>Plafond cumulé de tokens</td><td><code>agent/pre-step</code></td><td>Dérive de dépense à petit feu</td></tr>\n<tr><td>Rétrogradation de route au seuil</td><td><code>agent/pre-step</code></td><td>Tarif frontière sur du travail bon marché</td></tr>\n<tr><td>Liste blanche d'outils par classe de coût</td><td>Garde monotone</td><td>Outils coûteux en contexte bon marché</td></tr>\n<tr><td>Refus des sous-processus et du réseau</td><td>Politique <code>ctx.sandbox</code></td><td>Sortie réseau non mesurée</td></tr>\n<tr><td>Filtrage du write-intent</td><td>Couture <code>ctx.fs</code></td><td>Mutations non relues</td></tr>\n</tbody>\n</table>\n\n<h2>La réserve</h2>\n<p>DeepSeek Harness est en developer preview et son propre README annonce des changements cassant la compatibilité. Ces noms et sémantiques de hooks sont ceux documentés aujourd'hui ; traitez les plugins de garde-fous bâtis dessus comme du code que vous rouvrirez, et épinglez la version contre laquelle vous avez construit.</p>",
+      "faq": [
+        {
+          "question": "Où peut-on appliquer une politique de dépense dans DeepSeek Harness ?",
+          "answer": "À deux points d'extension en cascade. agent/pre-step s'exécute avant l'émission d'une requête modèle et la décision qu'il renvoie fait autorité. tools/pre-execute s'exécute avant le corps de tout outil, en amont des gardes monotones de permissions."
+        },
+        {
+          "question": "Qu'est-ce qu'un hook en cascade dans DeepSeek Harness ?",
+          "answer": "Une cascade est une chaîne ordonnée de listeners où chacun doit appeler next() pour déléguer en aval. Les listeners qui enveloppent next() préservent les messages suivants sauf remplacement intentionnel, si bien qu'un garde peut inspecter, modifier ou court-circuiter une étape."
+        },
+        {
+          "question": "Qu'est-ce qu'un garde monotone ?",
+          "answer": "Un garde monotone évalue les permissions d'outils sans les modifier : il peut refuser ou s'abstenir, jamais accorder. Les gardes passent après la cascade tools/pre-execute, et si un garde refuse ou si l'approbation reste sans réponse possible, le corps de l'outil est ignoré."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-plugin-architecture",
+          "label": "Tout est un plugin : l'architecture (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Garde-fous de dépense pour agents (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessで支出ガードレールをどこに置くか",
+      "titleCore": "DeepSeek Harnessで支出ガードレールをどこに置くか",
+      "description": "DeepSeek Harnessはagent/pre-stepとtools/pre-executeという二つのウォーターフォールフックを備えます。予算とポリシーの強制点として使う方法を解説します。",
+      "body": "<p>月次請求書で初めて自分の予算を知るエージェントに、予算はありません。あるのは事後検証だけです。どのハーネスに対しても有用な問いは「ループのどこに立って『いいえ』と言えるか」であり、DeepSeek Harness は名前の付いた二つのウォーターフォール拡張点でそれに答えます。</p>\n\n<h2>まずループの形</h2>\n<p>ハーネスはターンとステップのモデルを使います。<strong>ステップ</strong>とは一回のモデルリクエストと、そこから生じるツール呼び出しのことです。<strong>ターン</strong>はゼロ個以上のステップを含みます。ターンの流れはおおよそ、入力の受理、プロンプト組み立て、<code>agent/pre-step</code>、LLM ストリーム、ツール実行、ステップ完了、ターン終了です。</p>\n<p>二つのイベントストリームが並走します。<code>session/event</code> は再生に耐える永続的な事実（チャンク、メッセージ、ツール呼び出し、結果）を運びます。<code>agent/*</code> はライブの調整シグナル（ステータス、受信箱、リクエスト介入）を運びます。ガードレールは後者に、会計は前者に属します。</p>\n\n<h2>介入点 1：<code>agent/pre-step</code></h2>\n<p>モデルリクエストが送出される前のチェックポイントです。ドキュメントは、返された <code>agent/pre-step</code> の決定が権威を持つこと、そして <code>next()</code> をラップするリスナーは意図的な置換でない限り下流のメッセージを保つことを明記しています。この性質こそが予算ゲートとして使える理由です。リスナーは提案されたステップを拒否も変更もでき、その決定が通ります。</p>\n<p>ここに置くべきもの：</p>\n<ul>\n<li><strong>ターンあたりのステップ上限。</strong> 暴走の失敗形態は、収束しないターンです。硬い上限は、青天井の請求を上限付きの請求に変えます。</li>\n<li><strong>累積トークン予算。</strong> セッションログのこれまでの使用量を合計し、閾値を超えたら次のステップを拒否します。</li>\n<li><strong>モデルのダウンシフト。</strong> ソフト閾値を超えたターンでは、拒否ではなくより安いルートへステップを書き換えます。</li>\n<li><strong>コンテキストサイズの制限。</strong> プロンプト組み立てはこのフックより前なので、組み上がったリクエストをここで可視・計測できます。</li>\n</ul>\n\n<h2>介入点 2：<code>tools/pre-execute</code></h2>\n<p>ツール実行は三段のパイプラインです。まず <code>tools/pre-execute</code> ウォーターフォールが走り、次に単調ガード、そのあとで初めてツール本体が、サンドボックス内でファイルシステムの門番付きで実行されます。実行後にはポスト実行ウォーターフォールが結果を受理・遮断・置換・文脈追加でき、<code>ToolDefinition.finalizeContent</code> が内容の不変条件を同期的に強制します。</p>\n<p>権限レイヤーは意図的に非対称です。登録された単調ガードは、識別子を保護されたうえで拒否か棄権のみを行い、決して許可しません。ガードが拒否した場合、あるいは <code>ctx.approval</code> のワンショットプロンプトが存在しないか応答不能な場合、結果は拒否となりツール本体はスキップされます。フェイルオープンではなくフェイルクローズです。</p>\n<p>ファイルシステムの変更は別枠で制御されます。通過できるのは <code>fs/write-intent</code> または <code>fs/edit-intent</code> の変更だけです。書き込みはツールが動いた副次的な結果ではありません。</p>\n\n<p class=\"agent-summary\">このパイプラインを制御点として信頼できるものにしている性質は二つです。ガードは拒否しかできないこと、そして応答不能な承認プロンプトは拒否になること。自作のエージェント・ポリシー層の多くは承認チャネルが欠けたときフェイルオープンしますが、それこそまさに必要だった場面です。</p>\n\n<h2>パイプラインが残す記録</h2>\n<p>監査証跡は三つのセッションイベントで得られます。実行前の <code>tool/call</code>、サブ呼び出しの <code>tool/code-dispatch</code>、そして最終的で権威ある結果の <code>tool/result</code> です。サブ呼び出しが別途記録される点は重要で、内部でファンアウトするモデル可視のツール呼び出しが、そのファンアウトを隠しません。</p>\n\n<h2>実用的なガードレールの組み合わせ</h2>\n<table>\n<thead><tr><th>制御</th><th>フック</th><th>止めるもの</th></tr></thead>\n<tbody>\n<tr><td>ターンあたり最大ステップ数</td><td><code>agent/pre-step</code></td><td>収束しないループ</td></tr>\n<tr><td>累積トークン上限</td><td><code>agent/pre-step</code></td><td>じわじわ進む超過支出</td></tr>\n<tr><td>閾値超過でのルート降格</td><td><code>agent/pre-step</code></td><td>安価な作業へのフロンティア価格</td></tr>\n<tr><td>コストクラス別ツール許可リスト</td><td>単調ガード</td><td>安価な文脈での高価なツール</td></tr>\n<tr><td>サブプロセスとネットワークの拒否</td><td><code>ctx.sandbox</code> ポリシー</td><td>計測されない外向き通信</td></tr>\n<tr><td>write-intent のゲート</td><td><code>ctx.fs</code> シーム</td><td>レビューされない変更</td></tr>\n</tbody>\n</table>\n\n<h2>留保</h2>\n<p>DeepSeek Harness は developer preview であり、README 自身が互換性を壊す変更を警告しています。ここに挙げたフック名と意味論は今日時点で文書化されているものです。これらに対して作るガードレール・プラグインは後で手を入れるコードだと考え、構築時のバージョンを固定してください。</p>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness ではどこで支出ポリシーを強制できますか？",
+          "answer": "二つのウォーターフォール拡張点です。agent/pre-step はモデルリクエストが発行される前に走り、返された決定が権威を持ちます。tools/pre-execute はいかなるツール本体よりも前、単調な権限ガードよりも手前で走ります。"
+        },
+        {
+          "question": "DeepSeek Harness のウォーターフォールフックとは何ですか？",
+          "answer": "ウォーターフォールとは、各リスナーが下流へ委譲するために next() を呼ばねばならない順序付きのリスナー連鎖です。next() をラップするリスナーは意図的な置換でない限り下流のメッセージを保つため、ガードはステップの検査・変更・打ち切りができます。"
+        },
+        {
+          "question": "単調ガードとは何ですか？",
+          "answer": "単調ガードはツール権限を変更せずに評価します。拒否か棄権はできますが、許可はできません。ガードは tools/pre-execute ウォーターフォールの後に走り、ガードが拒否するか承認が応答不能であればツール本体はスキップされます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-plugin-architecture",
+          "label": "すべてがプラグイン：その構造（英語）"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "エージェントの支出ガードレール（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Onde colocar os limites de gasto no DeepSeek Harness",
+      "titleCore": "Onde colocar os limites de gasto no DeepSeek Harness",
+      "description": "O DeepSeek Harness expõe dois hooks em cascata, agent/pre-step e tools/pre-execute. Um guia para usá-los como pontos de aplicação de orçamento e política.",
+      "body": "<p>Um agente que descobre seu orçamento na fatura mensal não tem orçamento: tem um post-mortem. A pergunta útil sobre qualquer harness é onde dá para se plantar dentro do laço e dizer não, e o DeepSeek Harness responde com dois pontos de extensão em cascata com nome próprio.</p>\n\n<h2>Primeiro, o formato do laço</h2>\n<p>O harness usa um modelo de turno e passo. Um <strong>passo</strong> é um pedido ao modelo mais as chamadas de ferramenta que ele produz. Um <strong>turno</strong> contém zero ou mais passos. O fluxo de um turno é, em linhas gerais: tomada da entrada, montagem do prompt, <code>agent/pre-step</code>, stream do LLM, execução de ferramentas, fecho do passo e fecho do turno.</p>\n<p>Dois fluxos de eventos correm lado a lado. <code>session/event</code> carrega fatos duráveis de replay — chunks, mensagens, chamadas de ferramenta, resultados. <code>agent/*</code> carrega sinais vivos de coordenação — status, caixa de entrada, interceptação de pedidos. Os limites pertencem ao segundo; a contabilidade ao primeiro.</p>\n\n<h2>Ponto de interceptação 1: <code>agent/pre-step</code></h2>\n<p>É o ponto de controle antes de o pedido ao modelo sair. A documentação afirma que a decisão devolvida por <code>agent/pre-step</code> é autoritativa e que listeners que envolvem <code>next()</code> preservam as mensagens a jusante salvo substituição intencional. É essa propriedade que o torna utilizável como portão de orçamento: um listener pode recusar um passo proposto, ou modificá-lo, e a decisão vale.</p>\n<p>O que pertence aqui:</p>\n<ul>\n<li><strong>Tetos de passos por turno.</strong> O modo de falha do agente desgovernado é um turno que nunca converge. Um teto duro transforma uma conta ilimitada numa limitada.</li>\n<li><strong>Orçamentos cumulativos de tokens.</strong> Some o uso já registrado no log de sessão e recuse o passo seguinte além do limiar.</li>\n<li><strong>Rebaixamento de modelo.</strong> Reescreva o passo para uma rota mais barata quando o turno passar de um limiar suave, em vez de recusá-lo de vez.</li>\n<li><strong>Limites de tamanho de contexto.</strong> A montagem do prompt ocorre antes deste hook, então o pedido montado é visível e mensurável aqui.</li>\n</ul>\n\n<h2>Ponto de interceptação 2: <code>tools/pre-execute</code></h2>\n<p>A execução de ferramentas é um pipeline de três fases. Primeiro roda a cascata <code>tools/pre-execute</code>, depois os guardas monotônicos e só então o corpo da ferramenta, em sandbox e com controle de acesso ao sistema de arquivos. Em seguida uma cascata pós-execução pode aceitar, bloquear, substituir ou acrescentar contexto ao resultado, e <code>ToolDefinition.finalizeContent</code> impõe invariantes de conteúdo de forma síncrona.</p>\n<p>A camada de permissões é deliberadamente assimétrica. Guardas monotônicos registrados negam ou se abstêm, com identidade protegida: nunca concedem. Se um guarda nega, ou se o prompt de uso único de <code>ctx.approval</code> está ausente ou é irrespondível, o resultado é negação e o corpo da ferramenta é pulado. Falha fechado, não aberto.</p>\n<p>Mutações do sistema de arquivos são controladas à parte: só passam mutações <code>fs/write-intent</code> ou <code>fs/edit-intent</code>. Escrever não é um efeito colateral incidental de uma ferramenta rodar.</p>\n\n<p class=\"agent-summary\">Duas propriedades tornam este pipeline confiável como ponto de controle: guardas só podem negar, e um prompt de aprovação irrespondível nega. A maioria das camadas caseiras de política para agentes falha em aberto quando o canal de aprovação some, que é exatamente quando você precisava dela.</p>\n\n<h2>O que o pipeline registra</h2>\n<p>Três eventos de sessão dão a trilha de auditoria: <code>tool/call</code> antes da execução, <code>tool/code-dispatch</code> para subchamadas e <code>tool/result</code> como resultado final autoritativo. Subchamadas serem registradas em separado importa: uma única chamada de ferramenta visível ao modelo que se ramifica internamente não esconde sua ramificação.</p>\n\n<h2>Um conjunto prático de limites</h2>\n<table>\n<thead><tr><th>Controle</th><th>Hook</th><th>Impede</th></tr></thead>\n<tbody>\n<tr><td>Máximo de passos por turno</td><td><code>agent/pre-step</code></td><td>Laços que não convergem</td></tr>\n<tr><td>Teto cumulativo de tokens</td><td><code>agent/pre-step</code></td><td>Excesso de gasto em fogo brando</td></tr>\n<tr><td>Rebaixamento de rota após limiar</td><td><code>agent/pre-step</code></td><td>Preço de fronteira em trabalho barato</td></tr>\n<tr><td>Lista de ferramentas por classe de custo</td><td>Guarda monotônico</td><td>Ferramentas caras em contextos baratos</td></tr>\n<tr><td>Negação de subprocessos e rede</td><td>Política <code>ctx.sandbox</code></td><td>Saída de rede não medida</td></tr>\n<tr><td>Controle de write-intent</td><td>Costura <code>ctx.fs</code></td><td>Mutações não revisadas</td></tr>\n</tbody>\n</table>\n\n<h2>A ressalva</h2>\n<p>O DeepSeek Harness está em developer preview e seu próprio README avisa de mudanças que quebram compatibilidade. Estes nomes e semânticas de hooks são os documentados hoje; trate plugins de limites construídos sobre eles como código que você vai revisitar, e fixe a versão contra a qual construiu.</p>",
+      "faq": [
+        {
+          "question": "Onde se pode aplicar política de gasto no DeepSeek Harness?",
+          "answer": "Em dois pontos de extensão em cascata. agent/pre-step roda antes de um pedido ao modelo ser emitido e a decisão que devolve é autoritativa. tools/pre-execute roda antes do corpo de qualquer ferramenta, à frente dos guardas monotônicos de permissão."
+        },
+        {
+          "question": "O que é um hook em cascata no DeepSeek Harness?",
+          "answer": "Uma cascata é uma cadeia ordenada de listeners em que cada um precisa chamar next() para delegar adiante. Listeners que envolvem next() preservam as mensagens a jusante salvo substituição intencional, de modo que um guarda pode inspecionar, modificar ou interromper um passo."
+        },
+        {
+          "question": "O que é um guarda monotônico?",
+          "answer": "Um guarda monotônico avalia permissões de ferramenta sem modificá-las: pode negar ou se abster, mas nunca conceder. Guardas rodam depois da cascata tools/pre-execute, e se um guarda nega ou a aprovação é irrespondível, o corpo da ferramenta é pulado."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-plugin-architecture",
+          "label": "Tudo é um plugin: a arquitetura (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Limites de gasto para agentes (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "حواجز الميزانية والإنفاق في DeepSeek Harness",
+      "titleCore": "حواجز الميزانية والإنفاق في DeepSeek Harness",
+      "description": "يوفر DeepSeek Harness خطافي اعتراض pre-step و pre-execute. كيفية استخدامهما كنقاط حوكمة لفرض الميزانية والسياسات المالية.",
+      "body": "<p>يمثل التحكم المالي في الوكلاء المستقلين خط الدفاع الأول ضد الفواتير غير المتوقعة. في DeepSeek Harness، لا تعتمد الحماية على افتراضات النموذج الذاتية، بل على نقاط اعتراض صريحة في دورة حياة التنفيذ عبر خطافين رئيسيين في معمارية شلال المعالجة (Waterfall Hooks).</p>\n\n<h2>نقطة الاعتراض الأولى: <code>agent/pre-step</code></h2>\n<p>يتم تشغيل هذا الخطاف قبل إرسال الطلب إلى نموذج اللغة الكبير. هذا هو الموقع المثالي لفرض القيود المالية:</p>\n<ul>\n  <li>التحقق من الرصيد المتبقي لميزانية المهمة وحساب المستخدم.</li>\n  <li>حساب عدد الرموز التراكمي للجلسة وتطبيق سقف الاستهلاك الأقصى.</li>\n  <li>رفض أو تعليق التنفيذ وطلب الموافقة البشرية قبل استدعاء نماذج التفكير الاستدلالي الباهظة.</li>\n</ul>\n\n<h2>نقطة الاعتراض الثانية: <code>tools/pre-execute</code></h2>\n<p>يتم إطلاق هذا الخطاف بعد أن يقرر النموذج استدعاء أداة، ولكن قبل تنفيذ شفرة الأداة فعلياً:</p>\n<ul>\n  <li>التحقق من صلاحيات الأداة وملاءمة المعلمات المدخلة.</li>\n  <li>فرض حدود على استدعاء أدوات الخوادم المدفوعة (مثل البحث في الويب وقواعد البيانات).</li>\n  <li>منع العمليات المدمرة أو التي تتجاوز مساحة العمل المحددة للمشروع.</li>\n</ul>\n\n<h2>تسجيل البيانات كأصل محاسبي</h2>\n<p>تسجل نقاط الاعتراض هذه كافة القرارات والرفض والمبالغ المقدرة في سجل الجلسة، مما يحول بيانات التنفيذ إلى سجل تدقيق مالي موثوق ومحكم.</p>",
+      "faq": [
+        {
+          "question": "أين توضع حواجز الإنفاق في DeepSeek Harness؟",
+          "answer": "توضع في خطافي الاعتراض الصريحين: agent/pre-step قبل استدعاء النموذج، و tools/pre-execute قبل تنفيذ شفرة الأداة."
+        },
+        {
+          "question": "هل يمكن لحارس الصلاحيات منح أذونات إضافية تلقائياً؟",
+          "answer": "لا، وفق المعمارية الدفاعية يمكن للحراس الرفض أو الامتناع فقط، وأي طلب مصادقة يتعذر حله يعتبر مرفوضاً بشكل افتراضي."
+        },
+        {
+          "question": "كيف تفيد هذه الخطافات الإدارة المالية السحابية؟",
+          "answer": "تتيح فرض سقوف الإنفاق اللحظية ومنع تجاوز الميزانيات المعتمدة قبل حدوث الاستهلاك الفعلي للموارد السحابية."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/three-agent-budgets",
+          "label": "ميزانيات الوكلاء الثلاث"
+        },
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "حواجز إنفاق الوكلاء المستقلين"
+        }
+      ]
+    },
+    "zh": {
+      "title": "DeepSeek Harness 支出护栏与拦截钩子",
+      "titleCore": "DeepSeek Harness 支出护栏与拦截钩子",
+      "description": "DeepSeek Harness 中的 agent/pre-step 与 tools/pre-execute 双重瀑布流钩子：如何将其作为预算与安全策略强制点。",
+      "body": "<p>在 Harness 架构中，预算护栏不是被动告警，而是在关键执行节点前的硬性拦截点。系统提供了两个原生瀑布钩子：</p>\n<h2>拦截点一：<code>agent/pre-step</code></h2>\n<p>在向大模型发送推理请求之前触发。可在此校验任务剩余额度、累计 Token 限制，并在超支时强制阻断或升级为人工审批。</p>\n<h2>拦截点二：<code>tools/pre-execute</code></h2>\n<p>在工具代码真正运行前触发。可在此对网络搜索、数据库写入等付费外部操作实施频次管控。</p>",
+      "faq": [
+        {
+          "question": "护栏拦截钩子位于何处？",
+          "answer": "位于模型请求前的 agent/pre-step 以及工具执行前的 tools/pre-execute 节点，确保事前预防而非事后告警。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/three-agent-budgets",
+          "label": "三层预算模型"
+        }
+      ]
+    },
+    "it": {
+      "title": "Guardrail di spesa in DeepSeek Harness",
+      "titleCore": "Guardrail di spesa in DeepSeek Harness",
+      "description": "Utilizzo degli hook agent/pre-step e tools/pre-execute come punti di controllo per budget e autorizzazioni.",
+      "body": "<p>Due punti di controllo chiave prima delle chiamate al modello e prima dell'esecuzione dei tool per bloccare sprechi finanziari.</p>",
+      "faq": [
+        {
+          "question": "Dove si applicano i limiti?",
+          "answer": "Negli hook pre-step prima del modello e pre-execute prima degli strumenti operativi."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "DeepSeek Harness의 지출 가드레일 구현",
+      "titleCore": "DeepSeek Harness의 지출 가드레일 구현",
+      "description": "agent/pre-step 및 tools/pre-execute 훅을 활용한 사전 모델 요청 차단 및 툴 실행 예산 통제 기법.",
+      "body": "<p>사후 청구서 충격을 방지하기 위해 모델 호출 전과 툴 실행 직전에 예산 한도를 강제 검증하는 2단계 훅 아키텍처입니다.</p>",
+      "faq": [
+        {
+          "question": "가드레일 훅의 위치는 어디인가요?",
+          "answer": "모델 호출 직전(pre-step)과 도구 실행 직전(pre-execute)에 배치되어 즉시 차단합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/three-agent-budgets",
+          "label": "에이전트 3단계 예산 모델"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Budget-vangrails in DeepSeek Harness",
+      "titleCore": "Budget-vangrails in DeepSeek Harness",
+      "description": "Gebruik van agent/pre-step en tools/pre-execute hooks voor proactieve budgethandhaving bij autonome agents.",
+      "body": "<p>Twee cruciale controlepunten in de uitvoeringslus om kostenplafonds direct af te dwingen voordat API-kosten gemaakt worden.</p>",
+      "faq": [
+        {
+          "question": "Waarom zijn deze hooks belangrijk?",
+          "answer": "Ze grijpen in vóórdat tokens verbruikt worden of dure tools uitgevoerd worden."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        }
+      ]
+    },
+    "en": {
+      "title": "Where to put spend guardrails in DeepSeek Harness",
+      "titleCore": "Where to put spend guardrails in DeepSeek Harness",
+      "description": "DeepSeek Harness exposes two waterfall hooks, agent/pre-step and tools/pre-execute. A guide to using them as budget and policy enforcement points.",
+      "body": "<p>An agent that discovers its budget from the monthly invoice does not have a budget. It has a postmortem. The useful question about any harness is where you can stand in the loop and say no, and DeepSeek Harness answers that with two named waterfall extension points.</p>\n\n<h2>First, the shape of the loop</h2>\n<p>The harness uses a turn and step model. A <strong>step</strong> is one model request plus the tool calls it produces. A <strong>turn</strong> contains zero or more steps. The flow for a turn runs roughly: input claim, prompt assembly, <code>agent/pre-step</code>, LLM stream, tool execution, step completion, then turn closure.</p>\n<p>Two event streams run alongside each other. <code>session/event</code> carries durable replay facts — chunks, messages, tool calls, results. <code>agent/*</code> carries live coordination signals — status, inbox, request interception. Guardrails belong in the second; accounting belongs in the first.</p>\n\n<h2>Interception point 1: <code>agent/pre-step</code></h2>\n<p>This is the checkpoint before the model request goes out. The docs state that the returned <code>agent/pre-step</code> decision is authoritative, and that listeners wrapping <code>next()</code> preserve downstream messages unless replacement is intentional. That is the property that makes it usable as a budget gate: a listener can reject a proposed step, or modify it, and the decision stands.</p>\n<p>What belongs here:</p>\n<ul>\n<li><strong>Per-turn step caps.</strong> The runaway-agent failure mode is a turn that never converges. A hard step ceiling turns an unbounded bill into a bounded one.</li>\n<li><strong>Cumulative token budgets.</strong> Sum usage from the session log so far; refuse the next step past the threshold.</li>\n<li><strong>Model downshifting.</strong> Rewrite the step to a cheaper route once a turn has burned past a soft threshold, rather than refusing outright.</li>\n<li><strong>Context-size limits.</strong> Prompt assembly happens before this hook, so the assembled request is visible and measurable at this point.</li>\n</ul>\n\n<h2>Interception point 2: <code>tools/pre-execute</code></h2>\n<p>Tool execution is a three-phase pipeline. The <code>tools/pre-execute</code> waterfall runs first, monotonic guards run next, and only then does the tool body execute — sandboxed, with filesystem gatekeeping. Afterwards a post-execute waterfall can accept, block, replace, or add context to the result, and <code>ToolDefinition.finalizeContent</code> enforces content invariants synchronously.</p>\n<p>The permission layer is deliberately asymmetric. Registered monotonic guards deny or abstain, with identity protected — they never grant. If a guard denies, or if <code>ctx.approval</code>'s one-shot prompt is absent or unanswerable, the result is denial and the tool body is skipped. Failure closed, not open.</p>\n<p>Filesystem mutations are separately gated: only <code>fs/write-intent</code> or <code>fs/edit-intent</code> tool-fs mutations pass. Writes are not an incidental side effect of a tool running.</p>\n\n<div class=\"callout\">Two properties make this pipeline trustworthy as a control point: guards can only deny, and an unanswerable approval prompt denies. Most homegrown agent policy layers fail open when the approval channel is missing, which is exactly when you needed them.</div>\n\n<h2>What the pipeline records</h2>\n<p>Three session events give you the audit trail: <code>tool/call</code> before execution, <code>tool/code-dispatch</code> for sub-calls, and <code>tool/result</code> as the final authoritative outcome. Sub-calls being separately recorded matters — a single model-visible tool call that fans out internally does not hide its fan-out.</p>\n\n<h2>A practical guardrail set</h2>\n<table>\n<thead><tr><th>Control</th><th>Hook</th><th>Stops</th></tr></thead>\n<tbody>\n<tr><td>Max steps per turn</td><td><code>agent/pre-step</code></td><td>Non-converging loops</td></tr>\n<tr><td>Cumulative token ceiling</td><td><code>agent/pre-step</code></td><td>Slow-burn overspend</td></tr>\n<tr><td>Route downshift past threshold</td><td><code>agent/pre-step</code></td><td>Frontier pricing on cheap work</td></tr>\n<tr><td>Tool allow-list by cost class</td><td>Monotonic guard</td><td>Expensive tools in cheap contexts</td></tr>\n<tr><td>Subprocess and network denial</td><td><code>ctx.sandbox</code> policy</td><td>Unmetered egress</td></tr>\n<tr><td>Write-intent gating</td><td><code>ctx.fs</code> seam</td><td>Unreviewed mutations</td></tr>\n</tbody>\n</table>\n\n<h2>The caveat</h2>\n<p>DeepSeek Harness is in developer preview and its own README warns of compatibility-breaking changes. These hook names and semantics are the ones documented today; treat guardrail plugins built against them as code you will revisit, and pin the version you built against.</p>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — the data the guardrails read.</li>\n<li><a href=\"/research/deepseek-harness-plugin-architecture\">DeepSeek Harness: what \"everything is a plugin\" buys you</a> — why guards are plugins too.</li>\n<li><a href=\"/research/agent-spend-guardrails\">Agent spend guardrails</a> — the provider-agnostic version.</li>\n<li><a href=\"https://finopsllm.com/research/true-cost-coding-agents\">The true cost of coding agents</a> — what runaway loops actually cost.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "Where can you enforce spend policy in DeepSeek Harness?",
+          "answer": "Two waterfall extension points. agent/pre-step runs before a model request is issued and its returned decision is authoritative. tools/pre-execute runs before any tool body executes, ahead of the monotonic permission guards."
+        },
+        {
+          "question": "What is a waterfall hook in DeepSeek Harness?",
+          "answer": "A waterfall is an ordered chain of listeners where each must call next() to delegate downstream. Listeners that wrap next() preserve downstream messages unless replacement is intentional, so a guard can inspect, modify, or short-circuit a step."
+        },
+        {
+          "question": "What is a monotonic guard?",
+          "answer": "A monotonic guard evaluates tool permissions without modifying them: it can deny or abstain but never grant. Guards run after the tools/pre-execute waterfall, and if a guard denies or approval is unanswerable the tool body is skipped."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-guardrails"
+  }
+}

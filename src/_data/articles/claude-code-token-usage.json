@@ -1,0 +1,59 @@
+{
+  "slug": "claude-code-token-usage",
+  "tags": [
+    "llm-costs",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "How to check and reduce Claude Code token usage",
+      "titleCore": "How to check and reduce Claude Code token usage",
+      "description": "Check Claude Code token usage with /usage and /context, then cut it: 96% of tokens are context re-reads, and effort level alone moves cost per task 4.5x.",
+      "related": [
+        {
+          "slug": "/research/claude-pro-max-tokens-limit",
+          "label": "How many tokens Claude Pro and Max give you"
+        },
+        {
+          "slug": "/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 effort levels are the real price"
+        },
+        {
+          "slug": "/research/claude-max-20x-vs-5x-weekly-limit",
+          "label": "Claude Max 20x vs 5x: the weekly limit, measured"
+        }
+      ],
+      "body": "<p><strong>Run <code>/usage</code> to see what Claude Code is spending, and <code>/context</code> to see what is filling the window.</strong> To spend less, keep context small: clear between tasks, lower the effort level, and keep verbose output out of the main conversation. Context matters more than anything else because Claude Code re-sends the whole conversation with every request. In our own logs, 96% of tokens were the agent re-reading its context.</p>\n\n<p>This page covers the commands that show your usage, the settings that move it most, and where the tokens actually go. The tips come from <a href=\"https://code.claude.com/docs/en/costs\">Anthropic&rsquo;s cost documentation</a>. The numbers come from our own Claude Code logs and published benchmarks.</p>\n\n<h2>How do I check Claude Code token usage?</h2>\n\n<ul>\n<li><strong><code>/usage</code></strong>: shows token counts and an estimated cost for the current session, a prompt cache line, and on Pro, Max, Team and Enterprise plans your plan usage bars. It also breaks down what is using your plan: skills, subagents, plugins, MCP servers and scheduled loops, over the last 24 hours or 7 days.</li>\n<li><strong><code>/context</code></strong>: shows what is taking up the context window right now, with hints on what to trim.</li>\n<li><strong><code>/insights</code></strong>: writes an HTML report on your recent sessions and where you lose time and tokens.</li>\n<li><strong>The status line</strong>: a script can show cost, context used and your 5-hour and 7-day plan percentages on every prompt. See <a href=\"https://code.claude.com/docs/en/statusline\">status line docs</a>.</li>\n<li><strong>claude.ai Settings &gt; Usage</strong>: plan limits and usage-credit spend, including use from other devices.</li>\n</ul>\n\n<p>On a Pro or Max plan, the dollar figure in <code>/usage</code> is what the session would have cost at API list prices, not what you pay. It is still the best single measure of how heavy a session is.</p>\n\n<h2>Where do Claude Code tokens actually go?</h2>\n\n<p><strong>Mostly into re-reading context.</strong> Every request carries the full conversation, and every tool call sends another request with the results. Across our Claude Code logs, 7.0 billion cache-read tokens were 96% of all tokens and half of a $6,986 API-equivalent bill. Output tokens, the part you see, were under 1% of volume.</p>\n\n<p>That is why a one-line question in a session that has been open all day is not cheap. It carries the whole day with it. Our <a href=\"/research/claude-pro-max-tokens-limit\">tokens per plan page</a> has the full breakdown: about 1.9 billion tokens in a Max 20x week and about 39 million in a Max 5x session.</p>\n\n<h2>How do I reduce Claude Code token usage?</h2>\n\n<p>These are the changes that move usage most, in rough order of effect.</p>\n\n<ol>\n<li><strong>Clear between unrelated tasks.</strong> <code>/clear</code> starts a fresh context and costs nothing. Use <code>/rename</code> first if you want to <code>/resume</code> the old session later.</li>\n<li><strong>Lower the effort level.</strong> On Opus 5.5, one task cost $5.98 at max effort and $1.34 at medium in Artificial Analysis runs, a 4.5x difference from one setting. Use <code>/effort</code> to change it. Details on our <a href=\"/research/opus-5-5-effort-level-cost\">effort level cost page</a>.</li>\n<li><strong>Match the model to the job.</strong> Anthropic recommends Sonnet for most coding and Opus for hard architectural or multi-step work. Switch with <code>/model</code>, and set <code>model: haiku</code> on simple subagents.</li>\n<li><strong>Don&rsquo;t take long breaks mid-session.</strong> The prompt cache lasts an hour on a subscription and five minutes on usage credits or an API key. Coming back after it expires re-processes your whole context at full price.</li>\n<li><strong>Keep noisy output out of the main context.</strong> Send test runs, log reading and doc fetching to subagents so only a summary comes back. A hook can filter a 10,000-line log down to the error lines before Claude sees it.</li>\n<li><strong>Trim what loads at start.</strong> Keep CLAUDE.md under about 200 lines and move workflow-specific instructions into skills, which load only when used. Disable MCP servers you aren&rsquo;t using with <code>/mcp</code>. Prefer CLI tools like <code>gh</code> where one exists.</li>\n<li><strong>Write specific prompts and plan first.</strong> &ldquo;Improve this codebase&rdquo; makes Claude scan everything. Plan mode (Shift+Tab) catches a wrong approach before it costs a full implementation.</li>\n<li><strong>Watch background work.</strong> Scheduled loops, agent teammates and idle subagents keep sending your full context. Agent teams use about 7x the tokens of a normal session when teammates run in plan mode.</li>\n</ol>\n\n<h2>Does /compact save tokens?</h2>\n\n<p><strong>Only on later requests, and compacting a big context is itself a big request.</strong> <code>/compact</code> reads the whole conversation to summarize it. If you don&rsquo;t need the history, <code>/clear</code> is cheaper. If you do, <code>/compact</code> with instructions (for example <code>/compact keep the API changes and failing tests</code>) keeps what matters. You can also set an earlier auto-compact threshold with <code>/autocompact</code>.</p>\n\n<h2>How much does Claude Code cost per developer?</h2>\n\n<p><strong>Anthropic says about $13 per developer per active day and $150 to $250 a month across enterprise deployments, and under $30 a day for 90% of users.</strong> That is billed at API rates. On a subscription the question becomes which plan&rsquo;s limits you hit first. Our <a href=\"/research/claude-max-20x-vs-5x-weekly-limit\">Claude Max weekly limit page</a> prices a Max 20x week at about $1.86k of API-equivalent usage.</p>\n\n<h2>How do teams track Claude Code usage?</h2>\n\n<ul>\n<li><strong>Team and Enterprise plans:</strong> the spend report in org analytics, with a per-user CSV. Enterprise also has an analytics API. Spend limits are set in admin settings.</li>\n<li><strong>API (Claude Console):</strong> the Console usage page and workspace spend limits.</li>\n<li><strong>Any setup:</strong> set <code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code> to export per-user token and cost metrics over OpenTelemetry to your own stack. See <a href=\"https://code.claude.com/docs/en/monitoring-usage\">monitoring docs</a>.</li>\n</ul>\n\n<p>If you pay contracted rates, the <code>modelPricing</code> managed setting makes the cost figures in <code>/usage</code> and OpenTelemetry match your contract instead of list price.</p>\n\n<h2>Sources</h2>\n\n<ul>\n<li><a href=\"https://code.claude.com/docs/en/costs\">Claude Code docs: Manage costs effectively</a></li>\n<li><a href=\"https://code.claude.com/docs/en/statusline\">Claude Code docs: Status line</a></li>\n<li><a href=\"https://code.claude.com/docs/en/monitoring-usage\">Claude Code docs: Monitoring usage</a></li>\n<li><a href=\"https://artificialanalysis.ai/\">Artificial Analysis: model benchmarks and cost per task</a></li>\n</ul>",
+      "faq": [
+        {
+          "question": "How do I check token usage in Claude Code?",
+          "answer": "Run /usage for session tokens, estimated cost and plan usage bars, and /context to see what fills the context window. A custom status line can show both on every prompt."
+        },
+        {
+          "question": "Why does Claude Code use so many tokens?",
+          "answer": "It re-sends the whole conversation with every request and every tool call. In our logs 96% of tokens were cache reads of existing context, and output was under 1%."
+        },
+        {
+          "question": "What is the fastest way to reduce Claude Code token usage?",
+          "answer": "Use /clear between unrelated tasks and lower the effort level. On Opus 5.5 a task cost $5.98 at max effort and $1.34 at medium."
+        },
+        {
+          "question": "Does /compact reduce Claude Code costs?",
+          "answer": "It shrinks later requests, but compacting reads the whole conversation, so it is a large request itself. If you do not need the history, /clear costs nothing."
+        },
+        {
+          "question": "How much does Claude Code cost per developer?",
+          "answer": "Anthropic reports about $13 per developer per active day and $150 to $250 a month across enterprise deployments at API rates, with 90% of users under $30 a day."
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/claude-code-token-usage"
+  }
+}

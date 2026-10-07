@@ -1,0 +1,64 @@
+{
+  "slug": "enterprise-ai-procurement-committed-spend",
+  "tags": [
+    "committed-spend",
+    "procurement",
+    "llm-costs",
+    "enterprise"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Enterprise AI procurement and committed spend",
+      "titleCore": "Enterprise AI procurement and committed spend",
+      "description": "At billions in AI spend, negotiated rates beat model choice. Rate cards, committed-use discounts, egress terms, and the clause that matters most.",
+      "body": "<p>On 25 September 2026 a report based on classified estimates put one US agency's spending on AI model testing in the billions, drawing 176 points and 106 comments on Hacker News. Whatever the exact figure, the direction is the point: AI model spend has moved from a line item to a procurement category, and the mechanics that govern a $50K monthly bill do not govern a nine-figure one.</p><h2>What changes at procurement scale</h2><ul><li><strong>Published rate cards become negotiable.</strong> At low volume you take the list price. At high volume the provider has a cost to serve and a relationship to protect.</li><li><strong>Committed-use discounts replace spot pricing.</strong> A committed spend agreement trades flexibility for a lower rate. Useful only if you know the floor.</li><li><strong>Rate-limit and throughput guarantees get contractual.</strong> Best-effort priority becomes a term. This matters more than price for agent workloads.</li><li><strong>Support tier and escalation paths are bought, not assumed.</strong> A Sev-1 with an engineer on call is an operational dependency, not an expense.</li><li><strong>Data terms get reviewed by legal.</strong> Retention, training opt-out, and subprocessor lists get audited. That review is on the critical path.</li></ul><h2>The committed-spend trade</h2><p>A committed-use agreement is a bet on your own forecast. Discounts are typically 10&ndash;35% off list for a 12-month floor. The failure mode is a team that commits to a floor, then over-uses a cheaper model during the term, and ends up paying committed rates for tokens it did not need. Three controls make the bet safe:</p><ol><li><strong>Size the floor to the workload that is genuinely steady.</strong> Batch, eval, and internal traffic forecast far better than customer-facing agent traffic.</li><li><strong>Model selection stays fungible inside the term.</strong> A commitment to spend $X with a provider is portable across that provider's models. A commitment to a specific model is not.</li><li><strong>Review at month 6, not month 12.</strong> If actual run-rate is far under the floor, renegotiate before the true-up.</li></ol><h2>Rate cards and egress still decide the bill</h2><p>Two line items regularly surprise procurement teams who negotiated a headline rate:</p><ul><li><strong>Cached input.</strong> Opus 5.5 charges $0.20 per million for cache reads against $4.00 fresh. On cache-heavy agent workloads the cache rate, not the headline rate, is the majority of the input cost. Negotiate the cache rate explicitly.</li><li><strong>Server-side tools are a separate invoice line.</strong> Web search, code execution, and similar server tools are billed independently of tokens. An enterprise agent built on web search can have a large non-token line item that no rate-card negotiation touched.</li></ul><h2>Model choice is a second-order lever</h2><p>At procurement scale, the gap between a premium and a mid-tier model is often smaller than the gap between a negotiated and a list rate. And when a major lab cuts prices 40% on an afternoon, a rate card locked six months ago is suddenly the expensive option. Structure agreements so that price revisions pass through or trigger a review window. That single clause has repeatedly mattered more than the model inside the contract.</p><h2>Bottom line</h2><p>Committed spend, cache rates, egress, and pass-through clauses are the mechanics that decide a large AI bill. Model selection decides the quality. Keep those two conversations separate, and put the renewal date in the calendar before the term starts.</p>",
+      "faq": [
+        {
+          "question": "When does a committed-use discount make sense for LLM spend?",
+          "answer": "When you can size a floor from steady workloads &mdash; batch, evals, internal traffic &mdash; and keep model selection fungible inside the term. A commitment to a provider's spend is portable across its models; a commitment to one model is not."
+        },
+        {
+          "question": "Why does the cached-input rate matter so much at enterprise volume?",
+          "answer": "On cache-heavy agent workloads, cache reads can be the majority of input cost. Opus 5.5 charges $0.20 per million for cache reads against $4.00 fresh, so the cache rate rather than the headline rate drives the bill. Negotiate it explicitly."
+        },
+        {
+          "question": "What line items are missed by headline rate negotiations?",
+          "answer": "Server-side tools are billed separately from tokens. An agent built on server-side web search or code execution can produce a large non-token line item that no rate-card negotiation covered."
+        },
+        {
+          "question": "How should a long-term agreement handle a price cut?",
+          "answer": "Structure it so provider price revisions pass through, or trigger a review window. When two labs cut prices on the same afternoon, a rate card locked six months ago becomes the expensive option."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/committed-spend-discounts",
+          "label": "Committed spend discounts"
+        },
+        {
+          "slug": "/research/server-tools-are-a-separate-invoice",
+          "label": "Server tools are a separate invoice"
+        },
+        {
+          "slug": "/research/azure-openai-vs-direct-cost",
+          "label": "Azure OpenAI vs direct cost"
+        },
+        {
+          "slug": "/research/regional-pricing-premium",
+          "label": "Regional pricing premium"
+        },
+        {
+          "slug": "/research/shadow-ai-corporate-cards",
+          "label": "Shadow AI on corporate cards"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/enterprise-ai-procurement-committed-spend"
+  }
+}

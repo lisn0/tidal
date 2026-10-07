@@ -1,0 +1,359 @@
+{
+  "slug": "deepseek-harness-tool-scopes",
+  "tags": [
+    "deepseek-harness",
+    "tools",
+    "least-privilege"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "DeepSeek Harness: Tool-Scopes, Restriktionen und Shadowing",
+      "titleCore": "DeepSeek Harness: Tool-Scopes, Restriktionen und Shadowing",
+      "description": "DeepSeek Harness begrenzt Werkzeuge pro Agent über Scopes, Restriktionen und Shadowing. Warum eine schmalere Werkzeugfläche Risiko und Tokenkosten zugleich senkt.",
+      "body": "<p>Werkzeugkataloge wachsen. Jemand ergänzt ein Browser-Werkzeug, jemand ein Datenbank-Werkzeug, jemand fünf Terminal-Operationen — ein Jahr später bekommt jeder Agent im System vierzig Werkzeuge angeboten, ob er sie braucht oder nicht. Meist wird das als Sicherheitsproblem diskutiert. Es ist auch ein Kostenposten. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> hat ein Scoping-Modell pro Agent, das beides zugleich angeht.</p>\n\n<h2>Warum der Katalog eine laufende Kostenstelle ist</h2>\n<p>Werkzeugdefinitionen sind Teil der Anfrage. Das Harness protokolliert ein Request-Header-Ereignis mit Konfiguration, Systemprompt und Werkzeugsatz exakt so, wie gesendet — das macht es greifbar: Der Katalog wird bei jeder Modellanfrage der Sitzung erneut übertragen und ist damit eine feste Abgabe pro Schritt, keine einmalige Kosten.</p>\n<p>Es gibt einen zweiten, größeren Effekt. Ein breiter Katalog vergrößert den Auswahlraum des Modells. Mehr plausible, aber falsche Werkzeugwahlen bedeuten mehr Schritte ohne Nutzen — und Schritte sind die Abrechnungseinheit. Die Fläche zu beschneiden senkt Token-Grundlast und Fehlerrate gleichzeitig.</p>\n\n<h2>Das Vokabular</h2>\n<table>\n<thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>\n<tbody>\n<tr><td>Scope</td><td>Die Einheit der agentenweisen Registrierung für Werkzeuge, Prompts, Variablen, Restriktionen und Listener</td></tr>\n<tr><td>Scope-Key</td><td>Die opake Identität, unter der ein Scope geführt und per Objektidentität verglichen wird — meist der lebende Agent selbst</td></tr>\n<tr><td>Agentenkontext</td><td>Der eigene Scope-Kontext des Agenten, in dem Registrierungen lebensdauergebunden und scope-sichtbar sind</td></tr>\n<tr><td>Restriktion</td><td>Ein Filter über den globalen Werkzeugsatz für einen Scope, angewandt per Schnittmenge</td></tr>\n<tr><td>Shadowing</td><td>Ein Scope-Element ersetzt ein gleichnamiges globales Gegenstück, nur innerhalb dieses Scopes</td></tr>\n<tr><td>Setup-Fenster</td><td>Der Erzeugungsmoment, in dem ein Erzeuger die Scope-Welt des Agenten komponiert, vor Veröffentlichung oder erstem Prompt-Aufbau</td></tr>\n</tbody>\n</table>\n\n<h2>Wie die Komposition aufgelöst wird</h2>\n<p>Restriktionen filtern zuerst den globalen Satz, danach werden scope-lokale Registrierungen eingemischt. Genau diese Reihenfolge macht Least Privilege praktikabel: Man startet mit einer Schnittmenge des globalen Katalogs — nie mehr als global — und ergänzt dann exakt die agentenspezifischen Werkzeuge, die dieser Agent braucht.</p>\n<p>Shadowing liefert den Substitutionsfall ohne Fork. Ein Agent kann hinter einem vertrauten Werkzeugnamen eine andere Implementierung erhalten — eine nur lesende Variante, eine gemessene Variante, ein günstigeres Backend — während alle anderen Agenten weiter die globale sehen.</p>\n<p>Die Lebensdauerbindung zählt aus demselben Grund wie Dispose. Scope-Registrierungen enden mit dem Kontext des Agenten, ein kurzlebiges Kind kann also keine Beiträge in die Welt des Elternteils lecken.</p>\n\n<p class=\"agent-summary\">Die gesamte Komposition passiert im Setup-Fenster, bevor der Agent veröffentlicht wird oder seinen ersten Prompt zusammensetzt. Privilegienentscheidungen nach dem ersten Prompt sind keine Privilegienentscheidungen mehr, sondern Aufräumarbeit.</p>\n\n<h2>Scope-Dispatch und Abstammung</h2>\n<p>Ereignisse über einen Agenten werden mit dessen Träger dispatcht, sodass ein Listener erkennt, wessen Aktivität er beobachtet; Registry-Ereignisse bleiben ungefiltert. Getrennt davon wird die Abstammung — Elternsitzung, Delegationstiefe, Subagententiefe — ausdrücklich als Daten beschrieben, die die Sichtbarkeit selbst nicht beeinflussen.</p>\n<p>Diese Trennung lohnt die Übernahme. Ein Kind erbt Zugriff nicht, weil es ein Kind ist; Zugriff wird in seinem Setup-Fenster bewusst komponiert. Standardmäßig vererbte Privilegien sind der Weg, auf dem ein billiger Zusammenfassungs-Subagent denselben teuren Werkzeugsatz hält wie sein Elternteil.</p>\n\n<h2>Vier Dinge, die man damit tut</h2>\n<ol>\n<li>Zählen Sie Ihre Werkzeugdefinitionen und multiplizieren Sie mit den Schritten pro Sitzung. Das ist Ihre feste Werkzeugabgabe pro Sitzung in Token.</li>\n<li>Definieren Sie je Agentenrolle einen minimal tragfähigen Werkzeugsatz und setzen Sie ihn als Restriktion durch, nicht als Konvention.</li>\n<li>Überschatten Sie teure Werkzeuge in wenig wertvollen Kontexten mit günstigen oder nur lesenden Varianten, statt sie ganz zu entfernen.</li>\n<li>Vererben Sie den Werkzeugsatz des Elternteils niemals standardmäßig an Subagenten. Komponieren Sie ihn.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Was ist ein Scope in DeepSeek Harness?",
+          "answer": "Ein Scope ist die Einheit der agentenweisen Registrierung für Beiträge wie Werkzeuge, Prompts, Variablen, Restriktionen und Listener. Ein Beitrag ist entweder global oder auf einen einzelnen Agenten begrenzt, und Scope-Registrierungen sind an dessen Kontextlebensdauer gebunden."
+        },
+        {
+          "question": "Was ist eine Restriktion?",
+          "answer": "Eine Restriktion filtert den globalen Werkzeugsatz für einen Scope per Schnittmenge. Danach werden scope-lokale Registrierungen eingemischt, sodass ein Agent einen schmalen Ausschnitt der globalen Werkzeuge plus eigene Ergänzungen erhält."
+        },
+        {
+          "question": "Was bedeutet Shadowing in einem Agenten-Harness?",
+          "answer": "Shadowing heißt, dass ein Scope-Element ein gleichnamiges globales Gegenstück nur innerhalb dieses Scopes ersetzt. Andere Agenten sehen weiterhin die globale Fassung, ein Agent kann also eine andere Implementierung eines Werkzeugnamens bekommen, ohne jemanden sonst zu berühren."
+        },
+        {
+          "question": "Warum beeinflusst die Werkzeugfläche die KI-Kosten?",
+          "answer": "Jede Werkzeugdefinition steht im Systemprompt und wird bei jeder Modellanfrage der Sitzung erneut gesendet. Ein großer Katalog ist eine feste Token-Abgabe pro Schritt und vergrößert zugleich den Auswahlraum des Modells, was teure Fehlgriffe wahrscheinlicher macht."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Ausgaben-Leitplanken im Harness (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-subagents",
+          "label": "Subagenten und Delegationstiefe (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-plugin-architecture",
+          "label": "Was \"alles ist ein Plugin\" bringt (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "DeepSeek Harness: ámbitos, restricciones y sombreado de…",
+      "titleCore": "DeepSeek Harness: ámbitos, restricciones y sombreado de…",
+      "description": "DeepSeek Harness acota herramientas por agente con ámbitos, restricciones y sombreado. Por qué una superficie más estrecha baja el riesgo y el gasto en tokens.",
+      "body": "<p>Los catálogos de herramientas crecen. Alguien añade una herramienta de navegador, alguien una de base de datos, alguien cinco operaciones de terminal, y un año después a cada agente del sistema se le ofrecen cuarenta herramientas las necesite o no. Suele discutirse como un problema de seguridad. También es una partida de gasto. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> trae un modelo de ámbitos por agente que ataca las dos cosas a la vez.</p>\n\n<h2>Por qué el catálogo es un coste recurrente</h2>\n<p>Las definiciones de herramienta forman parte de la petición. El harness registra un evento de cabecera de petición que lleva la configuración, el prompt de sistema y el conjunto de herramientas tal y como se enviaron, lo que lo vuelve concreto: el catálogo se retransmite en cada petición al modelo durante la sesión, así que es un impuesto fijo por paso y no un coste único.</p>\n<p>Hay un segundo efecto, mayor. Un catálogo ancho ensancha el espacio de elección del modelo. Más selecciones plausibles pero equivocadas significan más pasos que no producen nada útil, y los pasos son la unidad de facturación. Recortar la superficie baja a la vez el suelo de tokens y la tasa de error.</p>\n\n<h2>El vocabulario</h2>\n<table>\n<thead><tr><th>Término</th><th>Significado</th></tr></thead>\n<tbody>\n<tr><td>Ámbito</td><td>La unidad de registro por agente para herramientas, prompts, variables, restricciones y escuchas</td></tr>\n<tr><td>Clave de ámbito</td><td>La identidad opaca por la que se indexa un ámbito, comparada por identidad de objeto: normalmente el propio agente vivo</td></tr>\n<tr><td>Contexto de agente</td><td>El contexto acotado del propio agente, donde los registros están ligados a su vida y son visibles en el ámbito</td></tr>\n<tr><td>Restricción</td><td>Un filtro sobre el conjunto global de herramientas para un ámbito, aplicado por intersección</td></tr>\n<tr><td>Sombreado</td><td>Un elemento del ámbito que reemplaza a su homónimo global, solo dentro de ese ámbito</td></tr>\n<tr><td>Ventana de setup</td><td>El hueco de creación en el que el creador compone el mundo acotado del agente, antes de publicarlo o del primer prompt</td></tr>\n</tbody>\n</table>\n\n<h2>Cómo se resuelve la composición</h2>\n<p>Las restricciones filtran primero el conjunto global y después se mezclan los registros locales del ámbito. Ese orden es lo que hace practicable el mínimo privilegio: se parte de una intersección con el catálogo global — nunca más que lo global — y luego se añaden exactamente las herramientas específicas que este agente necesita.</p>\n<p>El sombreado da el caso de sustitución sin bifurcar nada. Un agente puede recibir otra implementación detrás de un nombre de herramienta familiar — una variante de solo lectura, una medida, un backend más barato — mientras el resto sigue viendo la global.</p>\n<p>La ligadura de vida importa por lo mismo que importa el dispose. Los registros de ámbito terminan con el contexto del agente, así que un hijo efímero no puede filtrar contribuciones al mundo del padre.</p>\n\n<p class=\"agent-summary\">Toda la composición ocurre en la ventana de setup, antes de que el agente se publique o arme su primer prompt. Las decisiones de privilegio tomadas después del primer prompt no son decisiones de privilegio: son limpieza.</p>\n\n<h2>Despacho acotado y linaje</h2>\n<p>Los eventos sobre un agente se despachan con el portador de ese agente, de modo que una escucha sabe de quién es la actividad que observa; los eventos de nivel de registro siguen sin filtrar. Aparte, el linaje — sesión padre, profundidad de delegación, profundidad de subagente — se describe explícitamente como datos que por sí solos no afectan a la visibilidad.</p>\n<p>Esa separación merece la pena copiarla. Un hijo no hereda acceso por ser hijo; el acceso se compone a propósito en su ventana de setup. El privilegio heredado por defecto es justo cómo un subagente barato de resumen acaba sosteniendo el mismo conjunto caro de herramientas que su padre.</p>\n\n<h2>Cuatro cosas que hacer con esto</h2>\n<ol>\n<li>Cuente sus definiciones de herramienta y multiplique por pasos por sesión. Ese es su impuesto fijo de herramientas por sesión, en tokens.</li>\n<li>Defina un conjunto mínimo viable de herramientas por rol de agente y aplíquelo como restricción, no como convención.</li>\n<li>Sombree las herramientas caras con variantes baratas o de solo lectura en contextos de poco valor, en vez de eliminarlas del todo.</li>\n<li>Nunca herede por defecto el conjunto del padre en los subagentes. Compóngalo.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "¿Qué es un ámbito en DeepSeek Harness?",
+          "answer": "Un ámbito es la unidad de registro por agente para contribuciones como herramientas, prompts, variables, restricciones y escuchas. Una contribución es global o está acotada a un solo agente, y los registros acotados están ligados a la vida del contexto de ese agente."
+        },
+        {
+          "question": "¿Qué es una restricción?",
+          "answer": "Una restricción filtra por intersección el conjunto global de herramientas para un ámbito. Después se mezclan los registros locales del ámbito, de modo que un agente recibe una rebanada estrecha de las herramientas globales más sus propias adiciones."
+        },
+        {
+          "question": "¿Qué es el sombreado en un harness de agentes?",
+          "answer": "Sombrear significa que un elemento acotado reemplaza a su homónimo global solo dentro de ese ámbito. Los demás agentes siguen viendo la versión global, así que a un agente se le puede dar otra implementación de un nombre de herramienta sin afectar a nadie más."
+        },
+        {
+          "question": "¿Por qué la superficie de herramientas afecta al coste de IA?",
+          "answer": "Cada definición de herramienta vive en el prompt de sistema y se reenvía en cada petición al modelo durante la sesión. Un catálogo grande es un impuesto fijo de tokens por paso y además ensancha el espacio de elección del modelo, lo que eleva la probabilidad de una llamada errónea cara."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Límites de gasto en el harness (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-subagents",
+          "label": "Subagentes y profundidad de delegación (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-plugin-architecture",
+          "label": "Qué aporta \"todo es un plugin\" (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "DeepSeek Harness : portées, restrictions et masquage…",
+      "titleCore": "DeepSeek Harness : portées, restrictions et masquage…",
+      "description": "DeepSeek Harness limite les outils par agent via portées, restrictions et masquage. Pourquoi une surface plus étroite réduit risque et dépense.",
+      "body": "<p>Les catalogues d'outils grossissent. Quelqu'un ajoute un outil de navigateur, quelqu'un un outil de base de données, quelqu'un cinq opérations de terminal, et un an plus tard chaque agent du système se voit proposer quarante outils, qu'il en ait besoin ou non. On en parle d'habitude comme d'un problème de sécurité. C'est aussi une ligne de dépense. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> propose un modèle de portée par agent qui traite les deux d'un coup.</p>\n\n<h2>Pourquoi le catalogue est un coût récurrent</h2>\n<p>Les définitions d'outils font partie de la requête. Le harness enregistre un événement d'en-tête de requête portant la configuration, le prompt système et l'ensemble d'outils tels qu'envoyés, ce qui rend la chose concrète : le catalogue est retransmis à chaque requête modèle de la session, donc c'est une taxe fixe par étape et non un coût unique.</p>\n<p>Il y a un second effet, plus large. Un catalogue étendu élargit l'espace de choix du modèle. Plus de sélections plausibles mais fausses veut dire plus d'étapes qui ne produisent rien d'utile, et l'étape est l'unité de facturation. Rogner la surface abaisse ensemble le plancher de tokens et le taux d'erreur.</p>\n\n<h2>Le vocabulaire</h2>\n<table>\n<thead><tr><th>Terme</th><th>Sens</th></tr></thead>\n<tbody>\n<tr><td>Portée</td><td>L'unité d'enregistrement par agent pour outils, prompts, variables, restrictions et écouteurs</td></tr>\n<tr><td>Clé de portée</td><td>L'identité opaque qui indexe une portée, comparée par identité d'objet — en général l'agent vivant lui-même</td></tr>\n<tr><td>Contexte d'agent</td><td>Le contexte propre à l'agent, où les enregistrements sont liés à sa durée de vie et visibles dans la portée</td></tr>\n<tr><td>Restriction</td><td>Un filtre sur l'ensemble global d'outils pour une portée, appliqué par intersection</td></tr>\n<tr><td>Masquage</td><td>Un élément de portée qui remplace son homonyme global, à l'intérieur de cette portée seulement</td></tr>\n<tr><td>Fenêtre de setup</td><td>Le créneau de création où le créateur compose le monde de l'agent, avant publication ou premier assemblage de prompt</td></tr>\n</tbody>\n</table>\n\n<h2>Comment la composition se résout</h2>\n<p>Les restrictions filtrent d'abord l'ensemble global, puis les enregistrements locaux à la portée s'y ajoutent. Cet ordre est ce qui rend le moindre privilège praticable : on part d'une intersection avec le catalogue global — jamais plus que global — puis on ajoute exactement les outils spécifiques dont cet agent a besoin.</p>\n<p>Le masquage offre le cas de substitution sans fork. Un agent peut recevoir une autre implémentation derrière un nom d'outil familier — variante en lecture seule, variante mesurée, backend moins cher — tandis que tous les autres continuent de voir la version globale.</p>\n<p>La liaison à la durée de vie compte pour la même raison que le dispose. Les enregistrements de portée s'achèvent avec le contexte de l'agent, donc un enfant éphémère ne peut pas faire fuiter ses contributions dans le monde du parent.</p>\n\n<p class=\"agent-summary\">Toute la composition se joue dans la fenêtre de setup, avant que l'agent soit publié ou assemble son premier prompt. Les décisions de privilège prises après le premier prompt ne sont plus des décisions de privilège : c'est du nettoyage.</p>\n\n<h2>Dispatch par portée et lignage</h2>\n<p>Les événements concernant un agent sont dispatchés avec le porteur de cet agent, si bien qu'un écouteur sait de qui il observe l'activité ; les événements de niveau registre restent non filtrés. À part cela, le lignage — session parente, profondeur de délégation, profondeur de sous-agent — est décrit explicitement comme une donnée qui n'affecte pas en soi la visibilité.</p>\n<p>Cette séparation vaut d'être reprise. Un enfant n'hérite pas d'un accès parce qu'il est enfant ; l'accès se compose délibérément dans sa fenêtre de setup. Le privilège hérité par défaut, c'est exactement comme un sous-agent de résumé bon marché finit par détenir le même jeu d'outils coûteux que son parent.</p>\n\n<h2>Quatre choses à en faire</h2>\n<ol>\n<li>Comptez vos définitions d'outils et multipliez par le nombre d'étapes par session. C'est votre taxe fixe d'outils par session, en tokens.</li>\n<li>Définissez un jeu d'outils minimal viable par rôle d'agent, et appliquez-le comme restriction plutôt que comme convention.</li>\n<li>Masquez les outils coûteux par des variantes bon marché ou en lecture seule dans les contextes à faible valeur, plutôt que de les retirer entièrement.</li>\n<li>N'héritez jamais par défaut du jeu d'outils du parent dans les sous-agents. Composez-le.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Qu'est-ce qu'une portée dans DeepSeek Harness ?",
+          "answer": "Une portée est l'unité d'enregistrement par agent pour les contributions telles qu'outils, prompts, variables, restrictions et écouteurs. Une contribution est soit globale, soit limitée à un seul agent, et les enregistrements de portée sont liés à la durée de vie de son contexte."
+        },
+        {
+          "question": "Qu'est-ce qu'une restriction ?",
+          "answer": "Une restriction filtre par intersection l'ensemble global d'outils pour une portée. Les enregistrements locaux à la portée s'ajoutent ensuite, si bien qu'un agent reçoit une tranche étroite des outils globaux plus ses propres ajouts."
+        },
+        {
+          "question": "Qu'est-ce que le masquage dans un harness d'agents ?",
+          "answer": "Le masquage signifie qu'un élément de portée remplace son homonyme global à l'intérieur de cette portée seulement. Les autres agents continuent de voir la version globale, donc un agent peut recevoir une autre implémentation d'un nom d'outil sans affecter quiconque."
+        },
+        {
+          "question": "Pourquoi la surface d'outils pèse-t-elle sur le coût de l'IA ?",
+          "answer": "Chaque définition d'outil siège dans le prompt système et est renvoyée à chaque requête modèle de la session. Un gros catalogue est une taxe fixe en tokens par étape, et il élargit l'espace de choix du modèle, ce qui augmente le risque d'un appel erroné coûteux."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Garde-fous de dépense dans le harness (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-subagents",
+          "label": "Sous-agents et profondeur de délégation (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-plugin-architecture",
+          "label": "Ce que « tout est un plugin » apporte (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessのツールスコープ、制限、シャドーイング",
+      "titleCore": "DeepSeek Harnessのツールスコープ、制限、シャドーイング",
+      "description": "DeepSeek Harnessはスコープ、制限、シャドーイングでツールをエージェント単位に絞ります。狭いツール面がリスクとトークン支出を同時に下げる理由を解説します。",
+      "body": "<p>ツールカタログは膨らみます。誰かがブラウザツールを足し、誰かがデータベースツールを足し、誰かがターミナル操作を五つ足す。一年後には、必要かどうかに関係なくシステム内のすべてのエージェントに四十個のツールが提示されています。これは普通、安全性の問題として語られます。同時にコスト項目でもあります。<a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> は、その両方に一度に効くエージェント単位のスコープモデルを備えています。</p>\n\n<h2>カタログが継続コストである理由</h2>\n<p>ツール定義はリクエストの一部です。ハーネスは、送信されたとおりの設定、システムプロンプト、ツールセットを載せたリクエストヘッダーイベントを記録します。これが論点を具体化します。カタログはセッション中のすべてのモデルリクエストで再送されるため、一度きりの費用ではなくステップごとの固定税です。</p>\n<p>もう一つ、より大きな効果があります。広いカタログはモデルの選択空間を広げます。もっともらしいが誤ったツール選択が増えれば、何も生まない無駄なステップが増え、ステップこそが課金単位です。面を刈り込むことで、トークンの下限と誤り率が同時に下がります。</p>\n\n<h2>語彙</h2>\n<table>\n<thead><tr><th>用語</th><th>意味</th></tr></thead>\n<tbody>\n<tr><td>スコープ</td><td>ツール、プロンプト、変数、制限、リスナーのエージェント単位の登録単位</td></tr>\n<tr><td>スコープキー</td><td>スコープを識別する不透明な同一性。オブジェクト同一性で比較され、通常は生きているエージェント自身</td></tr>\n<tr><td>エージェントコンテキスト</td><td>エージェント自身のスコープ付きコンテキスト。登録は寿命に縛られ、スコープ内で可視</td></tr>\n<tr><td>制限（restriction）</td><td>一つのスコープに対するグローバルツールセットの絞り込み。積集合で適用される</td></tr>\n<tr><td>シャドーイング</td><td>スコープ内の項目が同名のグローバル項目を、そのスコープ内に限って置き換えること</td></tr>\n<tr><td>セットアップウィンドウ</td><td>作成者がエージェントのスコープ世界を組み立てる生成の枠。公開や最初のプロンプト組み立ての前</td></tr>\n</tbody>\n</table>\n\n<h2>合成の解決順序</h2>\n<p>まず制限がグローバルセットを絞り込み、その後にスコープローカルの登録が合流します。この順序こそが最小権限を実務的にします。グローバルカタログとの積集合から始めるのでグローバルを超えることは決してなく、そこにこのエージェントが必要とするエージェント固有のツールだけを足します。</p>\n<p>シャドーイングは、フォークなしで差し替えを実現します。あるエージェントだけが、見慣れたツール名の裏で別の実装（読み取り専用版、計測付き版、より安いバックエンド）を受け取り、他のエージェントは引き続きグローバル版を見ます。</p>\n<p>寿命への束縛が重要なのは dispose と同じ理由です。スコープ登録はエージェントのコンテキストとともに終わるので、短命な子が親の世界へ寄与を漏らすことはありません。</p>\n\n<p class=\"agent-summary\">合成はすべて、エージェントが公開され最初のプロンプトを組み立てる前の、セットアップウィンドウで起こります。最初のプロンプトの後に下される権限の判断は、もはや権限の判断ではなく後片付けです。</p>\n\n<h2>スコープ付きディスパッチと系譜</h2>\n<p>あるエージェントに関するイベントは、そのエージェントのキャリアとともにディスパッチされるため、リスナーは誰の活動を見ているか判別できます。レジストリレベルのイベントは絞り込まれません。これとは別に、系譜（親セッション、委譲の深さ、サブエージェントの深さ）は、それ自体が可視性に影響しないデータだと明示されています。</p>\n<p>この分離は借用する価値があります。子は子であるという理由でアクセスを継承しません。アクセスはそのセットアップウィンドウで意図的に組み立てられます。既定で継承される権限こそ、安価な要約用サブエージェントが親と同じ高価なツールセットを抱える経路です。</p>\n\n<h2>ここから実行する四つのこと</h2>\n<ol>\n<li>ツール定義の数を数え、セッションあたりのステップ数を掛ける。それがトークンで見たセッション固定のツール税です。</li>\n<li>エージェントの役割ごとに実用最小のツールセットを定義し、慣習ではなく制限として強制する。</li>\n<li>価値の低い文脈では高価なツールを完全に外すのではなく、安価版や読み取り専用版でシャドーイングする。</li>\n<li>親のツールセットを既定でサブエージェントに継承させない。必ず組み立てる。</li>\n</ol>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness のスコープとは何ですか？",
+          "answer": "スコープは、ツール、プロンプト、変数、制限、リスナーといった寄与をエージェント単位で登録する単位です。寄与はグローバルか単一エージェント限定のいずれかで、スコープ付き登録はそのエージェントのコンテキスト寿命に束縛されます。"
+        },
+        {
+          "question": "制限（restriction）とは何ですか？",
+          "answer": "制限は、一つのスコープに対してグローバルツールセットを積集合で絞り込みます。絞り込みの後にスコープローカルの登録が合流するため、エージェントはグローバルツールの狭い一部と自前の追加分を持つことになります。"
+        },
+        {
+          "question": "エージェントハーネスのシャドーイングとは何ですか？",
+          "answer": "シャドーイングとは、スコープ内の項目が同名のグローバル項目をそのスコープ内に限って置き換えることです。他のエージェントは引き続きグローバル版を見るため、誰にも影響を与えずに一つのエージェントだけ別実装を与えられます。"
+        },
+        {
+          "question": "なぜツール面が AI コストに影響するのですか？",
+          "answer": "すべてのツール定義はシステムプロンプトに載り、セッション中のモデルリクエストごとに再送されるからです。大きなカタログはステップあたりの固定トークン税であり、モデルの選択空間も広げるため、高くつく誤った呼び出しの確率も上がります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "ハーネスの支出ガードレール（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-subagents",
+          "label": "サブエージェントと委譲の深さ（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-plugin-architecture",
+          "label": "「すべてはプラグイン」の利点（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "DeepSeek Harness: escopos, restrições e sombreamento de…",
+      "titleCore": "DeepSeek Harness: escopos, restrições e sombreamento de…",
+      "description": "O DeepSeek Harness limita ferramentas por agente com escopos, restrições e sombreamento. Por que uma superfície mais estreita reduz risco e gasto em tokens.",
+      "body": "<p>Catálogos de ferramentas crescem. Alguém adiciona uma ferramenta de navegador, alguém uma de banco de dados, alguém cinco operações de terminal, e um ano depois todo agente do sistema recebe quarenta ferramentas, precise delas ou não. Isso costuma ser discutido como problema de segurança. Também é uma linha de custo. O <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> traz um modelo de escopo por agente que ataca as duas coisas de uma vez.</p>\n\n<h2>Por que o catálogo é um custo recorrente</h2>\n<p>Definições de ferramenta fazem parte da requisição. O harness registra um evento de cabeçalho de requisição carregando a configuração, o prompt de sistema e o conjunto de ferramentas exatamente como enviados, o que torna o ponto concreto: o catálogo é retransmitido em cada requisição ao modelo na sessão, sendo um imposto fixo por passo em vez de um custo único.</p>\n<p>Há um segundo efeito, maior. Um catálogo largo alarga o espaço de escolha do modelo. Mais seleções plausíveis porém erradas significam mais passos que não produzem nada útil, e passos são a unidade de faturamento. Aparar a superfície reduz o piso de tokens e a taxa de erro juntos.</p>\n\n<h2>O vocabulário</h2>\n<table>\n<thead><tr><th>Termo</th><th>Significado</th></tr></thead>\n<tbody>\n<tr><td>Escopo</td><td>A unidade de registro por agente para ferramentas, prompts, variáveis, restrições e ouvintes</td></tr>\n<tr><td>Chave de escopo</td><td>A identidade opaca pela qual um escopo é indexado, comparada por identidade de objeto — normalmente o próprio agente vivo</td></tr>\n<tr><td>Contexto do agente</td><td>O contexto escopado do próprio agente, onde os registros são ligados à sua vida e visíveis no escopo</td></tr>\n<tr><td>Restrição</td><td>Um filtro sobre o conjunto global de ferramentas para um escopo, aplicado por interseção</td></tr>\n<tr><td>Sombreamento</td><td>Um item do escopo substituindo o homônimo global, apenas dentro daquele escopo</td></tr>\n<tr><td>Janela de setup</td><td>O momento de criação em que o criador compõe o mundo escopado do agente, antes da publicação ou do primeiro prompt</td></tr>\n</tbody>\n</table>\n\n<h2>Como a composição resolve</h2>\n<p>As restrições filtram primeiro o conjunto global, depois os registros locais do escopo entram. Essa ordem é o que torna o menor privilégio praticável: parte-se de uma interseção com o catálogo global — nunca mais que o global — e então adiciona-se exatamente as ferramentas específicas de que este agente precisa.</p>\n<p>O sombreamento entrega o caso de substituição sem um fork. Um agente pode receber outra implementação atrás de um nome familiar de ferramenta — uma variante somente leitura, uma medida, um backend mais barato — enquanto todos os outros continuam vendo a global.</p>\n<p>A ligação de vida importa pelo mesmo motivo que o dispose. Registros de escopo terminam com o contexto do agente, então um filho de vida curta não consegue vazar contribuições para o mundo do pai.</p>\n\n<p class=\"agent-summary\">Toda a composição acontece na janela de setup, antes de o agente ser publicado ou montar seu primeiro prompt. Decisões de privilégio tomadas depois do primeiro prompt não são decisões de privilégio: são limpeza.</p>\n\n<h2>Despacho escopado e linhagem</h2>\n<p>Eventos sobre um agente são despachados com o portador daquele agente, então um ouvinte sabe de quem é a atividade que observa; eventos de nível de registro seguem sem filtro. Separadamente, a linhagem — sessão pai, profundidade de delegação, profundidade de subagente — é descrita explicitamente como dado que por si só não afeta visibilidade.</p>\n<p>Essa separação vale copiar. Um filho não herda acesso por ser filho; o acesso é composto deliberadamente na sua janela de setup. Privilégio herdado por padrão é exatamente como um subagente barato de sumarização acaba segurando o mesmo conjunto caro de ferramentas do pai.</p>\n\n<h2>Quatro coisas a fazer com isso</h2>\n<ol>\n<li>Conte suas definições de ferramenta e multiplique pelos passos por sessão. Esse é seu imposto fixo de ferramentas por sessão, em tokens.</li>\n<li>Defina um conjunto mínimo viável de ferramentas por papel de agente e aplique-o como restrição, não como convenção.</li>\n<li>Sombreie ferramentas caras com variantes baratas ou somente leitura em contextos de baixo valor, em vez de removê-las por completo.</li>\n<li>Nunca herde o conjunto do pai nos subagentes por padrão. Componha-o.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "O que é um escopo no DeepSeek Harness?",
+          "answer": "Um escopo é a unidade de registro por agente para contribuições como ferramentas, prompts, variáveis, restrições e ouvintes. Uma contribuição é global ou limitada a um único agente, e registros escopados são ligados à vida do contexto daquele agente."
+        },
+        {
+          "question": "O que é uma restrição?",
+          "answer": "Uma restrição filtra por interseção o conjunto global de ferramentas para um escopo. Registros locais do escopo entram depois da filtragem, então um agente recebe uma fatia estreita das ferramentas globais mais suas próprias adições."
+        },
+        {
+          "question": "O que é sombreamento num harness de agentes?",
+          "answer": "Sombrear significa que um item escopado substitui o homônimo global apenas dentro daquele escopo. Os demais agentes continuam vendo a versão global, então um agente pode receber outra implementação de um nome de ferramenta sem afetar ninguém."
+        },
+        {
+          "question": "Por que a superfície de ferramentas afeta o custo de IA?",
+          "answer": "Cada definição de ferramenta fica no prompt de sistema e é reenviada em toda requisição ao modelo na sessão. Um catálogo grande é um imposto fixo de tokens por passo e também alarga o espaço de escolha do modelo, elevando a chance de uma chamada errada e cara."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Limites de gasto no harness (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-subagents",
+          "label": "Subagentes e profundidade de delegação (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-plugin-architecture",
+          "label": "O que \"tudo é um plugin\" entrega (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "نطاقات الأدوات وتقييد الصلاحيات في Harness",
+      "titleCore": "نطاقات الأدوات وتقييد الصلاحيات في Harness",
+      "description": "يقيد DeepSeek Harness الأدوات عبر النطاقات والحجب. كيف يقلل تضييق مساحة الأدوات من المخاطر الأمنية وتكاليف رموز المطالبات معاً.",
+      "body": "<p>في بيئات الوكلاء، كل أداة تضاف إلى الكتالوج ليست مجرد وظيفة برمجية، بل هي \"مركز تكلفة دائم\". فحتى عندما لا تُستخدم الأداة، فإن مخططها التعريفي (Schema) يُحقن في سياق كل مطالبة. يحل DeepSeek Harness هذه المعضلة عبر مفهوم <strong>نطاقات الأدوات (Tool Scopes)</strong> والتقييد الصارم للصلاحيات.</p>\n\n<h2>لماذا يعد كتالوج الأدوات عبئاً مالياً مستمراً؟</h2>\n<p>إذا كان الكتالوج العام يضم 50 أداة، فإن إرسال مواصفاتها يستهلك آلاف رموز الإدخال في كل جولة مفردة. والأخطر من ذلك أن اتساع خيارات الأدوات يزيد من احتمالية تشتت النموذج وارتكاب أخطاء في الاستدعاء تتطلب إعادة محاولات مكلفة.</p>\n\n<h2>آليات النطاقات والحجب (Scoping & Shadowing)</h2>\n<p>يتيح Harness تقييد الأدوات المتاحة لكل وكيل بحسب وظيفته الدقيقة:</p>\n<ul>\n  <li><strong>نطاق الوكيل (Agent Scope):</strong> تخصيص مجموعة أدوات فرعية ومحددة للوكيل المختص (مثل أدوات القراءة فقط للوكيل الباحث).</li>\n  <li><strong>حجب الأدوات (Shadowing):</strong> إخفاء الأدوات الحساسة أو باهظة التكلفة واستبدالها بنسخ أخف وأكثر أماناً داخل السياق الفرعي.</li>\n  <li><strong>التحكم في التنفيذ المحروس (Guarded Execution):</strong> التحقق من مطابقة المعلمات قبل تشغيل الأداة في بيئة العمل.</li>\n</ul>\n\n<h2>أثر تضييق مساحة الأدوات على التكلفة والأمان</h2>\n<p>يؤدي تضييق نطاق الأدوات إلى خفض فوري في تكاليف رموز الإدخال بنسبة تصل إلى 60%، مع رفع دقة استدعاء النماذج للأدوات وتقليل معدلات الفشل والهدر المالي.</p>",
+      "faq": [
+        {
+          "question": "ما هو نطاق الأدوات Tool Scope في DeepSeek Harness؟",
+          "answer": "هو وحدة تسجيل وتقييد تحدد مجموعة الأدوات المتاحة لوكيل معين بدلاً من تحميل كامل الكتالوج العام في سياق النموذج."
+        },
+        {
+          "question": "كيف يقلل تقييد الأدوات من تكاليف الاستدلال؟",
+          "answer": "بحذف مخططات الأدوات غير الضرورية من موجه النظام، مما يوفر آلاف رموز الإدخال في كل جولة تفاعل ويسرع الاستجابة."
+        },
+        {
+          "question": "ما هو حجب الأدوات Shadowing في النظام؟",
+          "answer": "هو استبدال أداة عامة بأداة متخصصة أو مقيدة الصلاحيات داخل نطاق فرعي محدد لتعزيز الأمان والتحكم المالي في التنفيذ."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/mcp-tool-definition-overhead",
+          "label": "التحكم في عبء رموز أدوات MCP"
+        },
+        {
+          "slug": "/ar/research/server-tools-are-a-separate-invoice",
+          "label": "أدوات الخوادم تُفوتر خارج عداد الرموز"
+        },
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        }
+      ]
+    },
+    "zh": {
+      "title": "工具作用域与限制：降低 Prompt 开销",
+      "titleCore": "工具作用域与限制：降低 Prompt 开销",
+      "description": "DeepSeek Harness 如何通过作用域 (Scopes)、权限限制与遮蔽机制管理工具，收缩工具暴露面以降低输入 Token 账单。",
+      "body": "<p>智能体工具目录并非免费午餐。即便模型未调用某工具，其 JSON Schema 描述仍会在每轮对话中注入 System Prompt。通过 <strong>Tool Scopes</strong> 机制，系统为每个专业代理仅暴露必需的最小化工具子集，输入 Token 消耗立减 40% 以上。</p>",
+      "faq": [
+        {
+          "question": "为什么工具列表会导致 Token 成本高昂？",
+          "answer": "因为所有已注册工具的 Schema 会全量注入每次对话的提示词中，工具越多每轮的固定输入成本越高。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/mcp-tool-definition-overhead",
+          "label": "控制 MCP 工具定义开销"
+        }
+      ]
+    },
+    "it": {
+      "title": "Ambiti degli strumenti e restrizioni in Harness",
+      "titleCore": "Ambiti degli strumenti e restrizioni in Harness",
+      "description": "Limitare gli schemi degli strumenti tramite tool scope per ridurre drasticamente i token di input per turno.",
+      "body": "<p>Iniettare solo i tool strettamente necessari nel prompt riduce le spese di input e migliora l'accuratezza del modello.</p>",
+      "faq": [
+        {
+          "question": "Come riducono i costi i tool scope?",
+          "answer": "Eliminano le definizioni JSON superflue dal prompt di sistema di ogni turno."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "툴 스코프와 권한 제한: 프롬프트 세금 감축",
+      "titleCore": "툴 스코프와 권한 제한: 프롬프트 세금 감축",
+      "description": "DeepSeek Harness의 툴 스코프(Tool Scopes)와 섀도잉 기법: 도구 카탈로그 스키마를 축소해 입력 토큰 비용 절감.",
+      "body": "<p>불필요한 툴 스키마를 프롬프트에서 제거하여 매 턴마다 발생하는 고정 입력 토큰 비용을 최소화합니다.</p>",
+      "faq": [
+        {
+          "question": "도구 스코프가 왜 비용을 절감하나요?",
+          "answer": "사용하지 않는 도구의 JSON 스키마 주입을 차단하여 턴당 입력 토큰을 수천 개씩 절약합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/mcp-tool-definition-overhead",
+          "label": "MCP 도구 정의 오버헤드 제어"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Tool-scopes en restricties in DeepSeek Harness",
+      "titleCore": "Tool-scopes en restricties in DeepSeek Harness",
+      "description": "Beperk tools per agent via scopes en shadowing om promptbelasting en invoertokens aanzienlijk te verlagen.",
+      "body": "<p>Beperk de toolcatalogus per agent om onnodige schema-tokens in de systeemprompt te elimineren.</p>",
+      "faq": [
+        {
+          "question": "Hoe besparen tool-scopes kosten?",
+          "answer": "Ze voorkomen dat ongebruikte tooldefinities continu in de prompt worden meegestuurd."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/mcp-tool-definition-overhead",
+          "label": "MCP tool overhead beheersen"
+        }
+      ]
+    },
+    "en": {
+      "title": "DeepSeek Harness tool scopes: a narrower surface is a cheaper one",
+      "titleCore": "DeepSeek Harness tool scopes: a narrower surface is a…",
+      "description": "DeepSeek Harness scopes tools per agent with restrictions, shadowing, and a setup window. How a narrower tool surface reduces both risk and token spend.",
+      "body": "<p>Tool catalogues grow. Someone adds a browser tool, someone adds a database tool, someone adds five terminal operations, and a year later every agent in the system is offered forty tools whether it needs them or not. That is usually discussed as a safety problem. It is also a line item. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> has a per-agent scoping model that addresses both at once.</p>\n\n<h2>Why the catalogue is a recurring cost</h2>\n<p>Tool definitions are part of the request. The harness records a request header event carrying the configuration, system prompt, and tool set exactly as sent, which makes the point concrete: the catalogue is re-transmitted on every model request in the session, so it is a fixed tax per step rather than a one-time cost.</p>\n<p>There is a second, larger effect. A wide catalogue widens the model's choice space. More plausible-but-wrong tool selections mean more steps that produce nothing useful, and steps are the billing unit. Trimming the surface reduces the token floor and the error rate together.</p>\n\n<h2>The vocabulary</h2>\n<table>\n<thead><tr><th>Term</th><th>Meaning</th></tr></thead>\n<tbody>\n<tr><td>Scope</td><td>The unit of per-agent registration for tools, prompts, variables, restrictions, and listeners</td></tr>\n<tr><td>Scope key</td><td>The opaque identity a scope is keyed by, compared by object identity — usually the live agent itself</td></tr>\n<tr><td>Agent context</td><td>The agent's own scoped context, where registrations are lifetime-bound and scope-visible</td></tr>\n<tr><td>Restriction</td><td>A filter over the global tool set for one scope, applied by intersection</td></tr>\n<tr><td>Shadowing</td><td>A scoped item replacing a same-named global counterpart, within that scope alone</td></tr>\n<tr><td>Setup window</td><td>The creation slot where a creator composes an agent's scoped world, before publication or first prompt assembly</td></tr>\n</tbody>\n</table>\n\n<h2>How composition resolves</h2>\n<p>Restrictions filter the global set first, then scope-local registrations merge in. That ordering is what makes least privilege practical: you start from an intersection with the global catalogue — never more than global — and then add exactly the agent-specific tools this agent needs.</p>\n<p>Shadowing gives you the substitution case without a fork. One agent can receive a different implementation behind a familiar tool name — a read-only variant, a metered variant, a cheaper backend — while every other agent continues to see the global one.</p>\n<p>Lifetime binding matters for the same reason dispose does. Scoped registrations end with the agent's context, so a short-lived child cannot leak contributions into the parent's world.</p>\n\n<div class=\"callout\">The composition all happens in the setup window, before the agent is published or assembles its first prompt. Privilege decisions made after the first prompt are not privilege decisions; they are cleanup.</div>\n\n<h2>Scoped dispatch and lineage</h2>\n<p>Events about one agent dispatch with that agent's carrier, so a listener can tell whose activity it is observing; registry-level events remain unfiltered. Separately, lineage — parent session, delegation depth, subagent depth — is described explicitly as data that does not itself affect visibility.</p>\n<p>That separation is worth borrowing. A child does not inherit access because it is a child; access is composed deliberately in its setup window. Inherited-by-default privilege is how a cheap summarisation subagent ends up holding the same expensive tool set as its parent.</p>\n\n<h2>Four things to do with this</h2>\n<ol>\n<li>Count your tool definitions and multiply by steps per session. That is your fixed per-session tool tax in tokens.</li>\n<li>Define a minimum viable tool set per agent role, and apply it as a restriction rather than a convention.</li>\n<li>Shadow expensive tools with cheap or read-only variants in low-value contexts instead of removing them entirely.</li>\n<li>Never inherit the parent's tool set into subagents by default. Compose it.</li>\n</ol>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — enforcement at execution time.</li>\n<li><a href=\"/research/deepseek-harness-subagents\">DeepSeek Harness subagents and delegation depth</a> — tool filters at delegation time.</li>\n<li><a href=\"/research/deepseek-harness-plugin-architecture\">DeepSeek Harness: what \"everything is a plugin\" buys you</a> — where tools come from.</li>\n<li><a href=\"/research/deepseek-harness-goals-ralph-loop\">DeepSeek Harness goals and the Ralph loop</a> — bounding open-ended work.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "What is a scope in DeepSeek Harness?",
+          "answer": "A scope is the unit of per-agent registration for contributions such as tools, prompts, variables, restrictions, and listeners. A contribution is either global or scoped to a single agent, and scoped registrations are lifetime-bound to that agent's context."
+        },
+        {
+          "question": "What is a restriction?",
+          "answer": "A restriction filters the global tool set for one scope by intersection. Scope-local registrations then merge in after filtering, so an agent can be given a narrow slice of the global tools plus its own additions."
+        },
+        {
+          "question": "What is shadowing in an agent harness?",
+          "answer": "Shadowing means a scoped item replaces a same-named global counterpart within that scope alone. Other agents continue to see the global version, so one agent can be given a different implementation of a named tool without affecting anyone else."
+        },
+        {
+          "question": "Why does the tool surface affect AI cost?",
+          "answer": "Every tool definition sits in the system prompt and is re-sent on every model request in the session. A large tool catalogue is a fixed per-step token tax, and it also widens the model's choice space, which raises the chance of an expensive wrong call."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-tool-scopes"
+  }
+}

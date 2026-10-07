@@ -1,0 +1,143 @@
+{
+  "slug": "structured-output-token-cost",
+  "tags": [
+    "finops",
+    "unit-economics",
+    "cost-optimization",
+    "architecture"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The token cost of JSON mode and schemas",
+      "titleCore": "The token cost of JSON mode and schemas",
+      "description": "JSON mode and tool schemas make output parseable and add tokens on both sides of every call. Here is where the overhead lands and how to cut it.",
+      "body": "<p>Asking a model for structured output looks like a formatting choice. On the bill it is a volume choice, and it lands in three places at once.</p><h2>The schema is an input cost on every request</h2><p>A response format or tool definition is serialised into the request. A modest schema &mdash; a dozen fields, descriptions on each, a couple of nested objects &mdash; is a few hundred tokens. That is small until you multiply it by every call, on every turn, for the life of the feature. A 400-token schema on a million calls is 400 million input tokens you are paying for in order to describe a shape that never changes.</p><p>Worse, schemas usually sit <em>after</em> the volatile part of the prompt in naive implementations, which breaks the cached prefix. The schema then costs full price every time <em>and</em> destroys the discount on everything before it.</p><h2>Syntax is an output cost</h2><p>Every brace, quote, comma and field name in the response is a generated token you are billed for at the output rate. Verbose field names are a recurring charge: <code>customer_shipping_address_line_one</code> costs more, forever, than <code>addr1</code>. Deeply nested objects pay for their own scaffolding. For short answers wrapped in a large envelope, the structure can genuinely exceed the content.</p><h2>Retries are the expensive part</h2><p>Constrained decoding on the major providers makes schema violations rare, but validation failures still happen &mdash; a field the model cannot fill honestly, an enum with no right answer, a schema that is ambiguous to a reader. Each failure costs a full retry: all input tokens again, all output tokens again, plus latency. A 2% invalid rate on a high-volume endpoint is a 2% cost increase with nothing to show for it.</p><h2>What to actually do</h2><p>Put the schema in the stable prefix so it caches, and keep it identical across calls. Ask only for fields you consume &mdash; extra fields are paid for twice, once in the schema and once in the response. Prefer short field names and flat structures. Where the output is a single value, do not wrap it in an object at all. And measure your validation failure rate: it is the one part of this that is pure waste.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/prompt-caching-economics\">Prompt caching economics</a></li><li><a href=\"https://finopsllm.com/research/token-budget-implementation\">Token budget implementation</a></li><li><a href=\"/research/retry-loop-hidden-spend\">Retry loop hidden spend</a></li></ul>",
+      "faq": [
+        {
+          "question": "Does JSON mode cost extra?",
+          "answer": "Not as a surcharge, but as tokens. The schema is input tokens on every call, the braces, quotes and field names are billed output tokens, and every validation failure costs a full retry of both sides."
+        },
+        {
+          "question": "How do you reduce structured output overhead?",
+          "answer": "Cache the schema by keeping it in a stable prompt prefix, request only fields you actually consume, use short field names and flat structures, and track your validation failure rate."
+        },
+        {
+          "question": "Do long field names really matter?",
+          "answer": "On a low-volume feature, no. On a million calls a day, every extra token in a field name is generated and billed on every response, so verbose naming becomes a permanent recurring charge."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/token-budget-implementation",
+          "label": "Token budget implementation"
+        },
+        {
+          "slug": "/research/retry-loop-hidden-spend",
+          "label": "Retry loop hidden spend"
+        }
+      ]
+    },
+    "es": {
+      "title": "Coste en tokens del modo JSON y los esquemas",
+      "titleCore": "Coste en tokens del modo JSON y los esquemas",
+      "description": "El modo JSON y los esquemas de herramientas hacen la salida parseable y añaden tokens en ambos lados de cada llamada. Dónde cae ese sobrecoste y cómo reducirlo.",
+      "body": "<p>Pedir salida estructurada parece una decisión de formato. En la factura es una decisión de volumen, y cae en tres sitios a la vez.</p><h2>El esquema es coste de entrada en cada petición</h2><p>El esquema se serializa dentro de la petición. Uno modesto son unos cientos de tokens; multiplícalo por cada llamada y cada turno durante la vida de la función. 400 tokens por un millón de llamadas son 400 millones de tokens de entrada para describir una forma que nunca cambia.</p><p>Peor aún: si el esquema va <em>después</em> de la parte volátil del prompt, rompe el prefijo cacheado y destruye el descuento de todo lo anterior.</p><h2>La sintaxis es coste de salida</h2><p>Cada llave, comilla, coma y nombre de campo es un token generado que pagas a precio de salida. Nombres largos son un cargo recurrente para siempre.</p><h2>Los reintentos son lo caro</h2><p>Cada fallo de validación cuesta un reintento completo: toda la entrada otra vez y toda la salida otra vez. Un 2% de inválidos es un 2% más de coste sin nada a cambio.</p><h2>Qué hacer</h2><p>Pon el esquema en el prefijo estable para que cachee, pide solo los campos que consumes, usa nombres cortos y estructuras planas, y mide tu tasa de fallo de validación.</p>",
+      "faq": [
+        {
+          "question": "¿El modo JSON cuesta más?",
+          "answer": "No como recargo, sino en tokens: el esquema son tokens de entrada en cada llamada, la sintaxis son tokens de salida facturados, y cada fallo de validación cuesta un reintento completo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economía del caché de prompts"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Coût en tokens du mode JSON et des schémas",
+      "titleCore": "Coût en tokens du mode JSON et des schémas",
+      "description": "Le mode JSON et les schémas d’outils rendent la sortie exploitable et ajoutent des tokens des deux côtés de chaque appel. Où tombe ce surcoût, et comment le réduire.",
+      "body": "<p>Demander une sortie structurée ressemble à un choix de format. Sur la facture c’est un choix de volume, et il tombe à trois endroits à la fois.</p><h2>Le schéma est un coût d’entrée à chaque requête</h2><p>Le schéma est sérialisé dans la requête. Un schéma modeste fait quelques centaines de tokens &mdash; multipliez par chaque appel, chaque tour, pendant toute la vie de la fonctionnalité. 400 tokens sur un million d’appels, ce sont 400 millions de tokens d’entrée payés pour décrire une forme qui ne change jamais.</p><p>Pire : placé <em>après</em> la partie volatile du prompt, le schéma casse le préfixe mis en cache et supprime la remise sur tout ce qui précède.</p><h2>La syntaxe est un coût de sortie</h2><p>Chaque accolade, guillemet, virgule et nom de champ est un token généré, facturé au tarif de sortie. Les noms verbeux deviennent une charge récurrente définitive.</p><h2>Les reprises coûtent le plus</h2><p>Chaque échec de validation coûte une reprise complète : toute l’entrée et toute la sortie à nouveau. 2% d’invalides, c’est 2% de coût en plus pour rien.</p><h2>Que faire</h2><p>Mettez le schéma dans le préfixe stable pour qu’il soit mis en cache, ne demandez que les champs consommés, préférez des noms courts et des structures plates, et mesurez votre taux d’échec de validation.</p>",
+      "faq": [
+        {
+          "question": "Le mode JSON coûte-t-il plus cher?",
+          "answer": "Pas en supplément, mais en tokens : le schéma est facturé en entrée à chaque appel, la syntaxe en sortie, et chaque échec de validation coûte une reprise complète des deux côtés."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Économie du cache de prompts"
+        }
+      ]
+    },
+    "de": {
+      "title": "Tokenkosten von JSON-Modus und Schemas",
+      "titleCore": "Tokenkosten von JSON-Modus und Schemas",
+      "description": "JSON-Modus und Tool-Schemas machen Ausgaben parsebar und kosten Tokens auf beiden Seiten jedes Aufrufs. Wo der Aufschlag landet und wie man ihn senkt.",
+      "body": "<p>Strukturierte Ausgabe wirkt wie eine Formatentscheidung. Auf der Rechnung ist sie eine Mengenentscheidung, und zwar an drei Stellen gleichzeitig.</p><h2>Das Schema kostet bei jeder Anfrage Eingabe-Tokens</h2><p>Das Schema wird in die Anfrage serialisiert. Ein bescheidenes Schema sind ein paar hundert Tokens &mdash; multipliziert mit jedem Aufruf, jedem Turn, über die gesamte Lebensdauer der Funktion. 400 Tokens mal einer Million Aufrufe sind 400 Millionen Eingabe-Tokens für eine Form, die sich nie ändert.</p><p>Schlimmer: steht das Schema <em>nach</em> dem volatilen Teil des Prompts, zerstört es das gecachte Präfix und damit den Rabatt auf alles davor.</p><h2>Syntax kostet Ausgabe-Tokens</h2><p>Jede Klammer, jedes Anführungszeichen, jeder Feldname ist ein generiertes Token zum Ausgabepreis. Lange Feldnamen sind eine dauerhafte laufende Gebühr.</p><h2>Wiederholungen sind der teure Teil</h2><p>Jeder Validierungsfehler kostet einen vollen Retry: die gesamte Eingabe und die gesamte Ausgabe erneut. 2% ungültige Antworten sind 2% Mehrkosten ohne Gegenwert.</p><h2>Was zu tun ist</h2><p>Schema ins stabile Präfix, damit es gecacht wird; nur Felder anfordern, die Sie auch verwenden; kurze Namen und flache Strukturen; und die Fehlerquote der Validierung messen.</p>",
+      "faq": [
+        {
+          "question": "Kostet der JSON-Modus extra?",
+          "answer": "Nicht als Zuschlag, sondern in Tokens: Das Schema zählt bei jedem Aufruf als Eingabe, die Syntax als Ausgabe, und jeder Validierungsfehler kostet einen vollständigen Retry."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Ökonomie des Prompt-Caching"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Custo em tokens do modo JSON e dos esquemas",
+      "titleCore": "Custo em tokens do modo JSON e dos esquemas",
+      "description": "O modo JSON e os esquemas de ferramentas tornam a saída parseável e acrescentam tokens dos dois lados de cada chamada. Onde cai o custo e como reduzi-lo.",
+      "body": "<p>Pedir saída estruturada parece uma decisão de formato. Na fatura é uma decisão de volume, e cai em três sítios ao mesmo tempo.</p><h2>O esquema é custo de entrada em cada pedido</h2><p>O esquema é serializado dentro do pedido. Um esquema modesto são umas centenas de tokens &mdash; multiplique por cada chamada, cada turno, durante toda a vida da funcionalidade. 400 tokens por um milhão de chamadas são 400 milhões de tokens de entrada para descrever uma forma que nunca muda.</p><p>Pior: colocado <em>depois</em> da parte volátil do prompt, o esquema parte o prefixo em cache e elimina o desconto de tudo o que vem antes.</p><h2>A sintaxe é custo de saída</h2><p>Cada chaveta, aspa, vírgula e nome de campo é um token gerado, faturado ao preço de saída. Nomes longos são um encargo recorrente permanente.</p><h2>As repetições são a parte cara</h2><p>Cada falha de validação custa uma repetição completa: toda a entrada e toda a saída outra vez. 2% de inválidos são 2% de custo a mais por nada.</p><h2>O que fazer</h2><p>Ponha o esquema no prefixo estável para ficar em cache, peça só os campos que consome, use nomes curtos e estruturas planas, e meça a taxa de falha de validação.</p>",
+      "faq": [
+        {
+          "question": "O modo JSON custa mais?",
+          "answer": "Não como sobretaxa, mas em tokens: o esquema é entrada em cada chamada, a sintaxe é saída faturada, e cada falha de validação custa uma repetição completa dos dois lados."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economia da cache de prompts"
+        }
+      ]
+    },
+    "ja": {
+      "title": "JSON モードとスキーマのトークンコスト",
+      "titleCore": "JSON モードとスキーマのトークンコスト",
+      "description": "JSON モードとツールスキーマは出力を解析可能にする代わりに、毎回の呼び出しの入出力双方にトークンを足します。その所在と削り方を整理します。",
+      "body": "<p>構造化出力はフォーマットの選択に見えますが、請求書の上では分量の選択であり、同時に 3 か所に現れます。</p><h2>スキーマは毎リクエストの入力コスト</h2><p>スキーマはリクエストに直列化されます。控えめなスキーマでも数百トークンあり、それを全呼び出し・全ターン・機能の寿命ぶん掛け合わせます。400 トークン × 100 万回 = 4 億入力トークンを、決して変わらない「形」の説明に払っていることになります。</p><p>さらに悪いのは、スキーマをプロンプトの可変部分の<em>後ろ</em>に置いた場合です。キャッシュされたプレフィックスが壊れ、その前のすべての割引まで消えます。</p><h2>構文は出力コスト</h2><p>波括弧、引用符、カンマ、フィールド名はすべて生成トークンで、出力単価で課金されます。冗長なフィールド名は恒久的な継続課金です。</p><h2>高いのはリトライ</h2><p>検証失敗のたびに完全なリトライが発生し、入力も出力も丸ごと再課金されます。不正率 2% は、見返りのない 2% のコスト増です。</p><h2>実際にやること</h2><p>スキーマは安定プレフィックスに置いてキャッシュさせる。実際に使うフィールドだけ要求する。短いフィールド名と浅い構造にする。単一の値ならオブジェクトで包まない。そして検証失敗率を計測する &mdash; そこだけは純粋な無駄です。</p>",
+      "faq": [
+        {
+          "question": "JSON モードは追加料金がかかりますか？",
+          "answer": "追加料金ではなくトークンとしてかかります。スキーマは毎回の入力トークン、括弧やフィールド名は課金対象の出力トークン、そして検証失敗のたびに入出力を丸ごとやり直すリトライ費用が発生します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "プロンプトキャッシュの経済学"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/structured-output-token-cost"
+  }
+}

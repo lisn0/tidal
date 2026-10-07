@@ -1,0 +1,64 @@
+{
+  "slug": "gpt-6-sol-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "openai",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-23",
+  "dateModified": "2026-09-23",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "GPT-6 Sol cost model",
+      "titleCore": "GPT-6 Sol cost model",
+      "description": "GPT-6 Sol costs $2 input and $10 output per 1M tokens, half of GPT-5.6 Sol. Cost per task by effort level, agent-step math and how it compares with Opus 5.5.",
+      "body": "<p>OpenAI released GPT-6 Sol on 22 September 2026. OpenAI positions it as the everyday model for complex work, coding included, and says it makes about half as many mistakes as GPT-5.6 Sol. For a cost owner, the headline is simpler: it costs half as much per token as the model it replaces.</p><h2>GPT-6 Sol prices</h2><table><thead><tr><th>Tier</th><th>Input</th><th>Cached input</th><th>Output</th></tr></thead><tbody><tr><td>Standard</td><td>$2.00</td><td>$0.20</td><td>$10.00</td></tr><tr><td>Batch or flex</td><td>$1.00</td><td>$0.10</td><td>$5.00</td></tr><tr><td>Fast mode</td><td>$4.00</td><td>$0.40</td><td>$20.00</td></tr><tr><td>Long context (over 272K input)</td><td>$4.00</td><td>$0.40</td><td>$15.00</td></tr></tbody></table><p>Per 1M tokens, from <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI's pricing page</a>. A cache write costs $2.50. The model has a 1,050,000-token context window, 128,000 max output tokens and an April 2026 knowledge cutoff.</p><h2>Against GPT-5.6 Sol and Claude Opus 5.5</h2><table><thead><tr><th>Model</th><th>Input</th><th>Cached</th><th>Output</th></tr></thead><tbody><tr><td>GPT-6 Sol</td><td>$2.00</td><td>$0.20</td><td>$10.00</td></tr><tr><td>GPT-5.6 Sol</td><td>$4.00</td><td>$0.40</td><td>$20.00</td></tr><tr><td>Claude Opus 5.5</td><td>$4.00</td><td>$0.20</td><td>$20.00</td></tr></tbody></table><p>GPT-5.6 Sol's $4/$20 is itself a promotional price that OpenAI says runs at least through 21 November 2026, so the gap may widen after that. Against Opus 5.5, Sol is half the price on fresh input and output, but cached input costs the same $0.20. For an agent that re-reads a large cached context and writes little, the two models cost closer to each other than the headline prices suggest.</p><h2>Cost per task at each effort level</h2><p>Per-token price is only half the bill. The other half is how many tokens the model spends thinking. Artificial Analysis ran GPT-6 Sol through its Intelligence Index (v4.3.2) at every effort setting.</p><table><thead><tr><th>Effort</th><th>Index score</th><th>Cost per task</th></tr></thead><tbody><tr><td>none</td><td>28.1</td><td>$0.33</td></tr><tr><td>low</td><td>33.9</td><td>$0.13</td></tr><tr><td>medium (default)</td><td>39.8</td><td>$0.25</td></tr><tr><td>high</td><td>42.8</td><td>$0.37</td></tr><tr><td>xhigh</td><td>44.1</td><td>$0.53</td></tr><tr><td>max</td><td>47.5</td><td>$1.06</td></tr></tbody></table><p>Two things stand out. First, <code>none</code> is not the cheap setting: it scored lower than <code>low</code> and cost 2.5&times; more per task on this index. Measure on your own traffic before assuming that turning reasoning off saves money. Second, going from medium to max adds 7.7 points at 4.2&times; the cost. Every setting from low to max sits on the price-performance frontier, so none is wasted, but the last step (xhigh to max) doubles the cost for 3.4 points.</p><p>For comparison, Claude Opus 5.5 at medium effort scores 51.2 at $1.34 per task. That is higher than any Sol setting. If your workload needs that score, Sol cannot reach it at any price. If it does not, Sol at high effort (42.8 for $0.37) costs about a quarter as much. Full numbers across models are in <a href=\"/research/real-cost-per-task-frontier-models\">real cost per task</a>.</p><h2>What an agent step costs</h2><p>A step with 200K input tokens, 90% served from cache, and 20K output tokens:</p><ul><li>GPT-6 Sol: $0.276</li><li>Claude Opus 5.5: $0.516</li><li>GPT-5.6 Sol: $0.552</li></ul><p>Output tokens are 72% of the Sol figure ($0.20 of $0.276). Capping output length and choosing a lower effort setting move this bill more than further cache tuning.</p><h2>Watch the 272K line</h2><p>Above 272K input tokens the whole request is billed at 2&times; input and 1.5&times; output. The same step at 270K input costs $0.303. At 300K it costs $0.528, 74% more for 11% more context. A long-running Sol agent that never compacts its history will cross that line on its own. Alert on it.</p><h2>When to move to GPT-6 Sol</h2><ul><li><strong>From GPT-5.6 Sol:</strong> move now. Same model family, half the price, and OpenAI claims fewer mistakes. Replay a sample of real traffic first to confirm output quality on your tasks.</li><li><strong>From GPT-5.6 Terra ($2/$12):</strong> Sol costs the same on input and less on output.</li><li><strong>From Claude Opus 5.5:</strong> only for tasks where Sol's score is enough. Split traffic by task, not by vendor.</li><li><strong>To GPT-6 Luna:</strong> anything that is extraction, classification or summarising. See the <a href=\"/research/gpt-6-luna-cost-model\">GPT-6 Luna cost model</a>.</li></ul><p>Sources: <a href=\"https://developers.openai.com/api/docs/models/gpt-6-sol\">OpenAI GPT-6 Sol model page</a>, <a href=\"https://techcrunch.com/2026/09/22/openai-launches-gpt-6-sol-and-luna/\">TechCrunch</a>, <a href=\"https://www.macrumors.com/2026/09/22/openai-gpt-6-sol-luna/\">MacRumors</a>, <a href=\"https://artificialanalysis.ai/\">Artificial Analysis</a>. Prices read 23 September 2026.</p>",
+      "faq": [
+        {
+          "question": "How much does GPT-6 Sol cost?",
+          "answer": "$2 per 1M input tokens, $0.20 per 1M cached input tokens and $10 per 1M output tokens on the standard tier. Batch and flex are half that, fast mode is double."
+        },
+        {
+          "question": "Is GPT-6 Sol cheaper than Claude Opus 5.5?",
+          "answer": "Per token, yes: $2/$10 vs $4/$20. Cached input costs the same $0.20 on both. Opus 5.5 scores higher on the Artificial Analysis index, so Sol is cheaper only for tasks where its score is enough."
+        },
+        {
+          "question": "Does turning reasoning off make GPT-6 Sol cheaper?",
+          "answer": "Not on the Artificial Analysis index. Sol with effort set to none cost $0.33 per task and scored 28.1, while low effort cost $0.13 and scored 33.9."
+        },
+        {
+          "question": "What is the GPT-6 Sol context window?",
+          "answer": "1,050,000 tokens, with up to 922,000 input and 128,000 output tokens. Requests over 272K input tokens are billed at long-context rates: $4 input and $15 output per 1M tokens."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing: Astra, Sol and Luna"
+        },
+        {
+          "slug": "/research/gpt-6-luna-cost-model",
+          "label": "GPT-6 Luna cost model"
+        },
+        {
+          "slug": "/research/gpt-6-astra-cost-model",
+          "label": "GPT-6 Astra cost model"
+        },
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        },
+        {
+          "slug": "/research/real-cost-per-task-frontier-models",
+          "label": "Real cost per task across frontier models"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/gpt-6-sol-cost-model"
+  }
+}

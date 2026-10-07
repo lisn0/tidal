@@ -1,0 +1,280 @@
+{
+  "slug": "ai-feature-gross-margin",
+  "tags": [
+    "unit-economics",
+    "gross-margin",
+    "pricing"
+  ],
+  "datePublished": "2026-09-02",
+  "dateModified": "2026-09-02",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Measure an AI feature's gross margin before you ship it",
+      "titleCore": "Measure an AI feature's gross margin before you ship it",
+      "description": "Instrument an AI feature in staging so its cost per account and margin at the usage tail are known before launch, not after the first invoice.",
+      "body": "<p>Inference is a cost of serving, not a development cost. It runs on every customer action, scales with usage, and lands in the same invoice as production infrastructure. Treating it as R&amp;D until launch means the first honest margin number arrives with the first full billing cycle, which is the worst possible time to learn it.</p><h2>Instrument before you launch, not after</h2><p>In staging, tag every model call with the account, the workflow, and the outcome, and replay realistic traffic rather than a synthetic loop. What you need out of it is a distribution: cost per successful task at p50, p90, and p99, plus the share of spend that went to failed and retried work you still pay for. A single average hides the accounts that break the margin.</p><h2>Roll it up to cost per account</h2><p>Multiply cost per successful task by expected tasks per account per month and add the failure share. That number is comparable to the price of the plan. Do it once at median usage, once at the 90th percentile, and once for the heaviest account you would still accept. Flat-price plans fail in the tail, because model cost keeps scaling after revenue stops.</p><h2>The four cost drivers to check</h2><ul><li><strong>Context resent per turn.</strong> A long conversation or a large retrieved document is re-billed on every turn unless caching covers it.</li><li><strong>Retries and failures.</strong> Billed at full rate; they belong in the numerator, not in an error budget.</li><li><strong>Agentic fan-out.</strong> One user action becomes many model and tool calls, and the multiplier is what varies between accounts.</li><li><strong>Model routing.</strong> A default that sends easy cases to an expensive model is the largest single controllable line.</li></ul><h2>Wire the numbers to a decision</h2><p>The output of the exercise should be a choice made before launch: a usage ceiling in the plan, a consumption component in the price, a cheaper default model with escalation only where quality requires it, or an accepted margin with a review date. Ship the instrumentation with the feature so the same numbers keep arriving in production and the assumption can be checked rather than defended.</p><h2>Report it as its own line</h2><p>Break AI cost of revenue out inside gross margin, with cost per account and margin at each usage percentile. Read that way, a rising bill is legible: spend growing in step with revenue at a flat cost per account is scale, and spend growing faster than revenue is erosion with a named cause.</p>",
+      "faq": [
+        {
+          "question": "Is LLM inference a cost of revenue or an R&D cost?",
+          "answer": "Recurring inference triggered by customer usage is a variable cost of serving and belongs in cost of revenue. One-off fine-tuning, prototyping, and evaluation runs generally stay in development spend."
+        },
+        {
+          "question": "How do you measure an AI feature's gross margin before launch?",
+          "answer": "Tag staging traffic by account, workflow, and outcome; take cost per successful task at p50, p90, and p99; multiply by expected monthly tasks per account, add paid failures and retries, and compare against plan price."
+        },
+        {
+          "question": "Why does average cost per request understate margin risk?",
+          "answer": "AI cost scales with usage while a flat subscription price does not, so margin failures appear in the heaviest accounts, which an average deliberately smooths away."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        },
+        {
+          "slug": "/research/free-tier-is-an-acquisition-cost",
+          "label": "The free tier is an acquisition cost"
+        },
+        {
+          "slug": "/research/retry-loop-hidden-spend",
+          "label": "Retry loops and hidden spend"
+        }
+      ]
+    },
+    "es": {
+      "title": "Mide el margen bruto de una función de IA antes de lanzarla",
+      "titleCore": "Mide el margen bruto de una función de IA antes de lanzarla",
+      "description": "Cómo instrumentar una función de IA en staging para conocer su coste por cuenta y su margen en la cola de uso antes del lanzamiento.",
+      "body": "<p>La inferencia es un coste de servicio, no de desarrollo. Se ejecuta en cada acción del cliente y escala con el uso. Tratarla como I+D hasta el lanzamiento significa conocer el margen real con la primera factura completa.</p><h2>Instrumente antes de lanzar</h2><p>En staging, etiquete cada llamada con cuenta, flujo y resultado, y reproduzca tráfico realista. Necesita una distribución: coste por tarea exitosa en p50, p90 y p99, más la parte pagada por fallos y reintentos.</p><h2>Coste por cuenta</h2><p>Multiplique el coste por tarea exitosa por las tareas mensuales esperadas y sume los fallos. Compárelo con el precio del plan en uso mediano, percentil 90 y la cuenta más pesada aceptable.</p><h2>Cuatro factores de coste</h2><p>Contexto reenviado en cada turno, reintentos facturados por completo, expansión agéntica de una acción en muchas llamadas, y enrutamiento que manda casos fáciles a un modelo caro.</p><h2>Conéctelo a una decisión</h2><p>Techo de uso, componente de consumo en el precio, modelo por defecto más barato, o margen aceptado con fecha de revisión. Repórtelo como línea propia del margen bruto.</p>",
+      "faq": [
+        {
+          "question": "¿La inferencia es coste de ventas o I+D?",
+          "answer": "La inferencia recurrente provocada por el uso del cliente es un coste variable de servicio y pertenece al coste de ventas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/cost-per-successful-task",
+          "label": "Coste por tarea exitosa"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Mesurer la marge brute d’une fonctionnalité d’IA avant le…",
+      "titleCore": "Mesurer la marge brute d’une fonctionnalité d’IA avant le…",
+      "description": "Comment instrumenter une fonctionnalité d’IA en préproduction pour connaître son coût par compte et sa marge en queue d’usage avant le lancement.",
+      "body": "<p>L’inférence est un coût de service, pas un coût de développement. Elle s’exécute à chaque action client et croît avec l’usage. La traiter comme de la R&amp;D jusqu’au lancement revient à découvrir la marge réelle avec la première facture complète.</p><h2>Instrumenter avant de lancer</h2><p>En préproduction, étiquetez chaque appel par compte, flux et résultat, et rejouez un trafic réaliste. Ce qu’il faut : le coût par tâche réussie aux p50, p90 et p99, plus la part payée en échecs et reprises.</p><h2>Coût par compte</h2><p>Multipliez le coût par tâche réussie par le volume mensuel attendu et ajoutez les échecs. Comparez au prix du plan à l’usage médian, au 90e centile et sur le compte le plus lourd acceptable.</p><h2>Quatre facteurs de coût</h2><p>Contexte renvoyé à chaque tour, reprises facturées plein tarif, éclatement agentique d’une action en de nombreux appels, et routage envoyant les cas simples vers un modèle coûteux.</p><h2>Relier à une décision</h2><p>Plafond d’usage, part de consommation dans le prix, modèle par défaut moins cher, ou marge assumée avec date de revue. Présentez-la comme une ligne dédiée de la marge brute.</p>",
+      "faq": [
+        {
+          "question": "L’inférence relève-t-elle du coût des ventes ?",
+          "answer": "L’inférence récurrente déclenchée par l’usage client est un coût variable de service et relève du coût des ventes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/cost-per-successful-task",
+          "label": "Coût par tâche réussie"
+        }
+      ]
+    },
+    "de": {
+      "title": "Die Bruttomarge eines KI-Features vor dem Launch messen",
+      "titleCore": "Die Bruttomarge eines KI-Features vor dem Launch messen",
+      "description": "Wie man ein KI-Feature in der Staging-Umgebung instrumentiert, um Kosten je Konto und Marge im Nutzungs-Tail vor dem Launch zu kennen.",
+      "body": "<p>Inferenz ist ein Servicekosten-Block, kein Entwicklungsaufwand. Sie läuft bei jeder Kundenaktion und wächst mit der Nutzung. Wer sie bis zum Launch als F&amp;E führt, erfährt die echte Marge erst mit der ersten vollen Rechnung.</p><h2>Vor dem Launch instrumentieren</h2><p>Markieren Sie in Staging jeden Modellaufruf nach Konto, Workflow und Ergebnis und spielen Sie realistischen Traffic ein. Gebraucht wird eine Verteilung: Kosten je erfolgreicher Aufgabe bei p50, p90 und p99, plus der bezahlte Anteil für Fehlläufe und Retries.</p><h2>Kosten je Konto</h2><p>Kosten je erfolgreicher Aufgabe mal erwartete Monatsaufgaben, plus Fehlläufe. Vergleichen Sie mit dem Planpreis bei Median, 90. Perzentil und dem schwersten noch akzeptablen Konto.</p><h2>Vier Kostentreiber</h2><p>Kontext in jedem Turn erneut berechnet, voll berechnete Retries, agentische Vervielfachung einer Aktion, und Routing, das einfache Fälle an ein teures Modell schickt.</p><h2>An eine Entscheidung koppeln</h2><p>Nutzungsobergrenze, Verbrauchskomponente im Preis, günstigeres Standardmodell oder bewusst akzeptierte Marge mit Review-Termin. Als eigene Zeile der Bruttomarge berichten.</p>",
+      "faq": [
+        {
+          "question": "Sind Inferenzkosten Umsatzkosten?",
+          "answer": "Wiederkehrende, durch Kundennutzung ausgelöste Inferenz ist ein variabler Servicekosten-Block und gehört in die Umsatzkosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/cost-per-successful-task",
+          "label": "Kosten je erfolgreicher Aufgabe"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AI機能の粗利率は、出荷前に測る",
+      "titleCore": "AI機能の粗利率は、出荷前に測る",
+      "description": "ステージングで計測し、顧客単価と利用の裾野における粗利率をローンチ前に把握する方法。",
+      "body": "<p>推論は開発費ではなく提供コストです。顧客の操作ごとに走り、利用量に応じて増えます。ローンチまで研究開発として扱えば、実際の粗利は最初の満額請求で初めて分かります。</p><h2>出荷前に計測する</h2><p>ステージングで各呼び出しに顧客・処理・結果のタグを付け、現実的なトラフィックを再生します。必要なのは分布です。成功タスク単価のp50・p90・p99と、支払う失敗・リトライの比率。</p><h2>顧客単価に集約する</h2><p>成功タスク単価に想定月間タスク数を掛け、失敗分を加えます。中央値、90パーセンタイル、許容できる最重量顧客の三点でプラン価格と比較します。</p><h2>四つのコスト要因</h2><p>毎ターン再課金される長い文脈、全額課金されるリトライ、一操作を多数の呼び出しに広げるエージェント処理、そして簡単な要求を高価なモデルへ送る既定ルーティング。</p><h2>意思決定に接続する</h2><p>利用上限、従量課金の併用、既定モデルの低価格化、または見直し期日付きで容認する margin。粗利の独立した行として報告します。</p>",
+      "faq": [
+        {
+          "question": "推論コストは売上原価ですか？",
+          "answer": "顧客利用によって発生する継続的な推論は提供に伴う変動費であり、売上原価に含めます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/cost-per-successful-task",
+          "label": "成功タスクあたりコスト"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Meça a margem bruta de uma funcionalidade de IA antes de…",
+      "titleCore": "Meça a margem bruta de uma funcionalidade de IA antes de…",
+      "description": "Como instrumentar uma funcionalidade de IA em staging para conhecer o custo por conta e a margem na cauda de uso antes do lançamento.",
+      "body": "<p>A inferência é um custo de serviço, não de desenvolvimento. Corre a cada ação do cliente e cresce com o uso. Tratá-la como I&amp;D até ao lançamento significa descobrir a margem real com a primeira fatura completa.</p><h2>Instrumente antes de lançar</h2><p>Em staging, etiquete cada chamada por conta, fluxo e resultado, e reproduza tráfego realista. O que precisa é de uma distribuição: custo por tarefa bem-sucedida em p50, p90 e p99, mais a parte paga em falhas e retries.</p><h2>Custo por conta</h2><p>Multiplique o custo por tarefa bem-sucedida pelas tarefas mensais esperadas e some as falhas. Compare com o preço do plano no uso mediano, no percentil 90 e na conta mais pesada aceitável.</p><h2>Quatro fatores de custo</h2><p>Contexto reenviado a cada turno, retries faturados por inteiro, expansão agêntica de uma ação em muitas chamadas, e routing que envia casos fáceis para um modelo caro.</p><h2>Ligue a uma decisão</h2><p>Teto de uso, componente de consumo no preço, modelo por omissão mais barato, ou margem aceite com data de revisão. Reporte como linha própria da margem bruta.</p>",
+      "faq": [
+        {
+          "question": "A inferência é custo das vendas?",
+          "answer": "A inferência recorrente despoletada pelo uso do cliente é um custo variável de serviço e pertence ao custo das vendas."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/cost-per-successful-task",
+          "label": "Custo por tarefa bem-sucedida"
+        }
+      ]
+    },
+    "it": {
+      "title": "Misurare il margine lordo di una feature IA prima del lancio",
+      "titleCore": "Misurare il margine lordo di una feature IA prima del lancio",
+      "description": "Come instrumentare una funzionalità IA in staging per conoscerne il costo per account e il margine prima della prima fattura.",
+      "body": "<p>L'inferenza è un costo di erogazione del servizio, non un costo di sviluppo. Viene eseguita su ogni azione del cliente e scala con l'utilizzo. Trattarla come R&amp;D fino al lancio significa scoprire il margine reale solo con la prima fattura del provider.</p><h2>Strumentare prima del rilascio</h2><p>In staging, tracciate ogni chiamata al modello con account, workflow ed esito, riproducendo traffico reale. È necessaria una distribuzione: costo per task riuscito a p50, p90 e p99, più la quota di spesa per fallimenti e retry.</p><h2>Costo per account</h2><p>Moltiplicate il costo per task riuscito per il volume mensile atteso e sommate i fallimenti. Confrontate con il prezzo dell'abbonamento.</p><h2>Quattro fattori di costo</h2><p>Contesto reinviato a ogni turno, retry fatturati per intero, espansione agéntica e routing inefficiente.</p>",
+      "faq": [
+        {
+          "question": "L'inferenza è un costo di vendita o R&D?",
+          "answer": "L'inferenza ricorrente legata all'uso del cliente è un costo variabile di erogazione e fa parte del costo del venduto (COGS)."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/cost-per-successful-task",
+          "label": "Costo per task riuscito"
+        }
+      ]
+    },
+    "ko": {
+      "title": "AI 기능의 매출총이익률은 출시 전에 측정한다",
+      "titleCore": "AI 기능의 매출총이익률은 출시 전에 측정한다",
+      "description": "스테이징 단계에서 고객 계정당 원가와 사용량 꼬리 구간의 마진을 출시 전에 계측하고 가격 정책에 반영하는 방법.",
+      "body": "<p>추론은 개발비가 아니라 서비스 제공 원가입니다. 고객의 모든 작업마다 실행되며 사용량에 비례하여 증가합니다. 출시 직전까지 이를 R&amp;D로 취급하면 첫 번째 청구서가 도착한 후에야 마진 실패를 깨닫게 됩니다.</p><h2>출시 전에 계측하라</h2><p>스테이징 환경에서 각 모델 호출에 계정, 워크플로우, 결과 태그를 지정하고 실제 트래픽을 재생합니다. p50, p90, p99 백분위수별 성공 작업당 비용과 실패/재시도 비율을 측정해야 합니다.</p><h2>계정당 비용으로 집계</h2><p>성공 작업당 비용에 예상 월간 작업 수를 곱하고 유료 실패 비용을 합산하여 요금제 가격과 비교합니다. 정액 요금제는 헤비 유저 구간에서 마진 붕괴가 발생합니다.</p><h2>4대 비용 요인</h2><p>매 턴 재전송되는 긴 컨텍스트, 전액 청구되는 재시도, 에이전트 다중 분기, 비효율적인 모델 기본 라우팅을 점검해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "AI 추론 비용은 매출원가인가요?",
+          "answer": "고객 이용에 의해 발생하는 지속적인 추론은 제공에 따른 변동비로서 매출원가에 포함됩니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/cost-per-successful-task",
+          "label": "성공 작업당 비용"
+        }
+      ]
+    },
+    "zh": {
+      "title": "AI功能上线前必须测算的毛利率模型",
+      "titleCore": "AI功能上线前必须测算的毛利率模型",
+      "description": "在预发环境对AI功能进行深度埋点，在正式发布前而非首月账单后准确掌握单租户成本与长尾毛利率。",
+      "body": "<p>大模型在线推理是服务交付成本（Cost of Goods Sold），绝非研发资本化开支。它随着客户的每次真实操作持续触发，与业务用量严格线性绑定，并最终体现在生产基础设施账单中。如果直到功能上线前都将其计入研发成本，那么真正的毛利率数据就只能等首个完整账单周期揭晓——而那是发现利润塌陷最糟糕的时机。</p><h2>在上线前而非上线后埋点</h2><p>在预发（Staging）环境中，必须将每次模型调用打上租户账户、业务流以及最终交付结果的元数据标签，并回放高度拟真的真实流量，而非简单的虚构压测循环。你需要的是完整的统计分布：p50、p90与p99分位数下的单次成功任务成本，以及即使失败也必须付费的重试损耗比例。单一的平均值会彻底抹平那些击穿毛利的极端重度客户。</p><h2>汇总为单租户月度成本</h2><p>将单次成功任务成本乘以每个账户预期的月任务量，并加上无效重试的沉没损耗。将该测算值与订阅套餐价格直接对比。分别在用量中位数、第90百分位以及系统可承受的最重度极端账户三个切片进行核算。固定订阅价格模式往往在用量长尾处彻底失效，因为收入停滞时Token支出却在无上限膨胀。</p><h2>四大关键成本动因</h2><ul><li><strong>每轮重复发送的上下文：</strong>超长对话历史或检索生成（RAG）召回的大文档在每个交互回合都会被重新计费，除非配置了高效的提示词前缀缓存。</li><li><strong>失败与重试浪费：</strong>云厂商对失败的API调用同样全额收费，它们属于真实的成本分子，绝不能在错误预算中被一笔勾销。</li><li><strong>智能体多步并发扇出：</strong>单个用户操作可能裂变为海量的模型和工具调用，这一倍数在不同客户习惯间差异极大。</li><li><strong>默认模型路由策略：</strong>将简单问答无差别路由至顶级高价推理模型，是团队最容易治理却最常忽视的单项失控源头。</li></ul><h2>将测算指标落实为商业决策</h2><p>在正式发布前，基于测算做出明确的商业或架构决策：在套餐中引入阶梯用量硬顶、增加基于用量的按需加价包、将默认模型降级为经济型并在复杂场景动态升级，或确立经管理层特批的阶段性毛利目标并设立复盘日期。</p>",
+      "faq": [
+        {
+          "question": "LLM模型推理成本应计入营业成本还是研发费用？",
+          "answer": "由终端客户使用触发的持续性推理属于服务提供的变动成本，应计入营业成本（COGS）；而一次性微调、原型验证和离线评估通常属于研发支出。"
+        },
+        {
+          "question": "产品团队如何在功能上线前准确测算AI功能的毛利率？",
+          "answer": "在预发环境按账户、工作流和终态打标签回放真实流量，测算p50/p90/p99成功任务单价，乘以预期用量并加上失败重试损耗，最后与定价方案比对。"
+        },
+        {
+          "question": "为什么单次请求平均成本会严重低估毛利率侵蚀风险？",
+          "answer": "因为AI推理成本随用量无上限增长而固定订阅收入存在封顶，毛利崩溃往往集中爆发在极少数重度账户上，简单的全局平均值会将其人为掩盖。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/cost-per-successful-task",
+          "label": "成功任务单价"
+        },
+        {
+          "slug": "https://finopsllm.com/research/free-tier-is-an-acquisition-cost",
+          "label": "免费层是客户获取成本"
+        },
+        {
+          "slug": "/zh/research/retry-loop-hidden-spend",
+          "label": "重试循环与隐性支出"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Brutomarge van een AI-feature meten voor release",
+      "titleCore": "Brutomarge van een AI-feature meten voor release",
+      "description": "Hoe u een AI-functionaliteit in staging instrumenteert om kosten per account en marges in de gebruikstaart vooraf inzichtelijk te maken.",
+      "body": "<p>Inferentie is een kostprijs van de omzet (COGS), geen eenmalige ontwikkelingsinvestering. Het wordt aangeroepen bij elke klantactie, schaalt direct mee met het gebruik en belandt op dezelfde factuur als de productie-infrastructuur. Wie dit tot de livegang behandelt als R&amp;D, ontdekt de werkelijke brutomarge pas bij de eerste volledige factuurcyclus — het meest ongunstige moment om operationele margedruk vast te stellen.</p><h2>Instrumenteer vóór de release, niet erna</h2><p>Tag in staging elke modelaanroep met account-, workflow- en uitkomstlabels en speel realistisch verkeer af in plaats van een synthetische lus. Wat u nodig heeft is een verdeling: kosten per geslaagde taak op p50, p90 en p99, plus het percentage van de uitgaven dat opgaat aan mislukte en herhaalde taken waarvoor u wel providerkosten betaalt. Een enkel gemiddelde maskeert de accounts die de marge vernietigen.</p><h2>Herleid naar kosten per account</h2><p>Vermenigvuldig de kosten per geslaagde taak met het verwachte aantal maandelijkse taken per account en tel de faalverhouding erbij op. Vergelijk die uitkomst met de abonnementsprijs van het plan. Voer dit uit bij mediaan gebruik, op het 90e percentiel en voor het zwaarste account dat u commercieel nog toestaat. Vaste abonnementen falen in de staart, omdat modelkosten blijven stijgen terwijl de omzet begrensd is.</p><h2>Vier kritieke kostendrijvers</h2><ul><li><strong>Opnieuw verzonden context per turn:</strong> Lange gesprekken of grote opgehaalde documenten worden bij elke interactie opnieuw gefactureerd, tenzij contextcaching is geactiveerd.</li><li><strong>Retries en systeemfouten:</strong> Volledig gefactureerd door de provider; ze horen thuis in de teller van de kostprijs, niet weggemoffeld in een foutenbudget.</li><li><strong>Agentic fan-out:</strong> Eén gebruikersactie vertaalt zich naar tientallen model- en toolcalls; deze vermenigvuldigingsfactor varieert sterk per type gebruiker.</li><li><strong>Modelroutering:</strong> Een standaardconfiguratie die eenvoudige vragen naar een duur redeneermodel stuurt, is de grootste vermijdbare kostenpost.</li></ul><h2>Koppel cijfers direct aan een beleidskeuze</h2><p>De uitkomst moet een vooraf genomen besluit zijn: een verbruiksplafond in het abonnement, een variabele verbruikscomponent in de prijsstructuur, een voordeliger standaardmodel met slimme escalatie, of een bewust geaccepteerde marge met een herzieningsdatum.</p>",
+      "faq": [
+        {
+          "question": "Zijn LLM-inferentiekosten omzetkosten of R&D?",
+          "answer": "Terugkerende inferentie die wordt getriggerd door klantgebruik is een variabele kostprijs van de dienstverlening en hoort thuis onder de omzetkosten (COGS)."
+        },
+        {
+          "question": "Hoe meet u de brutomarge van een AI-feature vóór de livegang?",
+          "answer": "Tag stagingverkeer op account en workflow, bereken kosten per geslaagde taak op p50/p90/p99, vermenigvuldig met maandvolume, tel faalkosten mee en toets aan de planprijs."
+        },
+        {
+          "question": "Waarom verbergt een gemiddelde kost per verzoek margerisico's?",
+          "answer": "Omdat AI-kosten schalen met intensiteit terwijl vaste abonnementstarieven een plafond hebben; margedruk concentreert zich in de zwaarste gebruikscohorten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/cost-per-successful-task",
+          "label": "Kosten per geslaagde taak"
+        },
+        {
+          "slug": "https://finopsllm.com/research/free-tier-is-an-acquisition-cost",
+          "label": "De gratis laag is een acquisitiekost"
+        },
+        {
+          "slug": "/nl/research/retry-loop-hidden-spend",
+          "label": "Herhaallussen en verborgen kosten"
+        }
+      ]
+    },
+    "ar": {
+      "title": "قياس إجمالي هامش ربح ميزات الذكاء قبل الإطلاق",
+      "titleCore": "قياس إجمالي هامش ربح ميزات الذكاء قبل الإطلاق",
+      "description": "قياس تكلفة ميزة الذكاء في بيئة الاختبار لمعرفة تكلفتها لكل حساب وهامشها عند ذروة الاستخدام قبل الإطلاق، وليس بعد الفاتورة.",
+      "body": "<p>يتحمس مهندسو المنتجات لطرح قدرات الذكاء الاصطناعي التوليدي لمستخدميهم، لكن إطلاق هذه الميزات دون قياس دقيق لاقتصاديات الاستدلال قد يحول منتجاً رابحاً إلى خدمة خاسرة تلتهم أرباح الشركة السحابية. يوضح هذا الدليل كيفية قياس الهامش الإجمالي لميزات الذكاء بدقة في مرحلة الاختبار والتجهيز (Staging).</p>\n\n<h2>القياس قبل الإطلاق وليس بعد الفاتورة</h2>\n<p>يجب تزويد الميزة بأدوات القياس عن بعد أثناء تطويرها. سجل الرموز المستهلكة في كل طلب، وحجم استدعاءات الأدوات، ومعدلات التخزين المؤقت، والتكلفة الإجمالية بالدولار لكل حساب مستخدم. محاكاة سيناريوهات الاستخدام الكثيف تكشف العيوب الاقتصادية في التصميم قبل أن تصبح التزامات مالية واقعية.</p>\n\n<h2>الانتباه لذيل الاستخدام المرتفع (Usage Tail Risk)</h2>\n<p>إن الاعتماد على متوسط التكلفة لكل مستخدم يمثل فخاً خطيراً. في ميزات الذكاء الاصطناعي، يتبع الاستهلاك غالباً توزيع القوة (Power Law): 5% من المستخدمين يستهلكون 80% من إجمالي رموز الاستدلال. إذا كان تسعير المنتج ثابتاً، فإن هؤلاء المستخدمين المفرطين سيقضون تماماً على هامش ربح بقية الحسابات.</p>\n\n<h2>ربط الأرقام بقرارات الإطلاق والتسعير</h2>\n<p>بناءً على نتائج بيئة الاختبار، يمكن اتخاذ قرارات مبكرة مثل: تحديد سقف استهلاك شهري عادل، أو إتاحة الميزة فقط للباقات الأعلى سعراً، أو تحسين المطالبات والتخزين المؤقت لتقليص تكلفة الاستدلال بنسبة 60% قبل فتح الباب لكافة المستخدمين.</p>",
+      "faq": [
+        {
+          "question": "هل استدلال النماذج تكلفة إيرادات أم تكلفة أبحاث وتطوير؟",
+          "answer": "الاستدلال في المنتجات الحية يمثل تكلفة إيرادات مباشرة تنعكس فوراً على إجمالي الهامش الربحي للشركة السحابية."
+        },
+        {
+          "question": "كيف تقيس هامش ربح ميزة الذكاء الاصطناعي مسبقاً؟",
+          "answer": "بتسجيل استهلاك الرموز لكل مستخدم في بيئة التطوير ومحاكاة التكاليف على شرائح الاستخدام المرتفعة بدقة."
+        },
+        {
+          "question": "لماذا يضلل متوسط التكلفة لكل طلب تقييم مخاطر الهامش؟",
+          "answer": "لأن شريحة صغيرة من المستخدمين المفرطين تستهلك معظم الرموز مما قد يحول الحسابات إلى خسائر فادحة غير متوقعة."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        },
+        {
+          "slug": "https://finopsllm.com/research/free-tier-is-an-acquisition-cost",
+          "label": "الباقة المجانية كتكلفة اكتساب"
+        },
+        {
+          "slug": "/ar/research/retry-loop-hidden-spend",
+          "label": "حلقات إعادة المحاولة والإنفاق الخفي"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/ai-feature-gross-margin"
+  }
+}

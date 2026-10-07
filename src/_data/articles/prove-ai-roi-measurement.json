@@ -1,0 +1,284 @@
+{
+  "slug": "prove-ai-roi-measurement",
+  "tags": [
+    "ai-roi",
+    "attribution",
+    "quality"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "How to prove AI ROI without hiding quality regressions",
+      "titleCore": "How to prove AI ROI without hiding quality regressions",
+      "description": "A measurement framework that connects AI spend to successful outcomes, quality, and business value without relying on vanity metrics.",
+      "body": "<p>AI ROI is not proven by showing that the model bill fell. It is proven when a measured business outcome improves more than the fully loaded AI cost required to produce it. The measurement needs three linked records: attributable spend, successful outcome, and a quality check that prevents cheaper but worse work from looking like a win.</p><h2>Start with a counterfactual</h2><p>State what would have happened without the AI change: human handling, an older model, the previous workflow, or no feature launch. Choose a comparable period or control cohort. Without a counterfactual, revenue growth and cost reduction cannot be attributed to AI rather than traffic, pricing, seasonality, or unrelated product work.</p><h2>Use an outcome denominator</h2><p>Measure cost per successful task, not cost per request. Define success in observable terms and link the outcome to the model trace: accepted support answer, invoice extracted without correction, or workflow completed within its service level. Include retries, tools, human repair, and evaluation traffic in the cost numerator.</p><h2>Keep quality in the equation</h2><p>Pair the financial result with task success, error rate, latency, user acceptance, or downstream conversion. A 25% cost reduction that cuts task success from 92% to 80% is not an ROI improvement. Set a quality floor before the experiment and reject savings below it.</p><h2>Report a range, not a miracle number</h2><p>Show conservative, base, and upside cases. Name the assumptions for adoption, provider rate, volume, human time, and quality. Reconcile spend to provider invoices and document which benefits are realized cash savings, avoided hiring, faster throughput, or strategic option value.</p><p>The board does not need a perfect number. It needs a number whose denominator, counterfactual, quality floor, and assumptions can survive questions.</p><h2>Related</h2><ul><li>Cost per successful task</li><li>LLM cost attribution</li><li>AI observability</li></ul>",
+      "faq": [
+        {
+          "question": "How do you prove AI ROI?",
+          "answer": "Connect attributable AI spend to a defined successful outcome, compare it with a credible counterfactual, and enforce a measurable quality floor."
+        },
+        {
+          "question": "Why is lower AI spend not enough to prove ROI?",
+          "answer": "A lower bill can reflect lower usage or worse output. ROI requires showing that business value improved relative to the fully loaded cost."
+        },
+        {
+          "question": "What costs belong in AI ROI?",
+          "answer": "Include model tokens, tools, retries, evaluations, human repair, gateway and observability costs, and any implementation or migration cost relevant to the period."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "AI observability"
+        }
+      ]
+    },
+    "es": {
+      "title": "Probar el ROI de IA sin ocultar fallos",
+      "titleCore": "Probar el ROI de IA sin ocultar fallos",
+      "description": "Un marco para conectar gasto de IA, resultados exitosos, calidad y valor de negocio.",
+      "body": "<p>El ROI de IA no se demuestra solo reduciendo la factura. Se demuestra cuando un resultado de negocio mejora más que el coste total de producirlo. Une gasto atribuible, resultado exitoso y control de calidad.</p><h2>Define el contrafactual</h2><p>Explica qué habría ocurrido sin el cambio: trabajo humano, modelo anterior, flujo anterior o ninguna funcionalidad. Usa un periodo o cohorte comparable.</p><h2>Mide resultados</h2><p>Usa coste por tarea exitosa, no por solicitud. Define éxito de forma observable y vincúlalo al trace. Incluye reintentos, herramientas, reparación humana y evaluaciones.</p><h2>Conserva la calidad</h2><p>Acompaña el resultado con tasa de éxito, errores, latencia, aceptación o conversión. Un ahorro que empeora el producto no es ROI.</p><p>Presenta escenarios conservador, base y optimista con supuestos auditables.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo se demuestra el ROI de IA?",
+          "answer": "Conecta gasto atribuible con un resultado definido, compáralo con un contrafactual y aplica un umbral de calidad."
+        },
+        {
+          "question": "¿Basta con gastar menos?",
+          "answer": "No. Una factura menor puede significar menos uso o peor resultado; el ROI necesita valor de negocio frente al coste total."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/cost-per-successful-task",
+          "label": "Coste por tarea exitosa"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Prouver le ROI IA sans masquer la qualité",
+      "titleCore": "Prouver le ROI IA sans masquer la qualité",
+      "description": "Un cadre pour relier dépense IA, résultats réussis, qualité et valeur métier.",
+      "body": "<p>Le ROI IA ne se prouve pas par une facture plus basse. Il se prouve quand un résultat métier progresse davantage que le coût complet nécessaire. Reliez dépense attribuable, résultat réussi et contrôle qualité.</p><h2>Définir le contrefactuel</h2><p>Décrivez ce qui se serait passé sans le changement: travail humain, ancien modèle ou ancien flux. Utilisez une période ou cohorte comparable.</p><h2>Mesurer le résultat</h2><p>Suivez le coût par tâche réussie, pas par requête. Définissez la réussite et incluez reprises, outils, réparation humaine et évaluations.</p><h2>Garder la qualité</h2><p>Associez résultat financier, taux de réussite, erreurs, latence et acceptation. Une économie qui dégrade le produit n’est pas un ROI.</p>",
+      "faq": [
+        {
+          "question": "Comment prouver le ROI de l’IA?",
+          "answer": "Reliez la dépense attribuable à un résultat défini, comparez-la à un contrefactuel et imposez un seuil de qualité."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/cost-per-successful-task",
+          "label": "Coût par tâche réussie"
+        }
+      ]
+    },
+    "de": {
+      "title": "KI-ROI nachweisen, ohne Qualitätsverluste zu verstecken",
+      "titleCore": "KI-ROI nachweisen, ohne Qualitätsverluste zu verstecken",
+      "description": "Ein Messrahmen für KI-Ausgaben, erfolgreiche Ergebnisse, Qualität und Geschäftswert.",
+      "body": "<p>KI-ROI wird nicht durch eine kleinere Rechnung bewiesen. Er entsteht, wenn ein Geschäftsergebnis stärker steigt als die Vollkosten seiner Erzeugung. Verbinden Sie zurechenbare Kosten, Erfolg und Qualität.</p><h2>Das Gegenfaktum</h2><p>Beschreiben Sie, was ohne die Änderung passiert wäre: Menschen, altes Modell oder alter Workflow. Nutzen Sie eine vergleichbare Periode oder Kohorte.</p><h2>Ergebnis messen</h2><p>Verwenden Sie Kosten je erfolgreicher Aufgabe statt je Anfrage. Definieren Sie Erfolg beobachtbar und zählen Sie Retries, Tools, Nacharbeit und Evaluation.</p><h2>Qualität schützen</h2><p>Zeigen Sie Erfolgsquote, Fehler, Latenz und Akzeptanz. Eine Einsparung mit schlechterem Ergebnis ist kein ROI.</p>",
+      "faq": [
+        {
+          "question": "Wie weist man KI-ROI nach?",
+          "answer": "Durch die Verbindung zurechenbarer Kosten mit einem definierten Ergebnis, einem Gegenfaktum und einer messbaren Qualitätsgrenze."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/cost-per-successful-task",
+          "label": "Kosten je erfolgreicher Aufgabe"
+        }
+      ]
+    },
+    "ja": {
+      "title": "品質低下を隠さずにAIのROIを証明する方法",
+      "titleCore": "品質低下を隠さずにAIのROIを証明する方法",
+      "description": "AI支出を成功した成果、品質、事業価値に結び付ける測定方法です。",
+      "body": "<p>AIのROIは請求額が下がっただけでは証明できません。成果の改善が、成果を生むための総コストを上回ったときに証明できます。帰属支出、成功成果、品質確認を結び付けます。</p><h2>反実仮想を置く</h2><p>AI変更がなければ人手、旧モデル、旧ワークフローでどうなったかを定義し、比較可能な期間や顧客群を使います。</p><h2>成果を分母にする</h2><p>リクエスト単価ではなく成功タスク単価を測ります。再試行、ツール、人手修正、評価も含めます。</p><h2>品質を守る</h2><p>成功率、エラー、遅延、受入率を同時に示します。品質を下げた節約はROIではありません。</p>",
+      "faq": [
+        {
+          "question": "AIのROIはどう証明しますか？",
+          "answer": "帰属支出を定義した成功成果に結び付け、反実仮想と測定可能な品質基準と比較します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/cost-per-successful-task",
+          "label": "成功タスク単価"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Provar o ROI de IA sem esconder falhas",
+      "titleCore": "Provar o ROI de IA sem esconder falhas",
+      "description": "Um enquadramento para ligar despesa de IA, resultados bem-sucedidos, qualidade e valor de negócio.",
+      "body": "<p>O ROI da IA não se prova apenas com uma fatura menor. Prova-se quando o resultado de negócio melhora mais do que o custo total para o produzir. Ligue despesa atribuível, resultado bem-sucedido e controlo de qualidade.</p><h2>Defina o contrafactual</h2><p>Explique o que aconteceria sem a mudança: trabalho humano, modelo anterior ou fluxo anterior. Use un período ou coorte comparável.</p><h2>Meça o resultado</h2><p>Use custo por tarefa bem-sucedida, não por pedido. Defina sucesso de forma observável e inclua retries, ferramentas, reparação humana e avaliações.</p><h2>Proteja a qualidade</h2><p>Mostre taxa de sucesso, erros, latência e aceitação. Poupança com pior produto não é ROI.</p>",
+      "faq": [
+        {
+          "question": "Como se prova o ROI da IA?",
+          "answer": "Ligando despesa atribuível a um resultado definido, comparando com um contrafactual e impondo um limite de qualidade."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/cost-per-successful-task",
+          "label": "Custo por tarefa bem-sucedida"
+        }
+      ]
+    },
+    "it": {
+      "title": "Come misurare il ROI dell'IA senza nascondere regressioni…",
+      "titleCore": "Come misurare il ROI dell'IA senza nascondere regressioni…",
+      "description": "Un framework di misurazione per collegare spesa LLM, task riusciti, qualità del modello e valore economico reale senza metriche di vanità.",
+      "body": "<p>Il ROI dell'IA non si dimostra esibendo una fattura cloud ridotta. Si dimostra quando un risultato operativo misurabile migliora più del costo complessivo necessario a generarlo. La misurazione richiede tre record collegati: spesa attribuibile per chiamata, esito positivo del task e controllo qualitativo costante per evitare che un output scadente sia scambiato per efficienza.</p><h2>Definire uno scenario controfattuale</h2><p>Indicate cosa sarebbe accaduto senza l'adozione dell'IA: gestione manuale da parte del personale, modello precedente o assenza del servizio. Senza un gruppo di controllo, la crescita dei ricavi o la contrazione dei costi non possono essere attribuite in modo affidabile all'intelligenza artificiale.</p><h2>Adottare il task riuscito come denominatore</h2><p>Misurate il costo per task completato con successo, non per singola richiesta API. Includete nel numeratore chiamate a strumenti, retry, fallimenti e ore di correzione da parte degli operatori.</p><h2>Preservare la qualità dell'output</h2><p>Una riduzione dei costi del 25% che fa crollare il successo dei compiti dal 92% all'80% distrugge valore. Fissate una soglia minima di accuratezza prima di dichiarare qualsiasi risparmio economico.</p>",
+      "faq": [
+        {
+          "question": "Come si calcola il vero ROI di un progetto di IA?",
+          "answer": "Collegando la spesa computazionale direttamente al risultato utile ottenuto, confrontandola con uno scenario controfattuale e verificando la qualità minima."
+        },
+        {
+          "question": "Perché una riduzione della fattura non prova un aumento del ROI?",
+          "answer": "Perché un costo inferiore può riflettere una minore adozione o un output degradato che impone lavoro correttivo a valle."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/cost-per-successful-task",
+          "label": "Costo per task riuscito"
+        }
+      ]
+    },
+    "ko": {
+      "title": "품질 저하 없이 AI ROI를 증명하는 측정 프레임워크",
+      "titleCore": "품질 저하 없이 AI ROI를 증명하는 측정 프레임워크",
+      "description": "허위 지표 없이 AI 지출, 작업 성공률, 출력 품질 및 실제 사업 가치를 유기적으로 연결하여 ROI를 측정하는 엔지니어링 프레임워크.",
+      "body": "<p>AI의 ROI는 단순히 모델 청구 비용이 줄었다고 증명되지 않습니다. 성공적인 비즈니스 성과의 개선 가치가 해당 성과를 내기 위해 투입된 총비용보다 커질 때 비로소 입증됩니다. 이를 측정하려면 귀속 지출, 성공 성과, 품질 검증이라는 세 가지 상호 연결된 데이터셋이 필요합니다.</p><h2>반사실적 기준선(Counterfactual) 설정</h2><p>AI 변경이 없었을 경우의 대안(사람의 직접 처리, 이전 모델, 이전 워크플로우 등)을 명시하십시오. 비교 대조군이 없다면 매출 증대나 비용 절감을 AI의 기여로 입증할 수 없습니다.</p><h2>작업 성공을 분모로 채택</h2><p>단순 API 호출당 비용이 아니라 <strong>성공 작업당 비용</strong>을 측정하십시오. 토큰 비용 외에도 재시도, 툴 호출, 평가 파이프라인, 사람의 오류 수정 시간을 비용 분자에 반영해야 합니다.</p><h2>품질 기준선 유지</h2><p>비용을 25% 절감했더라도 작업 성공률이 92%에서 80%로 떨어졌다면 이는 ROI 개선이 아닙니다. 실험 전 최저 품질 기준선을 설정하고 기준 미달의 절감액은 거부하십시오.</p>",
+      "faq": [
+        {
+          "question": "AI ROI를 정확하게 증명하려면 어떻게 해야 하나요?",
+          "answer": "귀속 AI 지출을 측정 가능한 성공 성과와 연결하고, 신뢰할 수 있는 반사실과 비교하며, 품질 기준선을 반드시 검증해야 합니다."
+        },
+        {
+          "question": "AI 청구 비용 감소가 ROI 개선을 의미하지 않는 이유는 무엇인가요?",
+          "answer": "사용량 감소나 품질 저하로 인해 후속 인간 개입 비용이 증가했을 수 있으므로, 총비용 대비 개선 가치를 평가해야 합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/cost-per-successful-task",
+          "label": "성공 작업당 비용"
+        }
+      ]
+    },
+    "zh": {
+      "title": "不掩盖质量退化的AI ROI度量框架",
+      "titleCore": "不掩盖质量退化的AI ROI度量框架",
+      "description": "将AI支出与任务成功交付、输出质量及实际业务价值挂钩，剔除虚荣指标的ROI度量框架。",
+      "body": "<p>AI的真实ROI绝不能仅靠云账单下降来证明。只有当可衡量的业务成果提升幅度超过了交付该成果所需的全口径AI成本时，ROI才得以成立。严谨的度量需要三组相互关联的记录：可归因支出、有效任务成果，以及防止劣质输出被误判为效率提升的质量底线校验。</p><h2>设立反事实对比基准</h2><p>明确在不实施AI改动时原本会发生的情况：人工处理、旧版模型、历史工作流或暂不上线。必须设定严格的对照组，否则营收增长或成本节省无法归因于AI系统。</p><h2>以有效成果作为分母</h2><p>度量“单次成功任务成本”而非简单的“单次API调用成本”。在模型调用链中追踪真实结果：已被采纳的客服答复、无差错提取的发票。将重试、工具调用、人工修复和评测流量全部计入分子。</p><h2>守住质量底线方程</h2><p>将财务结余与任务成功率、错误率、延迟及下游转化率同步汇报。削减25%成本若导致成功率由92%降至80%，是在摧毁业务价值而非提升ROI。设定不可跌破的质量基线。</p><h2>汇报可审计的范围区间</h2><p>呈报保守、基准与乐观情景。将各项支出与云发票完全核对，明确区分已实现的现金节省与未来期权价值，建立经得起审计的ROI汇报体系。</p>",
+      "faq": [
+        {
+          "question": "如何严谨证明AI项目的实际ROI？",
+          "answer": "将可归因AI支出与可验证的有效业务成果挂钩，设立严密的反事实对照基线，并执行量化的质量底线约束。"
+        },
+        {
+          "question": "为何单纯账单下降不能证明ROI提升？",
+          "answer": "账单减少可能是调用量萎缩或质量劣化所致。若劣质输出导致更多下游人工返工，综合成本反而大幅上升。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/cost-per-successful-task",
+          "label": "单次成功任务成本"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM成本归因"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "AI可观测性"
+        }
+      ]
+    },
+    "nl": {
+      "title": "AI-ROI bewijzen zonder kwaliteitsverlies te verhullen",
+      "titleCore": "AI-ROI bewijzen zonder kwaliteitsverlies te verhullen",
+      "description": "Een meetkader dat AI-uitgaven koppelt aan succesvolle taken, kwaliteit en bedrijfswaarde zonder ijdelheidsstatistieken.",
+      "body": "<p>AI-ROI wordt niet bewezen door een dalende providerfactuur. Het wordt bewezen wanneer een meetbaar bedrijfsresultaat sterker verbetert dan de integrale kosten die nodig zijn om het te produceren. Betrouwbare meting vereist drie gekoppelde records: toewijsbare kosten, succesvolle resultaten en een kwaliteitscontrole die voorkomt dat verslechterd werk voor winst wordt aangetroffen.</p><h2>Begin met een contrafactische nulmeting</h2><p>Beschrijf wat er zonder de AI-implementatie zou zijn gebeurd: handmatige verwerking, een ouder model of de eerdere workflow. Zonder controlegroep kan omzetgroei of kostenbesparing niet zuiver aan AI worden toegeschreven.</p><h2>Gebruik een uitkomst als noemer</h2><p>Meet de kosten per succesvolle taak in plaats van per API-aanroep. Definieer succes in observeerbare termen zoals een geaccepteerd antwoord of foutloos verwerkte factuur. Reken retries, tool-aanroepen en handmatige correcties mee in de teller.</p><h2>Bewaak de kwaliteitsondergrens</h2><p>Koppel het financiële resultaat altijd aan taaksucces, foutpercentages en latentie. Een kostenbesparing van 25% die het succespercentage van 92% naar 80% verlaagt, is een kwaliteitsverlies en geen ROI-verbetering.</p><h2>Rapporteer een gefundeerde bandbreedte</h2><p>Toon conservatieve, basis- en optimistische scenario's. Reconcilieer de uitgaven met facturen en specificeer welke baten echte kasbesparingen zijn en welke strategische optiewaarde betreffen.</p>",
+      "faq": [
+        {
+          "question": "Hoe bewijst u de ROI van AI-initiatieven?",
+          "answer": "Door toewijsbare AI-uitgaven te koppelen aan gedefinieerde succesvolle resultaten, vergeleken met een contrafactische nulmeting en kwaliteitsondergrens."
+        },
+        {
+          "question": "Waarom bewijst een lagere AI-rekening geen ROI?",
+          "answer": "Een lagere rekening kan het gevolg zijn van dalend gebruik of slechtere output die elders in de organisatie extra handmatig herstelwerk vereist."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/cost-per-successful-task",
+          "label": "Kosten per succesvolle taak"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM-kostentoewijzing"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "AI-waarneembaarheid"
+        }
+      ]
+    },
+    "ar": {
+      "title": "إثبات العائد على استثمار الذكاء دون إخفاء الجودة",
+      "titleCore": "إثبات العائد على استثمار الذكاء دون إخفاء الجودة",
+      "description": "إطار قياس يربط إنفاق الذكاء الاصطناعي بالنتائج الناجحة والجودة وقيمة الأعمال الحقيقية دون الاعتماد على مقاييس وهمية خادعة.",
+      "body": "<p>تدعي العديد من لوحات التحكم تحقيق وفورات هائلة بمجرد تخفيض استهلاك الرموز أو التحول إلى نموذج أرخص، ولكن إذا تسبب ذلك في توليد كود معيب، أو إجابات ناقصة للعملاء، أو زيادة معدلات التراجع، فإن التوفير المزعوم يتحول في الواقع إلى خسارة في قيمة المنتج وثقة المستخدمين.</p>\n\n<h2>البدء بالسيناريو المضاد ومقام النتيجة</h2>\n<p>لإثبات العائد على الاستثمار الحقيقي (True ROI)، يجب مقارنة التكلفة الحالية بالبديل الفعلي: كم كان سيكلف إنجاز نفس الحجم من المهام عبر البشر أو عبر الأنظمة التقليدية؟ والأهم من ذلك: ربط التكلفة بمقام نفعي حقيقي، مثل: التكلفة لكل معاملة مقبولة، أو التكلفة لكل تذكرة دعم تم حلها بالكامل دون تصعيد.</p>\n\n<h2>الحفاظ على الجودة داخل معادلة التكلفة</h2>\n<p>لا يمكن فصل الكفاءة المالية عن مقاييس الجودة. يجب أن تتضمن معادلة العائد عتبات جودة دنيا (Quality Floor). أي تخفيض في تكاليف الاستدلال يترافق مع تراجع في دقة المخرجات أو درجات رضا العملاء يجب اعتباره تدهوراً في الكفاءة وليس توفيراً للمال.</p>\n\n<h2>تقديم نطاق واقعي بدلاً من أرقام خيالية</h2>\n<p>تجنب تقديم رقم موحد ومطلق للعائد؛ بل قدم نطاقاً متحفظاً يأخذ في الحسبان تكاليف البنية التحتية، واشتراكات الأدوات، وساعات المهندسين، ومعدلات الفشل المتوقعة. هذه الشفافية هي وحدها التي تبني مصداقية مبادرات الذكاء الاصطناعي لدى الإدارة التنفيذية.</p>",
+      "faq": [
+        {
+          "question": "كيف تثبت العائد على استثمار الذكاء الاصطناعي؟",
+          "answer": "بربط كل دولار استدلال بنتيجة تجارية مكتملة بنجاح مع ثبات أو تحسن مؤشرات الجودة المعتمدة في النظام."
+        },
+        {
+          "question": "لماذا لا يكفي خفض الإنفاق لإثبات العائد على الاستثمار؟",
+          "answer": "لأن تقليص النفقات قد يترافق مع تدهور في دقة النتائج ورضا العملاء مما يقوض القيمة الكلية للمنتج الرقمي."
+        },
+        {
+          "question": "ما هي التكاليف التي يجب تضمينها في حساب العائد؟",
+          "answer": "تكاليف الاستدلال والبنية التحتية، وتكاليف المهندسين، وصيانة الأدوات وعمليات التقييم المستمرة للمخرجات."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "إسناد تكاليف نماذج الذكاء الاصطناعي"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "قابلية المراقبة لأنظمة الذكاء الاصطناعي"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/prove-ai-roi-measurement"
+  }
+}

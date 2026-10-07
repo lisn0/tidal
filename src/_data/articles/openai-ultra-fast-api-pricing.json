@@ -1,0 +1,60 @@
+{
+  "slug": "openai-ultra-fast-api-pricing",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization",
+    "api-performance"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-10-07",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "OpenAI Ultrafast API Pricing and Speed",
+      "titleCore": "OpenAI Ultrafast API Pricing and Speed",
+      "description": "Current GPT-6 Astra Ultrafast API prices, speed claims, rate limits, and a break-even framework for latency-sensitive workloads.",
+      "body": "<p>OpenAI Ultrafast speeds up GPT-6 Astra output generation at six times Standard token prices. The current guide claims up to eight times faster generation; the DevDay announcement described up to six times. Neither guarantees end-to-end latency. Compare the added inference charge with measured completion time and business value before routing production traffic to it.</p>\n<h2>What does Ultrafast change?</h2>\n<p>Ultrafast reduces the time between generated output tokens. It does not make every part of a request eight times faster: input processing, network setup, tools, application code, and waiting on external services still affect total latency. OpenAI recommends WebSockets, especially for agents that make several tool calls in quick succession, because connection overhead can erase some of the gain.</p>\n<h2>How much does GPT-6 Astra Ultrafast cost?</h2>\n<p>OpenAI’s pricing table lists the following per one million text tokens for short-context GPT-6 Astra requests:</p>\n<table><thead><tr><th>Tier</th><th>Input</th><th>Cached input</th><th>Cache write</th><th>Output</th></tr></thead><tbody><tr><td>Standard</td><td>$10</td><td>$1</td><td>$12.50</td><td>$50</td></tr><tr><td>Ultrafast</td><td>$60</td><td>$6</td><td>$75</td><td>$300</td></tr></tbody></table>\n<p>Ultrafast is 6× the listed Standard rate for each token category. Check the live pricing page before budgeting because rates and eligibility can change. Ultrafast supports global processing and US data residency; it does not support EU or other non-US regional processing endpoints. Regional and FedRAMP price adjustments may apply where supported.</p>\n<h2>What does the premium mean per task?</h2>\n<p>Here is a hypothetical uncached request with 8,000 input tokens and 2,000 output tokens. At Standard rates it costs $0.18: $0.08 for input and $0.10 for output. At Ultrafast rates it costs $1.08: $0.48 for input and $0.60 for output. The premium is $0.90 per task. This example uses published token prices and assumed token counts; it does not predict a workload’s latency or business value.</p>\n<p>For a real workload, multiply monthly input, cached-input, cache-write, and output tokens by the current prices for each tier. Keep the same model, prompts, reasoning settings, and task mix when comparing tiers.</p>\n<h2>When is Ultrafast worth the premium?</h2>\n<p>Test it on work where model generation time affects a measurable outcome: an interactive assistant with a latency target, a live workflow waiting on the next action, or an agent where faster turns reduce paid idle time. Compare p50 and p95 end-to-end completion time, success rate, and cost per successful task. Use the premium only when the measured time saved has more value than the incremental cost.</p>\n<p>For offline enrichment, scheduled summaries, and other work that can wait, Standard or a discounted processing option may fit better. Keep a fallback route for requests that exceed the Ultrafast rate limit.</p>\n<h2>Who can use it, and what limits apply?</h2>\n<p>OpenAI’s current Ultrafast guide says GPT-6 Astra access is available to API customers at default rate limits. The documented default token-per-minute limits are 500,000 for Build, 1,000,000 for Launch, and 5,000,000 for Grow. Higher limits may require an OpenAI account-team request.</p>\n<h2>Which sources document the pricing and speed claims?</h2>\n<p>Primary sources: <a href=\"https://developers.openai.com/api/docs/guides/ultrafast-mode\">OpenAI Ultrafast mode guide</a>, <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI API pricing</a>, and <a href=\"https://openai.com/index/devday-2026-recap/\">OpenAI DevDay 2026 recap</a>. See also <a href=\"/research/model-routing\">model routing</a> and <a href=\"https://finopsllm.com/research/llm-cost-per-user-benchmarks\">LLM cost per user benchmarks</a>.</p>",
+      "faq": [
+        {
+          "question": "What is OpenAI Ultrafast mode?",
+          "answer": "Ultrafast is a Responses API service tier for GPT-6 Astra that reduces the time between generated output tokens. OpenAI’s current guide says up to 8× faster than Standard; the DevDay recap described up to 6× faster token generation. These are maximum claims, not end-to-end latency guarantees."
+        },
+        {
+          "question": "How much more does GPT-6 Astra Ultrafast cost?",
+          "answer": "The current OpenAI pricing table lists Ultrafast at six times GPT-6 Astra Standard rates: $60 vs $10 per million input tokens and $300 vs $50 per million output tokens. Cached-input and cache-write rates are also 6×."
+        },
+        {
+          "question": "Who can use GPT-6 Astra Ultrafast?",
+          "answer": "OpenAI says GPT-6 Astra Ultrafast is available to API customers at default rate limits. It supports global processing and US data residency, not EU or other non-US regional processing endpoints."
+        },
+        {
+          "question": "When is Ultrafast worth the extra cost?",
+          "answer": "Use it when measured reductions in end-to-end latency improve a valuable outcome enough to cover the added inference cost. Compare cost and completion time on the same workload; batch and other non-urgent tasks can often stay on Standard or discounted processing."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-per-user-benchmarks",
+          "label": "LLM cost per user benchmarks"
+        },
+        {
+          "slug": "/research/chatgpt-pro-max-economics",
+          "label": "ChatGPT Pro Max: $500 plan economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cap-inference-costs",
+          "label": "How to cap inference costs"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-ultra-fast-api-pricing"
+  }
+}

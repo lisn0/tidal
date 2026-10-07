@@ -1,0 +1,49 @@
+{
+  "slug": "claude-sonnet-5-5-launch-and-model-routing",
+  "tags": [
+    "anthropic",
+    "model-routing",
+    "llm-costs",
+    "coding-agents",
+    "ai-news"
+  ],
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-09-28",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Claude Sonnet 5.5: the cost-aware model routing guide",
+      "titleCore": "Claude Sonnet 5.5: the cost-aware model routing guide",
+      "description": "Sonnet 5.5 launches at Sonnet 5 token rates with higher efficiency claims. Here is how to test it against Opus 5.5 and decide where it belongs in production.",
+      "body": "<p><strong>Claude Sonnet 5.5 launched on September 28, 2026 at Sonnet 5's API rates: $2 per million input tokens and $10 per million output tokens.</strong> Anthropic positions it for well-scoped everyday work, bug fixes, coding, and polished documents, while Opus 5.5 is aimed at more complex work requiring careful judgment. For teams, the useful question is not which model wins a benchmark; it is which one meets each task's quality and latency target at the lowest cost per accepted result.</p><p>Anthropic says Sonnet 5.5 is more than 30% faster than Sonnet 5 and can cost up to 30% less per task. Those are launch claims. Use them to choose what to evaluate, not as automatic budget reductions.</p><h2>What Anthropic announced</h2><ul><li>Sonnet 5.5 retains the Sonnet 5 API list prices: $2/MTok input, $10/MTok output, $2.50/MTok for 5-minute cache writes, $4/MTok for 1-hour writes, and $0.20/MTok for cache reads.</li><li>Anthropic reports output generation more than 30% faster than Sonnet 5 and up to 30% lower cost per task for most work due to token efficiency.</li><li>The company describes Sonnet as strongest at well-scoped everyday tasks; Opus is designed for complex tasks that require careful judgment.</li><li>Anthropic says Haiku 5.5 is expected in the coming weeks. It was not part of today's launch.</li></ul><p>See <a href=\"https://www.anthropic.com/claude-sonnet-5-5\">Anthropic's launch announcement</a> for the complete benchmark descriptions and caveats.</p><h2>A routing policy to test</h2><table><thead><tr><th>Workload</th><th>Starting candidate</th><th>What to measure</th></tr></thead><tbody><tr><td>Routine coding changes, bug fixes, document edits</td><td>Sonnet 5.5</td><td>Accepted change rate, retries, output tokens, elapsed time</td></tr><tr><td>Ambiguous, long-horizon work with high judgment requirements</td><td>Compare Sonnet 5.5 with Opus 5.5</td><td>Quality at each effort setting, escalation frequency, end-to-end cost</td></tr><tr><td>High-volume simple classification or extraction</td><td>Compare Sonnet with lower-cost models already in your stack</td><td>Quality threshold, cost per valid record, exception handling</td></tr><tr><td>Latency-sensitive interactive work</td><td>Test Sonnet 5.5 at the effort setting that meets the quality bar</td><td>Tail latency, completion rate, and cost per completed task</td></tr></tbody></table><p>This is a test matrix, not a claim that one model is always the right choice for a workload category. Prompt shape, context length, tool environment, and evaluation criteria can change the result.</p><h2>Why list-price comparison is incomplete</h2><p>Sonnet 5.5's per-token price did not fall at launch. The potential saving is in how many tokens and agent steps it needs to complete a task. A model that generates a shorter answer but triggers more tool calls may cost more overall; a model that finishes faster but uses the same tokens may improve responsiveness without changing the token bill.</p><p>For an agent, calculate a task's total as input tokens × input rate + output tokens × output rate + cache writes/reads + any separately billed tools or infrastructure. Compare the total only after confirming the task passes the same acceptance checks.</p><h2>Measure the migration before changing your budget</h2><ol><li>Choose a few hundred representative tasks, including failures and edge cases.</li><li>Run Sonnet 5 and 5.5 with the same tools, prompts, context limits, and effort settings where possible.</li><li>Record token charges, retries, tool calls, time to completion, and human acceptance.</li><li>Compare cost per accepted task and report results by task family, not only as a global average.</li><li>Canary the workloads that meet your gates. Keep a route back to the previous model while monitoring quality and spend.</li></ol><p>Start forecasts with zero assumed savings. Replace that assumption with measured deltas as the evaluation produces evidence. For API rates and cache pricing, use the <a href=\"https://platform.claude.com/docs/en/about-claude/pricing\">Anthropic pricing documentation</a>.</p><h2>FAQ</h2><h3>Is Sonnet 5.5 cheaper than Sonnet 5?</h3><p>Its listed per-token rates are the same. Anthropic says it can cost up to 30% less per task because it uses fewer tokens, but results depend on workload.</p><h3>Does Sonnet 5.5 replace Opus 5.5?</h3><p>No. Anthropic presents the models for different task profiles. Evaluate both where task difficulty, failure cost, or quality requirements justify the comparison.</p><h3>Is it available on AWS?</h3><p>AWS announced availability on September 28 through Amazon Bedrock and Claude Platform on AWS. Check each service's current region, model access, and pricing details before planning deployment.</p><h2>Sources and related reading</h2><ul><li><a href=\"https://www.anthropic.com/claude-sonnet-5-5\">Anthropic: Introducing Claude Sonnet 5.5</a></li><li><a href=\"https://aws.amazon.com/about-aws/whats-new/2026/09/claude-sonnet-5-5-aws/\">AWS: Claude Sonnet 5.5 now available on AWS</a></li><li><a href=\"/research/sonnet-5-5-pricing-agent-cost-model\">Sonnet 5.5 pricing and task-cost model</a></li><li><a href=\"/research/claude-opus-5-5-cost-model\">Claude Opus 5.5 cost model</a></li></ul>",
+      "faq": [
+        {
+          "question": "Is Sonnet 5.5 cheaper than Sonnet 5?",
+          "answer": "Its listed per-token rates are the same. Anthropic says it can cost up to 30% less per task because it uses fewer tokens, but results depend on workload."
+        },
+        {
+          "question": "Does Sonnet 5.5 replace Opus 5.5?",
+          "answer": "No. Anthropic presents the models for different task profiles. Evaluate both where task difficulty and quality requirements justify it."
+        },
+        {
+          "question": "Is it available on AWS?",
+          "answer": "AWS announced availability through Amazon Bedrock and Claude Platform on AWS on September 28, 2026. Confirm region, model access, and service-specific pricing."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/sonnet-5-5-pricing-agent-cost-model",
+          "label": "Sonnet 5.5 pricing and task-cost model"
+        },
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/claude-sonnet-5-5-launch-and-model-routing"
+  }
+}

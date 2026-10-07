@@ -1,0 +1,143 @@
+{
+  "slug": "free-tier-is-an-acquisition-cost",
+  "tags": [
+    "finops",
+    "pricing",
+    "unit-economics",
+    "provider-arbitrage"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The free tier as customer acquisition cost",
+      "titleCore": "The free tier as customer acquisition cost",
+      "description": "Every free token a provider gives you sits in someone's CAC line. Read the free tier as a marketing budget and it tells you where the price is going next.",
+      "body": "<p>Inference is not free to serve. When a provider hands you a free tier, generous rate limits during a preview, or an unbranded endpoint that costs nothing to call, that compute is paid for &mdash; by them, out of a budget that has a name. It is customer acquisition cost, and it behaves like every other CAC line in every other business.</p><p>This is the most useful lens a finance team can apply to LLM pricing, because CAC has predictable dynamics. It is spent to win a cohort. It has a payback period. And it stops when the cohort is won.</p><h2>What a free tier is buying</h2><p>Three things, usually at once. <strong>Evaluation</strong>: engineers try the model without a procurement conversation, which is the only way to get into a stack that already has an incumbent. <strong>Data on real workloads</strong>: what people actually ask, at what shapes and lengths, which is worth more than the compute costs. <strong>A price anchor</strong>: if your engineers get used to a capability at zero, every competitor's paid rate for that capability now reads as expensive.</p><p>None of those goals survive the cohort being won. That is the part teams misprice.</p><h2>The signal to read</h2><p>The generosity of a free tier tells you roughly where that provider thinks it is in the acquisition cycle. Aggressive free limits on a new model mean the lab is buying distribution and has not yet decided what the thing is worth. Free limits quietly tightening means the acquisition phase is closing and the rate card is next.</p><p>Watch the shape of the tightening, not just the headline. Rate limits fall before prices rise, and context limits, concurrency, and which models are included in the free tier all move before anyone publishes a new price.</p><h2>How to actually use it</h2><p><strong>Never let a free tier into your unit economics.</strong> If a workload only clears its margin because part of the inference is free, you do not have a margin, you have a subsidy with an expiry date you do not control.</p><p><strong>Price free usage at a shadow rate.</strong> Pick the provider's nearest paid tier, apply it to your free traffic in telemetry, and carry that number in the forecast. When the free window closes you already know the size of the hit, on the day it happens rather than at the end of the month.</p><p><strong>Measure switching cost while it is still cheap to leave.</strong> The purpose of a free tier is to make leaving expensive. Prompts get tuned to one model's quirks, evaluations get built against its outputs, tool schemas get shaped to its behaviour. Keep a second provider wired into at least one route so the answer to a price change is a config change and not a project.</p><h2>Related</h2><ul><li><a href=\"/research/stealth-model-free-tokens-playbook\">The free anonymous model is a pricing weapon</a></li><li><a href=\"/research/provider-arbitrage\">Provider arbitrage</a></li><li><a href=\"https://finopsllm.com/research/llm-api-pricing-tracker\">LLM API pricing tracker</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why treat a provider's free tier as an acquisition cost?",
+          "answer": "Because inference costs the provider real money to serve, so free usage comes out of a marketing budget. CAC has a payback period and stops when the cohort is won, which makes the free tier a temporary condition rather than a price."
+        },
+        {
+          "question": "What is a shadow rate and why carry one?",
+          "answer": "Take the provider's nearest paid tier, apply it to your free traffic in telemetry, and keep that figure in the forecast. When the free window closes you already know the size of the increase instead of discovering it on an invoice."
+        },
+        {
+          "question": "What warns you that a free tier is about to end?",
+          "answer": "Rate limits, concurrency, context limits and which models are included all tighten before a price is published. Watch the shape of those limits rather than waiting for a rate-card announcement."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/stealth-model-free-tokens-playbook",
+          "label": "The free anonymous model is a pricing weapon"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-api-pricing-tracker",
+          "label": "LLM API pricing tracker"
+        }
+      ]
+    },
+    "es": {
+      "title": "El plan gratuito como coste de captación",
+      "titleCore": "El plan gratuito como coste de captación",
+      "description": "Cada token gratis que te regala un proveedor sale de una partida de captación. Léelo como presupuesto de marketing y sabrás hacia dónde va el precio.",
+      "body": "<p>Servir inferencia no es gratis. Cuando un proveedor te da un plan gratuito, límites generosos en una preview o un endpoint sin marca que no cuesta nada, ese cómputo lo paga alguien &mdash; con cargo a una partida que tiene nombre. Es coste de captación de clientes, y se comporta como cualquier otro CAC.</p><p>Es la lente más útil para un equipo financiero, porque el CAC tiene dinámicas predecibles: se gasta para ganar una cohorte, tiene periodo de recuperación y se detiene cuando la cohorte ya está ganada.</p><h2>Qué compra un plan gratuito</h2><p><strong>Evaluación</strong> sin pasar por compras. <strong>Datos de cargas reales</strong>, que valen más que el cómputo. Y un <strong>ancla de precio</strong>: si tus ingenieros se acostumbran a una capacidad a coste cero, la tarifa de cualquier competidor parecerá cara.</p><h2>La señal que hay que leer</h2><p>Los límites se aprietan antes de que suban los precios. Vigila la concurrencia, el contexto y qué modelos siguen incluidos: todo eso se mueve antes de que se publique una tarifa nueva.</p><h2>Cómo usarlo</h2><p><strong>Nunca metas un plan gratuito en tu unit economics.</strong> Si un caso de uso solo tiene margen porque parte de la inferencia es gratis, no tienes margen: tienes un subsidio con fecha de caducidad ajena.</p><p><strong>Valora el uso gratuito a una tarifa sombra</strong> en telemetría y llévala en la previsión.</p><p><strong>Mide el coste de cambiar mientras aún es barato irse.</strong> Mantén un segundo proveedor cableado en al menos una ruta.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué tratar el plan gratuito como coste de captación?",
+          "answer": "Porque servir inferencia le cuesta dinero real al proveedor, así que el uso gratuito sale de un presupuesto de marketing. El CAC tiene periodo de recuperación y se corta cuando la cohorte está ganada: el plan gratuito es una condición temporal, no un precio."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraje entre proveedores"
+        }
+      ]
+    },
+    "fr": {
+      "title": "L’offre gratuite comme coût d’acquisition",
+      "titleCore": "L’offre gratuite comme coût d’acquisition",
+      "description": "Chaque token offert par un fournisseur sort d’une ligne d’acquisition. Lisez l’offre gratuite comme un budget marketing et vous verrez où va le prix.",
+      "body": "<p>Servir de l’inférence n’est pas gratuit. Quand un fournisseur vous offre un palier gratuit, des limites généreuses en préversion ou un endpoint sans marque qui ne coûte rien, ce calcul est payé &mdash; par lui, sur une ligne budgétaire qui a un nom. C’est du coût d’acquisition client, et il se comporte comme tout autre CAC.</p><p>C’est la lecture la plus utile pour une équipe finance, car le CAC a une dynamique prévisible : il est dépensé pour gagner une cohorte, il a une période de retour, et il s’arrête quand la cohorte est gagnée.</p><h2>Ce qu’achète une offre gratuite</h2><p><strong>L’évaluation</strong> sans passer par les achats. <strong>Des données sur des charges réelles</strong>, qui valent plus que le calcul. Et un <strong>point d’ancrage tarifaire</strong> : une capacité connue à zéro rend cher le tarif de tout concurrent.</p><h2>Le signal à lire</h2><p>Les limites de débit se resserrent avant que les prix montent. Surveillez la concurrence, le contexte et les modèles encore inclus : tout bouge avant la publication d’un nouveau tarif.</p><h2>Comment s’en servir</h2><p><strong>Ne faites jamais entrer une offre gratuite dans vos unit economics.</strong> Une marge qui dépend d’une inférence gratuite n’est pas une marge, c’est une subvention à échéance subie.</p><p><strong>Valorisez l’usage gratuit à un tarif fantôme</strong> dans la télémétrie et portez-le dans la prévision.</p><p><strong>Mesurez le coût de sortie tant qu’il est faible.</strong> Gardez un second fournisseur câblé sur au moins une route.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi traiter l’offre gratuite comme un coût d’acquisition?",
+          "answer": "Parce que l’inférence coûte réellement au fournisseur : l’usage gratuit sort d’un budget marketing. Le CAC a une période de retour et s’arrête quand la cohorte est gagnée, donc la gratuité est une condition temporaire, pas un prix."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitrage entre fournisseurs"
+        }
+      ]
+    },
+    "de": {
+      "title": "Der Gratis-Tarif als Kundenakquisekosten",
+      "titleCore": "Der Gratis-Tarif als Kundenakquisekosten",
+      "description": "Jeder geschenkte Token stammt aus einer Akquise-Position. Lesen Sie den Gratis-Tarif als Marketingbudget, und er verrät, wohin der Preis geht.",
+      "body": "<p>Inferenz auszuliefern ist nicht kostenlos. Wenn ein Anbieter Ihnen einen Gratis-Tarif, großzügige Preview-Limits oder einen namenlosen Endpunkt ohne Kosten gibt, bezahlt jemand dieses Compute &mdash; aus einem Budget mit einem Namen. Es sind Kundenakquisekosten und verhalten sich wie jede andere CAC-Position.</p><p>Das ist die nützlichste Sicht für ein Finanzteam, denn CAC hat eine vorhersagbare Dynamik: ausgegeben, um eine Kohorte zu gewinnen, mit Amortisationszeit &mdash; und es endet, wenn die Kohorte gewonnen ist.</p><h2>Was ein Gratis-Tarif kauft</h2><p><strong>Evaluierung</strong> ohne Einkaufsprozess. <strong>Daten zu echten Workloads</strong>, mehr wert als das Compute. Und einen <strong>Preisanker</strong>: was man zum Nulltarif kennt, lässt jeden bezahlten Tarif teuer wirken.</p><h2>Das Signal</h2><p>Rate Limits sinken, bevor Preise steigen. Beobachten Sie Nebenläufigkeit, Kontextlimits und welche Modelle noch enthalten sind &mdash; das bewegt sich vor jeder neuen Preisliste.</p><h2>Anwendung</h2><p><strong>Lassen Sie einen Gratis-Tarif nie in Ihre Unit Economics.</strong> Eine Marge, die auf kostenloser Inferenz beruht, ist keine Marge, sondern eine Subvention mit fremdem Ablaufdatum.</p><p><strong>Bewerten Sie Gratis-Nutzung mit einem Schattenpreis</strong> in der Telemetrie und führen Sie ihn in der Prognose.</p><p><strong>Messen Sie Wechselkosten, solange Gehen billig ist.</strong></p>",
+      "faq": [
+        {
+          "question": "Warum ist ein Gratis-Tarif eine Akquisekosten?",
+          "answer": "Weil Inferenz den Anbieter echtes Geld kostet, kommt kostenlose Nutzung aus einem Marketingbudget. CAC hat eine Amortisationszeit und endet, wenn die Kohorte gewonnen ist &mdash; der Gratis-Tarif ist also ein befristeter Zustand, kein Preis."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Anbieter-Arbitrage"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O plano gratuito como custo de aquisição",
+      "titleCore": "O plano gratuito como custo de aquisição",
+      "description": "Cada token oferecido sai de uma rubrica de aquisição. Leia o plano gratuito como orçamento de marketing e ele diz para onde vai o preço a seguir.",
+      "body": "<p>Servir inferência não é grátis. Quando um fornecedor lhe dá um plano gratuito, limites generosos em preview ou um endpoint sem marca que nada custa, esse cómputo é pago &mdash; por ele, a partir de uma rubrica com nome. É custo de aquisição de clientes e comporta-se como qualquer outro CAC.</p><p>É a lente mais útil para uma equipa financeira, porque o CAC tem dinâmica previsível: gasta-se para ganhar uma coorte, tem período de retorno e para quando a coorte está ganha.</p><h2>O que compra um plano gratuito</h2><p><strong>Avaliação</strong> sem passar pelas compras. <strong>Dados de cargas reais</strong>, que valem mais do que o cómputo. E uma <strong>âncora de preço</strong>: uma capacidade conhecida a custo zero faz qualquer tarifa parecer cara.</p><h2>O sinal a ler</h2><p>Os limites apertam antes de os preços subirem. Vigie a concorrência, o contexto e que modelos continuam incluídos &mdash; tudo se mexe antes de haver tabela nova.</p><h2>Como usar</h2><p><strong>Nunca deixe um plano gratuito entrar na sua unit economics.</strong> Margem que depende de inferência grátis não é margem, é um subsídio com prazo alheio.</p><p><strong>Valorize o uso gratuito a uma tarifa sombra</strong> na telemetria e leve-a na previsão.</p><p><strong>Meça o custo de mudar enquanto sair ainda é barato.</strong></p>",
+      "faq": [
+        {
+          "question": "Porquê tratar o plano gratuito como custo de aquisição?",
+          "answer": "Porque servir inferência custa dinheiro real ao fornecedor, pelo que o uso gratuito sai de um orçamento de marketing. O CAC tem período de retorno e termina quando a coorte está ganha: o plano gratuito é temporário, não é um preço."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitragem entre fornecedores"
+        }
+      ]
+    },
+    "ja": {
+      "title": "顧客獲得コストとしての無料枠",
+      "titleCore": "顧客獲得コストとしての無料枠",
+      "description": "無料で配られるトークンは、必ず誰かの獲得コストから出ています。無料枠をマーケティング予算として読めば、次の値付けが見えます。",
+      "body": "<p>推論の提供は無料ではありません。無料枠、プレビュー期間の緩いレート制限、無料で叩けるブランドなしのエンドポイント &mdash; その計算資源は必ず誰かが、名前のついた予算から払っています。それは顧客獲得コスト（CAC）であり、他のあらゆる CAC と同じように振る舞います。</p><p>財務チームにとって最も有用な見方です。CAC の動きは予測できるからです。あるコホートを獲得するために使われ、回収期間があり、獲得が済めば止まります。</p><h2>無料枠が買っているもの</h2><p>調達プロセスを通さない<strong>評価</strong>。計算資源より価値のある<strong>実ワークロードのデータ</strong>。そして<strong>価格のアンカー</strong> &mdash; ゼロ円で慣れた機能は、他社の有料料金を高く見せます。</p><h2>読むべきシグナル</h2><p>価格が上がる前に、まずレート制限が下がります。同時実行数、コンテキスト上限、無料枠に含まれるモデルの範囲 &mdash; 新しい価格表が出る前にこれらが動きます。</p><h2>使い方</h2><p><strong>無料枠をユニットエコノミクスに入れない。</strong>推論の一部が無料だから成立する利益率は、利益率ではなく、期限を自分で決められない補助金です。</p><p><strong>無料利用にシャドウ単価を付ける。</strong>直近の有料料金をテレメトリ上で無料トラフィックに適用し、その数字を予測に載せます。</p><p><strong>離脱が安いうちに切り替えコストを測る。</strong>少なくとも 1 経路には第二のプロバイダーを配線しておきます。</p>",
+      "faq": [
+        {
+          "question": "なぜ無料枠を顧客獲得コストと見るのですか？",
+          "answer": "推論の提供にはプロバイダー側の実費がかかるため、無料利用はマーケティング予算から出ています。CAC には回収期間があり、コホートを獲得すれば止まります。つまり無料枠は価格ではなく一時的な状態です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "プロバイダー間アービトラージ"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/free-tier-is-an-acquisition-cost"
+  }
+}

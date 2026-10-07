@@ -1,0 +1,300 @@
+{
+  "slug": "retry-loop-hidden-spend",
+  "tags": [
+    "retries",
+    "agents",
+    "llm-costs"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The retry loop that quietly adds to inference spend",
+      "titleCore": "The retry loop that quietly adds to inference spend",
+      "description": "How retries, fallbacks, and tool failures multiply production LLM spend, plus the telemetry and limits that stop the leak.",
+      "body": "<p>A retry is not free resilience. It is another model call, and an agent can turn one transient error into five paid attempts before anyone sees a failure. The first control is to measure retry tax: retry and fallback spend divided by total inference spend, segmented by workflow and failure reason.</p><h2>Count the whole attempt tree</h2><p>Log the parent request, attempt number, provider, model, tool call, latency, error class, tokens, and final outcome. A request ID alone is insufficient when a tool call triggers a nested model request. Record parent-child relationships so one user task can be reconstructed as a tree.</p><h2>Separate useful from wasteful retries</h2><p>Retrying a rate limit may recover a valuable task. Retrying a validation error with the same prompt usually buys another identical failure. A provider timeout, malformed tool input, context overflow, and quality rejection need different policies. Assign each failure class a maximum attempt count and an escalation path.</p><h2>Set budgets at the loop boundary</h2><p>Use a per-request token ceiling, a per-workflow dollar ceiling, and a maximum wall-clock duration. A soft ceiling can route the next attempt to a smaller model; a hard ceiling stops the loop and returns a recoverable state. Do not rely on a monthly alert to control a request that can spend its budget in seconds.</p><h2>Review the tax with quality</h2><p>A low retry rate is not automatically good if the first attempt fails more often. Track successful-task cost, completion rate, latency, and retry tax together. Fix the largest dollars first: duplicate tool calls, oversized context on retries, fallback chains that repeat the same capability, or validators that reject answers without changing the prompt.</p><p>The durable fix is not “disable retries.” It is making every extra attempt visible, bounded, and justified by a measurable improvement in outcome.</p><h2>Related</h2><ul><li>Agent spend guardrails</li><li>LLM cost monitoring</li><li>Cost per successful task</li></ul>",
+      "faq": [
+        {
+          "question": "What is retry tax in LLM systems?",
+          "answer": "Retry tax is the spend caused by retries and fallbacks divided by total inference spend, measured by workflow and failure reason."
+        },
+        {
+          "question": "How should teams control agent retry loops?",
+          "answer": "Set per-request token, per-workflow dollar, attempt-count, and wall-clock limits, with soft routing and hard stop behavior."
+        },
+        {
+          "question": "Should all retries be disabled?",
+          "answer": "No. Classify failures first; retry transient provider errors when recovery is valuable, but stop deterministic validation and context errors."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/agent-spend-guardrails",
+          "label": "Agent spend guardrails"
+        },
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM cost monitoring"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    },
+    "es": {
+      "title": "El bucle de reintentos que añade gasto de inferencia",
+      "titleCore": "El bucle de reintentos que añade gasto de inferencia",
+      "description": "Cómo los reintentos, fallbacks y fallos de herramientas multiplican el gasto de LLM.",
+      "body": "<p>Un reintento no es resiliencia gratuita: es otra llamada al modelo. Mide el impuesto de reintentos como gasto de reintentos y fallbacks dividido por todo el gasto de inferencia.</p><h2>Registra el árbol completo</h2><p>Guarda solicitud padre, intento, proveedor, modelo, herramienta, error, tokens y resultado. Las llamadas anidadas necesitan relaciones padre-hijo.</p><h2>Separa fallos</h2><p>Un límite de tasa puede merecer un reintento; un error de validación repetido no. Define intentos máximos por clase de fallo.</p><h2>Controla el bucle</h2><p>Usa límites de tokens por solicitud, dólares por flujo, intentos y tiempo. El límite duro debe detener el bucle en segundos, no esperar a una alerta mensual.</p><p>No desactives todos los reintentos: haz que cada intento sea visible, limitado y justificado por un mejor resultado.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es el impuesto de reintentos?",
+          "answer": "Es el gasto de reintentos y fallbacks dividido por el gasto total de inferencia, segmentado por flujo y motivo."
+        },
+        {
+          "question": "¿Cómo se controla un bucle de agente?",
+          "answer": "Con límites de tokens, dólares, intentos y tiempo por solicitud o flujo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Límites de gasto de agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Boucle de reprises et coût d’inférence",
+      "titleCore": "Boucle de reprises et coût d’inférence",
+      "description": "Comment les reprises, bascules et outils défaillants multiplient la dépense LLM.",
+      "body": "<p>Une reprise est un nouvel appel modèle, pas une résilience gratuite. Mesurez sa taxe: dépenses de reprises et bascules divisées par toute l’inférence.</p><h2>Tracer l’arbre</h2><p>Conservez requête parente, tentative, fournisseur, modèle, outil, erreur, tokens et résultat. Les appels imbriqués doivent garder leur relation parent-enfant.</p><h2>Limiter la boucle</h2><p>Attribuez à chaque classe d’erreur un nombre maximal de tentatives, un plafond de tokens, un plafond financier et une durée maximale. Une erreur déterministe ne doit pas être rejouée sans changement.</p><p>Ne supprimez pas toutes les reprises: rendez chaque tentative visible, bornée et justifiée par un meilleur résultat.</p>",
+      "faq": [
+        {
+          "question": "Qu’est-ce que la taxe de reprise?",
+          "answer": "C’est la dépense des reprises et bascules divisée par toute la dépense d’inférence, par flux et cause d’erreur."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Garde-fous de dépense des agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "Die Retry-Schleife, die Inferenzkosten heimlich erhöht",
+      "titleCore": "Die Retry-Schleife, die Inferenzkosten heimlich erhöht",
+      "description": "Wie Retries, Fallbacks und fehlgeschlagene Tools Produktionskosten vervielfachen.",
+      "body": "<p>Ein Retry ist ein weiterer Modellaufruf, keine kostenlose Resilienz. Messen Sie die Retry-Steuer: Retry- und Fallback-Kosten geteilt durch die gesamte Inferenz.</p><h2>Den vollständigen Baum erfassen</h2><p>Speichern Sie Elternanfrage, Versuch, Anbieter, Modell, Tool, Fehler, Tokens und Ergebnis. Verschachtelte Aufrufe brauchen Eltern-Kind-Beziehungen.</p><h2>Die Schleife begrenzen</h2><p>Definieren Sie je Fehlerklasse Versuchszahl, Token-, Dollar- und Zeitlimit. Deterministische Fehler dürfen nicht unverändert wiederholt werden.</p><p>Deaktivieren Sie Retries nicht pauschal. Jeder Versuch muss sichtbar, begrenzt und durch ein besseres Ergebnis begründet sein.</p>",
+      "faq": [
+        {
+          "question": "Was ist Retry-Steuer?",
+          "answer": "Retry-Steuer sind Retry- und Fallback-Kosten geteilt durch die gesamte Inferenz, aufgeschlüsselt nach Workload und Fehler."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Leitplanken für Agentenausgaben"
+        }
+      ]
+    },
+    "ja": {
+      "title": "推論コストを静かに増やすリトライループ",
+      "titleCore": "推論コストを静かに増やすリトライループ",
+      "description": "リトライ、フォールバック、ツール失敗が本番LLM支出を増やす仕組みと制御方法です。",
+      "body": "<p>リトライは無料の回復処理ではなく、追加のモデル呼び出しです。リトライとフォールバックの支出を推論支出全体で割り、ワークフロー別に測ります。</p><h2>試行の木を記録する</h2><p>親リクエスト、試行番号、プロバイダー、モデル、ツール、エラー、トークン、結果を記録します。入れ子の呼び出しには親子関係が必要です。</p><h2>ループを制限する</h2><p>エラー種別ごとに試行回数、トークン、金額、時間の上限を定めます。入力検証やコンテキスト超過を同じ条件で繰り返してはいけません。</p><p>すべてのリトライを無効にするのではなく、各試行を可視化し、上限を設け、成果の改善で正当化します。</p>",
+      "faq": [
+        {
+          "question": "リトライ税とは何ですか？",
+          "answer": "リトライとフォールバックの費用を推論費用全体で割った値で、ワークフローとエラー理由ごとに測定します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "エージェント支出のガードレール"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O ciclo de retries que aumenta o custo de inferência",
+      "titleCore": "O ciclo de retries que aumenta o custo de inferência",
+      "description": "Como retries, fallbacks e falhas de ferramentas multiplicam a despesa de LLM em produção.",
+      "body": "<p>Um retry é outra chamada ao modelo, não resiliência gratuita. Meça o imposto de retries: despesa de retries e fallbacks dividida pela inferência total.</p><h2>Registe a árvore</h2><p>Guarde pedido pai, tentativa, fornecedor, modelo, ferramenta, erro, tokens e resultado. Chamadas aninhadas precisam de relações pai-filho.</p><h2>Limite o ciclo</h2><p>Defina limites de tentativas, tokens, dólares e tempo por classe de erro. Um erro determinístico não deve ser repetido sem alteração.</p><p>Não desligue todos os retries: torne cada tentativa visível, limitada e justificada por um resultado melhor.</p>",
+      "faq": [
+        {
+          "question": "O que é o imposto de retries?",
+          "answer": "É a despesa de retries e fallbacks dividida pela despesa total de inferência, por fluxo e motivo de falha."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Limites de despesa para agentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "Il ciclo di retry che aumenta la spesa di inferenza",
+      "titleCore": "Il ciclo di retry che aumenta la spesa di inferenza",
+      "description": "Come retry, fallback ed errori dei tool moltiplicano i costi dei modelli LLM in produzione e come arginarli.",
+      "body": "<p>Un retry non è resilienza gratuita: è una nuova chiamata al modello a pagamento. Un agente autonomo può trasformare un errore temporaneo in cinque tentativi fatturati prima ancora che venga segnalato un blocco. Il primo controllo FinOps consiste nel misurare la tassa sui retry: spesa per retry e fallback divisa per la spesa totale di inferenza.</p><h2>Tracciare l'intero albero dei tentativi</h2><p>Registrate richiesta padre, numero di tentativo, provider, modello, invocazione di tool, latenza, classe di errore, token e risultato finale. Un ID richiesta generico non basta quando un tool genera chiamate annidate; tracciate le relazioni padre-figlio per ricostruire l'intero albero di esecuzione.</p><h2>Distinguere errori utili da sprechi deterministici</h2><p>Ritentare una richiesta per superamento temporaneo di rate limit può recuperare un task prezioso. Ripetere una validazione fallita con il medesimo prompt compra quasi sempre un altro errore identico. Assegnate a ogni categoria di errore un tetto massimo di tentativi e un percorso di fallback appropriato.</p><h2>Fissare budget sul confine del loop</h2><p>Applicate un tetto di token per richiesta, un limite in dollari per workflow e un timeout massimo di esecuzione. I limiti rigidi devono fermare il ciclo a runtime restituendo uno stato recuperabile, senza affidarsi a report mensili.</p><p>La soluzione durevole non è disabilitare i retry, ma renderli visibili, circoscritti e giustificati da un miglioramento misurabile dell'outcome.</p>",
+      "faq": [
+        {
+          "question": "Che cos'è la tassa sui retry nei sistemi LLM?",
+          "answer": "È la quota di spesa causata da tentativi ripetuti e fallback divisa per la spesa complessiva di inferenza, monitorata per workflow."
+        },
+        {
+          "question": "Come limitare i cicli di retry degli agenti?",
+          "answer": "Impostando tetti di token per richiesta, massimali di spesa in dollari, limiti di tentativi e timeout rigorosi a runtime."
+        },
+        {
+          "question": "Bisogna disabilitare tutti i retry?",
+          "answer": "No. Occorre ritentare solo gli errori transitori dei provider ad alto valore di recupero, bloccando gli errori deterministici di validazione."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Limiti di spesa per gli agenti"
+        }
+      ]
+    },
+    "ko": {
+      "title": "추론 비용을 조용히 증폭시키는 재시도 루프 제어",
+      "titleCore": "추론 비용을 조용히 증폭시키는 재시도 루프 제어",
+      "description": "재시도, 폴백 및 도구 호출 오류가 프로덕션 LLM 비용을 증폭시키는 원인과 이를 차단하는 원격 측정 및 제한 방안.",
+      "body": "<p>재시도는 무료 복원력이 아닙니다. 엄연히 유료 모델 호출이며, 자율 에이전트는 일시적인 장애 하나를 사용자에게 알리기 전에 5번의 유료 시도로 바꿀 수 있습니다. FinOps 팀의 첫 번째 통제 조치는 재시도 세금(재시도 및 폴백 지출을 전체 추론 지출로 나눈 비율)을 측정하는 것입니다.</p><h2>호출 트리 전체 기록</h2><p>부모 요청 ID, 시도 횟수, 공급업체, 모델, 도구 호출, 지연 시간, 오류 유형, 토큰 수 및 최종 결과를 기록하십시오. 중첩된 도구 호출을 추적하려면 부모-자식 관계를 명시적으로 보존하여 단일 작업의 전체 실행 트리를 재구성할 수 있어야 합니다.</p><h2>가치 있는 재시도와 낭비성 재시도의 분리</h2><p>속도 제한(Rate Limit)으로 인한 재시도는 가치 있는 작업을 복구할 수 있습니다. 반면 스키마 검증 실패를 동일한 프롬프트로 재시도하는 것은 동일한 유료 실패를 반복 구매하는 것에 불과합니다. 오류 유형별로 최대 시도 횟수와 에스컬레이션 경로를 다르게 지정하십시오.</p><h2>루프 경계에서의 예산 상한 설정</h2><p>요청당 토큰 한도, 워크플로당 달러 한도, 최대 벽시계 실행 시간(Timeout)을 강제하십시오. 소프트 리밋은 더 저렴한 모델로 라우팅하고, 하드 리밋은 루프를 즉시 중단하여 복구 가능한 상태를 반환해야 합니다.</p><p>근본적인 해결책은 재시도를 전면 금지하는 것이 아니라, 모든 추가 시도를 가시화하고 한도를 설정하며 성공률 개선으로 정당화하는 것입니다.</p>",
+      "faq": [
+        {
+          "question": "LLM 시스템에서 재시도 세금이란 무엇인가요?",
+          "answer": "재시도와 폴백으로 인해 발생한 지출을 전체 추론 지출로 나눈 비율로, 워크플로 및 오류 유형별로 측정됩니다."
+        },
+        {
+          "question": "에이전트 재시도 루프를 어떻게 통제해야 하나요?",
+          "answer": "요청당 토큰 한도, 워크플로당 달러 한도, 최대 시도 횟수 및 런타임 타임아웃을 루프 경계에 설정합니다."
+        },
+        {
+          "question": "모든 재시도를 비활성화해야 하나요?",
+          "answer": "아닙니다. 결정론적 검증 오류는 즉시 중단하되, 복구 가치가 높은 일시적 공급업체 네트워크 오류는 한도 내에서 허용해야 합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "에이전트 지출 가드레일"
+        }
+      ]
+    },
+    "zh": {
+      "title": "悄然推高推理成本的智能体重试循环陷阱",
+      "titleCore": "悄然推高推理成本的智能体重试循环陷阱",
+      "description": "揭秘重试、降级备用与工具调用失败如何成倍吞噬LLM支出，以及彻底堵住成本跑冒滴漏的遥测与熔断机制。",
+      "body": "<p>系统自动重试绝不是免费的高可用弹性设计。每一次重试都是一次全额计费的模型调用。自律智能体可以在监控系统察觉异常之前，将一次网络瞬时抖动放大为五次昂贵的全额计费调用。首要的治理手段是度量<strong>重试损耗税（Retry Tax）</strong>：即重试与备选降级消耗的支出占总推理支出的比例，并按业务流和失败归因进行细分。</p><h2>全量追踪调用尝试树</h2><p>完整记录父请求标识、尝试序号、供应商、模型版本、工具调用详情、延迟、错误类型、各类型Token消耗及终态结果。单靠平铺的请求ID无法追踪工具调用所引发的嵌套模型请求。必须建立父子链路血缘，将用户的单次业务意图还原为完整的调用调用树。</p><h2>区分有价值的重试与纯粹的浪费</h2><p>针对云厂商限流（Rate Limit）的退避重试往往能挽救高价值业务；而针对Schema校验错误使用完全相同的Prompt进行重复尝试，通常只会换来另一次完全相同的失败。供应商超时、工具入参畸形、上下文超长与质量不达标需要严格分流处理。为每类错误设定明确的尝试上限与升级策略。</p><h2>在执行循环边界设立多重预算</h2><p>为单次请求设置Token封顶，为端到端工作流设置金额硬顶，并设定最大物理时钟超时限制。软上限可自动将下一次尝试路由至轻量经济型模型；硬上限必须彻底截断循环并返回可恢复的状态机快照。绝不能寄希望于月底的静态云账单告警来治理几秒内就能烧穿预算的高并发循环。</p>",
+      "faq": [
+        {
+          "question": "什么是LLM生产系统中的“重试损耗税”？",
+          "answer": "它是指由异常重试与降级备选路由所产生的开销占全部模型推理总支出的比例，按工作流和失败类型进行量化。"
+        },
+        {
+          "question": "工程团队应如何控制智能体的重试死循环？",
+          "answer": "在循环边界配置单次请求Token上限、单任务金额硬顶、最大重试次数与物理超时，并结合模型软降级与硬终止机制。"
+        },
+        {
+          "question": "系统是否应当彻底禁用大模型调用的自动重试？",
+          "answer": "不应该。应按错误类型精细分流：对网络抖动等偶发故障保留重试，而对确定性的上下文超限和格式校验错误坚决阻断。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "智能体支出护栏"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM成本监控"
+        },
+        {
+          "slug": "/zh/research/cost-per-successful-task",
+          "label": "成功任务单价"
+        }
+      ]
+    },
+    "nl": {
+      "title": "De stille kostprijs van de retry-loop in LLM's",
+      "titleCore": "De stille kostprijs van de retry-loop in LLM's",
+      "description": "Hoe retries, fallbacks en tool-fouten productiekosten vermenigvuldigen, plus de telemetrie en limieten om het lek te dichten.",
+      "body": "<p>Een retry is geen gratis vorm van veerkracht. Het is een volwaardige nieuwe modelaanroep, en een autonome agent kan één tijdelijke fout ongemerkt omzetten in vijf betaalde pogingen voordat er überhaupt een foutmelding verschijnt. De eerste noodzakelijke beheersmaatregel is het kwantificeren van de <strong>retry-belasting (retry tax)</strong>: de uitgaven aan herhaalpogingen en fallbacks gedeeld door de totale inferentiekosten, gesegmenteerd per workflow en storingsreden.</p><h2>Registreer de volledige boomstructuur van pogingen</h2><p>Log het hoofdverzoek, het pogingnummer, de provider, het model, de toolcall, de latentie, de foutklasse, de tokens en de uiteindelijke uitkomst. Een enkelvoudig request-ID schiet tekort zodra een toolcall een geneste modelaanroep start. Leg ouder-kindrelaties vast zodat een complete gebruikerstaak als een boomstructuur gereconstrueerd kan worden.</p><h2>Scheid nuttige van verspillende retries</h2><p>Het opnieuw proberen bij een rate-limit kan een waardevolle transactie redden. Het opnieuw proberen van een validatiefout met exact dezelfde prompt resulteert vrijwel altijd in een identieke mislukking. Een provider-timeout, foutieve JSON-invoer, contextoverloop en kwaliteitsafwijzingen vereisen elk een specifiek protocol met een strikt pogingsmaximum.</p><h2>Stel budgetplafonds in op de lusgrenzen</h2><p>Hanteer een tokenplafond per verzoek, een financieel plafond per workflow en een maximale looptijd in seconden. Een zacht plafond kan routeren naar een lichter model; een hard plafond stopt de lus onmiddellijk en retourneert een herstelbare status.</p>",
+      "faq": [
+        {
+          "question": "Wat is retry tax in LLM-systemen?",
+          "answer": "Het aandeel van de totale inferentie-uitgaven dat wordt veroorzaakt door retries en fallbacks, gemeten per workflow en foutcategorie."
+        },
+        {
+          "question": "Hoe beteugelen teams agent-retry-loops effectief?",
+          "answer": "Door tokenlimieten per aanroep, financiële plafonds per workflow, maximale pogingaantallen en runtime stopregels in te richten."
+        },
+        {
+          "question": "Moeten alle automatische retries worden uitgeschakeld?",
+          "answer": "Nee. Classificeer fouten eerst; probeer tijdelijke netwerkfouten opnieuw, maar blokkeer deterministische context- en parsefouten direct."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Budgetbewaking voor AI-agents"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM-kostenmonitoring"
+        },
+        {
+          "slug": "/nl/research/cost-per-successful-task",
+          "label": "Kosten per geslaagde taak"
+        }
+      ]
+    },
+    "ar": {
+      "title": "حلقات إعادة المحاولة والإنفاق الخفي للنماذج",
+      "titleCore": "حلقات إعادة المحاولة والإنفاق الخفي للنماذج",
+      "description": "كيف تضاعف عمليات إعادة المحاولة وفشل الأدوات تكاليف الإنتاج، والقياسات والحدود البرمجية التي توقف استنزاف الميزانية.",
+      "body": "<p>تتسبب حلقات إعادة المحاولة الصامتة (Silent Retry Loops)، وبدائل النماذج التلقائية، وفشل استدعاء الأدوات في تضاعف استهلاك الرموز وفواتير الاستدلال في بيئات الإنتاج دون إشعار فوري للفرق الهندسية. عندما يفشل نموذج في صياغة استجابة مهيكلة بصيغة JSON أو تتأخر أداة خارجية، يعيد النظام الطلب تلقائياً، مضاعفاً التكلفة على طلب واحد للمستخدم.</p>\n\n<h2>احتساب شجرة المحاولات بالكامل</h2>\n<p>عندما تفشل محاولة، لا تضيع تكلفة الاستدعاء الأول، بل تُضاف إلى المحاولة الثانية والثالثة. إذا كان الاستدعاء يتطلب 4,000 رمز إدخال وتمت إعادته 3 مرات، فإن تكلفة العملية بلغت 12,000 رمز إدخال لتحقيق استجابة واحدة فقط. يجب أن تسجل أنظمة القياس عن بعد (Telemetry) عدد المحاولات وسبب التكرار والتكلفة التراكمية لكل معاملة.</p>\n\n<h2>التمييز بين التكرار المفيد والتكرار المهدر</h2>\n<p>ليست كل عمليات إعادة المحاولة سيئة؛ فإعادة المحاولة بسبب انقطاع شبكي عابر أو تجاوز معدل الطلبات (Rate Limit) تحمي تجربة المستخدم. ولكن إعادة المحاولة بسبب فشل النموذج في استيفاء شروط منطقية أو أخطاء برمجية في المطالبة تؤدي إلى هدر مالي مستمر لا يثمر أي فائدة.</p>\n\n<h2>وضع ميزانيات عند حدود الحلقة البرمجية</h2>\n<p>لمنع النزيف المالي في الإنتاج، يجب تطبيق الضوابط التالية:</p>\n<ul>\n  <li>وضع حد أقصى لمحاولات إعادة التنفيذ (لا يتجاوز محاولتين لمعظم العمليات).</li>\n  <li>تطبيق قواطع الدوائر (Circuit Breakers) لإيقاف المحاولات عند استمرار فشل المزود أو الخدمة المستهدفة.</li>\n  <li>تحديد سقف تكلفة إجمالي للمعاملة (Cost Budget per Request) يمنع تجاوز الحد المالي المسموح.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "ما هي ضريبة إعادة المحاولة في أنظمة النماذج اللغوية؟",
+          "answer": "هي الإنفاق الإضافي غير المحسوب على استدعاءات النماذج والوكلاء عند تكرار المحاولات بعد فشل أدوات أو استجابات غير مطابقة."
+        },
+        {
+          "question": "كيف تتحكم الفرق الهندسية في حلقات تكرار الوكلاء؟",
+          "answer": "بوضع حدود صارمة لعدد المحاولات وقواطع الدوائر البرمجية ومراقبة معدلات الفشل في بوابات الذكاء الاصطناعي التشغيلية."
+        },
+        {
+          "question": "هل ينبغي إيقاف جميع عمليات إعادة المحاولة بالكامل؟",
+          "answer": "لا، بل يجب حصرها في الأخطاء العابرة القابلة للاسترداد وتحديد ميزانية استدلال قصوى لكل عملية تجارية مكتملة."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "حواجز إنفاق الوكلاء المستقلين"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "مراقبة تكاليف الاستدلال"
+        },
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/retry-loop-hidden-spend"
+  }
+}

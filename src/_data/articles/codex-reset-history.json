@@ -1,0 +1,59 @@
+{
+  "slug": "codex-reset-history",
+  "tags": [
+    "llm-costs",
+    "saas-ai-credits-metering"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Codex usage limit resets: how they work, banked resets and…",
+      "titleCore": "Codex usage limit resets: how they work, banked resets and…",
+      "description": "When Codex usage limits reset, what a banked reset is and when it expires, plus a dated log of every OpenAI reset in August and September 2026.",
+      "related": [
+        {
+          "slug": "/research/codex-usage-limits-chatgpt-pro",
+          "label": "How much Codex ChatGPT Pro includes, in dollars"
+        },
+        {
+          "slug": "/research/claude-max-vs-chatgpt-pro-codex-200",
+          "label": "Claude Max vs ChatGPT Pro: the full 60-day study"
+        },
+        {
+          "slug": "/research/claude-max-20x-vs-5x-weekly-limit",
+          "label": "Claude Max 20x vs 5x: the weekly limit, measured"
+        }
+      ],
+      "body": "<p><strong>Codex usage limits reset on two clocks: a 5-hour window and a weekly window that starts with your first request after the last reset.</strong> On top of that, OpenAI regularly resets everyone's limits early, either immediately or as a &ldquo;banked&rdquo; reset you redeem later. Third-party trackers count 55 of these one-off resets since September 2025, about one every 6.9 days. The dated log below covers August and September 2026.</p>\n\n<p>If you want to know what a Codex week is worth in dollars on Plus, Pro 5x and Pro 20x, that is on our <a href=\"/research/codex-usage-limits-chatgpt-pro\">Codex usage limits page</a>. This page is about when the gauge goes back to zero.</p>\n\n<h2>When do Codex usage limits reset?</h2>\n\n<p><strong>The 5-hour window resets 5 hours after it opens. The weekly window resets about 7 days after its first request, not on a fixed day.</strong> A new weekly period starts with your first Codex request after the previous one ended. If you stop using Codex for three days, your next week starts when you come back, so two people on the same plan reset on different days. <a href=\"https://github.com/openai/codex/issues/28246\">GitHub issue #28246</a> documents this anchoring and the paid time it can cost you.</p>\n\n<p>The two windows are checked separately. A fresh 5-hour window does not help if the weekly gauge is at 100%.</p>\n\n<h2>How do I check when my Codex limit resets?</h2>\n\n<ul>\n<li><strong>In the CLI:</strong> run <code>/status</code> in a Codex session. It shows the percentage used in each window and when each one resets. Recent CLI versions also have <code>/usage</code>.</li>\n<li><strong>On the web:</strong> the Codex usage page in ChatGPT settings shows the same windows, plus any banked resets on your account.</li>\n</ul>\n\n<h2>What is a banked Codex reset?</h2>\n\n<p><strong>A one-time reset that OpenAI puts on your account for you to use later, instead of resetting you on the spot.</strong> When you redeem it from the usage settings, both your 5-hour and weekly windows go back to 0% used, and your weekly reset date moves to a week from then. It does not raise your plan's allowance.</p>\n\n<p><strong>Banked resets expire about 30 days after they are granted</strong>, and nothing reminds you. Users have asked OpenAI to extend that in <a href=\"https://github.com/openai/codex/issues/28888\">GitHub issue #28888</a>. The practical rule: redeem a banked reset when your weekly gauge is high, not when it is nearly empty, and redeem it before the 30 days are up.</p>\n\n<h2>Why does OpenAI keep resetting Codex limits?</h2>\n\n<p><strong>Mostly to celebrate launches and user milestones, and occasionally to compensate for bugs that over-counted usage.</strong> Most resets are announced on X by Thibault Sottiaux (@thsottiaux), who leads Codex engineering. Resets have marked 8M, 9M, 10M, 15M and 20M active users, new model releases, and on 29 August a set of fixes to bugs that had been charging users too much usage.</p>\n\n<p>None of these resets is scheduled. You can't plan a workload around the next one, and you shouldn't price a plan on the assumption that it will come.</p>\n\n<h2>Codex reset log: August and September 2026</h2>\n\n<p>This log lists only the resets that both <a href=\"https://codex-resets.com/\">codex-resets.com</a> and <a href=\"https://aiidelist.com/codex-reset\">aiidelist</a> record. Dates are in UTC. &ldquo;Immediate&rdquo; resets apply to all paid accounts at once. &ldquo;Banked&rdquo; resets are loaded into accounts to be redeemed within 30 days.</p>\n\n<table>\n<thead><tr><th>Date</th><th>Type</th><th>Occasion</th></tr></thead>\n<tbody>\n<tr><td>1 Aug 2026</td><td>Immediate</td><td>Efficiency gains on Luna</td></tr>\n<tr><td>8 Aug 2026</td><td>Immediate</td><td>GPT-5.6 Sol release</td></tr>\n<tr><td>11 Aug 2026</td><td>Immediate</td><td>No reason given</td></tr>\n<tr><td>13 Aug 2026</td><td>Immediate</td><td>15M active users</td></tr>\n<tr><td>21 Aug 2026</td><td>Banked</td><td>20M active users</td></tr>\n<tr><td>24 Aug 2026</td><td>Immediate</td><td>Usage fixes landed</td></tr>\n<tr><td>25 Aug 2026</td><td>Immediate</td><td>No reason given</td></tr>\n<tr><td>27 Aug 2026</td><td>Immediate</td><td>No reason given</td></tr>\n<tr><td>29 Aug 2026</td><td>Immediate</td><td>Fixes for bugs that over-counted usage</td></tr>\n<tr><td>22 Sep 2026</td><td>Banked</td><td>GPT-6 Sol and Luna release</td></tr>\n<tr><td>26 Sep 2026</td><td>Immediate</td><td>Weekend reset</td></tr>\n</tbody>\n</table>\n\n<p>The trackers disagree about early September. aiidelist also lists banked resets on 3 and 5 September for accounts waiting on GPT-6 Astra, and resets on 31 August, 8 September and 12 September. codex-resets.com shows no reset between 29 August and 22 September. July was the busiest month, with a run of resets tied to the 7M to 10M user milestones.</p>\n\n<h2>Where can I track Codex resets?</h2>\n\n<p>Several community sites watch the announcements and log each reset. None is run by OpenAI.</p>\n\n<ul>\n<li><a href=\"https://codex-resets.com/\">codex-resets.com</a>: full history with average and median intervals.</li>\n<li><a href=\"https://codex-reset.com/\">codex-reset.com</a>: days since the last reset.</li>\n<li><a href=\"https://aiidelist.com/codex-reset\">aiidelist Codex reset tracker</a>: dated timeline with reasons.</li>\n<li><a href=\"https://usagereset.com/\">usagereset.com</a>: tracks Codex and Claude Code resets.</li>\n</ul>\n\n<h2>Does Claude Code do surprise resets too?</h2>\n\n<p><strong>Not as a habit.</strong> Claude plans use the same two-window structure, a 5-hour session and a weekly limit, but Anthropic does not run a milestone reset programme. What a Claude week is worth is on our <a href=\"/research/claude-max-20x-vs-5x-weekly-limit\">Claude Max weekly limit page</a>.</p>\n\n<h2>Sources</h2>\n\n<ul>\n<li><a href=\"https://codex-resets.com/\">codex-resets.com: Codex reset history and statistics</a></li>\n<li><a href=\"https://aiidelist.com/codex-reset\">aiidelist: Codex reset tracker</a></li>\n<li><a href=\"https://github.com/openai/codex/issues/28246\">GitHub openai/codex #28246: quota windows anchor to first post-reset use</a></li>\n<li><a href=\"https://github.com/openai/codex/issues/28888\">GitHub openai/codex #28888: extend banked reset expiration beyond 30 days</a></li>\n<li><a href=\"https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets\">OpenAI Help: Paid weekly Work and Codex rate limit resets</a></li>\n</ul>",
+      "faq": [
+        {
+          "question": "When do Codex usage limits reset?",
+          "answer": "The 5-hour window resets 5 hours after it opens. The weekly window resets about 7 days after its first request, so it has no fixed day and differs between users on the same plan."
+        },
+        {
+          "question": "What is a banked Codex reset?",
+          "answer": "A one-time reset OpenAI loads onto your account to redeem later. Redeeming it sets both the 5-hour and weekly windows back to 0% and moves your weekly reset date forward."
+        },
+        {
+          "question": "Do banked Codex resets expire?",
+          "answer": "Yes, about 30 days after they are granted, with no reminder. Redeem one when your weekly gauge is high and before the 30 days are up."
+        },
+        {
+          "question": "How often does OpenAI reset Codex limits?",
+          "answer": "Community trackers count 55 one-off resets since September 2025, on average one every 6.9 days, usually for launches, user milestones or usage bugs. None are scheduled."
+        },
+        {
+          "question": "How do I check my Codex usage and reset time?",
+          "answer": "Run /status in the Codex CLI, or open the Codex usage page in ChatGPT settings. Both show the percentage used in each window and when it resets."
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/codex-reset-history"
+  }
+}

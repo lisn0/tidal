@@ -1,0 +1,64 @@
+{
+  "slug": "order-of-llm-cost-optimizations",
+  "tags": [
+    "cost-optimization",
+    "llm-costs",
+    "prompt-caching",
+    "routing"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Order of LLM cost optimizations",
+      "titleCore": "Order of LLM cost optimizations",
+      "description": "Caching, then prompt trimming, then tool cleanup, then routing, then fine-tuning last. The sequence compounds; the wrong one pays twice.",
+      "body": "<p>A September 2026 r/LLMDevs thread asked how people actually control LLM costs in production, and what they'd do if engineering time were not the constraint. The top-voted reply is worth more than any vendor playbook: <em>the order matters way more than people admit.</em> They started with prompt caching and trimming system prompts way down. What failed spectacularly was fine-tuning a small model to handle the repetitive stuff &mdash; maintenance overhead was a nightmare and the quality kept drifting.</p><h2>The order that works</h2><ol><li><strong>Prompt caching.</strong> Cheapest engineering hour you will ever spend. Cache reads on Opus 5.5 are $0.20 per million against $4.00 for fresh input &mdash; a 95% discount on the largest line item. If your system prompt, tool definitions, or retrieved context repeat across calls, you are leaving this on the table before you do anything else.</li><li><strong>Trim the system prompt.</strong> The same thread, same reply: system prompts down. Verbose instructions are billed on every call forever. This is a writing task, not an engineering task.</li><li><strong>Delete unused tools.</strong> Every tool definition ships in the context on every request whether or not the model calls it. The same mechanism as MCP tool definition overhead. Removing a tool is a one-line config change with a permanent effect.</li><li><strong>Route by task.</strong> Only now does model routing pay. A router built on step 1 is already cheaper before it switches a single model.</li><li><strong>Batch or defer.</strong> Batch API is a straight discount for anything that is not user-facing. Non-production traffic should be on batch from day one.</li><li><strong>Fine-tune last, if ever.</strong> The step teams reach for first, and the one that failed for this team. Maintenance overhead plus drifting quality means a permanent ops tax for a saving that caching and routing already captured.</li></ol><h2>Why the order is the whole point</h2><p>Each step changes the token counts the next step operates on. Trim the system prompt before routing, and the cheap model handles more of your traffic for the same routing logic. Enable caching before fine-tuning, and the fine-tuning budget only has to cover the cache misses. Do it in the wrong order and you pay twice: a fine-tune that a prompt rewrite would have made unnecessary, or a router that routes 60K tokens of instructions through a cheap model it was never meant to carry.</p><h2>The mistake pattern</h2><p>The failure mode in the thread was fine-tuning a small model for repetitive work. The intended saving was real. What arrived instead was a model that needed re-training every time the repetitive work shifted, quality that drifted away from the underlying model as that model was upgraded upstream, and an ops burden that made the fine-tune unmaintainable. The repetitive work was probably 15% of volume and 2% of spend &mdash; a small number wrapped in a large ongoing cost.</p><h2>Rehearse the sequence on one request</h2><p>Take a single representative request and apply each step in order, recording total billed tokens:</p><table><thead><tr><th>Step</th><th>What changes</th><th>Typical billed-token cut</th></tr></thead><tbody><tr><td>Caching on</td><td>Repeat prefix becomes a cache read</td><td>40&ndash;70%</td></tr><tr><td>System prompt trimmed</td><td>Fewer uncached tokens on every call</td><td>10&ndash;25%</td></tr><tr><td>Unused tools removed</td><td>Smaller tool block</td><td>5&ndash;15%</td></tr><tr><td>Routing</td><td>Cheaper model on most traffic</td><td>30&ndash;60%</td></tr><tr><td>Batch for non-prod</td><td>Discount tier</td><td>25&ndash;50% of that traffic</td></tr></tbody></table><p>These compound. Applied in order, the same request often lands 80&ndash;90% cheaper. Applied in the order teams usually reach for, you get a fine-tune on 15% of volume and a routing rule that never pays for itself.</p><h2>Bottom line</h2><p>Caching, trimming, and deleting unused tools are cheap, compounding, and low-risk. Routing and batching come after. Fine-tuning comes last or not at all. The list is not the hard part; the sequence is.</p>",
+      "faq": [
+        {
+          "question": "What is the right order for LLM cost optimizations?",
+          "answer": "Prompt caching first, then trim the system prompt, then delete unused tool definitions, then routing, then batch for non-production traffic. Fine-tune last, or not at all."
+        },
+        {
+          "question": "Why is fine-tuning usually the wrong first move?",
+          "answer": "A September 2026 production report describes fine-tuning for repetitive work as failing: maintenance overhead was a nightmare and quality kept drifting as the base model was upgraded. The saving was on 15% of volume and 2% of spend."
+        },
+        {
+          "question": "How much does prompt caching actually save?",
+          "answer": "On Opus 5.5, cache reads are $0.20 per million against $4.00 for fresh input &mdash; a 95% discount. On a workload with a repeating prefix, total billed tokens typically drop 40&ndash;70%."
+        },
+        {
+          "question": "Should I delete tool definitions I rarely use?",
+          "answer": "Yes. Every tool definition is billed in the context on every request whether or not the model calls it. Removing unused tools is typically a 5&ndash;15% billed-token cut for a config change."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/verbose-prompt-tax",
+          "label": "The verbose prompt tax"
+        },
+        {
+          "slug": "/research/mcp-tool-definition-overhead",
+          "label": "MCP tool definition overhead"
+        },
+        {
+          "slug": "/research/subagent-fan-out-concurrency-limits",
+          "label": "Subagent fan-out concurrency limits"
+        },
+        {
+          "slug": "/research/free-tier-is-an-acquisition-cost",
+          "label": "Free tier is an acquisition cost"
+        },
+        {
+          "slug": "/research/three-agent-budgets",
+          "label": "Three agent budgets"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/order-of-llm-cost-optimizations"
+  }
+}

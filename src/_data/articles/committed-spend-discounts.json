@@ -1,0 +1,143 @@
+{
+  "slug": "committed-spend-discounts",
+  "tags": [
+    "finops",
+    "pricing",
+    "budgets",
+    "forecasting"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Committed spend and reserved capacity discounts",
+      "titleCore": "Committed spend and reserved capacity discounts",
+      "description": "Annual commits and provisioned throughput trade a discount for a forecast you have to hit. Here is how to price that trade honestly.",
+      "body": "<p>Once your model spend is large enough to be noticed, a provider will offer you a discount for committing to a volume. Provisioned throughput, an annual commitment, a reserved capacity tier &mdash; the shapes differ, the trade does not. You are being paid to be predictable.</p><p>The discount is real. So is the risk, and it is not the one most teams price.</p><h2>The three risks, in order of how much they cost</h2><p><strong>Underuse is the obvious one and the smallest.</strong> You commit to a volume, you use less, you pay for the gap. It is easy to model and easy to bound: commit under your conservative case, not your plan.</p><p><strong>Being locked to a model is bigger.</strong> A commitment usually names a model or a family. The frontier moves in months. A twelve-month commitment to today's flagship is a bet that nothing meaningfully cheaper arrives &mdash; and something meaningfully cheaper has arrived every quarter for three years. The discount has to beat the price decline you would have got by doing nothing, not the price you pay today.</p><p><strong>Losing the ability to switch is biggest and never appears in the model.</strong> A commit removes your leverage in the next negotiation, because both sides know you cannot walk. It also quietly kills routing work: nobody optimises traffic away from a model the company has prepaid for, even when a cheaper route is right there.</p><h2>How to price it</h2><p>Compare against the honest counterfactual. Not &quot;list price times volume&quot;, but what you would plausibly have paid on-demand over the same period, including the price cuts and cheaper models that historically arrive within it. On a twelve-month horizon that counterfactual is often 20&ndash;40% below today's list, which eats most of a typical commit discount before you start.</p><p>Then check the shape of the deal. <strong>Commit to a floor, not a plan</strong> &mdash; the volume you are confident about even if a product underperforms. <strong>Prefer spend commitments to model commitments</strong>, since a dollar commitment lets you move to whatever the provider ships next. <strong>Insist on rollover or reallocation</strong> for unused volume. And <strong>keep the term short</strong>; in a market repricing every quarter, a twelve-month term is already long and a multi-year one is a different kind of decision.</p><h2>When it is clearly right</h2><p>Stable, high-volume, latency-sensitive production traffic on a model you have already run for two quarters without wanting to change it. That is a real forecast, and being paid for it is a good deal. Everything experimental, agentic, or growing fast should stay on-demand &mdash; those are exactly the workloads whose volume you cannot promise and whose model you will want to change.</p><h2>Related</h2><ul><li><a href=\"/research/llm-purchasing-guide\">LLM purchasing guide</a></li><li><a href=\"/research/provider-arbitrage\">Provider arbitrage</a></li><li><a href=\"https://finopsllm.com/research/how-to-budget-for-ai-spend\">How to budget for AI spend</a></li></ul>",
+      "faq": [
+        {
+          "question": "What is the real risk in a committed-spend discount?",
+          "answer": "Not underuse, which is easy to bound, but being locked to a model while the frontier moves, and losing the leverage and the incentive to route traffic to something cheaper that ships during your term."
+        },
+        {
+          "question": "How should you value a commit discount?",
+          "answer": "Against what you would plausibly have paid on-demand over the same period, including the price cuts and cheaper models that historically arrive within a year, not against today's list price held flat."
+        },
+        {
+          "question": "Which workloads should stay on-demand?",
+          "answer": "Anything experimental, agentic, or growing fast. Those are the workloads whose volume you cannot promise and whose model you are most likely to want to change mid-term."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing guide"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/how-to-budget-for-ai-spend",
+          "label": "How to budget for AI spend"
+        }
+      ]
+    },
+    "es": {
+      "title": "Descuentos por compromiso de gasto",
+      "titleCore": "Descuentos por compromiso de gasto",
+      "description": "Los compromisos anuales y la capacidad reservada cambian descuento por una previsión que debes cumplir. Así se valora ese intercambio con honestidad.",
+      "body": "<p>Cuando tu gasto en modelos se nota, el proveedor te ofrece descuento a cambio de comprometer volumen. Capacidad reservada, compromiso anual, throughput aprovisionado: cambia la forma, no el trato. Te pagan por ser predecible.</p><h2>Los tres riesgos</h2><p><strong>Infrautilizar</strong> es el obvio y el menor: comprometes volumen, usas menos, pagas la diferencia. Se acota comprometiendo por debajo de tu caso conservador.</p><p><strong>Quedar atado a un modelo</strong> es mayor. La frontera se mueve en meses; un compromiso de doce meses con el buque insignia de hoy apuesta a que no llega nada más barato, y lleva tres años llegando cada trimestre.</p><p><strong>Perder la capacidad de cambiar</strong> es el mayor y nunca aparece en el modelo: elimina tu palanca en la siguiente negociación y mata el trabajo de enrutado, porque nadie optimiza tráfico fuera de un modelo ya prepagado.</p><h2>Cómo valorarlo</h2><p>Compara con el contrafactual honesto: lo que habrías pagado bajo demanda en ese periodo, incluyendo las bajadas de precio que históricamente llegan dentro de él. A doce meses suele ser un 20&ndash;40% por debajo de la tarifa actual.</p><p>Compromete un <strong>suelo</strong>, no un plan. Prefiere compromisos de <strong>gasto</strong> a compromisos de modelo. Exige traspaso del volumen no usado. Y mantén el plazo corto.</p>",
+      "faq": [
+        {
+          "question": "¿Cuál es el riesgo real de un compromiso de gasto?",
+          "answer": "No la infrautilización, que se acota fácil, sino quedar atado a un modelo mientras la frontera avanza, y perder tanto la palanca negociadora como el incentivo para enrutar tráfico a algo más barato."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-purchasing-guide",
+          "label": "Guía de compra de LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Remises pour engagement de dépense",
+      "titleCore": "Remises pour engagement de dépense",
+      "description": "Engagements annuels et capacité réservée échangent une remise contre une prévision à tenir. Voici comment évaluer honnêtement cet échange.",
+      "body": "<p>Dès que votre dépense modèle se remarque, un fournisseur vous proposera une remise contre un engagement de volume. Capacité réservée, engagement annuel, débit provisionné : les formes diffèrent, le marché non. On vous paie pour être prévisible.</p><h2>Les trois risques</h2><p><strong>La sous-utilisation</strong> est l’évidente et la plus petite : engagez sous votre cas prudent, pas sous votre plan.</p><p><strong>L’enfermement sur un modèle</strong> est plus grand. La frontière bouge en quelques mois ; s’engager douze mois sur le vaisseau amiral du jour, c’est parier que rien de nettement moins cher n’arrivera &mdash; alors qu’il en arrive chaque trimestre depuis trois ans.</p><p><strong>La perte de mobilité</strong> est la plus coûteuse et n’apparaît dans aucun modèle : elle supprime votre levier de négociation et tue le travail de routage, car personne n’optimise le trafic hors d’un modèle déjà prépayé.</p><h2>Comment le valoriser</h2><p>Comparez au contrefactuel honnête : ce que vous auriez payé à la demande sur la période, baisses de prix comprises. Sur douze mois, c’est souvent 20 à 40 % sous le tarif du jour.</p><p>Engagez un <strong>plancher</strong>, pas un plan. Préférez un engagement en <strong>dépense</strong> plutôt qu’en modèle. Exigez le report du volume inutilisé. Gardez une durée courte.</p>",
+      "faq": [
+        {
+          "question": "Quel est le vrai risque d’une remise pour engagement?",
+          "answer": "Pas la sous-utilisation, facile à borner, mais l’enfermement sur un modèle pendant que la frontière avance, et la perte du levier de négociation comme de l’incitation à router vers moins cher."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-purchasing-guide",
+          "label": "Guide d’achat LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Rabatte für zugesagte Ausgaben",
+      "titleCore": "Rabatte für zugesagte Ausgaben",
+      "description": "Jahreszusagen und reservierte Kapazität tauschen Rabatt gegen eine Prognose, die Sie treffen müssen. So bewerten Sie diesen Tausch ehrlich.",
+      "body": "<p>Sobald Ihre Modellausgaben auffallen, bietet ein Anbieter Rabatt gegen Volumenzusage. Reservierte Kapazität, Jahreszusage, bereitgestellter Durchsatz &mdash; die Formen unterscheiden sich, der Handel nicht. Sie werden dafür bezahlt, berechenbar zu sein.</p><h2>Die drei Risiken</h2><p><strong>Unterauslastung</strong> ist das offensichtliche und kleinste: sagen Sie unter Ihrem konservativen Fall zu, nicht unter Ihrem Plan.</p><p><strong>Die Bindung an ein Modell</strong> wiegt schwerer. Die Frontier bewegt sich in Monaten; zwölf Monate auf das heutige Flaggschiff sind eine Wette darauf, dass nichts deutlich Billigeres kommt &mdash; seit drei Jahren kommt jedes Quartal etwas.</p><p><strong>Der Verlust der Wechselfähigkeit</strong> ist am teuersten und steht in keinem Modell: er nimmt Ihnen den Hebel in der nächsten Verhandlung und beendet die Routing-Arbeit, denn niemand optimiert Traffic von einem vorausbezahlten Modell weg.</p><h2>Bewertung</h2><p>Vergleichen Sie mit dem ehrlichen Gegenszenario: was Sie im selben Zeitraum on-demand gezahlt hätten, inklusive der Preissenkungen, die darin erfahrungsgemäß kommen. Auf zwölf Monate liegt das oft 20&ndash;40 % unter dem heutigen Listenpreis.</p><p>Sagen Sie einen <strong>Boden</strong> zu, keinen Plan. Bevorzugen Sie <strong>Ausgaben</strong>zusagen vor Modellzusagen. Bestehen Sie auf Übertrag ungenutzten Volumens. Halten Sie die Laufzeit kurz.</p>",
+      "faq": [
+        {
+          "question": "Was ist das echte Risiko einer Ausgabenzusage?",
+          "answer": "Nicht die Unterauslastung, die sich leicht begrenzen lässt, sondern die Bindung an ein Modell, während die Frontier voranschreitet &mdash; und der Verlust von Verhandlungshebel wie Anreiz, auf Günstigeres zu routen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-purchasing-guide",
+          "label": "LLM-Einkaufsleitfaden"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Descontos por compromisso de gasto",
+      "titleCore": "Descontos por compromisso de gasto",
+      "description": "Compromissos anuais e capacidade reservada trocam desconto por uma previsão que tem de cumprir. Eis como avaliar essa troca com honestidade.",
+      "body": "<p>Assim que o seu gasto em modelos se nota, o fornecedor oferece desconto em troca de volume comprometido. Capacidade reservada, compromisso anual, throughput aprovisionado: muda a forma, não a troca. Estão a pagar-lhe para ser previsível.</p><h2>Os três riscos</h2><p><strong>Subutilizar</strong> é o óbvio e o menor: comprometa abaixo do seu cenário conservador, não do plano.</p><p><strong>Ficar preso a um modelo</strong> é maior. A fronteira move-se em meses; doze meses no topo de hoje é apostar que nada mais barato chega &mdash; e chega todos os trimestres há três anos.</p><p><strong>Perder a capacidade de mudar</strong> é o maior e nunca entra no modelo: retira alavancagem na próxima negociação e mata o trabalho de encaminhamento, porque ninguém tira tráfego de um modelo já pré-pago.</p><h2>Como avaliar</h2><p>Compare com o contrafactual honesto: o que teria pago a pedido no mesmo período, incluindo as descidas de preço que historicamente acontecem nele. A doze meses é muitas vezes 20&ndash;40% abaixo da tabela atual.</p><p>Comprometa um <strong>piso</strong>, não um plano. Prefira compromissos de <strong>gasto</strong> a compromissos de modelo. Exija transporte do volume não usado. Mantenha o prazo curto.</p>",
+      "faq": [
+        {
+          "question": "Qual é o risco real de um desconto por compromisso?",
+          "answer": "Não a subutilização, fácil de limitar, mas ficar preso a um modelo enquanto a fronteira avança, e perder tanto a alavancagem negocial como o incentivo para encaminhar tráfego para algo mais barato."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-purchasing-guide",
+          "label": "Guia de compra de LLM"
+        }
+      ]
+    },
+    "ja": {
+      "title": "コミット割引と予約容量",
+      "titleCore": "コミット割引と予約容量",
+      "description": "年間コミットやプロビジョンド・スループットは、割引と引き換えに達成義務のある予測を負います。その取引を正直に値付けする方法です。",
+      "body": "<p>モデル支出が目立つ規模になると、プロバイダーは volume コミットと引き換えに割引を提示してきます。予約容量、年間コミット、プロビジョンド・スループット &mdash; 形は違っても取引は同じで、予測可能であることに対して支払われているのです。</p><h2>3 つのリスク</h2><p><strong>使い切れないこと</strong>は分かりやすく、最も小さいリスクです。計画値ではなく保守シナリオの下でコミットすれば境界を引けます。</p><p><strong>モデルに縛られること</strong>はより重大です。フロンティアは数か月で動きます。今日の旗艦モデルに 12 か月コミットするのは、大幅に安いものが出てこないほうに賭けることであり、この 3 年は毎四半期出てきました。</p><p><strong>乗り換え能力を失うこと</strong>が最大で、しかもモデルには決して現れません。次の交渉での梃子がなくなり、前払い済みのモデルから traffic を逃がす最適化を誰もやらなくなります。</p><h2>値付けの方法</h2><p>正直な反実仮想と比べてください。定価×数量ではなく、同じ期間をオンデマンドで払っていた場合の額 &mdash; 期間中に実際に来る値下げと安いモデルを織り込んだ額です。12 か月ならしばしば現行定価の 20〜40% 下になり、典型的なコミット割引の大半を先に食べてしまいます。</p><p>計画ではなく<strong>下限</strong>にコミットする。モデルではなく<strong>金額</strong>でコミットする。未使用分の繰り越しを条件にする。期間は短く保つ。</p>",
+      "faq": [
+        {
+          "question": "コミット割引の本当のリスクは何ですか？",
+          "answer": "境界を引きやすい未消化ではなく、フロンティアが進むあいだ特定モデルに縛られること、そして次の交渉での梃子と、より安い経路へ振り向ける動機の両方を失うことです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-purchasing-guide",
+          "label": "LLM 購買ガイド"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/committed-spend-discounts"
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "slug": "deepseek-harness-plugin-architecture",
+  "tags": [
+    "deepseek-harness",
+    "architecture",
+    "plugins"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "DeepSeek Harness: was „alles ist ein Plugin“ wirklich bringt",
+      "titleCore": "DeepSeek Harness: was „alles ist ein Plugin“ wirklich bringt",
+      "description": "DeepSeek Harness macht jeden Teil eines Agenten zu einem Cordis-Plugin. Was diese Austauschbarkeit für Modell-Routing, Sandboxing und Kostenkontrolle bedeutet.",
+      "body": "<p>DeepSeek AI hat <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a> (<code>dsh</code>) veröffentlicht, ein MIT-lizenziertes Agenten-Harness, dessen Leitsatz lautet: alles ist ein Plugin. Dieser Satz wird im Agenten-Tooling gern locker verwendet, deshalb lohnt es sich, genau zu sagen, was er hier bedeutet und wo er die Ökonomie des Agentenbetriebs verändert.</p>\n\n<h2>Cordis, kein Framework mit Hooks</h2>\n<p>Das Harness läuft auf <a href=\"https://github.com/cordiverse/cordis\">Cordis</a>, einer Plugin-Laufzeit, deren Modell darin besteht, dass Plugins Dienste, typisierte Ereignisse und umkehrbare Effekte zu einem gemeinsamen Kontext beitragen. Das Architekturdokument sagt ausdrücklich, dass es keinen privilegierten Kern gibt: Modelladapter, Werkzeug-Registries, Sitzungsprotokolle und die Agentenschleife selbst sind allesamt Plugins. Nichts liegt als unbewegliche Engine darunter.</p>\n<p>Das ist wichtig, weil die übliche Form eines „erweiterbaren“ Agenten-Frameworks ein fester Kern plus eine Hook-Oberfläche ist. Man kann beobachten und dekorieren, aber nicht ersetzen. Ersetzen heißt forken. Cordis dreht das um: Genau die Teile, die man ersetzen möchte, sind die Einheiten der Komposition.</p>\n\n<h2>Fähigkeitsnähte: der operativ entscheidende Teil</h2>\n<p>Das Harness formalisiert das mit dem, was es eine <strong>Fähigkeitsnaht</strong> (capability seam) nennt. Eine Naht ist eine Dienstschnittstelle mit mehr als einer Implementierung, und jeder Dienst nimmt eine von drei Rollen ein:</p>\n<table>\n<thead><tr><th>Rolle</th><th>Aufgabe</th></tr></thead>\n<tbody>\n<tr><td>Owner</td><td>Das Paket, das die Dienstschnittstelle deklariert</td></tr>\n<tr><td>Implementierung</td><td>Ein Paket mit konkretem Verhalten (Nähte haben mehrere)</td></tr>\n<tr><td>Consumer</td><td>Ein Paket, das den Dienst aufruft, blind für den aktiven Provider</td></tr>\n</tbody>\n</table>\n<p>Nicht jeder Dienst ist eine Naht. Die Dokumentation unterscheidet drei Arten: austauschbare Nähte (<code>ctx.llm</code>, <code>ctx.subprocess</code>), Kerndienste mit einem einzigen Owner (<code>ctx.sessions</code>, <code>ctx.agents</code>) und Kompositionspunkte, die andere Dienste koordinieren (<code>ctx.agentLoop</code>). Zu wissen, was was ist, sagt Ihnen, wo Sie Verhalten ersetzen dürfen und wo nicht.</p>\n\n<h2>Die vier Nähte mit Kostenfolgen</h2>\n<ul>\n<li><strong><code>ctx.llm</code> — die Modellnaht.</strong> Gehört dem <code>llm</code>-Paket; Implementierungen sind unter anderem <code>llm-deepseek</code>, <code>llm-pi-ai</code> und <code>llm-replay</code>. Die Agentenschleife konsumiert einen anbieterneutralen Stream-Dienst und weiß nicht, welches Backend läuft. <code>llm-replay</code> ist für Kostenarbeit besonders interessant: Es erlaubt, eine aufgezeichnete Sitzung erneut abzuspielen, ohne die Inferenz noch einmal zu bezahlen.</li>\n<li><strong><code>ctx.fs</code> — die Dateisystemnaht.</strong> Provider sind <code>fs-local</code> (Host-Dateisystem), <code>fs-sandbox</code> (eingehegte Änderungen) und <code>fs-e2b</code> (eine entfernte, sandboxed Linux-Maschine). Die Naht entkoppelt die Werkzeuge, die das Modell sieht, davon, wo die Ausführung physisch stattfindet.</li>\n<li><strong><code>ctx.sandbox</code> — die Ausführungsnaht.</strong> Consumer übergeben argv; Implementierungen kapseln die Ausführung unter Richtlinien. <code>sandbox-local</code> setzt auf dem Host durch, <code>sandbox-policy</code> zentralisiert Deployment-Standards.</li>\n<li><strong><code>ctx.subagents</code> — die Delegationsnaht.</strong> Sechs Implementierungen decken In-Process-Spawning, Forking, ACP-Brücken, Codex, Claude Code und SDK-basierte Agenten ab. Genau hier verdrahtet ein Harness sonst eine Annahme fest; hier ist es ein Austausch.</li>\n</ul>\n\n<p class=\"agent-summary\">Jeder relevante Kostenhebel in einem Agentensystem ist ein Provider-Austausch: auf ein günstigeres Modell routen, die Ausführung in eine günstigere Sandbox verlagern, einen Subagenten-Transport durch einen lokalen ersetzen. Sind das Nähte, ist die Änderung eine Konfigurationsanpassung. Sind sie es nicht, ist die Änderung ein Fork, den Sie fortan pflegen.</p>\n\n<h2>Warum das ein FinOps-Thema ist, nicht nur ein Architekturthema</h2>\n<p>Das wiederkehrende Scheitern in Agenten-Kostenprogrammen ist nicht, dass Teams ein teures Modell wählen. Es ist, dass das Harness die teure Wahl strukturell macht. Sind Modellauswahl, Ausführungsort der Werkzeuge und Delegationstransport erst einmal in den Anwendungscode eingebacken, wird jede Optimierung zu einem Engineering-Projekt mit eigenem Zeitplan und eigenem Regressionsrisiko. Teams verschieben die Optimierung dann, und die Ausgaben summieren sich.</p>\n<p>Ein nahtbasiertes Harness verlagert diese Entscheidungen in die Komposition. Das macht sie nicht kostenlos, aber es verwandelt sie von Refactorings in Konfiguration — der Unterschied zwischen einer Quartalsinitiative und einem Nachmittag.</p>\n\n<h2>Der Vorbehalt, klar gesagt</h2>\n<p>DeepSeek Harness ist ein Developer Preview, und die README sagt ohne Beschönigung, dass es kompatibilitätsbrechende Änderungen geben wird. Produktions-Kostenwerkzeuge direkt gegen die internen Schnittstellen zu bauen, heißt derzeit, ihnen hinterherzulaufen. Evaluieren Sie es, prototypen Sie damit, aber pinnen Sie Ihre Versionen und rechnen Sie mit Bewegung.</p>",
+      "faq": [
+        {
+          "question": "Was ist DeepSeek Harness?",
+          "answer": "DeepSeek Harness (dsh) ist ein MIT-lizenziertes Open-Source-Agenten-Harness von DeepSeek AI. Es baut auf der Cordis-Plugin-Laufzeit auf, in der Modelladapter, Werkzeug-Registries, Sitzungsprotokolle und die Agentenschleife austauschbare Plugins sind statt ein privilegierter Kern."
+        },
+        {
+          "question": "Was ist eine Fähigkeitsnaht in DeepSeek Harness?",
+          "answer": "Eine Fähigkeitsnaht ist eine Dienstschnittstelle mit mehr als einer Implementierung. Das Owner-Paket deklariert die Schnittstelle, Provider-Pakete implementieren sie, und Consumer rufen sie auf, ohne zu wissen, welcher Provider aktiv ist. ctx.llm, ctx.fs, ctx.sandbox und ctx.subagents sind alle Nähte."
+        },
+        {
+          "question": "Warum ist eine Plugin-Architektur für KI-Kosten wichtig?",
+          "answer": "Kostenhebel in einem Agenten sind Provider-Austausche: Routing auf ein günstigeres Modell, Verlagerung der Ausführung in eine günstigere Sandbox oder der Ersatz eines Subagenten-Transports. Sind das Nähte statt fest verdrahteter Aufrufe, ist eine Routing-Änderung eine Konfigurationsanpassung statt ein Fork des Harness."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Wo Ausgaben-Leitplanken hingehören (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-getting-started",
+          "label": "Installation, Profile und erster Lauf (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "DeepSeek Harness: qué aporta de verdad «todo es un plugin»",
+      "titleCore": "DeepSeek Harness: qué aporta de verdad «todo es un plugin»",
+      "description": "DeepSeek Harness convierte cada parte de un agente en un plugin de Cordis. Qué significa esa intercambiabilidad para el enrutado de modelos y el coste.",
+      "body": "<p>DeepSeek AI ha publicado <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a> (<code>dsh</code>), un harness de agentes con licencia MIT cuyo lema de diseño es que todo es un plugin. Esa frase se usa con soltura en el ecosistema de herramientas de agentes, así que conviene precisar qué significa aquí y dónde cambia la economía de operar agentes.</p>\n\n<h2>Cordis, no un framework con hooks</h2>\n<p>El harness corre sobre <a href=\"https://github.com/cordiverse/cordis\">Cordis</a>, un runtime de plugins cuyo modelo consiste en que los plugins aportan servicios, eventos tipados y efectos reversibles a un contexto compartido. El documento de arquitectura es explícito: no hay un núcleo privilegiado. Adaptadores de modelo, registros de herramientas, logs de sesión y el propio bucle del agente son todos plugins. Nada queda debajo de ellos como motor inamovible.</p>\n<p>Esto importa porque la forma habitual de un framework de agentes «extensible» es un núcleo fijo más una superficie de hooks. Puede observar y decorar, pero no reemplazar. Reemplazar significa bifurcar. Cordis invierte eso: las piezas que querría reemplazar son las unidades de composición.</p>\n\n<h2>Costuras de capacidad: la parte que importa en operación</h2>\n<p>El harness formaliza esto con lo que llama una <strong>costura de capacidad</strong> (capability seam). Una costura es una interfaz de servicio con más de una implementación, y cada servicio ocupa uno de tres roles:</p>\n<table>\n<thead><tr><th>Rol</th><th>Qué hace</th></tr></thead>\n<tbody>\n<tr><td>Owner</td><td>El paquete que declara la interfaz del servicio</td></tr>\n<tr><td>Implementación</td><td>Un paquete que aporta comportamiento concreto (las costuras tienen varias)</td></tr>\n<tr><td>Consumidor</td><td>Un paquete que llama al servicio, ciego a qué proveedor está activo</td></tr>\n</tbody>\n</table>\n<p>No todo servicio es una costura. La documentación distingue tres tipos: costuras intercambiables (<code>ctx.llm</code>, <code>ctx.subprocess</code>), servicios de núcleo con un único owner (<code>ctx.sessions</code>, <code>ctx.agents</code>) y puntos de composición que coordinan otros servicios (<code>ctx.agentLoop</code>). Saber cuál es cuál le dice dónde puede sustituir comportamiento y dónde no.</p>\n\n<h2>Las cuatro costuras con consecuencias de coste</h2>\n<ul>\n<li><strong><code>ctx.llm</code>, la costura del modelo.</strong> Pertenece al paquete <code>llm</code>; entre las implementaciones están <code>llm-deepseek</code>, <code>llm-pi-ai</code> y <code>llm-replay</code>. El bucle del agente consume un servicio de streaming neutral respecto al proveedor y no sabe qué backend está corriendo. <code>llm-replay</code> es el interesante para trabajo de costes: permite reejecutar una sesión grabada sin volver a pagar inferencia.</li>\n<li><strong><code>ctx.fs</code>, la costura del sistema de archivos.</strong> Los proveedores son <code>fs-local</code> (sistema de archivos del host), <code>fs-sandbox</code> (mutaciones confinadas) y <code>fs-e2b</code> (una máquina Linux remota en sandbox). La costura desacopla las herramientas que ve el modelo de dónde ocurre físicamente la ejecución.</li>\n<li><strong><code>ctx.sandbox</code>, la costura de ejecución.</strong> Los consumidores entregan argv; las implementaciones envuelven la ejecución bajo política. <code>sandbox-local</code> aplica en el host, <code>sandbox-policy</code> centraliza los valores por defecto de despliegue.</li>\n<li><strong><code>ctx.subagents</code>, la costura de delegación.</strong> Seis implementaciones que cubren spawn en proceso, fork, puentes ACP, Codex, Claude Code y agentes basados en SDK. Aquí es donde un harness normalmente fija una suposición; aquí es un intercambio.</li>\n</ul>\n\n<p class=\"agent-summary\">Toda palanca de coste relevante en un sistema de agentes es un cambio de proveedor: enrutar a un modelo más barato, mover la ejecución a un sandbox más barato, sustituir un transporte de subagentes por uno local. Cuando eso son costuras, el cambio es una edición de configuración. Cuando no lo son, el cambio es una bifurcación que ahora mantiene usted.</p>\n\n<h2>Por qué es un asunto de FinOps y no solo de arquitectura</h2>\n<p>El fallo recurrente en los programas de coste de agentes no es que los equipos elijan un modelo caro. Es que el harness vuelve estructural la elección cara. Una vez que la selección de modelo, el lugar de ejecución de las herramientas y el transporte de delegación quedan horneados en el código de la aplicación, cada optimización se convierte en un proyecto de ingeniería con su propio calendario y su propio riesgo de regresión. Los equipos posponen entonces la optimización, y el gasto se acumula.</p>\n<p>Un harness basado en costuras mueve esas decisiones a la composición. Eso no las hace gratuitas, pero las convierte de refactorizaciones en configuración, que es la diferencia entre una iniciativa trimestral y una tarde.</p>\n\n<h2>La salvedad que conviene decir sin rodeos</h2>\n<p>DeepSeek Harness está en developer preview y su README dice, sin suavizarlo, que habrá cambios que rompan compatibilidad. Construir ahora herramientas de coste de producción directamente contra sus interfaces internas significa comprometerse a perseguirlas. Evalúelo, prototipe con él, pero fije las versiones y espere movimiento.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es DeepSeek Harness?",
+          "answer": "DeepSeek Harness (dsh) es un harness de agentes de código abierto con licencia MIT de DeepSeek AI. Se apoya en el runtime de plugins Cordis, donde los adaptadores de modelo, los registros de herramientas, los logs de sesión y el bucle del agente son plugins reemplazables y no un núcleo privilegiado."
+        },
+        {
+          "question": "¿Qué es una costura de capacidad en DeepSeek Harness?",
+          "answer": "Una costura de capacidad es una interfaz de servicio con más de una implementación. El paquete owner declara la interfaz, los paquetes proveedores la implementan y los consumidores la llaman sin saber cuál está activo. ctx.llm, ctx.fs, ctx.sandbox y ctx.subagents son costuras."
+        },
+        {
+          "question": "¿Por qué importa una arquitectura de plugins para el coste de la IA?",
+          "answer": "Las palancas de coste en un agente son cambios de proveedor: enrutar a un modelo más barato, mover la ejecución a un sandbox más barato o sustituir un transporte de subagentes. Cuando eso son costuras y no llamadas fijadas en el código, un cambio de enrutado es una edición de configuración y no una bifurcación del harness."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Dónde poner los límites de gasto (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-getting-started",
+          "label": "Instalación, perfiles y primera ejecución (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "DeepSeek Harness : ce que « tout est un plugin » apporte…",
+      "titleCore": "DeepSeek Harness : ce que « tout est un plugin » apporte…",
+      "description": "DeepSeek Harness fait de chaque partie d'un agent un plugin Cordis. Ce que cette interchangeabilité change pour le routage de modèles, le sandboxing et les coûts.",
+      "body": "<p>DeepSeek AI a publié <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a> (<code>dsh</code>), un harness d'agents sous licence MIT dont le slogan de conception est que tout est un plugin. Cette formule est employée à la légère dans l'écosystème des outils d'agents, il vaut donc la peine de préciser ce qu'elle signifie ici et où elle change l'économie de l'exploitation d'agents.</p>\n\n<h2>Cordis, pas un framework à hooks</h2>\n<p>Le harness tourne sur <a href=\"https://github.com/cordiverse/cordis\">Cordis</a>, un runtime de plugins dont le modèle veut que les plugins apportent des services, des événements typés et des effets réversibles à un contexte partagé. Le document d'architecture est explicite : il n'y a pas de noyau privilégié. Adaptateurs de modèle, registres d'outils, journaux de session et la boucle d'agent elle-même sont tous des plugins. Rien ne se trouve en dessous comme moteur inamovible.</p>\n<p>C'est important, car la forme habituelle d'un framework d'agents « extensible » est un noyau fixe plus une surface de hooks. Vous pouvez observer et décorer, mais pas remplacer. Remplacer veut dire forker. Cordis inverse cela : les pièces que vous voudriez remplacer sont les unités de composition.</p>\n\n<h2>Les coutures de capacité : la partie qui compte en exploitation</h2>\n<p>Le harness formalise cela avec ce qu'il appelle une <strong>couture de capacité</strong> (capability seam). Une couture est une interface de service avec plus d'une implémentation, et chaque service occupe l'un de trois rôles :</p>\n<table>\n<thead><tr><th>Rôle</th><th>Ce qu'il fait</th></tr></thead>\n<tbody>\n<tr><td>Owner</td><td>Le paquet qui déclare l'interface du service</td></tr>\n<tr><td>Implémentation</td><td>Un paquet fournissant un comportement concret (les coutures en ont plusieurs)</td></tr>\n<tr><td>Consommateur</td><td>Un paquet qui appelle le service, aveugle au fournisseur actif</td></tr>\n</tbody>\n</table>\n<p>Tous les services ne sont pas des coutures. La documentation en distingue trois sortes : coutures interchangeables (<code>ctx.llm</code>, <code>ctx.subprocess</code>), services de noyau à owner unique (<code>ctx.sessions</code>, <code>ctx.agents</code>) et points de composition coordonnant d'autres services (<code>ctx.agentLoop</code>). Savoir lequel est lequel vous dit où vous avez le droit de substituer un comportement et où non.</p>\n\n<h2>Les quatre coutures aux conséquences de coût</h2>\n<ul>\n<li><strong><code>ctx.llm</code>, la couture du modèle.</strong> Détenue par le paquet <code>llm</code> ; les implémentations comprennent <code>llm-deepseek</code>, <code>llm-pi-ai</code> et <code>llm-replay</code>. La boucle d'agent consomme un service de flux neutre vis-à-vis du fournisseur et ignore quel backend tourne. <code>llm-replay</code> est le plus intéressant pour le travail sur les coûts : il permet de rejouer une session enregistrée sans repayer l'inférence.</li>\n<li><strong><code>ctx.fs</code>, la couture du système de fichiers.</strong> Les fournisseurs sont <code>fs-local</code> (système de fichiers hôte), <code>fs-sandbox</code> (mutations confinées) et <code>fs-e2b</code> (une machine Linux distante en bac à sable). La couture découple les outils que le modèle voit de l'endroit où l'exécution a physiquement lieu.</li>\n<li><strong><code>ctx.sandbox</code>, la couture d'exécution.</strong> Les consommateurs transmettent argv ; les implémentations enveloppent l'exécution sous politique. <code>sandbox-local</code> applique sur l'hôte, <code>sandbox-policy</code> centralise les valeurs par défaut de déploiement.</li>\n<li><strong><code>ctx.subagents</code>, la couture de délégation.</strong> Six implémentations couvrant le spawn en processus, le fork, les ponts ACP, Codex, Claude Code et les agents fondés sur SDK. C'est là qu'un harness fige d'ordinaire une hypothèse ; ici c'est un échange.</li>\n</ul>\n\n<p class=\"agent-summary\">Tout levier de coût significatif dans un système d'agents est un changement de fournisseur : router vers un modèle moins cher, déplacer l'exécution vers un bac à sable moins cher, remplacer un transport de sous-agents par un transport local. Quand ce sont des coutures, le changement est une modification de configuration. Quand ce n'en sont pas, le changement est un fork que vous maintenez désormais.</p>\n\n<h2>Pourquoi c'est un sujet FinOps et pas seulement d'architecture</h2>\n<p>L'échec récurrent des programmes de coût sur les agents n'est pas que les équipes choisissent un modèle cher. C'est que le harness rend le choix cher structurel. Une fois la sélection du modèle, le lieu d'exécution des outils et le transport de délégation cuits dans le code applicatif, chaque optimisation devient un projet d'ingénierie avec son calendrier et son risque de régression. Les équipes reportent alors l'optimisation, et la dépense s'accumule.</p>\n<p>Un harness fondé sur des coutures déplace ces décisions dans la composition. Cela ne les rend pas gratuites, mais les fait passer de refactorisations à configuration, ce qui est la différence entre une initiative trimestrielle et un après-midi.</p>\n\n<h2>La réserve à énoncer clairement</h2>\n<p>DeepSeek Harness est en developer preview et son README dit, sans l'adoucir, qu'il y aura des changements cassant la compatibilité. Construire dès maintenant un outillage de coût de production directement contre ses interfaces internes revient à s'engager à leur courir après. Évaluez-le, prototypez avec, mais épinglez vos versions et attendez-vous à du mouvement.</p>",
+      "faq": [
+        {
+          "question": "Qu'est-ce que DeepSeek Harness ?",
+          "answer": "DeepSeek Harness (dsh) est un harness d'agents open source sous licence MIT de DeepSeek AI. Il repose sur le runtime de plugins Cordis, où les adaptateurs de modèle, les registres d'outils, les journaux de session et la boucle d'agent sont des plugins remplaçables plutôt qu'un noyau privilégié."
+        },
+        {
+          "question": "Qu'est-ce qu'une couture de capacité dans DeepSeek Harness ?",
+          "answer": "Une couture de capacité est une interface de service avec plus d'une implémentation. Le paquet owner déclare l'interface, les paquets fournisseurs l'implémentent et les consommateurs l'appellent sans savoir lequel est actif. ctx.llm, ctx.fs, ctx.sandbox et ctx.subagents sont des coutures."
+        },
+        {
+          "question": "Pourquoi une architecture de plugins compte-t-elle pour le coût de l'IA ?",
+          "answer": "Les leviers de coût dans un agent sont des changements de fournisseur : router vers un modèle moins cher, déplacer l'exécution vers un bac à sable moins cher ou remplacer un transport de sous-agents. Quand ce sont des coutures et non des appels figés, un changement de routage est une modification de configuration et non un fork du harness."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Où placer les garde-fous de dépense (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-getting-started",
+          "label": "Installation, profils et premier lancement (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harness：「すべてがプラグイン」が実際にもたらすもの",
+      "titleCore": "DeepSeek Harness：「すべてがプラグイン」が実際にもたらすもの",
+      "description": "DeepSeek Harnessはエージェントのあらゆる部分をCordisのプラグインにします。その差し替え可能性がモデルのルーティング、サンドボックス、コスト管理に何をもたらすかを解説します。",
+      "body": "<p>DeepSeek AI は <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a>（<code>dsh</code>）を公開しました。MIT ライセンスのエージェントハーネスで、設計上の標語は「すべてがプラグイン」です。この言い回しはエージェント関連ツールの界隈で緩く使われがちなので、ここでの意味と、どこでエージェント運用の経済性を変えるのかを正確にしておく価値があります。</p>\n\n<h2>フック付きフレームワークではなく Cordis</h2>\n<p>ハーネスは <a href=\"https://github.com/cordiverse/cordis\">Cordis</a> 上で動きます。プラグインが共有コンテキストにサービス、型付きイベント、可逆な作用を提供するというモデルのプラグインランタイムです。アーキテクチャ文書は、特権的なコアは存在しないと明言しています。モデルアダプタ、ツールレジストリ、セッションログ、そしてエージェントループ自体まですべてプラグインであり、その下に動かせないエンジンが座っていることはありません。</p>\n<p>これが重要なのは、「拡張可能」なエージェントフレームワークの通常の形が、固定されたコアにフック面を足したものだからです。観測と装飾はできても、置き換えはできません。置き換えるとはフォークすることです。Cordis はそれを反転させます。置き換えたくなる部品こそが合成の単位なのです。</p>\n\n<h2>ケイパビリティ・シーム：運用上いちばん効く部分</h2>\n<p>ハーネスはこれを<strong>ケイパビリティ・シーム</strong>（capability seam）として形式化します。シームとは実装が複数あるサービスインターフェースのことで、各サービスは三つの役割のいずれかを占めます。</p>\n<table>\n<thead><tr><th>役割</th><th>働き</th></tr></thead>\n<tbody>\n<tr><td>オーナー</td><td>サービスインターフェースを宣言するパッケージ</td></tr>\n<tr><td>実装</td><td>具体的な振る舞いを提供するパッケージ（シームには複数ある）</td></tr>\n<tr><td>コンシューマー</td><td>どの実装が動いているか知らずにサービスを呼ぶパッケージ</td></tr>\n</tbody>\n</table>\n<p>すべてのサービスがシームなわけではありません。ドキュメントは三種類を区別します。差し替え可能なシーム（<code>ctx.llm</code>、<code>ctx.subprocess</code>）、単一オーナーのコアサービス（<code>ctx.sessions</code>、<code>ctx.agents</code>）、そして他のサービスを調整する合成点（<code>ctx.agentLoop</code>）です。どれがどれかを知ることが、振る舞いを差し替えてよい場所とそうでない場所を教えてくれます。</p>\n\n<h2>コストに効く四つのシーム</h2>\n<ul>\n<li><strong><code>ctx.llm</code>：モデルのシーム。</strong> <code>llm</code> パッケージが所有し、実装には <code>llm-deepseek</code>、<code>llm-pi-ai</code>、<code>llm-replay</code> があります。エージェントループはプロバイダ中立のストリームサービスを消費し、どのバックエンドが動いているかを知りません。コスト作業で面白いのは <code>llm-replay</code> で、記録済みセッションを推論費用を再度払わずに再実行できます。</li>\n<li><strong><code>ctx.fs</code>：ファイルシステムのシーム。</strong> 実装は <code>fs-local</code>（ホストのファイルシステム）、<code>fs-sandbox</code>（変更を閉じ込める）、<code>fs-e2b</code>（リモートのサンドボックス化された Linux 環境）です。モデルから見えるツールと、実行が物理的にどこで起きるかを切り離します。</li>\n<li><strong><code>ctx.sandbox</code>：実行のシーム。</strong> コンシューマーは argv を渡し、実装がポリシー下で実行を包みます。<code>sandbox-local</code> はホスト上で強制し、<code>sandbox-policy</code> はデプロイ既定値を集中管理します。</li>\n<li><strong><code>ctx.subagents</code>：委譲のシーム。</strong> インプロセス生成、フォーク、ACP ブリッジ、Codex、Claude Code、SDK ベースのエージェントを網羅する六つの実装があります。ふつうのハーネスが前提を固定してしまう箇所が、ここでは差し替えになっています。</li>\n</ul>\n\n<p class=\"agent-summary\">エージェントシステムで意味のあるコスト削減レバーは、いずれもプロバイダの差し替えです。より安いモデルへルーティングする、より安いサンドボックスへ実行を移す、サブエージェントのトランスポートをローカルのものに置き換える。それらがシームであれば、変更は設定の編集です。シームでなければ、変更はあなたが以後保守することになるフォークです。</p>\n\n<h2>これがアーキテクチャだけでなく FinOps の問題である理由</h2>\n<p>エージェントのコスト施策で繰り返される失敗は、チームが高価なモデルを選ぶことではありません。ハーネスが高価な選択を構造にしてしまうことです。モデル選択、ツールの実行場所、委譲のトランスポートがアプリケーションコードに焼き込まれると、あらゆる最適化が独自のスケジュールとリグレッションリスクを持つエンジニアリング案件になります。結果としてチームは最適化を先送りし、支出は積み上がります。</p>\n<p>シームに基づくハーネスは、それらの判断を合成の側へ移します。無料になるわけではありませんが、リファクタリングから設定へと性質が変わります。四半期の施策と午後一回分の作業ほどの差です。</p>\n\n<h2>はっきり述べておくべき留保</h2>\n<p>DeepSeek Harness は developer preview であり、README は互換性を壊す変更があると和らげずに述べています。いま本番のコストツールを内部インターフェースに直接ぶつけて作るということは、その変化を追い続けることに同意することです。評価とプロトタイプは有益ですが、バージョンは固定し、変動を見込んでください。</p>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness とは何ですか？",
+          "answer": "DeepSeek Harness（dsh）は DeepSeek AI による MIT ライセンスのオープンソース・エージェントハーネスです。Cordis プラグインランタイム上に構築され、モデルアダプタ、ツールレジストリ、セッションログ、エージェントループが特権的なコアではなく差し替え可能なプラグインになっています。"
+        },
+        {
+          "question": "DeepSeek Harness のケイパビリティ・シームとは何ですか？",
+          "answer": "ケイパビリティ・シームとは実装が複数あるサービスインターフェースです。オーナーのパッケージがインターフェースを宣言し、プロバイダのパッケージが実装し、コンシューマーはどれが有効かを知らずに呼び出します。ctx.llm、ctx.fs、ctx.sandbox、ctx.subagents はいずれもシームです。"
+        },
+        {
+          "question": "プラグイン構造は AI コストにとってなぜ重要ですか？",
+          "answer": "エージェントにおけるコストのレバーはプロバイダの差し替えです。より安いモデルへのルーティング、より安いサンドボックスへの実行移動、サブエージェントのトランスポート交換などです。それらがハードコードされた呼び出しではなくシームであれば、ルーティング変更はハーネスのフォークではなく設定の編集で済みます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "支出ガードレールを置く場所（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-getting-started",
+          "label": "導入・プロファイル・初回実行（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "DeepSeek Harness: o que «tudo é um plugin» realmente entrega",
+      "titleCore": "DeepSeek Harness: o que «tudo é um plugin» realmente entrega",
+      "description": "O DeepSeek Harness torna cada parte de um agente um plugin do Cordis. O que essa intercambialidade significa para roteamento de modelos, sandboxing e custo.",
+      "body": "<p>A DeepSeek AI publicou o <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a> (<code>dsh</code>), um harness de agentes licenciado sob MIT cujo lema de projeto é que tudo é um plugin. Essa frase é usada com folga no ecossistema de ferramentas de agentes, então vale precisar o que ela significa aqui e onde muda a economia de operar agentes.</p>\n\n<h2>Cordis, não um framework com hooks</h2>\n<p>O harness roda sobre o <a href=\"https://github.com/cordiverse/cordis\">Cordis</a>, um runtime de plugins cujo modelo é que plugins contribuem serviços, eventos tipados e efeitos reversíveis a um contexto compartilhado. O documento de arquitetura é explícito: não há núcleo privilegiado. Adaptadores de modelo, registros de ferramentas, logs de sessão e o próprio laço do agente são todos plugins. Nada fica embaixo deles como motor imóvel.</p>\n<p>Isso importa porque a forma usual de um framework de agentes «extensível» é um núcleo fixo mais uma superfície de hooks. Você observa e decora, mas não substitui. Substituir significa bifurcar. O Cordis inverte isso: as peças que você gostaria de substituir são as unidades de composição.</p>\n\n<h2>Costuras de capacidade: a parte que importa na operação</h2>\n<p>O harness formaliza isso com o que chama de <strong>costura de capacidade</strong> (capability seam). Uma costura é uma interface de serviço com mais de uma implementação, e cada serviço ocupa um de três papéis:</p>\n<table>\n<thead><tr><th>Papel</th><th>O que faz</th></tr></thead>\n<tbody>\n<tr><td>Owner</td><td>O pacote que declara a interface do serviço</td></tr>\n<tr><td>Implementação</td><td>Um pacote que fornece comportamento concreto (costuras têm várias)</td></tr>\n<tr><td>Consumidor</td><td>Um pacote que chama o serviço, cego a qual provedor está ativo</td></tr>\n</tbody>\n</table>\n<p>Nem todo serviço é uma costura. A documentação distingue três tipos: costuras substituíveis (<code>ctx.llm</code>, <code>ctx.subprocess</code>), serviços de núcleo com owner único (<code>ctx.sessions</code>, <code>ctx.agents</code>) e pontos de composição que coordenam outros serviços (<code>ctx.agentLoop</code>). Saber qual é qual diz onde você pode substituir comportamento e onde não pode.</p>\n\n<h2>As quatro costuras com consequências de custo</h2>\n<ul>\n<li><strong><code>ctx.llm</code>, a costura do modelo.</strong> Pertence ao pacote <code>llm</code>; as implementações incluem <code>llm-deepseek</code>, <code>llm-pi-ai</code> e <code>llm-replay</code>. O laço do agente consome um serviço de stream neutro quanto ao provedor e não sabe qual backend está rodando. <code>llm-replay</code> é o interessante para trabalho de custo: permite reexecutar uma sessão gravada sem pagar inferência de novo.</li>\n<li><strong><code>ctx.fs</code>, a costura do sistema de arquivos.</strong> Os provedores são <code>fs-local</code> (sistema de arquivos do host), <code>fs-sandbox</code> (mutações confinadas) e <code>fs-e2b</code> (uma máquina Linux remota em sandbox). A costura desacopla as ferramentas que o modelo enxerga de onde a execução acontece fisicamente.</li>\n<li><strong><code>ctx.sandbox</code>, a costura de execução.</strong> Consumidores entregam argv; implementações envolvem a execução sob política. <code>sandbox-local</code> aplica no host, <code>sandbox-policy</code> centraliza padrões de implantação.</li>\n<li><strong><code>ctx.subagents</code>, a costura de delegação.</strong> Seis implementações cobrindo spawn em processo, fork, pontes ACP, Codex, Claude Code e agentes baseados em SDK. É aqui que um harness normalmente fixa uma suposição; aqui é uma troca.</li>\n</ul>\n\n<p class=\"agent-summary\">Toda alavanca de custo relevante num sistema de agentes é uma troca de provedor: rotear para um modelo mais barato, mover a execução para um sandbox mais barato, substituir um transporte de subagentes por um local. Quando isso são costuras, a mudança é uma edição de configuração. Quando não são, a mudança é uma bifurcação que você passa a manter.</p>\n\n<h2>Por que isso é assunto de FinOps e não só de arquitetura</h2>\n<p>A falha recorrente em programas de custo de agentes não é a equipe escolher um modelo caro. É o harness tornar a escolha cara estrutural. Uma vez que a seleção de modelo, o local de execução das ferramentas e o transporte de delegação estão assados no código da aplicação, cada otimização vira um projeto de engenharia com cronograma e risco de regressão próprios. As equipes então adiam a otimização, e o gasto se acumula.</p>\n<p>Um harness baseado em costuras move essas decisões para a composição. Isso não as torna gratuitas, mas as converte de refatorações em configuração, que é a diferença entre uma iniciativa trimestral e uma tarde.</p>\n\n<h2>A ressalva que vale dizer sem rodeios</h2>\n<p>O DeepSeek Harness está em developer preview e seu README diz, sem suavizar, que haverá mudanças que quebram compatibilidade. Construir agora ferramentas de custo de produção diretamente sobre suas interfaces internas significa assinar embaixo de correr atrás delas. Avalie, prototipe, mas fixe as versões e conte com movimento.</p>",
+      "faq": [
+        {
+          "question": "O que é o DeepSeek Harness?",
+          "answer": "O DeepSeek Harness (dsh) é um harness de agentes de código aberto sob licença MIT da DeepSeek AI. É construído sobre o runtime de plugins Cordis, onde adaptadores de modelo, registros de ferramentas, logs de sessão e o laço do agente são plugins substituíveis em vez de um núcleo privilegiado."
+        },
+        {
+          "question": "O que é uma costura de capacidade no DeepSeek Harness?",
+          "answer": "Uma costura de capacidade é uma interface de serviço com mais de uma implementação. O pacote owner declara a interface, pacotes provedores a implementam e consumidores a chamam sem saber qual está ativo. ctx.llm, ctx.fs, ctx.sandbox e ctx.subagents são todos costuras."
+        },
+        {
+          "question": "Por que uma arquitetura de plugins importa para o custo de IA?",
+          "answer": "As alavancas de custo num agente são trocas de provedor: rotear para um modelo mais barato, mover a execução para um sandbox mais barato ou substituir um transporte de subagentes. Quando isso são costuras e não chamadas fixas no código, uma mudança de roteamento é uma edição de configuração e não uma bifurcação do harness."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Onde colocar os limites de gasto (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-getting-started",
+          "label": "Instalação, perfis e primeira execução (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "كل شيء إضافة في DeepSeek Harness ومعمارية Cordis",
+      "titleCore": "كل شيء إضافة في DeepSeek Harness ومعمارية Cordis",
+      "description": "يحول DeepSeek Harness كل جزء في الوكيل إلى إضافة Cordis. ماذا تعني قابلية الاستبدال لتوجيه النماذج، والعزل، والتحكم في التكاليف.",
+      "body": "<p>السمة التصميمية الأبرز في DeepSeek Harness هي بناؤه بالكامل على بيئة تشغيل الإضافات <strong>Cordis</strong>. لا توجد نواة برمجية ذات امتيازات خاصة؛ فمحول النموذج إضافة، وسجل الأدوات إضافة، وسجل الجلسات إضافة، وحتى حلقة الوكيل نفسها عبارة عن إضافة قابلة للاستبدال.</p>\n\n<h2>لماذا تعد بيئة Cordis مختلفة عن أطر العمل التقليدية؟</h2>\n<p>في معظم الأنظمة، يمنحك إطار العمل نواة ثابتة مع خطافات (Hooks) للمراقبة والتزيين، ولكن استبدال المكونات الجوهرية يتطلب إنشاء تفريع كامل (Fork) من الشفرة. في Cordis، يتم قلب المعادلة: المكونات التي ترغب المؤسسة في استبدالها هي وحدات التركيب الأساسية للمنظومة.</p>\n\n<h2>أربعة مفاصل قدرة ذات أثر مالي حاسم</h2>\n<ol>\n  <li><strong>مفصل النموذج (LLM Seam):</strong> استبدال مزود النماذج أو استخدام طبقة محاكاة تعيد تشغيل جلسات سابقة دون دفع تكاليف استدلال إضافية.</li>\n  <li><strong>مفصل الأدوات (Tool Registry Seam):</strong> تخصيص كتالوج الأدوات وصلاحيات الوصول لكل وكيل بدقة لمنع الهدر في الرموز.</li>\n  <li><strong>مفصل الجلسات (Session Store Seam):</strong> ربط السجل بأنظمة التتبع المالي وقواعد بيانات المحاسبة السحابية.</li>\n  <li><strong>مفصل الحوكمة (Policy Seam):</strong> فرض قواعد التحقق والميزانية دون المساس بالمنطق التشغيلي للوكيل.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "ما هي بيئة Cordis في DeepSeek Harness؟",
+          "answer": "هي بيئة تشغيل إضافات توفر خدمات وأحداثاً مطبوعة وتأثيرات قابلة للعكس داخل سياق موحد دون وجود نواة برمجية محتكرة."
+        },
+        {
+          "question": "ما الفائدة المالية لكون محول النماذج إضافة مستقلة؟",
+          "answer": "يتيح تبديل المزودين وتطبيق التوجيه الذكي ومحاكاة الجلسات المسجلة للاختبار دون دفع تكاليف استدلال حقيقية في كل اختبار."
+        },
+        {
+          "question": "هل يمكن استبدال حلقة الوكيل بالكامل؟",
+          "answer": "نعم، لأن حلقة الوكيل عبارة عن إضافة في Cordis، يمكن للمؤسسات استبدالها بحلقة مخصصة تطبق قواعد أعمال وميزانيات محددة."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-getting-started",
+          "label": "تثبيت وتشغيل DeepSeek Harness"
+        },
+        {
+          "slug": "/ar/research/provider-prices-not-comparable",
+          "label": "مقارنة أسعار مزودي النماذج"
+        }
+      ]
+    },
+    "zh": {
+      "title": "一切皆插件：DeepSeek Harness 与 Cordis 运行时",
+      "titleCore": "一切皆插件：DeepSeek Harness 与 Cordis 运行时",
+      "description": "DeepSeek Harness 将智能体的每个部分转化为 Cordis 插件。可替换性对模型路由、沙箱隔离与成本控制的深远影响。",
+      "body": "<p>DeepSeek Harness 完全构建在 <a href=\"https://github.com/cordiverse/cordis\">Cordis</a> 插件运行时之上。核心不存在特权代码：模型适配器、工具注册表、会话日志乃至智能体主循环本身皆为可替换的插件。</p>\n<h2>四大关键能力接缝 (Capability Seams)</h2>\n<ul>\n  <li><strong>模型服务接缝 (LLM Seam):</strong> 可自由热拔插模型提供商，或接入模拟器回放已记录的会话，实现零推理费用的回归测试。</li>\n  <li><strong>工具注册接缝:</strong> 动态为不同角色加载最小化的工具集，降低输入 Token 消耗。</li>\n  <li><strong>会话持久化接缝:</strong> 将底层事件流无缝同步至企业 FinOps 监控数据库。</li>\n</ul>",
+      "faq": [
+        {
+          "question": "为什么说 Cordis 架构是 FinOps 议题？",
+          "answer": "因为它允许团队自由替换模型路由与持久化层，无需重写系统即可实施多提供商套利和会话回放节约开销。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "什么是 DeepSeek Harness？"
+        }
+      ]
+    },
+    "it": {
+      "title": "Tutto è un plugin: architettura di DeepSeek Harness",
+      "titleCore": "Tutto è un plugin: architettura di DeepSeek Harness",
+      "description": "Come il runtime Cordis rende sostituibile ogni parte dell'agente: routing del modello, sandbox e controllo dei costi.",
+      "body": "<p>L'assenza di un core privilegiato consente di sostituire adapter del modello e registri dei tool senza forkare il repository.</p>",
+      "faq": [
+        {
+          "question": "Qual è il vantaggio dell'architettura a plugin?",
+          "answer": "Consente il disaccoppiamento totale e la sostituzione di qualsiasi componente runtime."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "모든 것이 플러그인: Cordis 기반 아키텍처",
+      "titleCore": "모든 것이 플러그인: Cordis 기반 아키텍처",
+      "description": "DeepSeek Harness의 Cordis 플러그인 런타임 분석: 모델 라우팅, 샌드박싱 및 비용 최적화를 위한 컴포넌트 교체성.",
+      "body": "<p>특권화된 코어 없이 모델 어댑터, 세션 로그, 루프 자체가 독립 플러그인으로 구성되어 공급자 전환과 테스트가 용이합니다.</p>",
+      "faq": [
+        {
+          "question": "플러그인 구조가 비용에 미치는 영향은?",
+          "answer": "세션 재생 플러그인을 통해 실제 API 비용 없이 이전 세션을 재검증할 수 있습니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness 개요"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Alles is een plugin: DeepSeek Harness & Cordis",
+      "titleCore": "Alles is een plugin: DeepSeek Harness & Cordis",
+      "description": "DeepSeek Harness maakt elk onderdeel een Cordis-plugin. Voordelen voor model-routing, sandboxing en kostenbeheer.",
+      "body": "<p>Geen starre kern: model-adapters, sessielogging en de agent-loop zijn uitwisselbare plugins op de Cordis-runtime.</p>",
+      "faq": [
+        {
+          "question": "Wat maakt Cordis uniek?",
+          "answer": "Componenten kunnen zonder herstart of repository-fork worden vervangen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        }
+      ]
+    },
+    "en": {
+      "title": "DeepSeek Harness: what \"everything is a plugin\" actually buys you",
+      "titleCore": "DeepSeek Harness: what \"everything is a plugin\" actually…",
+      "description": "DeepSeek Harness makes every part of an agent a Cordis plugin. What that swappability means for model routing, sandboxing, and cost control.",
+      "body": "<p>DeepSeek AI has published <a href=\"https://github.com/deepseek-ai/deepseek-harness\">deepseek-harness</a> (<code>dsh</code>), an MIT-licensed agent harness whose design slogan is that everything is a plugin. That phrase gets used loosely across the agent tooling space, so it is worth being precise about what it means here and where it changes the economics of running agents.</p>\n\n<h2>Cordis, not a framework with hooks</h2>\n<p>The harness runs on <a href=\"https://github.com/cordiverse/cordis\">Cordis</a>, a plugin runtime whose model is that plugins contribute services, typed events, and reversible effects to a shared context. The architecture doc is explicit that there is no privileged core: model adapters, tool registries, session logs, and the agent loop itself are all plugins. Nothing sits underneath them as an immovable engine.</p>\n<p>That matters because the usual shape of an \"extensible\" agent framework is a fixed core plus a hook surface. You can observe and decorate, but you cannot replace. Replacing means forking. Cordis inverts that: the pieces you would want to replace are the units of composition.</p>\n\n<h2>Capability seams: the part that matters operationally</h2>\n<p>The harness formalises this with what it calls a <strong>capability seam</strong>. A seam is a service interface with more than one implementation, and each service occupies one of three roles:</p>\n<table>\n<thead><tr><th>Role</th><th>What it does</th></tr></thead>\n<tbody>\n<tr><td>Owner</td><td>The package that declares the service interface</td></tr>\n<tr><td>Implementation</td><td>A package providing concrete behaviour (seams have several)</td></tr>\n<tr><td>Consumer</td><td>A package calling the service, blind to which provider is live</td></tr>\n</tbody>\n</table>\n<p>Not every service is a seam. The docs distinguish three kinds: swappable seams (<code>ctx.llm</code>, <code>ctx.subprocess</code>), single-owner core services (<code>ctx.sessions</code>, <code>ctx.agents</code>), and composition points that coordinate other services (<code>ctx.agentLoop</code>). Knowing which is which tells you where you are allowed to substitute behaviour and where you are not.</p>\n\n<h2>The four seams with cost consequences</h2>\n<ul>\n<li><strong><code>ctx.llm</code> — the model seam.</strong> Owned by the <code>llm</code> package; implementations include <code>llm-deepseek</code>, <code>llm-pi-ai</code>, and <code>llm-replay</code>. The agent loop consumes a provider-neutral stream service and does not know which backend is running. <code>llm-replay</code> is the interesting one for cost work: it lets you re-run a recorded session without paying for inference again.</li>\n<li><strong><code>ctx.fs</code> — the filesystem seam.</strong> Providers are <code>fs-local</code> (host filesystem), <code>fs-sandbox</code> (confined mutations), and <code>fs-e2b</code> (a remote sandboxed Linux box). The seam decouples the tools the model can see from where execution physically happens.</li>\n<li><strong><code>ctx.sandbox</code> — the execution seam.</strong> Consumers hand over argv; implementations wrap execution under policy. <code>sandbox-local</code> enforces on the host, <code>sandbox-policy</code> centralises deployment defaults.</li>\n<li><strong><code>ctx.subagents</code> — the delegation seam.</strong> Six implementations covering in-process spawning, forking, ACP bridges, Codex, Claude Code, and SDK-based agents. This is where a harness usually hardcodes an assumption; here it is a swap.</li>\n</ul>\n\n<div class=\"callout\">Every meaningful cost lever in an agent system is a provider swap: route to a cheaper model, move execution to a cheaper sandbox, replace a subagent transport with a local one. When those are seams, the change is a config edit. When they are not, the change is a fork you now maintain.</div>\n\n<h2>Why this is a FinOps concern, not just an architecture one</h2>\n<p>The recurring failure in agent cost programmes is not that teams pick an expensive model. It is that the harness makes the expensive choice structural. Once model selection, tool execution location, and delegation transport are baked into application code, every optimisation becomes an engineering project with its own schedule and its own regression risk. Teams then defer the optimisation, and the spend compounds.</p>\n<p>A seam-based harness moves those decisions into composition. That does not make them free, but it changes them from refactors into configuration, which is the difference between a quarterly initiative and an afternoon.</p>\n\n<h2>The caveat worth stating plainly</h2>\n<p>DeepSeek Harness is in developer preview and its README says, without softening it, that there will be compatibility-breaking changes. Building production cost tooling directly against its internal interfaces right now means signing up to chase them. Evaluate it, prototype against it, but pin your versions and expect churn.</p>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — where token accounting actually lives.</li>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — the two waterfall interception points.</li>\n<li><a href=\"/research/deepseek-harness-getting-started\">DeepSeek Harness: install, profiles, and first run</a> — the practical setup path.</li>\n<li><a href=\"https://finopsllm.com/research/true-cost-coding-agents\">The true cost of coding agents</a> — the costs that sit outside the API bill.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "What is DeepSeek Harness?",
+          "answer": "DeepSeek Harness (dsh) is an MIT-licensed open-source agent harness from DeepSeek AI. It is built on the Cordis plugin runtime, where model adapters, tool registries, session logs, and the agent loop are all replaceable plugins rather than a privileged core."
+        },
+        {
+          "question": "What is a capability seam in DeepSeek Harness?",
+          "answer": "A capability seam is a service interface with more than one implementation. The owner package declares the interface, provider packages implement it, and consumers call it without knowing which provider is active. ctx.llm, ctx.fs, ctx.sandbox, and ctx.subagents are all seams."
+        },
+        {
+          "question": "Why does a plugin architecture matter for AI cost?",
+          "answer": "Cost levers in an agent are provider swaps: routing to a cheaper model, moving execution to a cheaper sandbox, or replacing a subagent transport. When those are seams rather than hardcoded calls, a routing change is a config edit instead of a fork of the harness."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-plugin-architecture"
+  }
+}

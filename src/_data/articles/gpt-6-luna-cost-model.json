@@ -1,0 +1,64 @@
+{
+  "slug": "gpt-6-luna-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "openai",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-23",
+  "dateModified": "2026-09-23",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "GPT-6 Luna cost model",
+      "titleCore": "GPT-6 Luna cost model",
+      "description": "GPT-6 Luna costs $0.10 input and $0.50 output per 1M tokens. Same benchmark score as GPT-5.6 Luna at 61% less per task, with volume math and latency caveats.",
+      "body": "<p>GPT-6 Luna is the cheap model in OpenAI's GPT-6 family, released on 22 September 2026 alongside GPT-6 Sol. OpenAI aims it at high-volume work with a clear goal: summarising, extraction and quick questions. At $0.10 per 1M input tokens it is the model to route to first, and to move off only when the task proves it needs more.</p><h2>GPT-6 Luna prices</h2><table><thead><tr><th>Tier</th><th>Input</th><th>Cached input</th><th>Output</th></tr></thead><tbody><tr><td>Standard</td><td>$0.10</td><td>$0.01</td><td>$0.50</td></tr><tr><td>Batch or flex</td><td>$0.05</td><td>$0.005</td><td>$0.25</td></tr><tr><td>Fast mode</td><td>$0.20</td><td>$0.02</td><td>$1.00</td></tr><tr><td>Long context (over 272K input)</td><td>$0.20</td><td>$0.02</td><td>$0.75</td></tr></tbody></table><p>Per 1M tokens, from <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI's pricing page</a>. A cache write costs $0.125. Luna has the same 1,050,000-token context window as the rest of GPT-6, a May 2026 knowledge cutoff (the newest of the three) and the full effort range from <code>none</code> to <code>max</code>.</p><h2>Same score as GPT-5.6 Luna, 61% cheaper per task</h2><p>Artificial Analysis ran both Luna generations through its Intelligence Index (v4.3.2) at max effort.</p><table><thead><tr><th>Model</th><th>Index score</th><th>Cost per task</th><th>Output speed</th></tr></thead><tbody><tr><td>GPT-6 Luna (max)</td><td>37</td><td>$0.07</td><td>132.2 tokens/s</td></tr><tr><td>GPT-5.6 Luna (max)</td><td>37</td><td>$0.18</td><td>142.3 tokens/s</td></tr><tr><td>GPT-6 Sol (low)</td><td>33.9</td><td>$0.13</td><td>&mdash;</td></tr></tbody></table><p>The score did not move. The cost per task fell 61%, mostly from the lower per-token price. GPT-6 Luna at max also beats GPT-6 Sol at low effort on both score and cost. If you were running Sol at low effort to save money, Luna at max is the better deal on this index.</p><h2>What high volume costs</h2><p>One million classification requests a month, each with 600 input tokens and 100 output tokens, no caching:</p><table><thead><tr><th>Model</th><th>Monthly cost</th></tr></thead><tbody><tr><td>GPT-6 Luna, batch</td><td>$55</td></tr><tr><td>GPT-6 Luna</td><td>$110</td></tr><tr><td>GPT-5.6 Luna</td><td>$240</td></tr><tr><td>Claude Haiku 4.5</td><td>$1,100</td></tr><tr><td>GPT-6 Sol</td><td>$2,200</td></tr><tr><td>GPT-6 Astra</td><td>$11,000</td></tr></tbody></table><p>Claude Haiku 4.5 costs 10&times; more per token and scored 15 on the same index, as a non-reasoning model. Moving the same work from Sol to Luna cuts the bill by 95%, which is why a router that sends only the hard cases to Sol is worth building.</p><h2>The catch: latency and verbosity</h2><p>The index numbers above are at max effort, and at max effort Luna is slow to start. Artificial Analysis measured 104 seconds to first token. It also used 150M output tokens across the index, against a median of 84M, which Artificial Analysis describes as somewhat verbose. That verbosity is already inside the $0.07 per task, so the cost figure holds, but the wait does not suit a user-facing chat.</p><p>For interactive traffic, run Luna at <code>none</code>, <code>low</code> or the default <code>medium</code> and measure accuracy on your own prompts. The scores on this page are for max effort only, so accuracy at lower settings is something you have to test, not look up. Keep max effort for batch jobs, where latency does not matter and batch pricing halves the bill again.</p><h2>Rate limits scale further than Sol</h2><p>Luna starts at 500K tokens per minute on Tier 1, the same as Sol, but reaches 180M tokens per minute at Tier 5 (Sol stops at 40M), with up to 30,000 requests per minute. For bulk pipelines, that headroom matters as much as the price.</p><h2>How to use Luna</h2><ul><li>Route by task type: extraction, classification, tagging and short summaries go to Luna by default.</li><li>Send non-urgent volume through the Batch API at $0.05/$0.25.</li><li>Pick effort per route: low for interactive, max for offline jobs.</li><li>Escalate to <a href=\"/research/gpt-6-sol-cost-model\">GPT-6 Sol</a> when a validator rejects Luna's output, not up front.</li></ul><p>Sources: <a href=\"https://developers.openai.com/api/docs/models/gpt-6-luna\">OpenAI GPT-6 Luna model page</a>, <a href=\"https://artificialanalysis.ai/models/gpt-6-luna\">Artificial Analysis: GPT-6 Luna</a>, <a href=\"https://artificialanalysis.ai/models/gpt-5-6-luna\">Artificial Analysis: GPT-5.6 Luna</a>, <a href=\"https://techcrunch.com/2026/09/22/openai-launches-gpt-6-sol-and-luna/\">TechCrunch</a>. Prices read 23 September 2026.</p>",
+      "faq": [
+        {
+          "question": "How much does GPT-6 Luna cost?",
+          "answer": "$0.10 per 1M input tokens, $0.01 per 1M cached input tokens and $0.50 per 1M output tokens. Batch and flex are half that: $0.05 and $0.25."
+        },
+        {
+          "question": "Is GPT-6 Luna better than GPT-5.6 Luna?",
+          "answer": "On the Artificial Analysis Intelligence Index both score 37 at max effort, but GPT-6 Luna costs $0.07 per task against $0.18, which is 61% less."
+        },
+        {
+          "question": "Is GPT-6 Luna cheaper than Claude Haiku 4.5?",
+          "answer": "Yes. Haiku 4.5 costs $1/$5 per 1M tokens, ten times Luna's $0.10/$0.50. One million requests of 600 input and 100 output tokens cost $110 on Luna and $1,100 on Haiku 4.5."
+        },
+        {
+          "question": "Why is GPT-6 Luna slow?",
+          "answer": "At max reasoning effort Artificial Analysis measured about 104 seconds to first token. Lower effort settings respond faster; use them for interactive traffic."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing: Astra, Sol and Luna"
+        },
+        {
+          "slug": "/research/gpt-6-sol-cost-model",
+          "label": "GPT-6 Sol cost model"
+        },
+        {
+          "slug": "/research/gpt-6-astra-cost-model",
+          "label": "GPT-6 Astra cost model"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Reasoning model cost guide"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-api-pricing-tracker",
+          "label": "LLM API pricing tracker"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/gpt-6-luna-cost-model"
+  }
+}

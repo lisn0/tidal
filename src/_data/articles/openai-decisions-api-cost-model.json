@@ -1,0 +1,58 @@
+{
+  "slug": "openai-decisions-api-cost-model",
+  "tags": [
+    "openai",
+    "api-pricing",
+    "cost-optimization",
+    "classification",
+    "decisions-api"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "OpenAI Decisions API cost model: input-only pricing and…",
+      "titleCore": "OpenAI Decisions API cost model: input-only pricing and…",
+      "description": "How the October 2026 OpenAI Decisions API bills, where its typed answers fit, and how to compare it with Responses API workflows.",
+      "body": "<p class=\"lede\">OpenAI’s Decisions API is a beta endpoint for turning shared text or image evidence into typed classifications, choices, or scores. With GPT-6 Luna, it charges $0.10 per million input tokens and no cache or output tokens. Treat its “10x faster” claim as a latency signal, then test quality and total task cost on your own workload.</p>\n<h2>What did OpenAI release on October 6, 2026?</h2>\n<p>OpenAI added the Decisions API in public beta on October 6, 2026. The dedicated <a href=\"https://developers.openai.com/api/docs/guides/decisions\">Decisions guide</a> says it returns typed answers about 10 times faster than the Responses API. At launch, GPT-6 Luna is the only supported model and requests use <code>POST /v1/decisions</code>. The speed comparison is OpenAI’s published claim, not a promise that every application will see the same end-to-end improvement.</p>\n<p>A request carries one shared input and one or more questions. Each question can ask for a predicate (a probability that a condition is true), a choice from a supplied set, or a score against ordered levels. The endpoint returns those answers in typed form, with probabilities or confidence information. That makes it suited to bounded decisions such as routing a support ticket, flagging likely damage in a product photo, or scoring issue severity.</p>\n<h2>How does Decisions API billing work?</h2>\n<p>For the Decisions endpoint, OpenAI lists $0.10 per million input tokens with GPT-6 Luna. The guide says only input tokens are charged: cache-read, cache-write, and output-token charges do not apply. This differs from an ordinary GPT-6 Luna Responses request, where the standard short-context rates are $0.10 per million uncached input tokens, $0.01 cached input, $0.125 cache writes, and $0.50 output tokens. Use the dedicated Decisions pricing terms for this endpoint, not the full model rate card.</p>\n<p>Here is a hypothetical estimate, before any applicable regional or long-context adjustment: if an average request uses 1,200 input tokens, its token charge is 1,200 ÷ 1,000,000 × $0.10 = $0.00012. One million such requests would use 1.2 billion input tokens and cost about $120. This is a planning example, not a quote; measure real token usage and confirm the live rate before setting a budget.</p>\n<p>Because output tokens are not a billed category here, count the complete input carefully: evidence, system context included in the request, and every question’s instructions and choices. Ask independent questions about the same input in a single request where that makes sense. OpenAI documents that independent questions can share evidence; questions that depend on earlier answers should be sent in separate calls. Keep questions short and observable so the request does not spend tokens on ambiguous rubrics.</p>\n<h2>When should a team use Decisions instead of Responses?</h2>\n<p>Use Decisions when the result is inherently bounded: “Is this image visibly damaged?”, “Which of these three queues owns this ticket?”, or “How severe is this incident against these explicit levels?” It returns an answer the application can route or tally without asking a general-purpose model to write a paragraph and then parsing that prose.</p>\n<p>Keep Responses for tasks that need explanation, arbitrary JSON schemas, generated text, tool calls, or a decision that requires a conversation with the model. OpenAI’s guide explicitly directs developers to <a href=\"https://developers.openai.com/api/docs/guides/structured-outputs\">Structured Outputs</a> when they need a custom JSON object and to function calling when the model should request a tool call. A typed choice is not a substitute for a reasoned explanation or an executable action.</p>\n<p>The right comparison is cost per correct business outcome, not tokens or latency in isolation. A quick classifier that creates costly false positives can increase review labor. A low-price endpoint can still lose if teams compensate with repeated prompts, manual review, or downstream correction. Track the Decision response’s usage and answer fields, sample outcomes against labeled examples, and include human review and downstream handling in the cost per successfully routed case.</p>\n<h2>How can FinOps validate the savings claim?</h2>\n<ol><li><strong>Choose one bounded workload.</strong> Pick a high-volume classification or scoring step with a clear answer set and a measurable error cost.</li><li><strong>Build a labeled test set.</strong> Measure accuracy by category and inspect confidence or probability calibration. Set human-review thresholds from the cost of false positives and false negatives, as OpenAI recommends.</li><li><strong>Run a comparable pilot.</strong> Compare the current production path and Decisions on equivalent inputs. Record endpoint latency, tokens, retries, review rate, and the cost of corrected errors.</li><li><strong>Budget the full route.</strong> Add storage, application compute, reviewer time, and any later Responses or tool calls. Decisions token pricing does not make the rest of the workflow free.</li><li><strong>Keep an exit path.</strong> The endpoint is in public beta. Pin the endpoint and model in configuration, watch the changelog, and retest before broad rollout as behavior or availability changes.</li></ol>\n<p>OpenAI documents support for Zero Data Retention and HIPAA use for eligible customers, plus US and Europe (EEA and Switzerland) residency options with eligibility and agreement requirements. Confirm those controls against your organization’s actual configuration before putting regulated data into a pilot.</p>\n<h2>What should a buyer remember about Decisions API pricing?</h2>\n<p>The Decisions API offers a new price-and-latency shape for compact, typed decisions: at the published GPT-6 Luna rate, input is priced at $0.10 per million tokens and generated output tokens carry no charge. Its best candidate workloads have reusable evidence, clear answer types, and low-cost ways to catch uncertain results. Measure task quality and total operating cost before shifting production volume.</p>\n<h2>Which related research should teams read?</h2><ul><li><a href=\"/research/structured-output-token-cost\">Structured output is not free</a></li><li><a href=\"/research/cost-per-successful-task\">Cost per successful task beats cost per request</a></li><li><a href=\"/research/model-price-cuts-routing-budget\">Model price cuts do not lower your AI bill automatically</a></li></ul>",
+      "faq": [
+        {
+          "question": "How much does the OpenAI Decisions API cost?",
+          "answer": "The OpenAI guide lists $0.10 per million input tokens for GPT-6 Luna on /v1/decisions. It says there are no cache-read, cache-write, or output-token charges; regional and long-context adjustments can apply."
+        },
+        {
+          "question": "Is Decisions API 10 times faster than GPT-6 Luna?",
+          "answer": "OpenAI describes Decisions as returning typed answers about 10 times faster than the Responses API. Validate end-to-end latency on your own application and data."
+        },
+        {
+          "question": "Can Decisions replace the Responses API?",
+          "answer": "Only for bounded predicates, choices, and rubric scores. Use Responses for custom JSON schemas, generated explanations, tool calls, or open-ended interaction."
+        },
+        {
+          "question": "Is the Decisions API generally available?",
+          "answer": "No. As of October 7, 2026, OpenAI labels it public beta and says GPT-6 Luna is its only supported model."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/structured-output-token-cost",
+          "label": "Structured output is not free"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        },
+        {
+          "slug": "/research/model-price-cuts-routing-budget",
+          "label": "Model price cuts and routing budgets"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-decisions-api-cost-model"
+  }
+}

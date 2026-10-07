@@ -1,0 +1,143 @@
+{
+  "slug": "add-provenance-to-your-ai-output",
+  "tags": [
+    "finops",
+    "observability",
+    "architecture",
+    "guardrails"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Add provenance to your AI output",
+      "titleCore": "Add provenance to your AI output",
+      "description": "You cannot add the model's watermark yourself. You can add the record that answers the same question, using telemetry you are probably already collecting.",
+      "body": "<p>Start with the thing you cannot do. The text watermark is applied by the model provider during generation; there is no parameter that turns it on, off, or up, and you cannot add it to text after the fact. C2PA signing likewise happens at generation for files the provider produces. If you want a stronger signal than what arrives, the answer is not to add marking &mdash; it is to add a record.</p><p>That record is cheap, it is entirely under your control, and it is the thing that actually gets produced when someone asks you to prove where an output came from. Most teams can build it in a day, because it is one join away from telemetry they already collect for cost attribution.</p><h2>The four fields</h2><p>For every generated artefact, log: the exact <strong>model ID and version</strong>, the <strong>region</strong> it ran in, the <strong>timestamp</strong>, and a stable <strong>artefact ID</strong> that follows the output through your pipeline. That last one is the field teams skip and later wish they had.</p><p>If you already emit per-request usage records for cost attribution, three of the four are in there. What is usually missing is the join: your cost telemetry knows a request happened and what it cost, but not which stored artefact it produced. Adding the artefact ID to the usage record turns two systems into one query.</p><h2>Keep the signed manifest when you control the pipeline</h2><p>Where the provider hands you a C2PA-signed file, the goal is simple: do not lose it. Configure image transforms to preserve metadata explicitly rather than trusting defaults, and re-attach provenance after any re-encode you control. Test the whole path from generation to delivery, not the model output alone.</p><p>For files you produce yourself &mdash; a chart your service renders, an image you compose from generated parts &mdash; you can sign your own C2PA manifest asserting what you did. That is a real option and a genuine improvement in traceability, but it is a project rather than an afternoon, and it is worth doing only after the logging above exists.</p><h2>Mark it for humans too</h2><p>Machine-readable marking and user-visible disclosure are different obligations solving different problems. A visible &quot;generated with AI&quot; label costs nothing to add, is not affected by any pipeline transform, and is what a user actually reads. It is not a substitute for machine-readable marking, and machine-readable marking is not a substitute for it.</p><h2>What it costs to run</h2><p>Four small fields per generated artefact, retained for as long as your compliance window requires. On any realistic volume this is a rounding error against the inference bill itself &mdash; and unlike the inference, it is the part you will be asked to produce. Set the retention period deliberately: too short and the record is gone before the question arrives; unbounded and you are paying storage forever for no reason.</p><p>The sequence that works: add the artefact ID to your existing usage telemetry, verify metadata survives one real image path end to end, add the visible label, then decide whether signing your own manifests is worth it. Only the last step is a project.</p><h2>Related</h2><ul><li><a href=\"/research/how-ai-watermarks-get-destroyed\">How AI watermarks get destroyed</a></li><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"https://finopsllm.com/research/ai-observability\">AI observability</a></li></ul>",
+      "faq": [
+        {
+          "question": "Can I add the AI watermark to text myself?",
+          "answer": "No. The text watermark is applied by the model provider during token generation and cannot be added afterwards, nor turned on or off by a parameter. What you can add is a provenance record: model ID, version, region, timestamp and artefact ID."
+        },
+        {
+          "question": "What is the minimum viable provenance record?",
+          "answer": "Four fields per generated artefact — exact model ID and version, region, timestamp, and a stable artefact ID that follows the output through your pipeline. If you already log usage for cost attribution, the artefact ID is usually the only missing field."
+        },
+        {
+          "question": "Should I sign my own C2PA manifests?",
+          "answer": "It is a real improvement for files you produce yourself, but it is a project rather than an afternoon. Do it after you have the provenance log and have confirmed your image pipeline preserves the manifests you already receive."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/how-ai-watermarks-get-destroyed",
+          "label": "How AI watermarks get destroyed"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "AI observability"
+        }
+      ]
+    },
+    "es": {
+      "title": "Añadir procedencia a la salida de IA",
+      "titleCore": "Añadir procedencia a la salida de IA",
+      "description": "No puedes añadir tú la marca de agua del modelo. Sí puedes añadir el registro que responde a la misma pregunta, con telemetría que ya recoges.",
+      "body": "<p>Empecemos por lo que no puedes hacer. La marca de agua del texto la aplica el proveedor durante la generación: no hay parámetro que la active o desactive, y no se puede añadir después. Si quieres una señal más fuerte, la respuesta no es añadir marcado, sino añadir un registro.</p><p>Ese registro es barato, está bajo tu control y es lo que realmente se entrega cuando alguien te pide demostrar de dónde salió una salida. La mayoría de los equipos lo construyen en un día, porque está a un JOIN de la telemetría que ya recogen para atribuir costes.</p><h2>Los cuatro campos</h2><p>Para cada artefacto generado registra el <strong>identificador y versión exactos del modelo</strong>, la <strong>región</strong>, la <strong>marca temporal</strong> y un <strong>identificador de artefacto</strong> estable que siga a la salida por toda la canalización. Ese último es el que todos omiten y luego echan de menos.</p><p>Si ya emites registros de uso por petición, tres de los cuatro están ahí. Lo que falta suele ser el JOIN: tu telemetría de coste sabe que hubo una petición y cuánto costó, pero no qué artefacto almacenado produjo.</p><h2>Conserva el manifiesto firmado</h2><p>Cuando el proveedor te entrega un archivo firmado con C2PA, el objetivo es simple: no perderlo. Configura las transformaciones de imagen para preservar metadatos de forma explícita en vez de confiar en los valores por defecto, y vuelve a adjuntar la procedencia tras cualquier recodificación que controles.</p><h2>Márcalo también para las personas</h2><p>El marcado legible por máquina y el aviso visible resuelven problemas distintos. Una etiqueta &quot;generado con IA&quot; no cuesta nada, ninguna transformación la afecta y es lo que el usuario lee de verdad. No sustituye al marcado automático, ni al revés.</p>",
+      "faq": [
+        {
+          "question": "¿Puedo añadir yo la marca de agua al texto?",
+          "answer": "No. La aplica el proveedor durante la generación y no puede añadirse después. Lo que sí puedes añadir es un registro de procedencia: identificador y versión del modelo, región, marca temporal e identificador de artefacto."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/how-ai-watermarks-get-destroyed",
+          "label": "Cómo se destruyen las marcas de agua"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ajouter la provenance à vos sorties IA",
+      "titleCore": "Ajouter la provenance à vos sorties IA",
+      "description": "Vous ne pouvez pas ajouter le filigrane du modèle. Vous pouvez ajouter l’enregistrement qui répond à la même question, avec votre télémétrie actuelle.",
+      "body": "<p>Commençons par ce que vous ne pouvez pas faire. Le filigrane textuel est appliqué par le fournisseur pendant la génération : aucun paramètre ne l’active ou le désactive, et on ne peut pas l’ajouter après coup. Si vous voulez un signal plus fort, la réponse n’est pas d’ajouter du marquage, mais d’ajouter un enregistrement.</p><p>Cet enregistrement est peu coûteux, entièrement sous votre contrôle, et c’est lui qu’on produit réellement quand on vous demande de prouver l’origine d’une sortie. La plupart des équipes le construisent en une journée, car il est à une jointure de la télémétrie déjà collectée pour l’attribution des coûts.</p><h2>Les quatre champs</h2><p>Pour chaque artefact généré, journalisez l’<strong>identifiant et la version exacts du modèle</strong>, la <strong>région</strong>, l’<strong>horodatage</strong> et un <strong>identifiant d’artefact</strong> stable qui suit la sortie dans toute la chaîne. C’est ce dernier que les équipes omettent et regrettent ensuite.</p><p>Si vous émettez déjà des enregistrements d’usage par requête, trois des quatre y sont. Ce qui manque, c’est la jointure : votre télémétrie de coût sait qu’une requête a eu lieu et ce qu’elle a coûté, mais pas quel artefact elle a produit.</p><h2>Conservez le manifeste signé</h2><p>Quand le fournisseur vous remet un fichier signé C2PA, l’objectif est simple : ne pas le perdre. Configurez explicitement vos transformations d’images pour préserver les métadonnées, et ré-attachez la provenance après tout ré-encodage que vous maîtrisez.</p><h2>Marquez aussi pour les humains</h2><p>Marquage lisible par machine et mention visible répondent à des problèmes différents. Une étiquette « généré avec de l’IA » ne coûte rien, n’est affectée par aucune transformation, et c’est ce que l’utilisateur lit réellement. L’un ne remplace pas l’autre.</p>",
+      "faq": [
+        {
+          "question": "Puis-je ajouter moi-même le filigrane au texte?",
+          "answer": "Non. Il est appliqué par le fournisseur pendant la génération et ne peut pas être ajouté après coup. Ce que vous pouvez ajouter, c’est un enregistrement de provenance : identifiant et version du modèle, région, horodatage et identifiant d’artefact."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/how-ai-watermarks-get-destroyed",
+          "label": "Comment les filigranes IA disparaissent"
+        }
+      ]
+    },
+    "de": {
+      "title": "Provenienz zu KI-Ausgaben hinzufügen",
+      "titleCore": "Provenienz zu KI-Ausgaben hinzufügen",
+      "description": "Das Wasserzeichen des Modells können Sie nicht selbst setzen. Den Nachweis, der dieselbe Frage beantwortet, schon — aus vorhandener Telemetrie.",
+      "body": "<p>Beginnen wir mit dem, was nicht geht. Das Textwasserzeichen setzt der Anbieter während der Generierung; es gibt keinen Parameter dafür, und nachträglich lässt es sich nicht anbringen. Wer ein stärkeres Signal will, fügt kein Marking hinzu, sondern einen Nachweis.</p><p>Dieser Nachweis ist günstig, vollständig in Ihrer Hand und genau das, was tatsächlich vorgelegt wird, wenn jemand die Herkunft einer Ausgabe belegt haben will. Die meisten Teams bauen ihn an einem Tag, denn er liegt einen Join von der Telemetrie entfernt, die ohnehin für die Kostenzuordnung erhoben wird.</p><h2>Die vier Felder</h2><p>Protokollieren Sie je erzeugtem Artefakt die <strong>exakte Modell-ID und Version</strong>, die <strong>Region</strong>, den <strong>Zeitstempel</strong> und eine stabile <strong>Artefakt-ID</strong>, die der Ausgabe durch die gesamte Pipeline folgt. Letztere lassen Teams weg und vermissen sie später.</p><p>Wer bereits Nutzungsdatensätze pro Anfrage schreibt, hat drei der vier Felder. Es fehlt der Join: Die Kostentelemetrie kennt die Anfrage und ihren Preis, aber nicht das gespeicherte Artefakt, das dabei entstand.</p><h2>Bewahren Sie das signierte Manifest</h2><p>Wo der Anbieter eine C2PA-signierte Datei liefert, lautet das Ziel schlicht: nicht verlieren. Konfigurieren Sie Bildtransformationen ausdrücklich auf Metadatenerhalt, statt Standardwerten zu vertrauen, und hängen Sie die Provenienz nach jedem selbst kontrollierten Re-Encoding wieder an.</p><h2>Kennzeichnen Sie auch für Menschen</h2><p>Maschinenlesbares Marking und sichtbarer Hinweis lösen verschiedene Probleme. Ein sichtbares &quot;mit KI erzeugt&quot; kostet nichts, überlebt jede Transformation und ist das, was Nutzer tatsächlich lesen. Keines ersetzt das andere.</p>",
+      "faq": [
+        {
+          "question": "Kann ich das Wasserzeichen selbst in Text einfügen?",
+          "answer": "Nein. Es wird vom Anbieter während der Generierung gesetzt und lässt sich nicht nachträglich anbringen. Hinzufügen können Sie einen Provenienznachweis: Modell-ID und Version, Region, Zeitstempel und Artefakt-ID."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/how-ai-watermarks-get-destroyed",
+          "label": "Wie KI-Wasserzeichen zerstört werden"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Adicionar proveniência à saída de IA",
+      "titleCore": "Adicionar proveniência à saída de IA",
+      "description": "Não pode adicionar a marca de água do modelo. Pode adicionar o registo que responde à mesma pergunta, com telemetria que já recolhe.",
+      "body": "<p>Comecemos pelo que não é possível. A marca de água no texto é aplicada pelo fornecedor durante a geração: não há parâmetro que a ligue ou desligue, e não pode ser acrescentada depois. Se quer um sinal mais forte, a resposta não é acrescentar marcação, é acrescentar um registo.</p><p>Esse registo é barato, está inteiramente sob o seu controlo e é o que de facto se apresenta quando alguém lhe pede para provar a origem de uma saída. A maioria das equipas constrói-o num dia, porque está a um join da telemetria que já recolhem para atribuição de custos.</p><h2>Os quatro campos</h2><p>Para cada artefacto gerado, registe o <strong>identificador e versão exactos do modelo</strong>, a <strong>região</strong>, a <strong>data e hora</strong> e um <strong>identificador de artefacto</strong> estável que acompanhe a saída por todo o pipeline. É este último que as equipas omitem e mais tarde lamentam.</p><p>Se já emite registos de utilização por pedido, três dos quatro já lá estão. O que falta é o join: a telemetria de custo sabe que houve um pedido e quanto custou, mas não que artefacto guardado produziu.</p><h2>Preserve o manifesto assinado</h2><p>Quando o fornecedor entrega um ficheiro assinado com C2PA, o objetivo é simples: não o perder. Configure as transformações de imagem para preservar metadados de forma explícita em vez de confiar nas omissões, e volte a anexar a proveniência após qualquer recodificação que controle.</p><h2>Marque também para pessoas</h2><p>A marcação legível por máquina e o aviso visível resolvem problemas diferentes. Uma etiqueta &quot;gerado com IA&quot; não custa nada, nenhuma transformação a afeta e é o que o utilizador realmente lê. Nenhuma substitui a outra.</p>",
+      "faq": [
+        {
+          "question": "Posso adicionar eu a marca de água ao texto?",
+          "answer": "Não. É aplicada pelo fornecedor durante a geração e não pode ser acrescentada depois. O que pode adicionar é um registo de proveniência: identificador e versão do modelo, região, data e hora, e identificador de artefacto."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/how-ai-watermarks-get-destroyed",
+          "label": "Como as marcas de água são destruídas"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AI 出力への来歴の付与",
+      "titleCore": "AI 出力への来歴の付与",
+      "description": "モデルの透かしを自分で付けることはできません。同じ問いに答える記録なら、いま集めているテレメトリーで足ります。",
+      "body": "<p>まず、できないことから始めます。テキストの電子透かしは生成時にモデル提供者が付与するもので、有効化するパラメータは存在せず、後から追加することもできません。より強い証跡が欲しいなら、答えは「マーキングを足す」ことではなく「記録を足す」ことです。</p><p>その記録は安価で、完全に自社の管理下にあり、出力の出所を証明せよと言われたときに実際に提出されるものです。多くのチームは 1 日で構築できます。すでにコスト按分のために集めているテレメトリーから、結合ひとつ分の距離しかないからです。</p><h2>4 つのフィールド</h2><p>生成物ごとに、<strong>正確なモデル ID とバージョン</strong>、<strong>リージョン</strong>、<strong>タイムスタンプ</strong>、そしてパイプライン全体で出力を追跡できる安定した<strong>成果物 ID</strong> を記録してください。最後のひとつが、たいてい省略され、後で必要になるフィールドです。</p><p>リクエスト単位の利用記録をすでに出力しているなら、4 つのうち 3 つは揃っています。欠けているのは結合です。コストのテレメトリーはリクエストの発生と金額を知っていますが、それがどの保存済み成果物を生んだかは知りません。</p><h2>署名済みマニフェストを失わない</h2><p>提供者から C2PA 署名済みファイルを受け取る場合、目的は単純です。失わないこと。画像変換は既定値に任せず、メタデータを保持するよう明示的に設定し、自社で制御する再エンコードの後には来歴を付け直してください。</p><h2>人間向けの表示も忘れずに</h2><p>機械可読なマーキングと、利用者に見える開示は別の問題を解いています。「AI で生成」という可視ラベルは追加コストがゼロで、どの変換にも壊されず、利用者が実際に読むものです。どちらも他方の代替にはなりません。</p>",
+      "faq": [
+        {
+          "question": "テキストの電子透かしを自分で付けられますか？",
+          "answer": "できません。生成時にモデル提供者が付与するもので、後から追加することはできません。追加できるのは来歴の記録です。モデル ID とバージョン、リージョン、タイムスタンプ、成果物 ID の 4 点です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/how-ai-watermarks-get-destroyed",
+          "label": "AI 電子透かしが壊れる仕組み"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/add-provenance-to-your-ai-output"
+  }
+}

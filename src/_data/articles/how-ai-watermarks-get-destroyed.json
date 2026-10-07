@@ -1,0 +1,143 @@
+{
+  "slug": "how-ai-watermarks-get-destroyed",
+  "tags": [
+    "finops",
+    "observability",
+    "reliability",
+    "incident-response"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "How AI watermarks get destroyed",
+      "titleCore": "How AI watermarks get destroyed",
+      "description": "Nobody strips provenance on purpose. Thumbnailers, translation steps and summarisation chains do it by default, and you find out during the audit.",
+      "body": "<p>The interesting question about AI watermarking is not how to defeat it. It is why so much production output arrives at the end of the pipeline with no provenance left, when nobody involved intended to remove anything. Provenance is not usually attacked. It is optimised away, by systems doing exactly what they were built to do.</p><p>There are two independent failure modes, because there are two independent mechanisms. Image provenance dies by deletion. Text provenance dies by dilution. Both are silent.</p><h2>Deletion: the metadata your pipeline throws away</h2><p>C2PA provenance lives in the file's metadata. Every one of these will discard it unless configured otherwise, and most are configured for bytes rather than evidence:</p><table><thead><tr><th>Stage</th><th>Why it strips</th></tr></thead><tbody><tr><td>Thumbnail and resize jobs</td><td>Re-encodes pixels, drops non-image chunks</td></tr><tr><td>CDN image transforms</td><td>Optimises for delivery size by default</td></tr><tr><td>Format conversion (to WebP/AVIF)</td><td>Metadata often not carried across containers</td></tr><tr><td>Social and CMS uploads</td><td>Third-party platforms normalise and re-encode</td></tr><tr><td>Screenshotting a generated image</td><td>Produces an entirely new file</td></tr></tbody></table><p>The pattern is consistent: anything that re-encodes the image produces a new file, and a new file has no signed manifest unless something deliberately re-attaches one. A single automatic transform between generation and delivery is enough.</p><h2>Dilution: the text steps that erode the signal</h2><p>The text watermark is statistical, so it does not vanish in one step &mdash; it weakens. Each of these reduces detection confidence, and they compound:</p><p>Translation, which re-generates every token in another language. Paraphrasing and &quot;rewrite in our tone&quot; passes. Summarisation, which discards most of the tokens carrying the signal. Passing output through a second model, after which the text is attributable to the last model at best. Heavy human editing. And simple brevity: a two-sentence output never carried much signal to begin with.</p><p>Note that a normal, well-built product does several of these. A pipeline that generates with one model, rewrites for tone with another, translates into five languages, and truncates to a summary card has not done anything wrong. It has also, without a line of code intended for the purpose, produced output no detector will confidently attribute.</p><h2>Why this costs money</h2><p>The bill arrives at the moment you are asked to demonstrate provenance and cannot. Under Article 50, the obligation is to mark generated content; if your delivery path destroys the marking, the obligation is unmet regardless of the model's behaviour at generation time. Remediation is then a pipeline retrofit under deadline, which is the most expensive form of engineering there is.</p><p>The cheaper version is a single test, today: generate one image and one long text through your real production path, and check what survives at the far end. That is an afternoon, and it either confirms your pipeline is clean or finds the exact stage that is not.</p><h2>What to do about it</h2><p>Preserve metadata explicitly in image transforms rather than relying on defaults, and re-attach provenance after any re-encode you control. Where the marking cannot survive &mdash; a third-party platform, a summarisation step you need &mdash; carry the evidence in your own telemetry instead: model ID, version, region and timestamp, joined to the artefact ID. That log is not a substitute for marking, but it is the record that answers the question when the marking is gone.</p><p>And treat the detection result as evidence, not proof. It is a confidence level over a statistical signal; short or heavily processed text will read as inconclusive even when it was genuinely generated. Systems that treat a low-confidence result as a verdict will be wrong in both directions.</p><h2>Related</h2><ul><li><a href=\"/research/how-ai-watermarking-works\">How AI watermarking works</a></li><li><a href=\"/research/ai-watermarking-compliance-cost\">What AI watermarking actually costs</a></li><li><a href=\"https://finopsllm.com/research/ai-observability\">AI observability</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why does my image lose its C2PA provenance?",
+          "answer": "Any stage that re-encodes the image produces a new file without the signed manifest. Thumbnailers, CDN transforms, WebP/AVIF conversion and third-party uploads all strip metadata by default to save bytes."
+        },
+        {
+          "question": "Does translating or summarising AI text remove the watermark?",
+          "answer": "It weakens it rather than removing it. The signal is statistical and accumulates across tokens, so translation, paraphrasing, summarisation and second-model passes each reduce detection confidence, and their effects compound."
+        },
+        {
+          "question": "What should I do if my pipeline cannot preserve the marking?",
+          "answer": "Carry the evidence in your own telemetry: model ID, version, region and timestamp joined to the artefact ID. It does not replace machine-readable marking, but it is the record that answers a provenance question when the marking is gone."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/how-ai-watermarking-works",
+          "label": "How AI watermarking works"
+        },
+        {
+          "slug": "/research/ai-watermarking-compliance-cost",
+          "label": "What AI watermarking actually costs"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-observability",
+          "label": "AI observability"
+        }
+      ]
+    },
+    "es": {
+      "title": "Cómo se destruyen las marcas de agua",
+      "titleCore": "Cómo se destruyen las marcas de agua",
+      "description": "Nadie elimina la procedencia a propósito. Los miniaturizadores, las traducciones y los resúmenes lo hacen por defecto, y te enteras en la auditoría.",
+      "body": "<p>La pregunta interesante sobre la marca de agua no es cómo burlarla, sino por qué tanto contenido de producción llega al final de la canalización sin procedencia, sin que nadie quisiera eliminar nada. La procedencia rara vez se ataca: se optimiza hasta desaparecer, con sistemas que hacen exactamente aquello para lo que se construyeron.</p><p>Hay dos fallos independientes porque hay dos mecanismos. La procedencia de imagen muere por borrado; la de texto, por dilución. Ambos son silenciosos.</p><h2>Borrado: los metadatos que tira tu canalización</h2><p>Los metadatos C2PA viven en el archivo. Los miniaturizadores, las transformaciones del CDN, la conversión a WebP o AVIF, las subidas a plataformas de terceros y cualquier captura de pantalla los descartan salvo configuración expresa. El patrón es constante: todo lo que vuelve a codificar la imagen produce un archivo nuevo, y un archivo nuevo no tiene manifiesto firmado. Basta una transformación automática entre la generación y la entrega.</p><h2>Dilución: los pasos de texto que erosionan la señal</h2><p>La marca de texto es estadística, así que no desaparece de golpe: se debilita. Traducir regenera cada token en otro idioma. Parafrasear y &quot;reescribir en nuestro tono&quot; degrada. Resumir descarta la mayoría de los tokens que llevaban la señal. Pasar la salida por un segundo modelo la atribuye, como mucho, al último. Y una salida de dos frases nunca llevó mucha señal.</p><p>Fíjate en que un producto bien construido hace varias de esas cosas. Generar con un modelo, reescribir el tono con otro, traducir a cinco idiomas y truncar a una tarjeta resumen no es hacer nada mal &mdash; y aun así produce contenido que ningún detector atribuirá con confianza.</p><h2>La versión barata</h2><p>Genera hoy una imagen y un texto largo por tu ruta real de producción y comprueba qué sobrevive al final. Es una tarde de trabajo, y encuentra la etapa exacta que rompe la cadena antes de que lo haga una auditoría.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué mi imagen pierde la procedencia C2PA?",
+          "answer": "Cualquier etapa que vuelva a codificar la imagen crea un archivo nuevo sin el manifiesto firmado. Miniaturizadores, transformaciones de CDN, conversión a WebP o AVIF y subidas a terceros descartan metadatos por defecto para ahorrar bytes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/how-ai-watermarking-works",
+          "label": "Cómo funciona la marca de agua de IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Comment les filigranes IA disparaissent",
+      "titleCore": "Comment les filigranes IA disparaissent",
+      "description": "Personne ne supprime la provenance exprès. Vignettes, traductions et résumés le font par défaut, et vous le découvrez pendant l’audit.",
+      "body": "<p>La question intéressante à propos du filigrane IA n’est pas comment le contourner, mais pourquoi tant de contenu arrive en bout de chaîne sans provenance alors que personne n’a voulu en retirer. La provenance est rarement attaquée : elle est optimisée jusqu’à disparaître, par des systèmes qui font exactement ce pour quoi ils ont été conçus.</p><p>Deux modes de défaillance indépendants, parce qu’il y a deux mécanismes. La provenance des images meurt par suppression; celle du texte, par dilution. Les deux sont silencieuses.</p><h2>Suppression : les métadonnées que votre chaîne jette</h2><p>Les métadonnées C2PA vivent dans le fichier. Générateurs de vignettes, transformations CDN, conversion vers WebP ou AVIF, envois vers des plateformes tierces et captures d’écran les écartent sauf configuration explicite. Le motif est constant : tout ce qui ré-encode l’image produit un nouveau fichier, et un nouveau fichier n’a pas de manifeste signé. Une seule transformation automatique entre génération et livraison suffit.</p><h2>Dilution : les étapes de texte qui érodent le signal</h2><p>Le filigrane textuel est statistique : il ne disparaît pas d’un coup, il faiblit. La traduction régénère chaque token dans une autre langue. La reformulation et les passes « réécris dans notre ton » dégradent. Le résumé jette la majorité des tokens porteurs. Un passage par un second modèle rend le texte attribuable, au mieux, au dernier. Et une sortie de deux phrases n’a jamais porté grand-chose.</p><p>Or un produit bien construit fait plusieurs de ces choses. Générer avec un modèle, réécrire le ton avec un autre, traduire en cinq langues et tronquer en carte-résumé n’a rien de fautif &mdash; et produit pourtant un contenu qu’aucun détecteur n’attribuera avec confiance.</p><h2>La version économique</h2><p>Générez aujourd’hui une image et un texte long via votre vrai chemin de production, et vérifiez ce qui survit à l’arrivée. C’est une après-midi, et cela désigne l’étape exacte qui casse la chaîne avant qu’un audit ne le fasse.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi mon image perd-elle sa provenance C2PA?",
+          "answer": "Toute étape qui ré-encode l’image crée un nouveau fichier sans manifeste signé. Vignettes, transformations CDN, conversion WebP ou AVIF et envois vers des tiers suppriment les métadonnées par défaut pour économiser des octets."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/how-ai-watermarking-works",
+          "label": "Comment fonctionne le filigrane IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Wie KI-Wasserzeichen zerstört werden",
+      "titleCore": "Wie KI-Wasserzeichen zerstört werden",
+      "description": "Niemand entfernt Provenienz absichtlich. Thumbnailer, Übersetzungen und Zusammenfassungen tun es standardmäßig — auffallen wird es im Audit.",
+      "body": "<p>Die interessante Frage zum KI-Wasserzeichen lautet nicht, wie man es aushebelt, sondern warum so viel Produktionsinhalt ohne Provenienz am Ende der Pipeline ankommt, obwohl niemand etwas entfernen wollte. Provenienz wird selten angegriffen. Sie wird wegoptimiert &mdash; von Systemen, die genau das tun, wofür sie gebaut wurden.</p><p>Es gibt zwei unabhängige Fehlerbilder, weil es zwei Mechanismen gibt. Bildprovenienz stirbt durch Löschung, Textprovenienz durch Verdünnung. Beides geschieht lautlos.</p><h2>Löschung: die Metadaten, die Ihre Pipeline wegwirft</h2><p>C2PA-Metadaten stecken in der Datei. Thumbnailer, CDN-Transformationen, Konvertierung nach WebP oder AVIF, Uploads zu Drittplattformen und jeder Screenshot verwerfen sie ohne ausdrückliche Konfiguration. Das Muster ist konstant: Alles, was das Bild neu kodiert, erzeugt eine neue Datei, und eine neue Datei hat kein signiertes Manifest. Eine einzige automatische Transformation zwischen Erzeugung und Auslieferung genügt.</p><h2>Verdünnung: die Textschritte, die das Signal abtragen</h2><p>Das Textwasserzeichen ist statistisch: Es verschwindet nicht auf einen Schlag, es wird schwächer. Übersetzung erzeugt jeden Token neu. Umformulieren und &quot;in unserem Ton neu schreiben&quot; degradiert. Zusammenfassen verwirft die meisten Träger-Token. Ein zweites Modell macht den Text bestenfalls diesem zurechenbar. Und eine Ausgabe aus zwei Sätzen trug nie viel Signal.</p><p>Ein gut gebautes Produkt tut mehrere dieser Dinge. Mit einem Modell erzeugen, mit einem zweiten den Ton anpassen, in fünf Sprachen übersetzen und auf eine Zusammenfassungskarte kürzen ist kein Fehler &mdash; erzeugt aber Inhalt, den kein Detektor zuverlässig zuordnet.</p><h2>Die günstige Variante</h2><p>Erzeugen Sie heute ein Bild und einen langen Text über Ihren echten Produktionsweg und prüfen Sie, was am Ende ankommt. Das ist ein Nachmittag &mdash; und es benennt die Stufe, die die Kette bricht, bevor ein Audit es tut.</p>",
+      "faq": [
+        {
+          "question": "Warum verliert mein Bild die C2PA-Provenienz?",
+          "answer": "Jede Stufe, die das Bild neu kodiert, erzeugt eine neue Datei ohne signiertes Manifest. Thumbnailer, CDN-Transformationen, WebP-/AVIF-Konvertierung und Uploads zu Dritten entfernen Metadaten standardmäßig, um Bytes zu sparen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/how-ai-watermarking-works",
+          "label": "So funktioniert das KI-Wasserzeichen"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Como as marcas de água são destruídas",
+      "titleCore": "Como as marcas de água são destruídas",
+      "description": "Ninguém remove a proveniência de propósito. Miniaturizadores, traduções e resumos fazem-no por omissão, e descobre-se durante a auditoria.",
+      "body": "<p>A pergunta interessante sobre a marca de água de IA não é como contorná-la, mas porque é que tanto conteúdo de produção chega ao fim do pipeline sem proveniência, sem que ninguém tenha querido remover nada. A proveniência raramente é atacada: é otimizada até desaparecer, por sistemas que fazem exatamente aquilo para que foram construídos.</p><p>Há dois modos de falha independentes porque há dois mecanismos. A proveniência de imagem morre por eliminação; a de texto, por diluição. Ambas em silêncio.</p><h2>Eliminação: os metadados que o pipeline deita fora</h2><p>Os metadados C2PA vivem no ficheiro. Miniaturizadores, transformações de CDN, conversão para WebP ou AVIF, envios para plataformas terceiras e capturas de ecrã descartam-nos salvo configuração explícita. O padrão é constante: tudo o que recodifica a imagem produz um ficheiro novo, e um ficheiro novo não tem manifesto assinado. Basta uma transformação automática entre a geração e a entrega.</p><h2>Diluição: os passos de texto que erodem o sinal</h2><p>A marca no texto é estatística: não desaparece de uma vez, enfraquece. Traduzir regenera cada token noutra língua. Parafrasear e &quot;reescrever no nosso tom&quot; degrada. Resumir descarta a maioria dos tokens que levavam o sinal. Passar por um segundo modelo atribui o texto, quando muito, ao último. E uma saída de duas frases nunca levou grande coisa.</p><p>Repare que um produto bem construído faz várias destas coisas. Gerar com um modelo, ajustar o tom com outro, traduzir para cinco línguas e truncar num cartão-resumo não é errado &mdash; e ainda assim produz conteúdo que nenhum detetor atribuirá com confiança.</p><h2>A versão barata</h2><p>Gere hoje uma imagem e um texto longo pelo seu caminho real de produção e veja o que sobrevive no fim. É uma tarde de trabalho, e identifica a etapa exata que parte a cadeia antes de o fazer uma auditoria.</p>",
+      "faq": [
+        {
+          "question": "Porque é que a minha imagem perde a proveniência C2PA?",
+          "answer": "Qualquer etapa que recodifique a imagem cria um ficheiro novo sem o manifesto assinado. Miniaturizadores, transformações de CDN, conversão para WebP ou AVIF e envios para terceiros descartam metadados por omissão para poupar bytes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/how-ai-watermarking-works",
+          "label": "Como funciona a marca de água de IA"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AI 電子透かしが壊れる仕組み",
+      "titleCore": "AI 電子透かしが壊れる仕組み",
+      "description": "誰も意図的に来歴を消してはいません。サムネイル生成、翻訳、要約が既定で消しており、判明するのは監査のときです。",
+      "body": "<p>AI 電子透かしについて本当に問うべきは、どう回避するかではありません。誰も何かを削除するつもりがなかったのに、なぜこれほど多くの本番コンテンツが来歴を失ったままパイプラインの末端に到達するのか、です。来歴は攻撃されるのではなく、最適化によって消えます。しかも、それを消す各システムは、まさに設計どおりの仕事をしています。</p><p>仕組みが 2 つある以上、故障の形も 2 つあります。画像の来歴は削除で死に、テキストの来歴は希釈で死にます。どちらも無音です。</p><h2>削除：パイプラインが捨てているメタデータ</h2><p>C2PA メタデータはファイルの中にあります。サムネイル生成、CDN の画像変換、WebP や AVIF への変換、第三者プラットフォームへのアップロード、スクリーンショット &mdash; いずれも明示的な設定がなければメタデータを捨てます。法則は一貫しています。画像を再エンコードするものは新しいファイルを作り、新しいファイルには署名済みマニフェストがありません。生成から配信までの間に自動変換が 1 つあれば十分です。</p><h2>希釈：信号を削るテキスト処理</h2><p>テキストの透かしは統計的なので、一度に消えるのではなく弱まります。翻訳は全トークンを別言語で再生成します。言い換えや「自社トーンへの書き換え」は劣化させます。要約は信号を担うトークンの大半を捨てます。二段目のモデルを通せば、帰属先はよくても最後のモデルです。そして 2 文の出力は、そもそも大した信号を持っていません。</p><p>注目すべきは、よくできた製品ほどこれらを複数行っている点です。あるモデルで生成し、別のモデルでトーンを整え、5 言語に翻訳し、要約カードに切り詰める &mdash; どれも間違いではありません。それでも、どの検出器も自信を持って帰属できない出力ができあがります。</p><h2>安く済ませる方法</h2><p>今日、実際の本番経路で画像 1 枚と長文 1 本を生成し、末端で何が残るかを確認してください。半日の作業で、監査より先に鎖を切っている工程を特定できます。</p>",
+      "faq": [
+        {
+          "question": "画像の C2PA 来歴が失われるのはなぜですか？",
+          "answer": "画像を再エンコードする工程はすべて、署名済みマニフェストを持たない新しいファイルを生成します。サムネイル生成、CDN 変換、WebP／AVIF 変換、第三者へのアップロードは、容量削減のため既定でメタデータを削除します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/how-ai-watermarking-works",
+          "label": "AI 電子透かしの仕組み"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/how-ai-watermarks-get-destroyed"
+  }
+}

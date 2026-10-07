@@ -1,0 +1,282 @@
+{
+  "slug": "subagent-fan-out-concurrency-limits",
+  "tags": [
+    "agents",
+    "subagents",
+    "fan-out",
+    "concurrency-limits",
+    "token-budgets"
+  ],
+  "datePublished": "2026-09-19",
+  "dateModified": "2026-09-19",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Stop subagent fan-out and recursive delegation from…",
+      "titleCore": "Stop subagent fan-out and recursive delegation from…",
+      "description": "Hierarchical multi-agent systems can spawn runaway background subagents. Architectural guardrails, depth limits, and shared token pools.",
+      "body": "<p>Subagent fan-out cascades occur when an autonomous orchestrator decomposes a high-level task into parallel sub-tasks and grants worker agents permission to spawn additional specialized workers. Without hard concurrency limits and depth bounds, a single ambiguous user prompt can trigger an exponential explosion: 1 root supervisor spawns 6 domain planners, each launching 4 research agents, which invoke further sub-workers. In production architectures, unconstrained recursive delegation routinely burns 2,000,000 to 8,000,000 tokens within 5 minutes, resulting in unexpected $15 to $80 API spikes for a single transaction.</p><h2>The mathematics of recursive agent delegation</h2><p>In a standard tree-based agent framework, task delegation expands according to a branching factor <code>B</code> raised to the execution depth <code>D</code>. If an orchestrator branches at <code>B = 4</code> and allows subagents to recurse to depth <code>D = 3</code>, the system schedules 64 independent agent loops. Each leaf agent maintains its own conversational context, performs iterative tool calls, and reports intermediate findings up the hierarchy. Because parent agents aggregate and summarize child outputs, context accumulation compounds quadratically across the execution tree.</p><h2>What is a subagent fan-out cascade in autonomous AI?</h2><p>A subagent fan-out cascade is a failure mode where an orchestrator agent recursively spawns child and grandchild agents without global budget constraints, multiplying token consumption exponentially across parallel execution threads.</p><h2>Four production guardrails for multi-agent fleets</h2><p>Platform teams operating enterprise agent systems prevent runaway cascades by enforcing strict runtime boundaries:</p><ul><li><strong>Maximum Recursion Depth (Depth Caps):</strong> Enforce a strict ceiling on execution hierarchy. In 95% of enterprise use cases, a depth limit of <code>max_depth: 2</code> (Root Supervisor &rarr; Worker Agent) achieves complete task resolution. Prohibit worker agents from spawning tertiary subagents unless specifically exempted by policy.</li><li><strong>Shared Thread Token Pools:</strong> Do not grant subagents independent budget allocations. Allocate a shared token allowance (e.g., 250,000 total tokens) to the root execution thread context. Pass the remaining token balance through trace context headers. When child agents consume tokens, decrement the global pool; if the pool hits zero, all parallel branches terminate immediately.</li><li><strong>Concurrency Circuit Breakers:</strong> Limit active parallel child agent instances to 3–5 concurrent processes. If a supervisor attempts to spawn more concurrent workers than the queue capacity allows, queue the tasks sequentially or reject the split.</li><li><strong>Distributed Tracing and OTLP Cost Propagation:</strong> Inject OpenTelemetry trace IDs and baggage headers across all inter-agent message buses. When OpenLIT or ClickHouse aggregates spend, every child span must roll up into the parent session ID, providing instant visibility into branch-level cost anomalies.</li></ul><h2>How do concurrency limits prevent multi-agent token exhaustion?</h2><p>Concurrency limits throttle the number of simultaneously executing worker loops, preventing parallel API flooding and enabling circuit breakers to abort malfunctioning agent loops before token budgets are exhausted.</p><h2>What is the recommended recursion depth for agent delegation?</h2><p>The recommended recursion depth is 2 levels (Root Orchestrator to Specialized Worker). Deeper hierarchies produce diminishing reasoning returns while dramatically increasing context overhead and error amplification.</p>",
+      "faq": [
+        {
+          "question": "What is a subagent fan-out cascade in autonomous AI?",
+          "answer": "A subagent fan-out cascade is a failure mode where an orchestrator agent recursively spawns child and grandchild agents without global budget constraints, multiplying token consumption exponentially across parallel execution threads."
+        },
+        {
+          "question": "How do concurrency limits prevent multi-agent token exhaustion?",
+          "answer": "Concurrency limits throttle the number of simultaneously executing worker loops, preventing parallel API flooding and enabling circuit breakers to abort malfunctioning agent loops before token budgets are exhausted."
+        },
+        {
+          "question": "What is the recommended recursion depth for agent delegation?",
+          "answer": "The recommended recursion depth is 2 levels (Root Orchestrator to Specialized Worker). Deeper hierarchies produce diminishing reasoning returns while dramatically increasing context overhead and error amplification."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/three-agent-budgets",
+          "label": "The three agent budgets"
+        },
+        {
+          "slug": "/research/llm-cost-spike-runbook",
+          "label": "LLM cost spike runbook"
+        },
+        {
+          "slug": "/research/retry-loop-hidden-spend",
+          "label": "Retry loops and hidden spend"
+        }
+      ]
+    },
+    "es": {
+      "title": "Frenar la cascada de subagentes y delegación recursiva de…",
+      "titleCore": "Frenar la cascada de subagentes y delegación recursiva de…",
+      "description": "Los sistemas multiagente jerárquicos pueden multiplicar subagentes sin control. Límites de profundidad, concurrencia y pools de tokens.",
+      "body": "<p>Las cascadas de subagentes suceden cuando un orquestador descompone una tarea en subtareas paralelas y permite que los agentes secundarios generen nuevos trabajadores. Sin límites estrictos de concurrencia y profundidad, una sola petición de usuario puede desencadenar un crecimiento exponencial de llamadas, consumiendo millones de tokens en cuestión de minutos.</p><h2>Qué es una cascada de dispersión de subagentes</h2><p>Es un fallo arquitectónico en el que un agente orquestador genera recursivamente agentes hijos y nietos sin control presupuestario global, multiplicando el consumo de tokens en múltiples hilos paralelos.</p><h2>Medidas de protección esenciales</h2><p>Para evitar picos de costes incontrolados, las arquitecturas de producción aplican un límite estricto de profundidad (máximo nivel 2: supervisor a trabajador), una bolsa compartida de tokens asignada al hilo raíz, y límites de concurrencia de 3 a 5 agentes simultáneos.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es una cascada de dispersión de subagentes?",
+          "answer": "Es un fallo arquitectónico en el que un agente orquestador genera recursivamente agentes hijos y nietos sin control presupuestario global, multiplicando el consumo de tokens en múltiples hilos paralelos."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/three-agent-budgets",
+          "label": "Los tres presupuestos para agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Limiter la dérive des sous-agents et la délégation récursive",
+      "titleCore": "Limiter la dérive des sous-agents et la délégation récursive",
+      "description": "Les systèmes multi-agents hiérarchiques peuvent engendrer des sous-agents incontrôlés. Limites de profondeur et plafonds de tokens partagés.",
+      "body": "<p>L'emballement des sous-agents se produit lorsqu'un orchestrateur décompose une tâche en plusieurs sous-tâches et autorise les agents exécutants à déléguer à leur tour. Sans limites strictes de profondeur et de concurrence, une requête peut lancer des dizaines de boucles d'agents en parallèle, brûlant des millions de tokens en quelques minutes.</p><h2>Qu'est-ce qu'une cascade de sous-agents en IA autonome ?</h2><p>Il s'agit d'un mode de défaillance dans lequel un agent superviseur génère récursivement des agents enfants sans budget global, multipliant la consommation de tokens de façon exponentielle.</p><h2>Moyens de contrôle indispensables</h2><p>Les équipes d'ingénierie imposent un plafond de profondeur d'exécution fixé à 2 niveaux, un pool de tokens partagé par fil d'exécution racine, et des disjoncteurs limitant la concurrence à 3 ou 5 sous-agents simultanés.</p>",
+      "faq": [
+        {
+          "question": "Qu'est-ce qu'une cascade de sous-agents en IA autonome ?",
+          "answer": "Il s'agit d'un mode de défaillance dans lequel un agent superviseur génère récursivement des agents enfants sans budget global, multipliant la consommation de tokens de façon exponentielle."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/three-agent-budgets",
+          "label": "Trois budgets pour les agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "Subagent-Fan-Out und unkontrollierte Rekursion im Keim…",
+      "titleCore": "Subagent-Fan-Out und unkontrollierte Rekursion im Keim…",
+      "description": "Hierarchische Multi-Agenten-Systeme können unkontrollierte Hintergrund-Subagenten starten. Tiefengrenzen, Concurrency Caps und Token-Pools.",
+      "body": "<p>Subagent-Fan-Out-Kaskaden treten auf, wenn ein Orchestrator-Agent komplexe Aufgaben aufteilt und Worker-Agenten erlaubt, eigenständig weitere Subagenten zu erzeugen. Ohne strikte Tiefen- und Concurrency-Grenzen führt ein einzelner Prompt zu einer exponentiellen Explosion paralleler Threads, die innerhalb weniger Minuten Millionen von Tokens verbrennen.</p><h2>Was versteht man unter einer Subagent-Fan-Out-Kaskade?</h2><p>Ein Ausfallmuster, bei dem ein koordinierender Agent rekursiv Kind- und Sub-Kind-Agenten ohne globales Budgetbudget startet und den Token-Verbrauch drastisch potenziert.</p><h2>Vier Schutzmaßnahmen für Produktivumgebungen</h2><p>Plattform-Teams setzen auf eine maximale Rekursionstiefe von 2 Ebenen, thread-weite Token-Pools mit zentralem Kontingent und Concurrency-Limits, die parallele Worker auf maximal 3 bis 5 Instanzen drosseln.</p>",
+      "faq": [
+        {
+          "question": "Was versteht man unter einer Subagent-Fan-Out-Kaskade?",
+          "answer": "Ein Ausfallmuster, bei dem ein koordinierender Agent rekursiv Kind- und Sub-Kind-Agenten ohne globales Budgetbudget startet und den Token-Verbrauch drastisch potenziert."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/three-agent-budgets",
+          "label": "Drei Budgets für Agenten"
+        }
+      ]
+    },
+    "ja": {
+      "title": "自律型マルチエージェントの拡散と再帰的委譲に伴うトークン急増の抑止",
+      "titleCore": "自律型マルチエージェントの拡散と再帰的委譲に伴うトークン急増の抑止",
+      "description": "階層型エージェントシステムでは未制御のサブエージェント増殖が発生します。再帰深度の制限と共通トークンプールによる統制手法。",
+      "body": "<p>サブエージェントの拡散カスケードは、オーケストレーターがタスクを並列分解し、ワーカーにさらなる子エージェント生成を許可した際に発生します。並行実行数と階層の制限がない場合、1回の曖昧なプロンプトから数分間で数百から数千万トークンが浪費され、予期せぬAPI請求急増を引き起こします。</p><h2>自律型AIにおけるサブエージェントの拡散カスケードとは？</h2><p>上位の司令塔エージェントが全体予算の制限なく子・孫エージェントを再帰的に生成し、並列処理全体でトークン消費が指数関数的に激増する不具合パターンです。</p><h2>実運用で必須となる4つのガードレール</h2><p>最大再帰深度を2階層（統括役から実行役まで）に制限すること、スレッド共通のトークンプールを設けて残量をコンテキスト経由で減算すること、および並行起動数を最大3〜5プロセスに抑えるサーキットブレーカーの導入が必須です。</p>",
+      "faq": [
+        {
+          "question": "自律型AIにおけるサブエージェントの拡散カスケードとは？",
+          "answer": "上位の司令塔エージェントが全体予算の制限なく子・孫エージェントを再帰的に生成し、並列処理全体でトークン消費が指数関数的に激増する不具合パターンです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/three-agent-budgets",
+          "label": "エージェント運用の3つの予算枠"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Travar a proliferação de subagentes e delegação recursiva",
+      "titleCore": "Travar a proliferação de subagentes e delegação recursiva",
+      "description": "Sistemas multiagente hierárquicos podem lançar subagentes descontrolados em segundo plano. Limites de profundidade e bolsas partilhadas de tokens.",
+      "body": "<p>A proliferação em cascata de subagentes acontece quando um agente orquestrador divide tarefas em fluxos paralelos e autoriza que cada trabalhador crie novos agentes subordinados. Sem limites claros de concorrência e profundidade, um único pedido pode consumir milhões de tokens em escassos minutos.</p><h2>O que é uma cascata de subagentes em IA autónoma?</h2><p>É uma anomalia arquitetural em que um agente orquestrador gera recursivamente novos agentes sem orçamento consolidado, multiplicando o custo da infraestrutura exponencialmente.</p><h2>Salvaguardas em produção</h2><p>As melhores práticas exigem um teto de recursividade fixado no nível 2 (supervisor para executor), uma bolsa centralizada de tokens associada à sessão raiz e disjuntores de concorrência que impedem mais de 3 a 5 agentes em simultâneo.</p>",
+      "faq": [
+        {
+          "question": "O que é uma cascata de subagentes em IA autónoma?",
+          "answer": "É uma anomalia arquitetural em que um agente orquestrador gera recursivamente novos agentes sem orçamento consolidado, multiplicando o custo da infraestrutura exponencialmente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/three-agent-budgets",
+          "label": "Três orçamentos para agentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "Bloccare la cascata di subagenti e la delega ricorsiva",
+      "titleCore": "Bloccare la cascata di subagenti e la delega ricorsiva",
+      "description": "I sistemi multi-agente gerarchici possono generare subagenti incontrollati. Limiti di profondità e pool di token condivisi.",
+      "body": "<p>La proliferazione a cascata dei subagenti si verifica quando un orchestratore suddivide un compito in sotto-attività parallele e concede ai worker la facoltà di istanziare ulteriori agenti specializzati. Senza limiti stringenti di concorrenza e profondità, un singolo prompt può innescare un'esplosione esponenziale: 1 supervisore genera 6 pianificatori, ciascuno dei quali avvia 4 agenti di ricerca. In pochi minuti vengono bruciati milioni di token con picchi di fatturazione inattesi.</p><h2>Cos'è una cascata di fan-out di subagenti nell'IA autonoma?</h2><p>È un'anomalia architetturale in cui un supervisore genera ricorsivamente agenti figli e nipoti senza tetti di spesa globali, moltiplicando i consumi in modo esponenziale su thread paralleli.</p><h2>Quattro protezioni essenziali per la produzione</h2><p>I team di piattaforma impediscono queste derive imponendo un tetto massimo di ricorsione a 2 livelli (orchestratore a worker), allocando un pool di token condiviso a livello di sessione radice, impostando circuit breaker per limitare la concorrenza a 3–5 agenti simultanei e propagando contesti di tracciamento OTLP.</p>",
+      "faq": [
+        {
+          "question": "Cos'è una cascata di fan-out di subagenti nell'IA autonoma?",
+          "answer": "È un'anomalia architetturale in cui un supervisore genera ricorsivamente agenti figli e nipoti senza tetti di spesa globali, moltiplicando i consumi in modo esponenziale su thread paralleli."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/three-agent-budgets",
+          "label": "Tre budget per gli agenti"
+        }
+      ]
+    },
+    "ko": {
+      "title": "자율형 서브에이전트의 재귀적 분기와 동시 실행 토큰 제한",
+      "titleCore": "자율형 서브에이전트의 재귀적 분기와 동시 실행 토큰 제한",
+      "description": "계층형 멀티 에이전트 시스템에서 발생하는 무제한 서브에이전트 확산을 방지하는 최대 깊이 제한과 공유 토큰 풀 가이드.",
+      "body": "<p>서브에이전트 확산 현상은 오케스트레이터가 작업을 병렬 하위 작업으로 분해하고 작업자 에이전트에게 추가 하위 에이전트 생성 권한을 부여할 때 발생합니다. 엄격한 동시성 제한과 깊이 상한이 없으면 단일 프롬프트가 수백만 개의 토큰을 몇 분 만에 소비하여 막대한 API 비용 급증을 초래합니다.</p><h2>자율형 AI에서 서브에이전트 확산 카스케이드란 무엇인가요?</h2><p>오케스트레이터 에이전트가 전체 예산 제약 없이 자식 및 손자 에이전트를 재귀적으로 생성하여 병렬 스레드 전반에서 토큰 소비를 기하급수적으로 폭증시키는 아키텍처 실패 모드입니다.</p><h2>프로덕션 멀티 에이전트를 위한 4가지 보호 장치</h2><p>엔터프라이즈 환경에서는 최대 재귀 깊이를 2단계로 제한하고, 루트 스레드에 공유 토큰 풀을 할당하여 소진 시 즉시 중단하며, 동시 실행 프로세스를 3~5개로 제한하는 서킷 브레이커와 OTLP 분산 추적을 통해 안전성을 확보합니다.</p>",
+      "faq": [
+        {
+          "question": "자율형 AI에서 서브에이전트 확산 카스케이드란 무엇인가요?",
+          "answer": "오케스트레이터 에이전트가 전체 예산 제약 없이 자식 및 손자 에이전트를 재귀적으로 생성하여 병렬 스레드 전반에서 토큰 소비를 기하급수적으로 폭증시키는 아키텍처 실패 모드입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/three-agent-budgets",
+          "label": "에이전트를 위한 3가지 예산"
+        }
+      ]
+    },
+    "zh": {
+      "title": "遏制子智能体并发扇出吞噬Token预算",
+      "titleCore": "遏制子智能体并发扇出吞噬Token预算",
+      "description": "分层多智能体系统易引发无序递归裂变。工程团队如何通过深度限制、并发熔断与全局Token池锁定成本。",
+      "body": "<p>当自律编排智能体将一项宏观任务拆解为并行子任务，并允许下游工作智能体自主派生新的专用子智能体时，极易发生<strong>子智能体并发扇出级联（Fan-out Cascades）</strong>。在缺乏硬性并发上限与递归深度约束的环境中，单条语义含糊的用户Prompt即可引爆指数级膨胀：1个主调度器派生6个领域规划器，每个规划器启动4个研究智能体，后者又继续调用深层分析工作流。在生产架构中，不受控的递归委派常在5分钟内烧掉200万至800万Token，导致单笔业务交易突发产生15至80美元的异常账单毛刺。</p><h2>多智能体舰队的四大生产护栏</h2><ul><li><strong>最大递归深度硬顶（Depth Caps）：</strong>在调度层设定严格的层级上限。在95%的企业落地场景中，设置<code>max_depth: 2</code>（主调度器 &rarr; 专用工作智能体）即可完全覆盖业务需求。除非有明确的权限豁免，坚决禁止工作智能体继续派生三级孙代智能体。</li><li><strong>根会话共享Token预算池：</strong>禁止赋予子智能体独立的预算配额。在根执行线程上下文分配共享配额（例如总计250,000 Token），并通过链路追踪上下文头部向下透传。子智能体消费时统一扣减全局资金池，一旦归零，全部并行分支立即强制终止。</li><li><strong>并发断路器（Circuit Breakers）：</strong>将单个任务活跃的并行子智能体限制在3至5个进程以内。若调度器试图派生超出队列容量的并发实例，强制排队顺序执行或直接驳回拆解请求。</li><li><strong>分布式链路追踪与OTLP成本透传：</strong>在智能体消息总线间注入OpenTelemetry Trace ID与Baggage请求头。确保每个子智能体的Span均能聚合至父会话ID，实现对分支级成本异动的秒级洞察。</li></ul>",
+      "faq": [
+        {
+          "question": "什么是自律AI中的子智能体并发扇出级联？",
+          "answer": "它是指主调度智能体在缺乏全局预算约束时，无序递归派生子智能体与孙智能体，导致多个并行执行线程的Token消耗呈指数级膨胀的系统失效。"
+        },
+        {
+          "question": "并发限制机制如何防止多智能体耗尽Token预算？",
+          "answer": "并发限制通过严格节流同时运行的工作循环数量，防止并发API洪水并使断路器能在发生故障时及时中止智能体，避免预算耗尽。"
+        },
+        {
+          "question": "智能体任务委派的推荐递归深度是多少？",
+          "answer": "推荐的最大递归深度为2层（从主调度器到专用工作者）。更深的层级在带来递减的推理收益的同时，会呈平方级放大上下文开销与累积错误。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/three-agent-budgets",
+          "label": "智能体三层预算"
+        },
+        {
+          "slug": "/zh/research/llm-cost-spike-runbook",
+          "label": "LLM成本暴增手册"
+        },
+        {
+          "slug": "/zh/research/retry-loop-hidden-spend",
+          "label": "重试循环与隐性支出"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Beheers subagent-fan-out en tokenbudget-uitputting",
+      "titleCore": "Beheers subagent-fan-out en tokenbudget-uitputting",
+      "description": "Hiërarchische multi-agent architecturen kunnen oneindig subagents spawnen. Architecturale guardrails, dieptelimieten en gedeelde tokenpools.",
+      "body": "<p>Subagent fan-out cascades ontstaan wanneer een autonome orchestrator een hoofdtaak opsplitst in parallelle subtaken en worker-agents toestaat om op hun beurt nieuwe gespecialiseerde agents te initialiseren. Zonder strikte concurrency- en dieptegrenzen kan één ambigue prompt leiden tot een exponentiële explosie: 1 root-supervisor creëert 6 domain-planners, die elk 4 research-agents aanroepen, welke vervolgens sub-workers spawnen. In productieomgevingen verbruikt ongecontroleerde recursieve delegatie binnen 5 minuten 2.000.000 tot 8.000.000 tokens, wat leidt tot onverwachte API-pieken van $15 tot $80 voor één transactie.</p><h2>Vier essentiële productiebeschermingen voor multi-agent fleets</h2><ul><li><strong>Maximale recursiediepte (Depth Caps):</strong> Hanteer een strikt plafond voor de uitvoeringshiërarchie. In 95% van de enterprise-toepassingen volstaat een dieptelimiet van <code>max_depth: 2</code> (Root Supervisor &rarr; Worker Agent). Verbied workers om zelfstandig tertiaire subagents te starten zonder expliciete uitzonderingspolicy.</li><li><strong>Gedeelde thread-tokenpools:</strong> Wijs subagents geen autonome budgetten toe. Ken één centrale tokenlimiet (bijv. 250.000 tokens) toe aan de root-context en geef het resterende saldo door via trace-context-headers. Zodra de centrale pool leeg is, termineren alle parallelle takken onmiddellijk.</li><li><strong>Concurrency-circuitbreakers:</strong> Beperk actieve parallelle subagents tot maximaal 3 tot 5 gelijktijdige processen. Wachtrij-aanroepen sequentieel af wanneer de limiet wordt overschreden.</li><li><strong>Gedistribueerde tracing via OTLP:</strong> Injecteer OpenTelemetry trace-ID's over alle inter-agent berichtenbussen om branch-specifieke kostendivergentie realtime te identificeren.</li></ul>",
+      "faq": [
+        {
+          "question": "Wat is een subagent-fan-out-cascade in autonome AI?",
+          "answer": "Een systeemstoring waarbij een orchestrator recursief agents spawnt zonder centrale budgetrestricties, waardoor tokenverbruik parallel explodeert."
+        },
+        {
+          "question": "Hoe voorkomen concurrency-limieten uitputting van tokenbudgetten?",
+          "answer": "Ze begrenzen het aantal gelijktijdige worker-loops, voorkomen API-flooding en stellen circuitbreakers in staat op hol geslagen agents direct te stoppen."
+        },
+        {
+          "question": "Wat is de aanbevolen recursiediepte voor agent-delegatie?",
+          "answer": "Maximaal 2 niveaus (Root Orchestrator naar Gespecialiseerde Worker). Diepere structuren verhogen contextoverhead en foutvermenigvuldiging onevenredig."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/three-agent-budgets",
+          "label": "De drie agentbudgetten"
+        },
+        {
+          "slug": "/nl/research/llm-cost-spike-runbook",
+          "label": "LLM-kostenspike runbook"
+        },
+        {
+          "slug": "/nl/research/retry-loop-hidden-spend",
+          "label": "Herhaallussen en verborgen kosten"
+        }
+      ]
+    },
+    "ar": {
+      "title": "كبح تفرع الوكلاء الفرعيين واستنزاف الرموز",
+      "titleCore": "كبح تفرع الوكلاء الفرعيين واستنزاف الرموز",
+      "description": "الأنظمة متعددة الوكلاء قد تطلق مهام فرعية غير منضبطة. الحواجز المعمارية وحدود العمق والتزامن للتحكم في استهلاك الرموز.",
+      "body": "<p>تتيح المعماريات متعددة الوكلاء (Multi-Agent Architectures) حل مشكلات معقدة عبر تفويض المهام لوكلاء فرعيين متخصصين. ولكن في غياب ضوابط معمارية صارمة، قد يؤدي تفرع الوكلاء (Agent Fan-Out) إلى متوالية هندسية من الاستدعاءات المتزامنة التي تستنزف ميزانية الرموز في دقائق معدودة.</p>\n\n<h2>رياضيات تفويض الوكلاء التكراري</h2>\n<p>إذا فوض الوكيل الرئيسي 4 وكلاء فرعيين، وقام كل وكيل فرعي بتفويض 4 مهام أخرى بعمق مستويات متعددة، فإن عدد استدعاءات النماذج يتضاعف أُسياً. مع كل استدعاء، يُعاد إرسال سياق الجلسة والمطالبات وأوصاف الأدوات، مما يقفز باستهلاك الرموز إلى ملايين الوحدات لمهمة واحدة كان يمكن إنجازها بنص برمجي بسيط.</p>\n\n<h2>أربعة حواجز إنتاجية لأسراب الوكلاء</h2>\n<p>للسيطرة على استهلاك الرموز في بيئات التشغيل، ينبغي تفعيل القواعد التالية:</p>\n<ol>\n  <li><strong>حد أقصى للتفرع المتزامن (Concurrency Limit):</strong> تقييد عدد الوكلاء الفرعيين النشطين في نفس اللحظة (مثلاً، 3 إلى 5 وكلاء كحد أقصى).</li>\n  <li><strong>تقييد عمق التكرار (Recursion Depth Ceiling):</strong> حظر تفويض الوكلاء الفرعيين لأكثر من مستوى واحد أو مستويين من الوكلاء.</li>\n  <li><strong>مجمع رموز موحد للجلسة (Unified Token Pool):</strong> تحديد سقف تكلفة إجمالي للمهمة الأصلية تتشاركه كافة المهام الفرعية المنبثقة عنها.</li>\n  <li><strong>مهلة زمنية للعمليات غير المتزامنة (Execution Timeout):</strong> إيقاف أي وكيل فرعي يعلق في حلقة تفكير أو أداة لا تستجيب.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "ما هو تدفق تفرع الوكلاء الفرعيين في أنظمة الذكاء؟",
+          "answer": "هو توليد الوكيل الرئيسي لوكلاء فرعيين متزامنين بصورة متسلسلة مما يؤدي إلى تضخم استهلاك الرموز بشكل أسي مفاجئ."
+        },
+        {
+          "question": "كيف تمنع حدود التزامن استنزاف رموز النماذج اللغوية؟",
+          "answer": "بتقييد عدد الوكلاء النشطين ومشاركة مجمع رموز مشترك يوقف التنفيذ فور بلوغ السقف المالي المحدد للمهمة الكلية."
+        },
+        {
+          "question": "ما هو عمق التكرار الموصى به لتفويض الوكلاء المستقلين؟",
+          "answer": "يوصى بحصر التفويض في عمق مستويين فقط لمعظم أعباء العمل لمنع الدخول في حلقات لا نهائية مكلفة وغير مجدية."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/three-agent-budgets",
+          "label": "ميزانيات الوكلاء الثلاث"
+        },
+        {
+          "slug": "/ar/research/llm-cost-spike-runbook",
+          "label": "دليل التعامل مع قفزات تكاليف النماذج"
+        },
+        {
+          "slug": "/ar/research/retry-loop-hidden-spend",
+          "label": "حلقات إعادة المحاولة والإنفاق الخفي"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/subagent-fan-out-concurrency-limits"
+  }
+}

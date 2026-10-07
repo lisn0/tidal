@@ -1,0 +1,359 @@
+{
+  "slug": "deepseek-harness-subagents",
+  "tags": [
+    "deepseek-harness",
+    "subagents",
+    "delegation"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "DeepSeek Harness Subagenten: Delegation als…",
+      "titleCore": "DeepSeek Harness Subagenten: Delegation als…",
+      "description": "DeepSeek Harness behandelt Subagenten als austauschbare Naht mit sechs Transporten, Capability-Flags und Tiefenlimit. Warum Delegationstiefe die Kosten treibt.",
+      "body": "<p>Der schnellste Weg, eine Agentenrechnung zu vervielfachen, ist Agenten Agenten starten zu lassen. Aus einer Nutzeranfrage wird ein Baum, und der Baum hat keine natürliche Größe. DeepSeek Harness behandelt Delegation deshalb nicht als Feature, sondern als Naht mit expliziten Grenzen.</p>\n\n<h2>Subagenten sind eine Naht, kein Einbau</h2>\n<p>Delegation läuft über <code>ctx.subagents</code>. Anders als der Shell-Executor, der genau eine Implementierung hat, werden Subagenten-Provider namentlich registriert und mehrere können nebeneinander existieren. Die Dokumentation nennt sechs Transporte: In-Process-Spawning und Forking (gewöhnliche Agenten über den Kontext des Elternteils), eine ACP-Brücke für Remote-Deployment, Codex, Claude Code und eine SDK-basierte Variante.</p>\n<p>Kostenseitig heißt das: Der Preis eines Kindes hängt davon ab, welcher Provider es erzeugt hat. Ein geforkter In-Process-Agent und ein über eine ACP-Brücke gestarteter Remote-Agent sehen im Aufrufcode gleich aus und haben völlig verschiedene Rechnungen.</p>\n\n<h2>Zwei Delegationsmodi, zwei Kostenprofile</h2>\n<table>\n<thead><tr><th>Modus</th><th>Form</th><th>Kostencharakteristik</th></tr></thead>\n<tbody>\n<tr><td>One-Shot</td><td>Kind erzeugen, Prompt senden, Ergebnis abwarten, verwerfen</td><td>Begrenzt, dem Elternzug zurechenbar</td></tr>\n<tr><td>Fortsetzbar</td><td>Dauerhafte Hintergrundsitzung mit residenter Aktivierung</td><td>Offen; akkumuliert über Züge hinweg</td></tr>\n</tbody>\n</table>\n<p>One-Shot löst sich zu einem Run-Handle mit einem finalen Ergebnis-Promise auf. Fortsetzbare Kinder sind aufwendiger: Ein Continuation-Manager reserviert die Identität, komponiert das Kind, ordnet jeden Zug über dessen Inbox, und der Provider steuert nur die anfänglichen Erzeugungsmetadaten bei. Aktivierungen haben drei Zustände — laufend, wartend (ruhend, hält aber unabgeschlossene Kindaktivierungen) und abgeschlossen. Trifft eine Nachricht ein, ohne dass eine Aktivierung lebt, wird kalt aus der persistierten Sitzung fortgesetzt.</p>\n<p>Kalte Fortsetzungen sind der Posten, den man vergisst. Der Zustand kommt aus dem Protokoll, also sind die Eingabe-Token proportional zur Protokollgröße. Ein langlebiges Kind, das selten angesprochen wird, kann pro Nachricht teurer sein als eines, das ständig läuft.</p>\n\n<h2>Capabilities scheitern laut, nicht leise</h2>\n<p>Das Harness validiert angeforderte Capabilities gegen den Provider und lehnt mit einem typisierten Fehler ab, statt still zu ignorieren. Die Start-Capabilities decken Ausgabeschemata, Tiefenlimits, Werkzeugfilter und Personas ab und stehen eins zu eins zu den Anfrageoptionen. Wer eine Option setzt, die der Provider nicht kann, bekommt das sofort zu sehen und nicht als überraschende Rechnungsposition.</p>\n\n<h2>Tiefe ist gedeckelt, und der Deckel lässt sich nicht umgehen</h2>\n<p>Die Delegationstiefe wird im Sitzungs-Header persistiert, und ein Laufzeitfeld führt den jeweils größeren Wert. Eine kalte Fortsetzung kann die Tiefe also nicht senken. Der Start wird abgelehnt, wenn die abgeleitete Tiefe <code>maxDepth</code> oder die Safe-Integer-Grenze überschreitet.</p>\n\n<p class=\"agent-summary\">Ein Elternteil, das drei Kinder startet, die je drei weitere starten, hat aus einer Nutzeranfrage dreizehn Agenten gemacht. Tiefenlimits sind der Unterschied zwischen einem Fan-out, den Sie dimensioniert haben, und einem, den Sie entdeckt haben.</p>\n\n<h2>Entdeckung ist billig, Zustellung ist autoritativ</h2>\n<p><code>listChildren()</code> liefert einen live bevorzugten Bestand über eine dreistufige Beschleunigung: Watermark-Cache, dann Projektions-Checkpoint, dann Inspektion der Persistenz. <code>listDescendants()</code> läuft in Pre-Order und ergänzt Eltern- und Tiefenpositionen. Keine der beiden Funktionen konsultiert Agentenregister, Aktivierungen oder Provider — die Nachrichtenzustellung bleibt autoritativ. Für die Kostenzurechnung heißt das: Sie können den Baum jederzeit günstig aufzählen.</p>\n\n<h2>Ergebnisse tragen einen Stop-Grund</h2>\n<p>Die Ausgabe ist die letzte nicht leere Assistenznachricht oder der akkumulierte Textstream; optionale strukturierte Ausgaben werden gegen das angeforderte Schema validiert. Der <code>stopReason</code> ist eine merge-erweiterbare Union: completed, aborted, error, max-tokens, refusal. Alles außer completed bedeutet Teilausgabe, die auf Fehler-Werkzeugergebnisse abgebildet wird — bezahlt, aber unvollständig.</p>\n\n<h2>Was zu messen ist</h2>\n<ol>\n<li>Kinder pro Elternzug und Nachfahren pro Nutzeranfrage.</li>\n<li>Maximal beobachtete Tiefe gegen den konfigurierten Deckel.</li>\n<li>Anteil fortsetzbarer Kinder, die kalt fortgesetzt wurden, plus Protokollgröße beim Fortsetzen.</li>\n<li>Verteilung der Stop-Gründe — ein hoher Anteil an max-tokens oder error ist bezahlte, unfertige Arbeit.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Wie funktionieren Subagenten in DeepSeek Harness?",
+          "answer": "Subagenten sind eine austauschbare Naht unter ctx.subagents. Provider werden namentlich registriert und mehrere können koexistieren, sodass ein Kind in-process, geforkt oder über eine Brücke remote laufen kann — je nachdem, welcher Provider es erzeugt."
+        },
+        {
+          "question": "Welche Subagenten-Transporte unterstützt DeepSeek Harness?",
+          "answer": "Die Dokumentation nennt sechs: In-Process-Spawning, Forking, eine ACP-Brücke für Remote-Deployment, Codex, Claude Code und eine SDK-basierte Implementierung. Jeder Transport hat ein eigenes Kostenprofil, obwohl der Aufrufcode gleich aussieht."
+        },
+        {
+          "question": "Wie begrenzt DeepSeek Harness die Delegationstiefe?",
+          "answer": "Die Tiefe wird im Sitzungs-Header persistiert und ein Laufzeitfeld führt den größeren Wert, sodass eine kalte Fortsetzung sie nicht senken kann. Der Start wird abgelehnt, wenn die abgeleitete Tiefe maxDepth oder die Safe-Integer-Grenze überschreitet."
+        },
+        {
+          "question": "Warum ist die Delegationstiefe für die Kosten relevant?",
+          "answer": "Delegation multipliziert sich. Ein Elternteil mit drei Kindern, die je drei weitere starten, erzeugt aus einer Anfrage dreizehn Agenten. Ohne Tiefendeckel wächst der Baum unbegrenzt, und jeder Knoten verbraucht eigene Eingabe- und Ausgabe-Token."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-plugin-architecture",
+          "label": "Alles ist ein Plugin: die Architektur (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Ausgaben-Leitplanken im Harness (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "Subagentes de DeepSeek Harness: la delegación como…",
+      "titleCore": "Subagentes de DeepSeek Harness: la delegación como…",
+      "description": "DeepSeek Harness trata los subagentes como costura intercambiable con seis transportes y tope de profundidad. Por qué delegar dispara el coste.",
+      "body": "<p>La forma más rápida de multiplicar la factura de un agente es dejar que los agentes creen agentes. Una petición de usuario se convierte en un árbol, y el árbol no tiene tamaño natural. Por eso DeepSeek Harness no trata la delegación como una función más, sino como una costura con límites explícitos.</p>\n\n<h2>Los subagentes son una costura, no algo integrado</h2>\n<p>La delegación va por <code>ctx.subagents</code>. A diferencia del ejecutor de shell, que tiene exactamente una implementación, los proveedores de subagentes se registran por nombre y varios pueden coexistir. La documentación enumera seis transportes: creación in-process y fork (agentes ordinarios a través del contexto del padre), un puente ACP para despliegue remoto, Codex, Claude Code y una variante basada en SDK.</p>\n<p>En términos de coste esto significa que el precio de un hijo depende de qué proveedor lo creó. Un agente forkeado in-process y uno remoto lanzado por un puente ACP se ven iguales en el código que los llama y tienen facturas completamente distintas.</p>\n\n<h2>Dos modos de delegación, dos perfiles de coste</h2>\n<table>\n<thead><tr><th>Modo</th><th>Forma</th><th>Característica de coste</th></tr></thead>\n<tbody>\n<tr><td>De un disparo</td><td>Crear hijo, enviar prompt, esperar resultado, descartar</td><td>Acotado, atribuible al turno del padre</td></tr>\n<tr><td>Continuable</td><td>Sesión de fondo duradera con una activación residente</td><td>Abierto; se acumula entre turnos</td></tr>\n</tbody>\n</table>\n<p>El modo de un disparo se resuelve en un handle de ejecución con una promesa de resultado terminal. Los hijos continuables son más caros de sostener: un gestor de continuación reserva la identidad, compone el hijo, ordena cada turno por el buzón del hijo, y el proveedor solo aporta los metadatos de creación inicial. Las activaciones tienen tres estados: en ejecución, en espera (inactiva pero con activaciones hijas sin completar) y liquidada. Si llega un mensaje sin activación viva, se reanuda en frío desde la sesión persistida.</p>\n<p>Las reanudaciones en frío son la línea que la gente olvida. El estado se rehidrata desde el registro, así que los tokens de entrada son proporcionales al tamaño del registro. Un hijo longevo al que se habla poco puede costar más por mensaje que uno siempre activo.</p>\n\n<h2>Las capacidades fallan alto, no en silencio</h2>\n<p>El harness valida las capacidades solicitadas contra el proveedor y rechaza con un error tipado en vez de ignorarlas calladamente. Las capacidades de arranque cubren esquemas de salida, límites de profundidad, filtros de herramientas y personas, y se corresponden uno a uno con las opciones de la petición. Si pide algo que el proveedor no soporta, se entera al arrancar, no en la factura.</p>\n\n<h2>La profundidad tiene tope, y el tope no se puede blanquear</h2>\n<p>La profundidad de delegación se persiste en la cabecera de sesión y un campo en tiempo de ejecución sigue el mayor de los dos valores, de modo que una reanudación en frío no puede rebajarla. El arranque se rechaza si la profundidad derivada supera <code>maxDepth</code> o los límites de entero seguro.</p>\n\n<p class=\"agent-summary\">Un padre que crea tres hijos, y cada uno tres más, ha convertido una petición de usuario en trece agentes. Los topes de profundidad son la diferencia entre una ramificación que usted dimensionó y otra que descubrió.</p>\n\n<h2>Descubrir es barato, entregar es autoritativo</h2>\n<p><code>listChildren()</code> devuelve un corpus con preferencia por lo vivo mediante una aceleración de tres niveles: caché de marca de agua, luego checkpoint de proyección, luego inspección de la persistencia. <code>listDescendants()</code> recorre en preorden y añade posiciones de padre y profundidad. Ninguna consulta registros de agentes, activaciones ni proveedores; la entrega de mensajes sigue siendo la autoridad. Para atribución de costes esto importa: puede enumerar el árbol barato y cuando quiera.</p>\n\n<h2>Los resultados llevan una razón de parada</h2>\n<p>La salida es el último mensaje de asistente no vacío o el flujo de texto acumulado; la salida estructurada opcional se valida contra el esquema pedido. El <code>stopReason</code> es una unión extensible por fusión: completed, aborted, error, max-tokens, refusal. Todo lo que no sea completed significa salida parcial mapeada a resultados de herramienta con error: pagada e incompleta.</p>\n\n<h2>Qué medir</h2>\n<ol>\n<li>Hijos por turno de padre y descendientes por petición de usuario.</li>\n<li>Profundidad máxima observada frente al tope configurado.</li>\n<li>Porcentaje de hijos continuables reanudados en frío, más el tamaño del registro al reanudar.</li>\n<li>Distribución de razones de parada: mucha proporción de max-tokens o error es trabajo pagado y sin terminar.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "¿Cómo funcionan los subagentes en DeepSeek Harness?",
+          "answer": "Los subagentes son una costura intercambiable bajo ctx.subagents. Los proveedores se registran por nombre y varios pueden coexistir, de modo que un hijo puede correr in-process, forkeado o en remoto por un puente, según qué proveedor lo cree."
+        },
+        {
+          "question": "¿Qué transportes de subagente soporta DeepSeek Harness?",
+          "answer": "La documentación enumera seis: creación in-process, fork, un puente ACP para despliegue remoto, Codex, Claude Code y una implementación basada en SDK. Cada transporte tiene su propio perfil de coste aunque el código que los llama sea idéntico."
+        },
+        {
+          "question": "¿Cómo limita DeepSeek Harness la profundidad de delegación?",
+          "answer": "La profundidad se persiste en la cabecera de sesión y un campo en runtime sigue el mayor valor, así que una reanudación en frío no puede rebajarla. El arranque se rechaza si la profundidad derivada supera maxDepth o los límites de entero seguro."
+        },
+        {
+          "question": "¿Por qué importa la profundidad de delegación para el coste?",
+          "answer": "La delegación se multiplica. Un padre con tres hijos que crean tres cada uno convierte una petición en trece agentes. Sin tope de profundidad el árbol crece sin límite, y cada nodo consume sus propios tokens de entrada y salida."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-plugin-architecture",
+          "label": "Todo es un plugin: la arquitectura (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Límites de gasto en el harness (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Sous-agents DeepSeek Harness : la délégation comme…",
+      "titleCore": "Sous-agents DeepSeek Harness : la délégation comme…",
+      "description": "DeepSeek Harness traite les sous-agents comme une couture interchangeable : six transports, plafond de profondeur. Pourquoi déléguer coûte cher.",
+      "body": "<p>Le moyen le plus rapide de multiplier une facture d'agents est de laisser des agents en créer d'autres. Une requête utilisateur devient un arbre, et l'arbre n'a pas de taille naturelle. DeepSeek Harness ne traite donc pas la délégation comme une fonctionnalité, mais comme une couture assortie de limites explicites.</p>\n\n<h2>Les sous-agents sont une couture, pas un composant intégré</h2>\n<p>La délégation passe par <code>ctx.subagents</code>. Contrairement à l'exécuteur shell, qui n'a qu'une seule implémentation, les fournisseurs de sous-agents sont enregistrés par nom et plusieurs peuvent coexister. La documentation recense six transports : création in-process et fork (agents ordinaires via le contexte du parent), un pont ACP pour le déploiement distant, Codex, Claude Code et une variante fondée sur le SDK.</p>\n<p>Côté coût, cela veut dire que le prix d'un enfant dépend du fournisseur qui l'a créé. Un agent forké en processus et un agent distant lancé via un pont ACP se ressemblent dans le code appelant et n'ont rien de commun sur la facture.</p>\n\n<h2>Deux modes de délégation, deux profils de coût</h2>\n<table>\n<thead><tr><th>Mode</th><th>Forme</th><th>Caractéristique de coût</th></tr></thead>\n<tbody>\n<tr><td>Coup unique</td><td>Créer l'enfant, envoyer le prompt, attendre le résultat, jeter</td><td>Borné, imputable au tour du parent</td></tr>\n<tr><td>Continuable</td><td>Session d'arrière-plan durable avec activation résidente</td><td>Ouvert ; s'accumule d'un tour à l'autre</td></tr>\n</tbody>\n</table>\n<p>Le mode coup unique se résout en un handle d'exécution assorti d'une promesse de résultat terminal. Les enfants continuables coûtent plus cher à maintenir : un gestionnaire de continuation réserve l'identité, compose l'enfant, ordonne chaque tour via la boîte de réception de l'enfant, et le fournisseur ne contribue qu'aux métadonnées de création initiale. Les activations ont trois états : en cours, en attente (au repos mais détenant des activations enfants inachevées) et réglée. Un message reçu sans activation vivante déclenche une reprise à froid depuis la session persistée.</p>\n<p>Les reprises à froid sont le poste que l'on oublie. L'état est reconstitué depuis le journal, donc les tokens d'entrée sont proportionnels à la taille du journal. Un enfant de longue durée peu sollicité peut coûter plus cher par message qu'un enfant toujours actif.</p>\n\n<h2>Les capacités échouent bruyamment, pas en silence</h2>\n<p>Le harness valide les capacités demandées auprès du fournisseur et rejette par une erreur typée plutôt que d'ignorer silencieusement. Les capacités de démarrage couvrent les schémas de sortie, les limites de profondeur, les filtres d'outils et les personas, et correspondent une à une aux options de la requête. Demander ce que le fournisseur ne sait pas faire se voit au démarrage, pas sur la facture.</p>\n\n<h2>La profondeur est plafonnée, et le plafond ne se contourne pas</h2>\n<p>La profondeur de délégation est persistée dans l'en-tête de session et un champ d'exécution suit la plus grande des deux valeurs, si bien qu'une reprise à froid ne peut pas l'abaisser. Le démarrage est rejeté si la profondeur dérivée dépasse <code>maxDepth</code> ou les bornes d'entier sûr.</p>\n\n<p class=\"agent-summary\">Un parent qui lance trois enfants, chacun en lançant trois autres, a transformé une requête utilisateur en treize agents. Les plafonds de profondeur font la différence entre un éventail que vous avez dimensionné et un éventail que vous avez découvert.</p>\n\n<h2>Découvrir coûte peu, livrer fait autorité</h2>\n<p><code>listChildren()</code> renvoie un corpus privilégiant le vivant via une accélération à trois niveaux : cache de filigrane, puis point de contrôle de projection, puis inspection de la persistance. <code>listDescendants()</code> parcourt en préordre et ajoute les positions de parent et de profondeur. Aucune des deux ne consulte les registres d'agents, les activations ou les fournisseurs ; la remise des messages reste l'autorité. Pour l'imputation des coûts, c'est appréciable : l'arbre s'énumère à bas prix, quand vous voulez.</p>\n\n<h2>Les résultats portent une raison d'arrêt</h2>\n<p>La sortie est le dernier message d'assistant non vide ou le flux de texte accumulé ; une sortie structurée facultative est validée contre le schéma demandé. Le <code>stopReason</code> est une union extensible par fusion : completed, aborted, error, max-tokens, refusal. Tout ce qui n'est pas completed signifie une sortie partielle transformée en résultats d'outil en erreur : payée et inachevée.</p>\n\n<h2>Quoi mesurer</h2>\n<ol>\n<li>Enfants par tour de parent et descendants par requête utilisateur.</li>\n<li>Profondeur maximale observée face au plafond configuré.</li>\n<li>Part des enfants continuables repris à froid, et taille du journal à la reprise.</li>\n<li>Distribution des raisons d'arrêt : une forte part de max-tokens ou error, c'est du travail payé et inachevé.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Comment fonctionnent les sous-agents dans DeepSeek Harness ?",
+          "answer": "Les sous-agents sont une couture interchangeable sous ctx.subagents. Les fournisseurs sont enregistrés par nom et plusieurs coexistent, si bien qu'un enfant peut tourner en processus, en fork ou à distance via un pont, selon le fournisseur qui le crée."
+        },
+        {
+          "question": "Quels transports de sous-agents DeepSeek Harness prend-il en charge ?",
+          "answer": "La documentation en recense six : création in-process, fork, un pont ACP pour le déploiement distant, Codex, Claude Code et une implémentation fondée sur le SDK. Chaque transport a son profil de coût, même si le code appelant est identique."
+        },
+        {
+          "question": "Comment DeepSeek Harness limite-t-il la profondeur de délégation ?",
+          "answer": "La profondeur est persistée dans l'en-tête de session et un champ d'exécution suit la plus grande valeur, si bien qu'une reprise à froid ne peut l'abaisser. Le démarrage est rejeté si la profondeur dérivée dépasse maxDepth ou les bornes d'entier sûr."
+        },
+        {
+          "question": "Pourquoi la profondeur de délégation compte-t-elle pour le coût ?",
+          "answer": "La délégation se multiplie. Un parent qui lance trois enfants, chacun en lançant trois, transforme une requête en treize agents. Sans plafond de profondeur l'arbre croît sans borne, et chaque nœud consomme ses propres tokens d'entrée et de sortie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-plugin-architecture",
+          "label": "Tout est un plugin : l'architecture (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Garde-fous de dépense dans le harness (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessのサブエージェント：コストを掛け算する委譲",
+      "titleCore": "DeepSeek Harnessのサブエージェント：コストを掛け算する委譲",
+      "description": "DeepSeek Harnessはサブエージェントを差し替え可能なシームとして扱い、六つの転送方式と能力フラグ、深さ上限を備えます。委譲の深さがコストを決める理由。",
+      "body": "<p>エージェントの請求額をもっとも手早く膨らませる方法は、エージェントにエージェントを生成させることです。一つのユーザーリクエストが木構造になり、その木には自然な大きさがありません。だから DeepSeek Harness は委譲を単なる機能ではなく、明示的な限界を伴うシームとして扱います。</p>\n\n<h2>サブエージェントは組み込みではなくシーム</h2>\n<p>委譲は <code>ctx.subagents</code> を通ります。実装がちょうど一つに定まるシェル実行器とは違い、サブエージェントのプロバイダは名前付きで登録され、複数が共存できます。ドキュメントは六つの転送方式を挙げています。インプロセス生成とフォーク（親のコンテキストを通じた通常のエージェント）、リモート配備用の ACP ブリッジ、Codex、Claude Code、そして SDK ベースの実装です。</p>\n<p>コストの観点では、子の値段はそれを生成したプロバイダ次第だということになります。インプロセスでフォークされたエージェントと ACP ブリッジ越しに起動されたリモートエージェントは、呼び出し側のコードでは同じに見えて、請求はまったく別物です。</p>\n\n<h2>二つの委譲モード、二つのコスト特性</h2>\n<table>\n<thead><tr><th>モード</th><th>形</th><th>コスト特性</th></tr></thead>\n<tbody>\n<tr><td>ワンショット</td><td>子を生成し、プロンプトを送り、結果を待ち、破棄する</td><td>有界で、親のターンに帰属できる</td></tr>\n<tr><td>継続可能</td><td>常駐アクティベーションを持つ永続的なバックグラウンドセッション</td><td>開放的で、ターンをまたいで累積する</td></tr>\n</tbody>\n</table>\n<p>ワンショットは、終端結果の Promise を伴う実行ハンドルに解決されます。継続可能な子はより重く、継続マネージャがアイデンティティを予約し、子を構成し、すべてのターンを子のインボックス経由で順序付けます。プロバイダが提供するのは初期生成メタデータだけです。アクティベーションには三つの状態があります。実行中、待機中（静止しているが未完了の子アクティベーションを保持）、そして確定です。生きたアクティベーションがない状態でメッセージが届くと、永続化されたセッションからのコールドレジュームが起きます。</p>\n<p>コールドレジュームは、皆が忘れる費目です。状態はログから再構成されるため、入力トークンはログの大きさに比例します。たまにしか話しかけない長寿命の子は、常時走っている子よりメッセージあたり高くつくことがあります。</p>\n\n<h2>能力は静かにではなく、大きな音で失敗する</h2>\n<p>ハーネスは要求された能力をプロバイダに照らして検証し、黙って無視するのではなく型付きエラーで拒否します。起動時の能力は出力スキーマ、深さ制限、ツールフィルタ、ペルソナをカバーし、リクエストオプションと一対一で対応します。プロバイダが対応しない指定は起動時に判明し、請求書で判明することはありません。</p>\n\n<h2>深さには上限があり、その上限は迂回できない</h2>\n<p>委譲の深さはセッションヘッダに永続化され、ランタイムのフィールドは大きい方の値を追跡します。したがってコールドレジュームで深さを下げることはできません。導出された深さが <code>maxDepth</code> または安全整数の範囲を超える場合、起動は拒否されます。</p>\n\n<p class=\"agent-summary\">三つの子を生成し、その各々がさらに三つを生成する親は、一つのユーザーリクエストを十三のエージェントに変えています。深さ上限は、自分でサイズを決めたファンアウトと、後から発見したファンアウトとの違いです。</p>\n\n<h2>発見は安く、配送は権威を持つ</h2>\n<p><code>listChildren()</code> はライブを優先したコーパスを、三層の高速化（ウォーターマークキャッシュ、次に射影チェックポイント、次に永続層の検査）で返します。<code>listDescendants()</code> は先行順で走査し、親と深さの位置を付け足します。どちらもエージェントレジストリやアクティベーション、プロバイダを参照せず、メッセージ配送が権威であり続けます。コスト帰属の観点では、木をいつでも安く列挙できるということです。</p>\n\n<h2>結果は停止理由を伴う</h2>\n<p>出力は最後の非空アシスタントメッセージ、あるいは蓄積されたテキストストリームです。任意の構造化出力は要求スキーマに照らして検証されます。<code>stopReason</code> はマージ拡張可能なユニオンで、completed、aborted、error、max-tokens、refusal を取ります。completed 以外はすべて部分出力を意味し、エラーのツール結果へ写像されます。支払い済みで、未完了です。</p>\n\n<h2>測るべきもの</h2>\n<ol>\n<li>親ターンあたりの子の数と、ユーザーリクエストあたりの子孫の数。</li>\n<li>観測された最大深さと、設定された上限の対比。</li>\n<li>コールドレジュームされた継続可能な子の割合と、再開時のログサイズ。</li>\n<li>停止理由の分布。max-tokens や error の比率が高ければ、それは支払い済みの未完了作業です。</li>\n</ol>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness のサブエージェントはどう動きますか？",
+          "answer": "サブエージェントは ctx.subagents 配下の差し替え可能なシームです。プロバイダは名前付きで登録され複数が共存できるため、どのプロバイダが生成するかによって子はインプロセス、フォーク、あるいはブリッジ越しのリモートで動きます。"
+        },
+        {
+          "question": "DeepSeek Harness はどのサブエージェント転送方式に対応していますか？",
+          "answer": "ドキュメントは六つを挙げます。インプロセス生成、フォーク、リモート配備用の ACP ブリッジ、Codex、Claude Code、そして SDK ベースの実装です。呼び出しコードは同じでも、転送方式ごとにコスト特性は異なります。"
+        },
+        {
+          "question": "DeepSeek Harness は委譲の深さをどう制限しますか？",
+          "answer": "深さはセッションヘッダに永続化され、ランタイムのフィールドが大きい方の値を追跡するため、コールドレジュームで下げることはできません。導出深さが maxDepth や安全整数の範囲を超えると起動は拒否されます。"
+        },
+        {
+          "question": "なぜ委譲の深さがコストに効くのですか？",
+          "answer": "委譲は掛け算になるからです。三つの子を持つ親の各子がさらに三つを生成すれば、一つのリクエストが十三のエージェントになります。深さ上限がなければ木は無限に伸び、各ノードが自前の入出力トークンを消費します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-plugin-architecture",
+          "label": "すべてがプラグイン：その構造（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "ハーネスの支出ガードレール（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Subagentes do DeepSeek Harness: delegação como…",
+      "titleCore": "Subagentes do DeepSeek Harness: delegação como…",
+      "description": "O DeepSeek Harness trata subagentes como costura trocável com seis transportes, flags de capacidade e teto de profundidade. Por que delegar multiplica o custo.",
+      "body": "<p>A forma mais rápida de multiplicar a conta de um agente é deixar agentes criarem agentes. Um pedido de usuário vira uma árvore, e a árvore não tem tamanho natural. Por isso o DeepSeek Harness não trata delegação como recurso, e sim como uma costura com limites explícitos.</p>\n\n<h2>Subagentes são uma costura, não algo embutido</h2>\n<p>A delegação passa por <code>ctx.subagents</code>. Ao contrário do executor de shell, que tem exatamente uma implementação, os provedores de subagente são registrados por nome e vários podem coexistir. A documentação lista seis transportes: criação in-process e fork (agentes comuns através do contexto do pai), uma ponte ACP para implantação remota, Codex, Claude Code e uma variante baseada em SDK.</p>\n<p>Em termos de custo, isso significa que o preço de um filho depende de qual provedor o criou. Um agente forkado in-process e um remoto lançado por ponte ACP parecem iguais no código chamador e têm faturas completamente diferentes.</p>\n\n<h2>Dois modos de delegação, dois perfis de custo</h2>\n<table>\n<thead><tr><th>Modo</th><th>Formato</th><th>Característica de custo</th></tr></thead>\n<tbody>\n<tr><td>Disparo único</td><td>Criar filho, enviar prompt, aguardar resultado, descartar</td><td>Limitado, atribuível ao turno do pai</td></tr>\n<tr><td>Continuável</td><td>Sessão de fundo durável com uma ativação residente</td><td>Aberto; acumula entre turnos</td></tr>\n</tbody>\n</table>\n<p>O disparo único resolve para um handle de execução com uma promessa de resultado terminal. Filhos continuáveis custam mais para manter: um gerenciador de continuação reserva a identidade, compõe o filho, ordena cada turno pela caixa de entrada do filho, e o provedor contribui apenas com os metadados de criação inicial. Ativações têm três estados: em execução, em espera (quiescente mas detendo ativações filhas incompletas) e liquidada. Uma mensagem sem ativação viva dispara retomada a frio a partir da sessão persistida.</p>\n<p>Retomadas a frio são a linha que as pessoas esquecem. O estado é reidratado do log, então os tokens de entrada são proporcionais ao tamanho do log. Um filho longevo pouco acionado pode custar mais por mensagem do que um sempre ativo.</p>\n\n<h2>Capacidades falham alto, não em silêncio</h2>\n<p>O harness valida as capacidades pedidas contra o provedor e rejeita com erro tipado em vez de ignorar silenciosamente. As capacidades de início cobrem esquemas de saída, limites de profundidade, filtros de ferramentas e personas, e mapeiam um a um para as opções do pedido. Pedir algo que o provedor não suporta aparece na partida, não na fatura.</p>\n\n<h2>A profundidade tem teto, e o teto não se contorna</h2>\n<p>A profundidade de delegação é persistida no cabeçalho da sessão e um campo de runtime acompanha o maior valor, de modo que uma retomada a frio não consegue reduzi-la. O início é rejeitado se a profundidade derivada ultrapassar <code>maxDepth</code> ou os limites de inteiro seguro.</p>\n\n<p class=\"agent-summary\">Um pai que cria três filhos, cada um criando outros três, transformou um pedido de usuário em treze agentes. Tetos de profundidade são a diferença entre uma ramificação que você dimensionou e uma que você descobriu.</p>\n\n<h2>Descobrir é barato, entregar é autoritativo</h2>\n<p><code>listChildren()</code> devolve um corpus com preferência pelo vivo via aceleração de três níveis: cache de marca d'água, depois checkpoint de projeção, depois inspeção da persistência. <code>listDescendants()</code> percorre em pré-ordem e acrescenta posições de pai e profundidade. Nenhuma consulta registros de agentes, ativações ou provedores; a entrega de mensagens continua autoritativa. Para atribuição de custo isso importa: dá para enumerar a árvore barato e quando quiser.</p>\n\n<h2>Resultados carregam uma razão de parada</h2>\n<p>A saída é a última mensagem de assistente não vazia ou o fluxo de texto acumulado; a saída estruturada opcional é validada contra o esquema pedido. O <code>stopReason</code> é uma união extensível por fusão: completed, aborted, error, max-tokens, refusal. Tudo que não é completed significa saída parcial mapeada para resultados de ferramenta com erro: paga e incompleta.</p>\n\n<h2>O que medir</h2>\n<ol>\n<li>Filhos por turno de pai e descendentes por pedido de usuário.</li>\n<li>Profundidade máxima observada contra o teto configurado.</li>\n<li>Fatia de filhos continuáveis retomados a frio, mais o tamanho do log na retomada.</li>\n<li>Distribuição das razões de parada: muita incidência de max-tokens ou error é trabalho pago e inacabado.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Como funcionam os subagentes no DeepSeek Harness?",
+          "answer": "Subagentes são uma costura trocável sob ctx.subagents. Provedores são registrados por nome e vários coexistem, de modo que um filho pode rodar in-process, forkado ou remoto por uma ponte, conforme o provedor que o cria."
+        },
+        {
+          "question": "Quais transportes de subagente o DeepSeek Harness suporta?",
+          "answer": "A documentação lista seis: criação in-process, fork, uma ponte ACP para implantação remota, Codex, Claude Code e uma implementação baseada em SDK. Cada transporte tem seu perfil de custo, mesmo com código chamador idêntico."
+        },
+        {
+          "question": "Como o DeepSeek Harness limita a profundidade de delegação?",
+          "answer": "A profundidade é persistida no cabeçalho da sessão e um campo de runtime acompanha o maior valor, então uma retomada a frio não pode reduzi-la. O início é rejeitado se a profundidade derivada passar de maxDepth ou dos limites de inteiro seguro."
+        },
+        {
+          "question": "Por que a profundidade de delegação importa para o custo?",
+          "answer": "Delegação se multiplica. Um pai com três filhos que criam três cada transforma um pedido em treze agentes. Sem teto de profundidade a árvore cresce sem limite, e cada nó consome os próprios tokens de entrada e saída."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-plugin-architecture",
+          "label": "Tudo é um plugin: a arquitetura (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Limites de gasto no harness (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "الوكلاء الفرعيون والتفويض في DeepSeek Harness",
+      "titleCore": "الوكلاء الفرعيون والتفويض في DeepSeek Harness",
+      "description": "يتعامل DeepSeek Harness مع الوكلاء الفرعيين كخدمة بست وسائط نقل وحدود عمق. لماذا يرفع عمق التفويض تكلفة الرموز بشكل انفجاري.",
+      "body": "<p>يمثل تفويض المهام لوكلاء فرعيين متخصصين ركيزة أساسية لإنجاز الأعمال المعقدة. في DeepSeek Harness، لا يتم بناء الوكلاء الفرعيين ككتل صلبة، بل كخدمة متكاملة تدعم وسائط نقل متعددة، مع فرض قيود صارمة على عمق التفويض لمنع الانفجار المالي.</p>\n\n<h2>وضعان للتفويض: ملفان ماليان متباينان</h2>\n<ul>\n  <li><strong>التفويض المتزامن (In-process Delegation):</strong> تشغيل الوكيل الفرعي داخل نفس العملية البرمجية لمشاركة الذاكرة والسياق السريع للمهام القصيرة.</li>\n  <li><strong>التفويض المعزول (Isolated/External Delegation):</strong> تشغيل الوكيل في عملية منفصلة أو حاوية مستقلة، مما يوفر أماناً وعزلاً تاماً للمهام الخطرة مع زيادة في زمن الاستجابة.</li>\n</ul>\n\n<h2>عمق التفويض مقيد ولا يمكن تجاوزه</h2>\n<p>أخطر أنماط الهدر المالي في أسراب الوكلاء هو التفويض التكراري غير المقيد (Unbounded Recursion). يفرض Harness حداً أقصى صريحاً لعمق الشجرة؛ أي محاولة من وكيل فرعي لتوليد وكيل آخر يتجاوز السقف المحدد تؤدي إلى رفض فوري صريح (Fail Loudly).</p>\n\n<h2>مؤشرات القياس المالي للوكلاء الفرعيين</h2>\n<p>يجب تتبع: تكلفة كل وكيل فرعي بالنسبة للمهمة الإجمالية، ومعدل نجاح الوكلاء الفرعيين دون إعادة محاولة، والوقت المستغرق في نقل الرسائل بين الوكلاء.</p>",
+      "faq": [
+        {
+          "question": "كيف يدير DeepSeek Harness الوكلاء الفرعيين؟",
+          "answer": "يديرهم كخدمة قابلة للاستبدال تدعم وسائط نقل متعددة وتفرض حدوداً صارمة لعمق التفويض لمنع الحلقات اللانهائية."
+        },
+        {
+          "question": "لماذا يؤدي تفويض الوكلاء إلى زيادة التكاليف بسرعة؟",
+          "answer": "لأن كل وكيل فرعي يمتلك سياقه الخاص ومطالباته وأدواته، مما يضاعف عدد استدعاءات النماذج والرموز المستهلكة بشكل تكراري."
+        },
+        {
+          "question": "ماذا يحدث عند محاولة تجاوز الحد الأقصى لعمق التفويض؟",
+          "answer": "يرفض النظام الطلب فوراً وبشكل صريح ويسجل سبب التوقف في سجل الجلسة لمنع استنزاف الميزانية المخصصة للعملية."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/subagent-fan-out-concurrency-limits",
+          "label": "كبح تفرع الوكلاء واستنزاف الرموز"
+        },
+        {
+          "slug": "/ar/research/three-agent-budgets",
+          "label": "ميزانيات الوكلاء الثلاث"
+        },
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        }
+      ]
+    },
+    "zh": {
+      "title": "子智能体与层级委托：限制递归深度",
+      "titleCore": "子智能体与层级委托：限制递归深度",
+      "description": "DeepSeek Harness 将子智能体作为可插拔接缝实现，提供能力标志与硬性深度限制。为什么委托深度直接决定系统成本。",
+      "body": "<p>层级化委托是智能体解决高阶难题的核心，但也容易引发爆炸式的 Token 消耗。DeepSeek Harness 通过以下机制进行约束：</p>\n<h2>硬性深度封顶 (Depth Ceiling)</h2>\n<p>系统内置不可绕过的递归深度上限，子智能体试图越级生成更深层级代理时会立即触发明确报错并终止，杜绝无限套娃消耗。</p>",
+      "faq": [
+        {
+          "question": "如何避免子智能体过度消耗 Token？",
+          "answer": "通过系统级的递归深度硬性封顶与能力标志限制，并在所有子代理之间共享任务级别的全局预算池以防超支失控。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/subagent-fan-out-concurrency-limits",
+          "label": "遏制子智能体并发发散"
+        }
+      ]
+    },
+    "it": {
+      "title": "Sotto-agenti e deleghe in DeepSeek Harness",
+      "titleCore": "Sotto-agenti e deleghe in DeepSeek Harness",
+      "description": "La gestione dei sotto-agenti con limiti rigidi di profondità per prevenire esplosioni esponenziali di costi.",
+      "body": "<p>Limitare la ricorsione della delega tra agenti autonomi per proteggere il budget da moltiplicatori non lineari.</p>",
+      "faq": [
+        {
+          "question": "Come si controllano i sotto-agenti?",
+          "answer": "Imponendo limiti invalicabili alla profondità dell'albero di delega."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "서브에이전트 위임과 재귀 깊이 제어 기법",
+      "titleCore": "서브에이전트 위임과 재귀 깊이 제어 기법",
+      "description": "DeepSeek Harness의 서브에이전트 아키텍처: 깊이 제한, 명시적 중단 사유 및 다중 에이전트 비용 폭증 방지책.",
+      "body": "<p>재귀적 위임 깊이를 엄격히 제한하여 서브에이전트 생성으로 인한 지수함수적 토큰 소모를 차단합니다.</p>",
+      "faq": [
+        {
+          "question": "서브에이전트 깊이 제한이 필수적인 이유는?",
+          "answer": "통제되지 않은 위임은 기하급수적인 모델 호출을 발생시켜 예산을 순식간에 고갈시키기 때문입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/subagent-fan-out-concurrency-limits",
+          "label": "서브에이전트 동시성 제어"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Sub-agents en delegatie in DeepSeek Harness",
+      "titleCore": "Sub-agents en delegatie in DeepSeek Harness",
+      "description": "DeepSeek Harness regelt sub-agents met strikte dieptelimieten om exponentiële tokenkosten te voorkomen.",
+      "body": "<p>Beperk de recursiediepte van agents om onbeheersbare kostenexplosies te voorkomen.</p>",
+      "faq": [
+        {
+          "question": "Waarom is dieptelimiet belangrijk?",
+          "answer": "Zonder harde grens kan een agent oneindig sub-agents spawnen die elk tokens verbruiken."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/subagent-fan-out-concurrency-limits",
+          "label": "Sub-agent concurrency limieten"
+        }
+      ]
+    },
+    "en": {
+      "title": "DeepSeek Harness subagents: delegation as a cost multiplier",
+      "titleCore": "DeepSeek Harness subagents: delegation as a cost multiplier",
+      "description": "DeepSeek Harness treats subagents as a swappable seam with six transports, capability flags, and a depth cap. Why delegation depth drives agent cost.",
+      "body": "<p>The fastest way to multiply an agent bill is to let agents spawn agents. One user request becomes a tree, and the tree has no natural size. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> treats delegation as a first-class subsystem with an explicit depth cap, which makes it a good place to study how the multiplier actually works.</p>\n\n<h2>Subagents are a seam, not a built-in</h2>\n<p>Delegation lives behind <code>ctx.subagents</code>, a capability seam rather than core agent-loop machinery. Unlike the shell executor, which permits exactly one implementation, subagent providers are registered by name and multiple can coexist. Documented transports cover in-process spawning and forking (creating ordinary agents through the parent's context), an ACP bridge for remote deployment, and Codex, Claude Code, and SDK-based implementations.</p>\n<p>That plurality is the point. Where a child runs is a deployment decision with a price attached, and here it is chosen at composition time instead of compiled in.</p>\n\n<h2>Two delegation modes, two cost profiles</h2>\n<table>\n<thead><tr><th>Mode</th><th>Shape</th><th>Cost characteristic</th></tr></thead>\n<tbody>\n<tr><td>One-shot</td><td>Create child, send prompt, await result, dispose</td><td>Bounded, attributable to the parent turn</td></tr>\n<tr><td>Continuable</td><td>Durable background session with a resident activation</td><td>Open-ended; accrues across turns</td></tr>\n</tbody>\n</table>\n<p>One-shot delegations resolve into a run handle with a terminal result promise. Continuable children are heavier: the continuation manager reserves identity, composes the child, and orders every turn through the child's inbox, with the provider contributing only initial creation metadata. Their activation moves through three states — running, waiting (quiescent but owning uncompleted child activations), and settled — and a message arriving with no live activation triggers a cold resume from the persisted session.</p>\n<p>Cold resumes are the line item people forget. Reconstituting a child from its session log costs input tokens proportional to that log, and a chatty continuable child gets more expensive to wake the longer it lives.</p>\n\n<h2>Capabilities fail loud, not silent</h2>\n<p>Before delegating, the service validates the requested capabilities against the chosen provider. The specification is explicit that a request needing a capability the provider lacks is rejected with a typed error rather than accepted and then ignored. Start-time capabilities cover output schemas, depth limits, tool filters, and personas, each mapping one-to-one onto a request option.</p>\n<p>This is the correct default for cost work. Silent degradation is how a tool filter meant to keep an expensive tool out of a cheap child quietly stops applying, and nobody finds out until the invoice.</p>\n\n<h2>Depth is capped, and the cap cannot be laundered</h2>\n<p>Delegation depth is persisted in the session header, with a runtime field tracking the greater value. Two rules protect it: a cold resume cannot lower depth, and a start is rejected if the derived depth exceeds the <code>maxDepth</code> cap or safe-integer bounds. You cannot reset the counter by restarting a child.</p>\n\n<div class=\"callout\">A parent that spawns three children, each spawning three more, has turned one user request into thirteen agents. Depth caps are the difference between a fan-out you sized and a fan-out you discovered.</div>\n\n<h2>Discovery is cheap, delivery is authoritative</h2>\n<p>Two enumeration operations exist. <code>listChildren()</code> returns direct children from a live-preferred corpus with three-tiered acceleration — a watermark cache, then a projection checkpoint, then persistence inspection. <code>listDescendants()</code> walks the whole tree in pre-order, adding parent and depth positions. Both deliberately consult no agent registries, activations, or providers; message delivery remains the authoritative operation.</p>\n<p>The practical read: you can audit the delegation tree without paying to instantiate it.</p>\n\n<h2>Results carry a stop reason</h2>\n<p>A subagent result carries the output (last non-empty assistant message, or the accumulated text stream), optional structured output validated against the requested schema, and a <code>stopReason</code> from a merge-extensible union: completed, aborted, error, max-tokens, refusal. Anything other than completed indicates partial output, and consumers map those to error tool results.</p>\n<p>Track that distribution. A rising share of <code>max-tokens</code> or <code>error</code> stop reasons is spend that produced nothing, and it is usually the cheapest waste in the system to eliminate.</p>\n\n<h2>What to measure</h2>\n<ol>\n<li>Children per parent turn, and descendants per user request.</li>\n<li>Maximum observed delegation depth against your configured cap.</li>\n<li>Share of continuable children resumed cold, and the log size at resume.</li>\n<li>Stop-reason distribution across all subagent runs.</li>\n</ol>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-plugin-architecture\">DeepSeek Harness: what \"everything is a plugin\" buys you</a> — the seam model.</li>\n<li><a href=\"/research/deepseek-harness-goals-ralph-loop\">DeepSeek Harness goals and the Ralph loop</a> — the other unbounded-iteration risk.</li>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — the enforcement points.</li>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — where the numbers come from.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "How do subagents work in DeepSeek Harness?",
+          "answer": "Subagents are a capability seam registered by name in ctx.subagents, with multiple providers coexisting. Two modes exist: one-shot delegations that create a child, deliver a prompt, await completion and dispose, and continuable children that persist as durable background sessions."
+        },
+        {
+          "question": "What subagent transports does DeepSeek Harness support?",
+          "answer": "Providers include in-process spawn and fork backends that create ordinary agents through the parent context, an ACP bridge for remote deployment, and Codex, Claude Code, and SDK-based implementations."
+        },
+        {
+          "question": "How does DeepSeek Harness limit delegation depth?",
+          "answer": "Delegation depth is persisted in the session header and tracked at runtime. Cold resume cannot lower depth, and a start is rejected if the derived depth exceeds the maxDepth cap or safe-integer bounds."
+        },
+        {
+          "question": "Why does delegation depth matter for AI cost?",
+          "answer": "Each level of delegation multiplies the number of model calls made per user request. A parent that spawns three children, each of which spawns three more, has turned one request into a tree of billable work. Depth caps convert an unbounded fan-out into a bounded one."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-subagents"
+  }
+}

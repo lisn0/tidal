@@ -1,0 +1,106 @@
+{
+  "slug": "jev-use-cases-that-fit",
+  "tags": [
+    "agents",
+    "jev",
+    "routing",
+    "guardrails",
+    "use-cases"
+  ],
+  "datePublished": "2026-09-21",
+  "dateModified": "2026-09-21",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Six Jev use cases that actually fit",
+      "titleCore": "Six Jev use cases that actually fit",
+      "description": "Jev fits decisions with a declared answer space. These six patterns show where a decision model improves an agent without replacing generative AI.",
+      "body": "<p>Jev is useful when the system already knows what its possible next actions are. The model's job is to select or score among them from messy context. That rules out a lot of fashionable “AI use cases” and leaves a smaller, more useful list.</p><h2>1. Route work before generation</h2><p>Choose the model, specialist, or queue before spending on a full generation. A request can go to Billing, Technical, Sales, or Review; a coding task can go to a fast edit path, a deep investigation, or a human. Each route has a known next action and cost.</p><h2>2. Gate a proposed tool call</h2><p>Give Jev the proposed action, policy text, and current state. Ask whether the action is routine, needs confirmation, or should stop. Code then checks the caller's permission and validates the arguments.</p><h2>3. Triage support and operations queues</h2><p>One call can assign an owner, score urgency, and flag insufficient evidence. That is more useful than asking a chat model for a paragraph summary and hoping downstream code extracts the same answers every time.</p><h2>4. Score risk before escalating</h2><p>For transaction review, moderation, security alerts, or document exceptions, use Jev to separate clear low-risk cases from those that need a slower investigation. The decision model does not approve a transaction or block an account; it makes the first sorting decision cheap enough to run on every item.</p><h2>5. Select context for the next agent step</h2><p>Long-running agents accumulate notes, tool output, and stale plans. Jev can rank which facts remain relevant, whether the last step changed the state, and whether the task has enough evidence to finish.</p><h2>6. Verify a generated result against a rubric</h2><p>After an LLM writes an answer, Jev can score whether it contains required fields, follows a specified rule, or needs a repair pass. Keep the rubric concrete: “Does it name the affected customer, remediation owner, and next update time?” is actionable; “Is this good?” is not.</p><p>These patterns match Vercel's documented examples and the early community implementations. State goes in, typed decisions return, and code chooses what happens next. The common thread is a decision boundary that a system can name, measure, and improve.</p>",
+      "faq": [
+        {
+          "question": "What makes a good Jev use case?",
+          "answer": "The workflow has a finite answer space, relevant state, and a clear next action for every answer."
+        },
+        {
+          "question": "Can Jev be used for moderation or fraud?",
+          "answer": "It can score or route cases for review. Keep actual enforcement, authorization, and customer-impacting actions in application code and policy."
+        },
+        {
+          "question": "Can Jev check an LLM output?",
+          "answer": "Yes, when the check is a concrete rubric with named criteria. Use it to choose whether an answer can continue, needs repair, or needs review."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/how-to-use-jev-in-an-agent",
+          "label": "How to use Jev in an AI agent"
+        },
+        {
+          "slug": "/research/jev-agent-controls-and-budgets",
+          "label": "Where Jev belongs in an agent workflow"
+        },
+        {
+          "slug": "/research/agent-web-search-cost-center",
+          "label": "Web search is becoming an agent cost center"
+        }
+      ]
+    },
+    "es": {
+      "title": "Seis casos de uso de Jev que sí encajan",
+      "titleCore": "Seis casos de uso de Jev que sí encajan",
+      "description": "Jev encaja en decisiones con un espacio de respuestas declarado: enrutamiento, guardas, triaje, riesgo, contexto y validación por rúbrica.",
+      "body": "<p>Jev sirve cuando el sistema ya conoce sus posibles acciones siguientes. El modelo selecciona o puntúa entre ellas a partir de contexto desordenado. Esto deja una lista pequeña y útil de aplicaciones.</p><h2>1. Enrutar trabajo antes de generar</h2><p>Elija el modelo, especialista o cola antes de pagar por una generación completa. Cada ruta tiene una acción y un coste conocidos.</p><h2>2. Proteger una llamada de herramienta</h2><p>Entregue la acción propuesta, la política y el estado. Pregunte si es rutinaria, requiere confirmación o debe detenerse. El código valida permiso y argumentos.</p><h2>3. Hacer triaje de soporte y operaciones</h2><p>Una llamada puede asignar propietario, puntuar urgencia y marcar evidencia insuficiente. Es más útil que una síntesis en prosa que otro sistema tiene que interpretar.</p><h2>4. Puntuar riesgo antes de escalar</h2><p>Para revisión de transacciones, moderación, alertas de seguridad o excepciones documentales, Jev separa los casos claros de los que requieren investigación más lenta.</p><h2>5. Seleccionar contexto para el siguiente paso</h2><p>Los agentes largos acumulan notas y resultados obsoletos. Jev puede clasificar qué hechos siguen siendo relevantes y si la tarea tiene evidencia suficiente para terminar.</p><h2>6. Comprobar un resultado contra una rúbrica</h2><p>Después de que un LLM escriba una respuesta, Jev puede comprobar criterios concretos y decidir si continúa, necesita reparación o revisión. La rúbrica debe nombrar los campos requeridos, no preguntar simplemente si el resultado es bueno.</p>",
+      "faq": [
+        {
+          "question": "¿Qué hace que un caso de uso sea adecuado?",
+          "answer": "Un conjunto finito de respuestas, estado relevante y una acción siguiente clara para cada respuesta."
+        },
+        {
+          "question": "¿Puede Jev ejecutar acciones de cliente?",
+          "answer": "Puede puntuar o enrutar un caso; la autorización y la acción final deben quedar en código y política."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/how-to-use-jev-in-an-agent",
+          "label": "Cómo usar Jev en un agente de IA"
+        },
+        {
+          "slug": "https://finopsllm.com/research/jev-agent-controls-and-budgets",
+          "label": "Dónde encaja Jev en un flujo de agentes"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Seis casos de uso de Jev que fazem sentido",
+      "titleCore": "Seis casos de uso de Jev que fazem sentido",
+      "description": "Jev encaixa em decisões com respostas declaradas: encaminhamento, guardrails, triagem, risco, contexto e verificação por rubrica.",
+      "body": "<p>Jev funciona quando o sistema já conhece as suas próximas ações possíveis. O modelo escolhe ou pontua entre elas a partir de contexto desorganizado. Isso deixa uma lista pequena e útil de aplicações.</p><h2>1. Encaminhar trabalho antes de gerar</h2><p>Escolha o modelo, especialista ou fila antes de pagar por uma geração completa. Cada rota tem uma ação e um custo conhecidos.</p><h2>2. Proteger uma chamada de ferramenta</h2><p>Envie a ação proposta, a política e o estado. Pergunte se é rotineira, se precisa de confirmação ou se deve parar. O código valida permissão e argumentos.</p><h2>3. Fazer triagem de suporte e operações</h2><p>Uma chamada pode atribuir responsável, pontuar urgência e marcar evidência insuficiente. É mais útil que uma síntese em prosa que outro sistema precisa interpretar.</p><h2>4. Pontuar risco antes de escalar</h2><p>Para revisão de transações, moderação, alertas de segurança ou exceções documentais, Jev separa casos claros dos que precisam de investigação mais lenta.</p><h2>5. Selecionar contexto para o próximo passo</h2><p>Agentes longos acumulam notas e resultados obsoletos. Jev pode classificar que factos continuam relevantes e se a tarefa tem evidência suficiente para terminar.</p><h2>6. Verificar um resultado contra uma rubrica</h2><p>Depois de um LLM escrever uma resposta, Jev pode verificar critérios concretos e decidir se continua, precisa de correção ou de revisão. A rubrica deve nomear campos necessários, não perguntar apenas se o resultado é bom.</p>",
+      "faq": [
+        {
+          "question": "O que torna um caso de uso adequado?",
+          "answer": "Um conjunto finito de respostas, estado relevante e uma próxima ação clara para cada resposta."
+        },
+        {
+          "question": "Jev pode executar ações no cliente?",
+          "answer": "Pode pontuar ou encaminhar um caso; a autorização e a ação final devem ficar no código e na política."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/how-to-use-jev-in-an-agent",
+          "label": "Como usar Jev num agente de IA"
+        },
+        {
+          "slug": "https://finopsllm.com/research/jev-agent-controls-and-budgets",
+          "label": "Onde Jev entra num fluxo de agentes"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/jev-use-cases-that-fit"
+  }
+}

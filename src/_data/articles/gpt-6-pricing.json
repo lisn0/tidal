@@ -1,0 +1,64 @@
+{
+  "slug": "gpt-6-pricing",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "openai",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-23",
+  "dateModified": "2026-09-23",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "GPT-6 pricing: Astra, Sol and Luna",
+      "titleCore": "GPT-6 pricing: Astra, Sol and Luna",
+      "description": "GPT-6 API pricing for Astra ($10/$50), Sol ($2/$10) and Luna ($0.10/$0.50) per 1M tokens, with batch, flex, fast mode and the 272K long-context price jump.",
+      "body": "<p>OpenAI's GPT-6 family now has three models. GPT-6 Astra launched on 3 September 2026. GPT-6 Sol and GPT-6 Luna followed on 22 September 2026, about 90 minutes after Anthropic released Claude Opus 5.5. This page lists every GPT-6 API price from <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI's pricing page</a>, read on 23 September 2026, and shows where the bill actually comes from.</p><h2>GPT-6 API prices per 1M tokens</h2><p>Standard tier, prompts up to 272K input tokens.</p><table><thead><tr><th>Model</th><th>Input</th><th>Cached input</th><th>Cache write</th><th>Output</th></tr></thead><tbody><tr><td>GPT-6 Astra</td><td>$10.00</td><td>$1.00</td><td>$12.50</td><td>$50.00</td></tr><tr><td>GPT-6 Sol</td><td>$2.00</td><td>$0.20</td><td>$2.50</td><td>$10.00</td></tr><tr><td>GPT-6 Luna</td><td>$0.10</td><td>$0.01</td><td>$0.125</td><td>$0.50</td></tr></tbody></table><p>The pattern is the same on all three: cached input is 10% of input, a cache write is 1.25&times; input, and output is 5&times; input. Astra costs 5&times; Sol, and Sol costs 20&times; Luna.</p><h2>GPT-6 vs GPT-5.6: what changed</h2><table><thead><tr><th>Tier</th><th>GPT-5.6 input / output</th><th>GPT-6 input / output</th><th>Change</th></tr></thead><tbody><tr><td>Sol</td><td>$4.00 / $20.00</td><td>$2.00 / $10.00</td><td>&minus;50% on both</td></tr><tr><td>Luna</td><td>$0.20 / $1.20</td><td>$0.10 / $0.50</td><td>&minus;50% input, &minus;58% output</td></tr><tr><td>Terra</td><td>$2.00 / $12.00</td><td>no GPT-6 Terra</td><td>&mdash;</td></tr></tbody></table><p>OpenAI's pricing page notes that the GPT-5.6 Sol price above is promotional and runs at least through 21 November 2026. GPT-5.6 Terra has no GPT-6 successor yet. GPT-6 Sol now costs the same as Terra on input and less on output, so Terra workloads are the first candidates to move.</p><h2>Batch, flex and fast mode</h2><table><thead><tr><th>Model</th><th>Batch or flex (in / cached / out)</th><th>Fast mode (in / cached / out)</th></tr></thead><tbody><tr><td>GPT-6 Astra</td><td>$5.00 / $0.50 / $25.00</td><td>$20.00 / $2.00 / $100.00</td></tr><tr><td>GPT-6 Sol</td><td>$1.00 / $0.10 / $5.00</td><td>$4.00 / $0.40 / $20.00</td></tr><tr><td>GPT-6 Luna</td><td>$0.05 / $0.005 / $0.25</td><td>$0.20 / $0.02 / $1.00</td></tr></tbody></table><p>Batch and flex are half price. Fast mode is double. Fast mode is the old priority processing, renamed on 30 July 2026, and both <code>service_tier: \"priority\"</code> and <code>service_tier: \"fast\"</code> still work. That rename matters for cost tracking: a dashboard filtering on the old tier name can miss fast-mode spend. Data residency endpoints add 10% for models released on or after 5 March 2026, which includes all of GPT-6.</p><h2>The 272K long-context price jump</h2><p>All three models have a 1,050,000-token context window, a 922,000-token input limit and 128,000 max output tokens. Above 272K input tokens, the whole request is billed at long-context rates: 2&times; input and cached input, 1.5&times; output.</p><table><thead><tr><th>Model</th><th>Long-context input</th><th>Cached</th><th>Output</th></tr></thead><tbody><tr><td>GPT-6 Astra</td><td>$20.00</td><td>$2.00</td><td>$75.00</td></tr><tr><td>GPT-6 Sol</td><td>$4.00</td><td>$0.40</td><td>$15.00</td></tr><tr><td>GPT-6 Luna</td><td>$0.20</td><td>$0.02</td><td>$0.75</td></tr></tbody></table><p>This is a step, not a slope. Take one GPT-6 Sol request with 90% of the prompt cached and 20K output tokens. At 270K input it costs $0.303. At 300K input it costs $0.528. Eleven percent more context costs 74% more. The same 74% jump applies to Astra and Luna, because the multipliers are the same. Agents that let context grow unchecked cross 272K without anyone deciding to. Trim or summarise history before that line, and alert on requests above it.</p><h2>Specs that affect cost</h2><table><thead><tr><th>Model</th><th>Knowledge cutoff</th><th>Reasoning effort</th><th>Tier 1 limit</th></tr></thead><tbody><tr><td>GPT-6 Astra</td><td>30 April 2026</td><td>low, medium, high, xhigh, max</td><td>500 RPM, 500K TPM</td></tr><tr><td>GPT-6 Sol</td><td>20 April 2026</td><td>none, low, medium (default), high, xhigh, max</td><td>500 RPM, 500K TPM</td></tr><tr><td>GPT-6 Luna</td><td>18 May 2026</td><td>none, low, medium (default), high, xhigh, max</td><td>500 RPM, 500K TPM</td></tr></tbody></table><p>Astra has no <code>none</code> setting, so it always reasons. The effort setting moves the bill as much as the model does: on the Artificial Analysis Intelligence Index, GPT-6 Sol costs $0.13 per task at low effort and $1.06 at max. See <a href=\"/research/real-cost-per-task-frontier-models\">real cost per task</a> for every setting.</p><h2>What one agent step costs</h2><p>One step with 200K input tokens, 90% cached, and 20K output tokens, at standard list prices.</p><table><thead><tr><th>Model</th><th>Cost per step</th><th>Per 10,000 steps</th></tr></thead><tbody><tr><td>GPT-6 Luna</td><td>$0.014</td><td>$138</td></tr><tr><td>GPT-6 Sol</td><td>$0.276</td><td>$2,760</td></tr><tr><td>Claude Opus 5.5</td><td>$0.516</td><td>$5,160</td></tr><tr><td>GPT-5.6 Sol</td><td>$0.552</td><td>$5,520</td></tr><tr><td>GPT-6 Astra</td><td>$1.380</td><td>$13,800</td></tr></tbody></table><h2>ChatGPT and Codex are billed separately</h2><p>GPT-6 Sol and Luna are rolling out in ChatGPT Work and Codex for Plus, Pro, Business, Enterprise and Edu users, and Free and Go users get Luna in the desktop app. Those are subscription plans. None of the prices on this page apply to them, and API usage is never covered by a ChatGPT plan.</p><h2>Which GPT-6 model to use</h2><ul><li><strong>GPT-6 Luna</strong> for classification, extraction, summarising and routing. See the <a href=\"/research/gpt-6-luna-cost-model\">GPT-6 Luna cost model</a>.</li><li><strong>GPT-6 Sol</strong> as the default for coding and agents. See the <a href=\"/research/gpt-6-sol-cost-model\">GPT-6 Sol cost model</a>.</li><li><strong>GPT-6 Astra</strong> only where a replay on your own tasks shows Sol failing. See the <a href=\"/research/gpt-6-astra-cost-model\">GPT-6 Astra cost model</a>.</li></ul><p>Prices change. The <a href=\"https://finopsllm.com/research/llm-api-pricing-tracker\">LLM API pricing tracker</a> reads OpenAI's pricing page live and picks up new GPT-6 models automatically.</p>",
+      "faq": [
+        {
+          "question": "How much does GPT-6 cost?",
+          "answer": "Per 1M tokens: GPT-6 Astra is $10 input and $50 output, GPT-6 Sol is $2 and $10, and GPT-6 Luna is $0.10 and $0.50. Cached input is 10% of the input price on all three."
+        },
+        {
+          "question": "Is GPT-6 cheaper than GPT-5.6?",
+          "answer": "Yes. GPT-6 Sol is half the price of GPT-5.6 Sol ($2/$10 vs $4/$20), and GPT-6 Luna is $0.10/$0.50 vs $0.20/$1.20 for GPT-5.6 Luna."
+        },
+        {
+          "question": "What is GPT-6 long-context pricing?",
+          "answer": "Requests above 272K input tokens are billed at 2x the input and cached-input rates and 1.5x the output rate. For GPT-6 Sol that is $4 input, $0.40 cached and $15 output per 1M tokens."
+        },
+        {
+          "question": "What is the GPT-6 context window?",
+          "answer": "1,050,000 tokens for Astra, Sol and Luna, with a 922,000-token input limit and up to 128,000 output tokens."
+        },
+        {
+          "question": "Does GPT-6 have batch pricing?",
+          "answer": "Yes. Batch and flex are half the standard price, for example $1 input and $5 output per 1M tokens on GPT-6 Sol. Fast mode is double the standard price."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-sol-cost-model",
+          "label": "GPT-6 Sol cost model"
+        },
+        {
+          "slug": "/research/gpt-6-luna-cost-model",
+          "label": "GPT-6 Luna cost model"
+        },
+        {
+          "slug": "/research/gpt-6-astra-cost-model",
+          "label": "GPT-6 Astra cost model"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-api-pricing-tracker",
+          "label": "LLM API pricing tracker"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/gpt-6-pricing"
+  }
+}

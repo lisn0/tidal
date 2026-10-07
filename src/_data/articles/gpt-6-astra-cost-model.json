@@ -1,0 +1,64 @@
+{
+  "slug": "gpt-6-astra-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "openai",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-23",
+  "dateModified": "2026-09-23",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "GPT-6 Astra cost model",
+      "titleCore": "GPT-6 Astra cost model",
+      "description": "GPT-6 Astra costs $10 input and $50 output per 1M tokens. Cost per task by effort level, where Opus 5.5 is cheaper for the same score, and fast-mode pricing.",
+      "body": "<p>GPT-6 Astra is the top model in OpenAI's GPT-6 family. It launched on 3 September 2026, three weeks before GPT-6 Sol and Luna. It costs 5&times; GPT-6 Sol per token, and on public benchmarks most of its effort settings cost more than a competitor that scores higher.</p><h2>GPT-6 Astra prices</h2><table><thead><tr><th>Tier</th><th>Input</th><th>Cached input</th><th>Output</th></tr></thead><tbody><tr><td>Standard</td><td>$10.00</td><td>$1.00</td><td>$50.00</td></tr><tr><td>Batch or flex</td><td>$5.00</td><td>$0.50</td><td>$25.00</td></tr><tr><td>Fast mode</td><td>$20.00</td><td>$2.00</td><td>$100.00</td></tr><tr><td>Long context (over 272K input)</td><td>$20.00</td><td>$2.00</td><td>$75.00</td></tr></tbody></table><p>Per 1M tokens, from <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI's pricing page</a>. A cache write costs $12.50. Astra has a 1,050,000-token context window, 128,000 max output tokens and an April 2026 knowledge cutoff.</p><p>Astra always reasons. Unlike Sol and Luna it has no <code>none</code> effort setting; the choices are low, medium, high, xhigh and max.</p><h2>Against other premium models</h2><table><thead><tr><th>Model</th><th>Input</th><th>Cached</th><th>Output</th></tr></thead><tbody><tr><td>GPT-6 Astra</td><td>$10.00</td><td>$1.00</td><td>$50.00</td></tr><tr><td>Claude Fable 5.1</td><td>$10.00</td><td>$0.25</td><td>$50.00</td></tr><tr><td>Claude Opus 5.5</td><td>$4.00</td><td>$0.20</td><td>$20.00</td></tr><tr><td>GPT-6 Sol</td><td>$2.00</td><td>$0.20</td><td>$10.00</td></tr></tbody></table><p>Astra and Claude Fable 5.1 have the same list price, but Fable 5.1 charges a quarter as much for cached input. On a cache-heavy agent that difference is most of the input bill.</p><h2>Cost per task at each effort level</h2><p>Artificial Analysis Intelligence Index (v4.3.2):</p><table><thead><tr><th>Effort</th><th>Index score</th><th>Cost per task</th></tr></thead><tbody><tr><td>low</td><td>45.8</td><td>$0.82</td></tr><tr><td>medium</td><td>49.6</td><td>$1.54</td></tr><tr><td>high</td><td>50.9</td><td>$1.73</td></tr><tr><td>xhigh</td><td>52.4</td><td>$2.31</td></tr><tr><td>max</td><td>52.7</td><td>$3.26</td></tr></tbody></table><p>Only Astra at low effort sits on the price-performance frontier. At 45.8 for $0.82, it fills the gap between Sol at xhigh (44.1, $0.53) and Sol at max (47.5, $1.06). It is also frugal: about 4,400 output tokens per task at low, against 27,200 at max.</p><p>From medium upward, Claude Opus 5.5 beats it on both axes. Opus 5.5 at medium scores 51.2 for $1.34, higher than Astra at medium or high and cheaper than either. Opus 5.5 at high scores 53.6 for $1.82, higher than Astra at max for 44% less per task. Full cross-model numbers are in <a href=\"/research/real-cost-per-task-frontier-models\">real cost per task</a>.</p><p>That is a benchmark result, not a verdict on your workload. It does mean Astra above low effort has to earn its place on your own tasks before you pay for it.</p><h2>What an agent step costs</h2><p>A step with 200K input tokens, 90% cached, and 20K output tokens costs $1.38 on Astra: 5&times; GPT-6 Sol ($0.276) and 2.7&times; Claude Opus 5.5 ($0.516). At the long-context rate the numbers climb fast: the same step at 270K input is $1.51, at 300K it is $2.64.</p><h2>Fast mode doubles everything</h2><p>Fast mode (formerly priority processing, renamed 30 July 2026) costs $20 input and $100 output per 1M tokens. Track <code>service_tier</code> on every request. Both <code>\"priority\"</code> and <code>\"fast\"</code> select it, so a dashboard filtering on one value will miss spend under the other.</p><h2>When Astra is worth it</h2><ul><li>Start at low effort. It is the only setting that is cost-efficient on public benchmarks.</li><li>Before raising effort, replay the same tasks on Opus 5.5 and Sol at max. Pay for Astra only where it wins on your tasks.</li><li>Send offline evaluation and bulk jobs through batch at $5/$25.</li><li>Keep fast mode behind an explicit allow-list.</li></ul><p>Sources: <a href=\"https://developers.openai.com/api/docs/models/gpt-6-astra\">OpenAI GPT-6 Astra model page</a>, <a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI pricing</a>, <a href=\"https://artificialanalysis.ai/\">Artificial Analysis</a>. Prices read 23 September 2026.</p>",
+      "faq": [
+        {
+          "question": "How much does GPT-6 Astra cost?",
+          "answer": "$10 per 1M input tokens, $1 per 1M cached input tokens and $50 per 1M output tokens on the standard tier. Batch is $5/$25, fast mode is $20/$100."
+        },
+        {
+          "question": "Is GPT-6 Astra worth it compared with Claude Opus 5.5?",
+          "answer": "On the Artificial Analysis index, Opus 5.5 at medium effort scores 51.2 for $1.34 per task, beating Astra at medium (49.6, $1.54) and high (50.9, $1.73). Only Astra at low effort is on the price-performance frontier."
+        },
+        {
+          "question": "Can I turn off reasoning on GPT-6 Astra?",
+          "answer": "No. Astra supports low, medium, high, xhigh and max effort, with no none setting. GPT-6 Sol and Luna do offer none."
+        },
+        {
+          "question": "When was GPT-6 Astra released?",
+          "answer": "3 September 2026. GPT-6 Sol and Luna followed on 22 September 2026."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing: Astra, Sol and Luna"
+        },
+        {
+          "slug": "/research/gpt-6-sol-cost-model",
+          "label": "GPT-6 Sol cost model"
+        },
+        {
+          "slug": "/research/gpt-6-luna-cost-model",
+          "label": "GPT-6 Luna cost model"
+        },
+        {
+          "slug": "/research/claude-fable-5-1-cost-model",
+          "label": "Claude Fable 5.1 cost model"
+        },
+        {
+          "slug": "/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 cost by effort level"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/gpt-6-astra-cost-model"
+  }
+}

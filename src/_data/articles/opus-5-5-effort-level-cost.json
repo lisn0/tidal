@@ -1,0 +1,392 @@
+{
+  "slug": "opus-5-5-effort-level-cost",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "reasoning",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Opus 5.5 effort levels are the real price",
+      "titleCore": "Opus 5.5 effort levels are the real price",
+      "description": "Opus 5.5 is cheaper per token, but at max effort it spends about 119,000 output tokens per task. The effort setting now moves the bill more than the model choice.",
+      "body": "<p>Claude Opus 5.5 lists at $4 per million input tokens and $20 per million output tokens. That is 20% below Opus 5. The rate card is the smaller half of the cost story. The larger half is the <code>effort</code> setting, which decides how many tokens the model spends thinking before it answers.</p><h2>One model, five prices</h2><p>Opus 5.5 exposes effort from <code>low</code> through <code>medium</code>, <code>high</code>, <code>xhigh</code> and <code>max</code>. Each level is the same model at the same per-token rate, but it produces a very different number of tokens. Independent benchmarking reported by The Decoder found that four of the five levels sit on the cost&ndash;performance Pareto frontier. It also found that at max effort Opus 5.5 used about 119,000 output tokens per task, far more than competing models at their top settings.</p><p>At $20 per million, 119,200 output tokens is $2.38 per task before any input. At medium, Artificial Analysis measured 25,700 output tokens, or $0.51. With input counted, max costs $5.98 per task and medium $1.34: the same model is about 4.5&times; more expensive per task depending on one request parameter.</p><p>Measured on the Artificial Analysis Intelligence Index v4.3.2 (ten evaluations), read 22 September 2026. Every row uses the same benchmark suite, so the rows compare directly.</p><table><thead><tr><th>Model and effort</th><th>Intelligence Index</th><th>Cost per task</th><th>Output tokens per task</th><th>On the cost–performance frontier</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>No</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Yes</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Yes</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Yes</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Yes</td></tr><tr><td>Opus 5 · high (reference)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>No</td></tr></tbody></table><p>Source: Artificial Analysis. On the frontier means no setting of GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 or Fable 5.1 scores higher for less. Opus 5.5 low is off it because GPT-6 Sol at xhigh scores 44.1 for $0.53. Going from xhigh to max adds 1.6 points for 73% more cost.</p><h2>Medium is the setting Anthropic benchmarks against</h2><p>Anthropic's headline comparison is made at default effort, which is medium. It says Opus 5.5 at medium beats GPT-6 Astra at max effort on knowledge work for about a fifth of the cost per task. So Anthropic's own case for the model is built on medium, and max is the exception. A team that sets max everywhere \"to be safe\" pays for tokens the launch benchmarks did not need.</p><h2>How to set effort without guessing</h2><ol><li><strong>Default to medium.</strong> Make it the explicit value in code, not an SDK default that can change under you.</li><li><strong>Raise effort per route, not globally.</strong> Hard debugging, long-horizon planning and final review steps can justify high or max. Classification, extraction and routine edits rarely do.</li><li><strong>Log effort with every request.</strong> Cost per request is not interpretable without it. A spend spike with a flat request count is usually an effort change.</li><li><strong>Compare effort levels on the same replayed tasks.</strong> Record success rate and output tokens per completed task at each level, and stop raising effort when success stops improving.</li><li><strong>Cap output where the product allows it.</strong> A max-token limit bounds the worst case. At max effort that bound is the only thing between one runaway task and a several-dollar request.</li></ol><p>The cut from $25 to $20 per million output tokens saves 20%. Moving a workload from max to medium effort can save far more than that. Treat effort as a budget line, owned and reviewed like any other.</p>",
+      "faq": [
+        {
+          "question": "What effort levels does Claude Opus 5.5 support?",
+          "answer": "low, medium, high, xhigh and max. Medium is the default and the setting Anthropic uses for its main cost comparisons."
+        },
+        {
+          "question": "How many tokens does Opus 5.5 use at max effort?",
+          "answer": "Benchmarking reported by The Decoder measured about 119,000 output tokens per task at max effort, roughly $2.38 of output per task at $20 per million tokens."
+        },
+        {
+          "question": "Should I run Opus 5.5 at max effort?",
+          "answer": "Only on routes where a replay on your own tasks shows a success-rate gain that is worth the extra tokens. Start at medium and raise effort per route."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        },
+        {
+          "slug": "/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5 fast mode economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Reasoning model cost guide"
+        }
+      ]
+    },
+    "es": {
+      "title": "Los niveles de esfuerzo de Opus 5.5 son el precio real",
+      "titleCore": "Los niveles de esfuerzo de Opus 5.5 son el precio real",
+      "description": "Opus 5.5 es más barato por token, pero a esfuerzo máximo gasta unos 119.000 tokens de salida por tarea. El esfuerzo pesa más en la factura que el modelo.",
+      "body": "<p>Claude Opus 5.5 cuesta $4 por millón de tokens de entrada y $20 por millón de tokens de salida. Eso es 20% menos que Opus 5. La tarifa es la mitad menor del costo. La mayor mitad es el parámetro <code>effort</code>, que decide cuántos tokens gasta el modelo pensando antes de responder.</p><h2>Un modelo, cinco precios</h2><p>Opus 5.5 expone esfuerzo desde <code>low</code> hasta <code>medium</code>, <code>high</code>, <code>xhigh</code> y <code>max</code>. Cada nivel es el mismo modelo con la misma tarifa por token, pero produce un número muy diferente de tokens. Análisis independiente reportado por The Decoder encontró que cuatro de los cinco niveles se sitúan en la frontera de eficiencia costo-rendimiento. También encontró que a esfuerzo máximo Opus 5.5 usó alrededor de 119.000 tokens de salida por tarea, mucho más que modelos competidores en sus máximos niveles.</p><p>A 20 $ por millón, 119.200 tokens de salida son 2,38 $ por tarea antes de contar la entrada. En medium, Artificial Analysis midió 25.700 tokens de salida, es decir, 0,51 $. Contando la entrada, max cuesta 5,98 $ por tarea y medium 1,34 $: el mismo modelo es unas 4,5 veces más caro por tarea según un solo parámetro de la petición.</p><p>Medido en el Artificial Analysis Intelligence Index v4.3.2 (diez evaluaciones), consultado el 22 de septiembre de 2026. Todas las filas usan la misma batería de pruebas, así que se comparan directamente.</p><table><thead><tr><th>Modelo y esfuerzo</th><th>Intelligence Index</th><th>Coste por tarea</th><th>Tokens de salida por tarea</th><th>En la frontera coste–rendimiento</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>No</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Sí</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Sí</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Sí</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Sí</td></tr><tr><td>Opus 5 · high (referencia)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>No</td></tr></tbody></table><p>Fuente: Artificial Analysis. En la frontera significa que ningún ajuste de GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 o Fable 5.1 puntúa más por menos. Opus 5.5 low queda fuera porque GPT-6 Sol en xhigh puntúa 44,1 por 0,53 $. Pasar de xhigh a max suma 1,6 puntos con un 73 % más de coste.</p><h2>Medio es la configuración con la que Anthropic hace benchmarks</h2><p>La comparación principal de Anthropic se hace a esfuerzo predeterminado, que es medio. Dice que Opus 5.5 a medio vence a GPT-6 Astra a máximo esfuerzo en trabajo de conocimiento por aproximadamente un quinto del costo por tarea. Entonces el caso propio de Anthropic para el modelo se construye en medio, y máximo es la excepción. Un equipo que establece máximo en todas partes \"para estar seguro\" paga por tokens que los benchmarks de lanzamiento no necesitaban.</p><h2>Cómo establecer esfuerzo sin adivinar</h2><ol><li><strong>Establece por defecto medio.</strong> Hazlo el valor explícito en código, no un defecto del SDK que pueda cambiar bajo ti.</li><li><strong>Sube esfuerzo por ruta, no globalmente.</strong> La depuración difícil, la planificación de horizonte largo y los pasos de revisión final pueden justificar alto o máximo. La clasificación, extracción y ediciones rutinarias raramente lo hacen.</li><li><strong>Registra esfuerzo con cada solicitud.</strong> El costo por solicitud no es interpretable sin él. Un pico de gasto con un conteo de solicitud plano es usualmente un cambio de esfuerzo.</li><li><strong>Compara niveles de esfuerzo en las mismas tareas reproducidas.</strong> Registra la tasa de éxito y tokens de salida por tarea completada en cada nivel, y deja de subir esfuerzo cuando el éxito deja de mejorar.</li><li><strong>Limita salida donde el producto lo permita.</strong> Un límite de tokens máximo acota el peor caso. A esfuerzo máximo ese límite es lo único entre una tarea desbocada y una solicitud de varios dólares.</li></ol><p>El corte de $25 a $20 por millón de tokens de salida ahorra 20%. Mover una carga de trabajo de máximo a esfuerzo medio puede ahorrar mucho más que eso. Trata esfuerzo como una línea de presupuesto, poseída y revisada como cualquier otra.</p>",
+      "faq": [
+        {
+          "question": "¿Qué niveles de esfuerzo soporta Claude Opus 5.5?",
+          "answer": "low, medium, high, xhigh y max. Medio es el predeterminado y la configuración que Anthropic usa para sus comparaciones de costo principales."
+        },
+        {
+          "question": "¿Cuántos tokens usa Opus 5.5 a esfuerzo máximo?",
+          "answer": "El análisis reportado por The Decoder midió alrededor de 119.000 tokens de salida por tarea a máximo esfuerzo, aproximadamente $2,38 de salida por tarea a $20 por millón de tokens."
+        },
+        {
+          "question": "¿Debo ejecutar Opus 5.5 a esfuerzo máximo?",
+          "answer": "Solo en rutas donde una reproducción en tus propias tareas muestra una ganancia de tasa de éxito que vale los tokens extra. Comienza en medio y sube esfuerzo por ruta."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/claude-opus-5-5-cost-model",
+          "label": "Modelo de costo de Claude Opus 5.5"
+        },
+        {
+          "slug": "/es/research/opus-5-5-fast-mode-economics",
+          "label": "Economía del modo rápido de Opus 5.5"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Guía de costos del modelo de razonamiento"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Les niveaux d'effort d'Opus 5.5 sont le vrai prix",
+      "titleCore": "Les niveaux d'effort d'Opus 5.5 sont le vrai prix",
+      "description": "Opus 5.5 coûte moins par token, mais à effort maximal il dépense environ 119 000 tokens de sortie par tâche. L'effort pèse plus sur la facture que le modèle.",
+      "body": "<p>Claude Opus 5.5 s'affiche à $4 par million de tokens d'entrée et $20 par million de tokens de sortie. C'est 20% moins qu'Opus 5. Le tarif n'est que la moitié du coût. L'autre moitié est le paramètre <code>effort</code>, qui détermine combien de tokens le modèle consomme en réfléchissant avant de répondre.</p><h2>Un modèle, cinq prix</h2><p>Opus 5.5 expose l'effort de <code>low</code> à <code>medium</code>, <code>high</code>, <code>xhigh</code> et <code>max</code>. Chaque niveau est le même modèle au même tarif par token, mais produit un nombre très différent de tokens. L'analyse indépendante rapportée par The Decoder a trouvé que quatre des cinq niveaux se situent sur la frontière de Pareto coût-performance. Elle a aussi découvert qu'au niveau d'effort maximal Opus 5.5 utilisait environ 119.000 tokens de sortie par tâche, bien plus que les modèles concurrents à leurs réglages les plus élevés.</p><p>À 20 $ le million, 119 200 tokens de sortie font 2,38 $ par tâche avant toute entrée. En medium, Artificial Analysis a mesuré 25 700 tokens de sortie, soit 0,51 $. Entrée comprise, max coûte 5,98 $ par tâche et medium 1,34 $ : le même modèle coûte environ 4,5 fois plus par tâche selon un seul paramètre de requête.</p><p>Mesuré sur l'Artificial Analysis Intelligence Index v4.3.2 (dix évaluations), consulté le 22 septembre 2026. Toutes les lignes utilisent la même batterie de tests et se comparent donc directement.</p><table><thead><tr><th>Modèle et effort</th><th>Intelligence Index</th><th>Coût par tâche</th><th>Tokens de sortie par tâche</th><th>Sur la frontière coût–performance</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>Non</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Oui</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Oui</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Oui</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Oui</td></tr><tr><td>Opus 5 · high (référence)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>Non</td></tr></tbody></table><p>Source : Artificial Analysis. Sur la frontière signifie qu'aucun réglage de GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 ou Fable 5.1 n'obtient un meilleur score pour moins cher. Opus 5.5 low en est exclu, car GPT-6 Sol en xhigh obtient 44,1 pour 0,53 $. Passer de xhigh à max ajoute 1,6 point pour 73 % de coût en plus.</p><h2>Moyen est le réglage sur lequel Anthropic fait ses comparaisons</h2><p>La comparaison phare d'Anthropic se fait à l'effort par défaut, qui est moyen. Elle déclare qu'Opus 5.5 en moyen surpasse GPT-6 Astra en effort maximal sur le travail de connaissance pour environ un cinquième du coût par tâche. Ainsi, l'argument propre d'Anthropic pour le modèle repose sur le moyen, et le maximum est l'exception. Une équipe qui fixe le maximum partout « pour être sûre » paie des tokens que les benchmarks de lancement n'avaient pas besoin.</p><h2>Comment définir l'effort sans deviner</h2><ol><li><strong>Par défaut au moyen.</strong> Fixez-le comme valeur explicite dans le code, pas un défaut du SDK qui peut changer sous vous.</li><li><strong>Augmentez l'effort par route, pas globalement.</strong> Le débogage difficile, la planification à long terme et les étapes d'examen final peuvent justifier haut ou max. La classification, l'extraction et les éditions routinières le font rarement.</li><li><strong>Enregistrez l'effort avec chaque requête.</strong> Le coût par requête n'est pas interprétable sans lui. Un pic de dépenses avec un nombre de requêtes stable est généralement un changement d'effort.</li><li><strong>Comparez les niveaux d'effort sur les mêmes tâches rejouées.</strong> Enregistrez le taux de succès et les tokens de sortie par tâche complétée à chaque niveau, et arrêtez d'augmenter l'effort quand le succès cesse de s'améliorer.</li><li><strong>Plafonnez la sortie où le produit le permet.</strong> Une limite de tokens maximale limite le pire des cas. Au niveau d'effort maximum, cette limite est la seule chose entre une tâche qui s'emballe et une requête de plusieurs dollars.</li></ol><p>La réduction de $25 à $20 par million de tokens de sortie économise 20%. Déplacer une charge de travail de l'effort maximum au moyen peut économiser bien plus. Traitez l'effort comme une ligne budgétaire, détenue et examinée comme n'importe quelle autre.</p>",
+      "faq": [
+        {
+          "question": "Quels niveaux d'effort Claude Opus 5.5 supporte-t-il?",
+          "answer": "low, medium, high, xhigh et max. Moyen est le défaut et le réglage qu'Anthropic utilise pour ses comparaisons de coûts principales."
+        },
+        {
+          "question": "Combien de tokens Opus 5.5 utilise-t-il au niveau d'effort maximum?",
+          "answer": "L'analyse rapportée par The Decoder a mesuré environ 119.000 tokens de sortie par tâche au niveau d'effort maximum, soit environ $2,38 de sortie par tâche à $20 par million de tokens."
+        },
+        {
+          "question": "Dois-je exécuter Opus 5.5 au niveau d'effort maximum?",
+          "answer": "Seulement sur les routes où une relecture de vos propres tâches montre un gain de taux de succès qui justifie les tokens supplémentaires. Commencez en moyen et augmentez l'effort par route."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/claude-opus-5-5-cost-model",
+          "label": "Modèle de coût de Claude Opus 5.5"
+        },
+        {
+          "slug": "/fr/research/opus-5-5-fast-mode-economics",
+          "label": "Économie du mode rapide d'Opus 5.5"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Guide des coûts du modèle de raisonnement"
+        }
+      ]
+    },
+    "de": {
+      "title": "Opus 5.5 Anstrengungsstufen sind der echte Preis",
+      "titleCore": "Opus 5.5 Anstrengungsstufen sind der echte Preis",
+      "description": "Opus 5.5 ist pro Token günstiger, verbraucht bei maximalem Effort aber rund 119.000 Ausgabe-Token pro Aufgabe. Effort bewegt die Rechnung mehr als die Modellwahl.",
+      "body": "<p>Claude Opus 5.5 kostet $4 pro Million Eingabe-Token und $20 pro Million Ausgabe-Token. Das sind 20% weniger als Opus 5. Der Tarif ist nur die kleinere Hälfte der Gesamtkosten. Die größere Hälfte ist die <code>effort</code>-Einstellung, die bestimmt, wie viele Token das Modell durch Nachdenken verbraucht, bevor es antwortet.</p><h2>Ein Modell, fünf Preise</h2><p>Opus 5.5 bietet Anstrengung von <code>low</code> bis <code>medium</code>, <code>high</code>, <code>xhigh</code> und <code>max</code>. Jede Stufe ist das gleiche Modell zum gleichen Preis pro Token, erzeugt aber eine sehr unterschiedliche Anzahl von Tokens. Unabhängige Messungen von The Decoder zeigten, dass vier der fünf Stufen auf der Kosten-Leistungs-Pareto-Grenze liegen. Sie fanden auch, dass Opus 5.5 bei maximaler Anstrengung etwa 119.000 Ausgabe-Token pro Aufgabe verbrauchte, viel mehr als konkurrierende Modelle bei ihren höchsten Einstellungen.</p><p>Bei 20 $ pro Million kosten 119.200 Ausgabe-Token 2,38 $ pro Aufgabe, noch ohne Eingabe. Bei medium hat Artificial Analysis 25.700 Ausgabe-Token gemessen, also 0,51 $. Mit Eingabe kostet max 5,98 $ pro Aufgabe und medium 1,34 $: Dasselbe Modell ist je nach einem einzigen Request-Parameter etwa 4,5-mal teurer pro Aufgabe.</p><p>Gemessen im Artificial Analysis Intelligence Index v4.3.2 (zehn Evaluierungen), abgerufen am 22. September 2026. Alle Zeilen nutzen dieselbe Testsuite und sind direkt vergleichbar.</p><table><thead><tr><th>Modell und Effort</th><th>Intelligence Index</th><th>Kosten pro Aufgabe</th><th>Ausgabe-Token pro Aufgabe</th><th>Auf der Kosten-Leistungs-Frontier</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>Nein</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Ja</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Ja</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Ja</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Ja</td></tr><tr><td>Opus 5 · high (Referenz)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>Nein</td></tr></tbody></table><p>Quelle: Artificial Analysis. Auf der Frontier heißt: Keine Einstellung von GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 oder Fable 5.1 erzielt mehr für weniger Geld. Opus 5.5 low liegt nicht darauf, weil GPT-6 Sol bei xhigh 44,1 für 0,53 $ erreicht. Der Schritt von xhigh auf max bringt 1,6 Punkte für 73 % mehr Kosten.</p><h2>Mittel ist die Einstellung, auf der Anthropic Benchmarks basiert</h2><p>Anthropics hauptsächlicher Vergleich wird bei Standard-Anstrengung durchgeführt, die mittel ist. Es heißt, Opus 5.5 bei mittlerer Anstrengung schlägt GPT-6 Astra bei maximaler Anstrengung bei Wissensarbeit um etwa ein Fünftel der Kosten pro Aufgabe. Anthropics eigenes Argument für das Modell basiert also auf mittel, und max ist die Ausnahme. Ein Team, das überall max setzt, um \"sicherzugehen\", zahlt für Tokens, die die Produktions-Benchmarks nicht benötigten.</p><h2>Anstrengung ohne Raten setzen</h2><ol><li><strong>Standard auf mittel.</strong> Machen Sie es einen expliziten Wert im Code, nicht einen SDK-Standard, der sich unter Ihnen ändern kann.</li><li><strong>Erhöhen Sie die Anstrengung pro Route, nicht global.</strong> Schwieriges Debuggen, Langzeit-Planung und abschließende Überprüfungsschritte können hoch oder max rechtfertigen. Klassifizierung, Extraktion und routinemäßige Bearbeitungen nicht.</li><li><strong>Protokollieren Sie Anstrengung mit jeder Anfrage.</strong> Kosten pro Anfrage sind ohne sie nicht interpretierbar. Ein Ausgabespitzenwert mit flacher Anfragenanzahl ist üblicherweise eine Anstrengungsänderung.</li><li><strong>Vergleichen Sie Anstrengungsstufen mit denselben wiedergespielten Aufgaben.</strong> Protokollieren Sie Erfolgsrate und Ausgabe-Token pro abgeschlossener Aufgabe auf jeder Stufe, und hören Sie auf, die Anstrengung zu erhöhen, wenn die Erfolgsrate nicht mehr steigt.</li><li><strong>Begrenzen Sie Ausgaben, wo das Produkt es erlaubt.</strong> Ein Max-Token-Limit begrenzt den schlimmsten Fall. Bei maximaler Anstrengung ist dieses Limit das Einzige zwischen einer durchgehenden Aufgabe und einer mehrere Dollar kostenden Anfrage.</li></ol><p>Der Schnitt von $25 auf $20 pro Million Ausgabe-Token spart 20%. Eine Workload von maximaler zu mittlerer Anstrengung zu verschieben kann viel mehr sparen. Behandeln Sie Anstrengung als eine Budgetlinie, die so besitzt und überprüft wird wie jede andere.</p>",
+      "faq": [
+        {
+          "question": "Welche Anstrengungsstufen unterstützt Claude Opus 5.5?",
+          "answer": "low, medium, high, xhigh und max. Mittel ist die Standard und die Einstellung, die Anthropic für seine Hauptkostenvergleiche verwendet."
+        },
+        {
+          "question": "Wie viele Tokens verwendet Opus 5.5 bei maximaler Anstrengung?",
+          "answer": "Unabhängige Messungen von The Decoder ergaben etwa 119.000 Ausgabe-Token pro Aufgabe bei maximaler Anstrengung, etwa $2,38 Ausgabekosten pro Aufgabe bei $20 pro Million Token."
+        },
+        {
+          "question": "Sollte ich Opus 5.5 bei maximaler Anstrengung ausführen?",
+          "answer": "Nur auf Routes, wo eine Wiederholung Ihrer eigenen Aufgaben einen Erfolgsraten-Gewinn zeigt, der die zusätzlichen Tokens rechtfertigt. Beginnen Sie bei mittel und erhöhen Sie die Anstrengung pro Route."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 Kostenmodell"
+        },
+        {
+          "slug": "/de/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5 Fast-Mode-Wirtschaft"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Kostenführer für Reasoning-Modelle"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Os níveis de esforço do Opus 5.5 são o preço real",
+      "titleCore": "Os níveis de esforço do Opus 5.5 são o preço real",
+      "description": "Opus 5.5 é mais barato por token, mas no esforço máximo gasta cerca de 119.000 tokens de saída por tarefa. O esforço pesa mais na fatura que o modelo.",
+      "body": "<p>Claude Opus 5.5 custa $4 por milhão de tokens de entrada e $20 por milhão de tokens de saída. Isso é 20% menos que Opus 5. A tarifa é apenas metade do custo total. A outra metade é a configuração <code>effort</code>, que decide quantos tokens o modelo gasta pensando antes de responder.</p><h2>Um modelo, cinco preços</h2><p>Opus 5.5 expõe esforço de <code>low</code> até <code>medium</code>, <code>high</code>, <code>xhigh</code> e <code>max</code>. Cada nível é o mesmo modelo com a mesma taxa por token, mas produz um número muito diferente de tokens. Análise independente reportada por The Decoder descobriu que quatro dos cinco níveis ficam na fronteira de Pareto custo-desempenho. Também descobriu que no máximo esforço Opus 5.5 usou cerca de 119.000 tokens de saída por tarefa, muito mais que modelos concorrentes em suas configurações máximas.</p><p>A US$ 20 por milhão, 119.200 tokens de saída custam US$ 2,38 por tarefa antes de qualquer entrada. Em medium, a Artificial Analysis mediu 25.700 tokens de saída, ou US$ 0,51. Contando a entrada, max custa US$ 5,98 por tarefa e medium US$ 1,34: o mesmo modelo fica cerca de 4,5 vezes mais caro por tarefa por causa de um único parâmetro da requisição.</p><p>Medido no Artificial Analysis Intelligence Index v4.3.2 (dez avaliações), consultado em 22 de setembro de 2026. Todas as linhas usam o mesmo conjunto de testes, por isso comparam-se diretamente.</p><table><thead><tr><th>Modelo e esforço</th><th>Intelligence Index</th><th>Custo por tarefa</th><th>Tokens de saída por tarefa</th><th>Na fronteira custo–desempenho</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>Não</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Sim</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Sim</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Sim</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Sim</td></tr><tr><td>Opus 5 · high (referência)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>Não</td></tr></tbody></table><p>Fonte: Artificial Analysis. Na fronteira significa que nenhuma configuração de GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 ou Fable 5.1 pontua mais por menos. O Opus 5.5 low fica de fora porque o GPT-6 Sol em xhigh pontua 44,1 por US$ 0,53. Passar de xhigh para max soma 1,6 ponto com 73% mais custo.</p><h2>Médio é a configuração que Anthropic usa para benchmarks</h2><p>A comparação principal da Anthropic é feita em esforço padrão, que é médio. Diz que Opus 5.5 em médio vence GPT-6 Astra em máximo esforço em trabalho de conhecimento por cerca de um quinto do custo por tarefa. Portanto, o próprio caso da Anthropic para o modelo é construído em médio, e máximo é a exceção. Uma equipe que define máximo em tudo \"para estar seguro\" paga por tokens que os benchmarks de lançamento não precisavam.</p><h2>Como configurar esforço sem adivinhar</h2><ol><li><strong>Padrão para médio.</strong> Faça-o um valor explícito no código, não um padrão de SDK que pode mudar sob você.</li><li><strong>Aumente o esforço por rota, não globalmente.</strong> Depuração difícil, planejamento de longo horizonte e etapas de revisão final podem justificar alto ou máximo. Classificação, extração e edições rotineiras raramente.</li><li><strong>Registre esforço com cada solicitação.</strong> Custo por solicitação não é interpretável sem ele. Um pico de gastos com contagem de solicitação plana é geralmente uma mudança de esforço.</li><li><strong>Compare níveis de esforço nas mesmas tarefas reproduzidas.</strong> Registre taxa de sucesso e tokens de saída por tarefa concluída em cada nível, e pare de aumentar esforço quando o sucesso parar de melhorar.</li><li><strong>Limite a saída onde o produto permitir.</strong> Um limite de tokens máximo limita o pior caso. No máximo esforço esse limite é a única coisa entre uma tarefa descontrolada e uma solicitação de vários dólares.</li></ol><p>O corte de $25 para $20 por milhão de tokens de saída economiza 20%. Mover uma carga de trabalho de máximo para esforço médio pode economizar muito mais que isso. Trate esforço como uma linha de orçamento, possuída e revisada como qualquer outra.</p>",
+      "faq": [
+        {
+          "question": "Quais níveis de esforço Claude Opus 5.5 suporta?",
+          "answer": "low, medium, high, xhigh e max. Médio é o padrão e a configuração que Anthropic usa para suas comparações de custo principais."
+        },
+        {
+          "question": "Quantos tokens Opus 5.5 usa no máximo esforço?",
+          "answer": "Análise reportada por The Decoder mediu cerca de 119.000 tokens de saída por tarefa em máximo esforço, aproximadamente $2,38 de saída por tarefa a $20 por milhão de tokens."
+        },
+        {
+          "question": "Devo executar Opus 5.5 no máximo esforço?",
+          "answer": "Apenas em rotas onde uma reprodução em suas próprias tarefas mostra um ganho de taxa de sucesso que vale os tokens extras. Comece em médio e aumente o esforço por rota."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/claude-opus-5-5-cost-model",
+          "label": "Modelo de custo de Claude Opus 5.5"
+        },
+        {
+          "slug": "/pt/research/opus-5-5-fast-mode-economics",
+          "label": "Economia do modo rápido Opus 5.5"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Guia de custos do modelo de raciocínio"
+        }
+      ]
+    },
+    "it": {
+      "title": "I livelli di sforzo di Opus 5.5 sono il vero prezzo",
+      "titleCore": "I livelli di sforzo di Opus 5.5 sono il vero prezzo",
+      "description": "Opus 5.5 costa meno per token, ma a sforzo massimo consuma circa 119.000 token di output per attività. Lo sforzo pesa sulla fattura più del modello.",
+      "body": "<p>Claude Opus 5.5 costa $4 per milione di token di input e $20 per milione di token di output. Ciò rappresenta il 20% in meno di Opus 5. La tariffa è la metà minore del racconto dei costi. L'altra metà è l'impostazione <code>effort</code>, che decide quanti token il modello spende ragionando prima di rispondere.</p><h2>Un modello, cinque prezzi</h2><p>Opus 5.5 espone lo sforzo da <code>low</code> fino a <code>medium</code>, <code>high</code>, <code>xhigh</code> e <code>max</code>. Ogni livello è lo stesso modello alla stessa tariffa per token, ma produce un numero molto diverso di token. L'analisi indipendente riportata da The Decoder ha trovato che quattro dei cinque livelli si trovano sulla frontiera di Pareto costo-performance. Ha anche rilevato che a massimo sforzo Opus 5.5 ha utilizzato circa 119.000 token di output per attività, molto più dei modelli concorrenti alle loro impostazioni massime.</p><p>A 20 $ per milione, 119.200 token di output costano 2,38 $ per attività prima di qualsiasi input. A medium, Artificial Analysis ha misurato 25.700 token di output, cioè 0,51 $. Contando l'input, max costa 5,98 $ per attività e medium 1,34 $: lo stesso modello costa circa 4,5 volte di più per attività a seconda di un solo parametro della richiesta.</p><p>Misurato sull'Artificial Analysis Intelligence Index v4.3.2 (dieci valutazioni), consultato il 22 settembre 2026. Tutte le righe usano la stessa suite di test, quindi si confrontano direttamente.</p><table><thead><tr><th>Modello e sforzo</th><th>Intelligence Index</th><th>Costo per attività</th><th>Token di output per attività</th><th>Sulla frontiera costo–prestazioni</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>No</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Sì</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Sì</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Sì</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Sì</td></tr><tr><td>Opus 5 · high (riferimento)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>No</td></tr></tbody></table><p>Fonte: Artificial Analysis. Sulla frontiera significa che nessuna impostazione di GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 o Fable 5.1 ottiene di più spendendo meno. Opus 5.5 low ne resta fuori perché GPT-6 Sol a xhigh ottiene 44,1 per 0,53 $. Passare da xhigh a max aggiunge 1,6 punti con il 73% di costo in più.</p><h2>Medio è l'impostazione su cui Anthropic fa i benchmark</h2><p>Il principale confronto di Anthropic viene fatto a sforzo predefinito, che è medio. Dice che Opus 5.5 a medio supera GPT-6 Astra a massimo sforzo nel lavoro di conoscenza per circa un quinto del costo per attività. Quindi il caso stesso di Anthropic per il modello è costruito su medio, e max è l'eccezione. Un team che imposta max ovunque \"per stare al sicuro\" paga i token che i benchmark di lancio non necessitavano.</p><h2>Come impostare lo sforzo senza indovinare</h2><ol><li><strong>Predefinito a medio.</strong> Rendilo il valore esplicito nel codice, non un default SDK che può cambiare sotto di te.</li><li><strong>Alza lo sforzo per rotta, non globalmente.</strong> Debug difficile, pianificazione a lungo orizzonte e step di revisione finale possono giustificare alto o max. Classificazione, estrazione e modifiche di routine raramente.</li><li><strong>Registra lo sforzo con ogni richiesta.</strong> Il costo per richiesta non è interpretabile senza. Un picco di spesa con conteggio di richieste piatto è di solito un cambio di sforzo.</li><li><strong>Confronta i livelli di sforzo sugli stessi compiti riprodotti.</strong> Registra il tasso di successo e i token di output per attività completata a ogni livello, e smetti di aumentare lo sforzo quando il successo smette di migliorare.</li><li><strong>Limita l'output dove il prodotto lo consente.</strong> Un limite di token massimi vincola il caso peggiore. A massimo sforzo quel limite è l'unica cosa tra un compito in fuga e una richiesta da diversi dollari.</li></ol><p>Il taglio da $25 a $20 per milione di token di output risparmia il 20%. Spostare un carico di lavoro da max a sforzo medio può risparmiare molto più di questo. Tratta lo sforzo come una linea di bilancio, posseduta e revisionata come qualsiasi altra.</p>",
+      "faq": [
+        {
+          "question": "Quali livelli di sforzo supporta Claude Opus 5.5?",
+          "answer": "low, medium, high, xhigh e max. Medio è il predefinito e l'impostazione che Anthropic utilizza per i suoi principali confronti di costo."
+        },
+        {
+          "question": "Quanti token utilizza Opus 5.5 a massimo sforzo?",
+          "answer": "L'analisi riportata da The Decoder ha misurato circa 119.000 token di output per attività a massimo sforzo, circa $2,38 di output per attività a $20 per milione di token."
+        },
+        {
+          "question": "Devo eseguire Opus 5.5 a massimo sforzo?",
+          "answer": "Solo su rotte dove una ripetizione nei tuoi compiti mostra un guadagno del tasso di successo che vale i token extra. Inizia a medio e alza lo sforzo per rotta."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/claude-opus-5-5-cost-model",
+          "label": "Modello di costo di Claude Opus 5.5"
+        },
+        {
+          "slug": "/it/research/opus-5-5-fast-mode-economics",
+          "label": "Economia della modalità veloce di Opus 5.5"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Guida ai costi del modello di ragionamento"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Opus 5.5 inspanningsniveaus bepalen de werkelijke prijs",
+      "titleCore": "Opus 5.5 inspanningsniveaus bepalen de werkelijke prijs",
+      "description": "Opus 5.5 is goedkoper per token, maar verbruikt bij maximale inspanning zo'n 119.000 output-tokens per taak. Inspanning weegt zwaarder dan de modelkeuze.",
+      "body": "<p>Claude Opus 5.5 kost $4 per miljoen input-tokens en $20 per miljoen output-tokens. Dat is 20% minder dan Opus 5. Het tarief is slechts het kleinere deel van het kostenplaatje. Het grotere deel is de <code>effort</code>-instelling, die bepaalt hoeveel tokens het model doorbrengt met nadenken voordat het antwoord geeft.</p><h2>Eén model, vijf prijzen</h2><p>Opus 5.5 biedt inspanningsniveaus van <code>low</code> tot <code>medium</code>, <code>high</code>, <code>xhigh</code> en <code>max</code>. Elk niveau is hetzelfde model tegen dezelfde prijs per token, maar produceerde een heel ander aantal tokens. Onafhankelijke benchmarking gerapporteerd door The Decoder bleek dat vier van de vijf niveaus op de kosten-performance Pareto-grens liggen. Het stelde ook vast dat Opus 5.5 bij maximale inspanning ongeveer 119.000 output-tokens per taak gebruikte, veel meer dan concurrerende modellen bij hun maximale instellingen.</p><p>Tegen $20 per miljoen kosten 119.200 output-tokens $2,38 per taak, nog zonder input. Bij medium mat Artificial Analysis 25.700 output-tokens, ofwel $0,51. Met input erbij kost max $5,98 per taak en medium $1,34: hetzelfde model is door één requestparameter ongeveer 4,5 keer duurder per taak.</p><p>Gemeten op de Artificial Analysis Intelligence Index v4.3.2 (tien evaluaties), geraadpleegd op 22 september 2026. Alle rijen gebruiken dezelfde testsuite en zijn dus direct vergelijkbaar.</p><table><thead><tr><th>Model en inspanning</th><th>Intelligence Index</th><th>Kosten per taak</th><th>Output-tokens per taak</th><th>Op de kosten-prestatiefrontier</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>Nee</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>Ja</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>Ja</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>Ja</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>Ja</td></tr><tr><td>Opus 5 · high (referentie)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>Nee</td></tr></tbody></table><p>Bron: Artificial Analysis. Op de frontier betekent dat geen enkele instelling van GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5 of Fable 5.1 hoger scoort voor minder geld. Opus 5.5 low valt erbuiten, want GPT-6 Sol op xhigh scoort 44,1 voor $0,53. Van xhigh naar max levert 1,6 punt op voor 73% meer kosten.</p><h2>Medium is de instelling waartegen Anthropic benchmarkt</h2><p>De voornaamste vergelijking van Anthropic wordt gemaakt op standaard-inspanning, namelijk medium. Het zegt dat Opus 5.5 op medium GPT-6 Astra op maximale inspanning verslaat op kenniswerk voor ongeveer een vijfde van de kosten per taak. Dus Anthropics eigen standpunt voor het model is gebouwd op medium, en max is de uitzondering. Een team dat overal max instelt \"om veilig te zijn\" betaalt voor tokens die de launchbenchmarks niet nodig hadden.</p><h2>Inspanning instellen zonder giswerk</h2><ol><li><strong>Standaard op medium.</strong> Maak het een expliciete waarde in code, niet een SDK-standaard die onder u kan veranderen.</li><li><strong>Verhoog inspanning per route, niet globaal.</strong> Moeilijk debuggen, langetermijnplanning en laatste reviewstappen kunnen hoog of max rechtvaardigen. Classificatie, extractie en routinebewerkingen zelden.</li><li><strong>Log inspanning bij elk verzoek.</strong> Kosten per verzoek zijn zonder dit niet interpreteerbaar. Een uitgavenpiek met vlak verzoekvolume is meestal een inspanningswijziging.</li><li><strong>Vergelijk inspanningsniveaus op dezelfde opnieuw afgespeelde taken.</strong> Registreer succespercentage en output-tokens per voltooide taak op elk niveau, en stop met het verhogen van inspanning wanneer succes niet meer verbetert.</li><li><strong>Beperk output waar het product dit toestaat.</strong> Een max-token-limiet stelt het ergste geval in. Bij maximale inspanning is die limiet het enige tussen een weggelopen taak en een verzoek van meerdere dollars.</li></ol><p>De verlaging van $25 naar $20 per miljoen output-tokens bespaart 20%. Het verplaatsen van een workload van max naar medium inspanning kan veel meer besparen. Behandel inspanning als een begroting, bezeten en gereviseerd als ieder ander.</p>",
+      "faq": [
+        {
+          "question": "Welke inspanningsniveaus ondersteunt Claude Opus 5.5?",
+          "answer": "low, medium, high, xhigh en max. Medium is de standaard en de instelling die Anthropic gebruikt voor zijn belangrijkste kostenvergelijkingen."
+        },
+        {
+          "question": "Hoeveel tokens gebruikt Opus 5.5 bij maximale inspanning?",
+          "answer": "Onafhankelijke benchmarking gerapporteerd door The Decoder mat ongeveer 119.000 output-tokens per taak bij maximale inspanning, ongeveer $2,38 output per taak op $20 per miljoen tokens."
+        },
+        {
+          "question": "Moet ik Opus 5.5 op maximale inspanning draaien?",
+          "answer": "Alleen op routes waar een herhaling op uw eigen taken een succespercentageverbetering toont die de extra tokens waard is. Begin op medium en verhoog inspanning per route."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 kostenmodel"
+        },
+        {
+          "slug": "/nl/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5 fast-mode-economie"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Gids voor redeneringsnmodelkosten"
+        }
+      ]
+    },
+    "ja": {
+      "title": "Opus 5.5のエフォートレベルが真の価格を決める",
+      "titleCore": "Opus 5.5のエフォートレベルが真の価格を決める",
+      "description": "Opus 5.5はトークン単価は安いが、最大エフォートでは1タスクあたり約119,000の出力トークンを消費する。エフォート設定はモデル選択よりも請求額に大きな影響を与える。",
+      "body": "<p>Claude Opus 5.5は入力トークン100万あたり$4、出力トークン100万あたり$20です。これはOpus 5より20%安い。料金表はコストストーリーの小さい方の半分だ。大きい方の半分は<code>effort</code>設定で、モデルが回答する前に考えるのに費やすトークン数を決定する。</p><h2>1つのモデル、5つの価格</h2><p>Opus 5.5は<code>low</code>から<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code>までのエフォートを提供する。各レベルは同じモデルで同じトークン単価だが、生成されるトークン数は大きく異なる。The Decoderが報告した独立した分析では、5つのレベルのうち4つがコスト・パフォーマンスのパレート効率線上にあることが判明した。また、最大エフォートではOpus 5.5がタスクあたり約119,000の出力トークンを使用し、競合モデルの最高設定よりもはるかに多いことが判明した。</p><p>100万トークンあたり20ドルなら、出力119,200トークンは入力を除いてもタスクあたり2.38ドルです。medium では Artificial Analysis の実測で出力25,700トークン、0.51ドルでした。入力込みでは max がタスクあたり5.98ドル、medium が1.34ドルで、リクエストパラメータ1つで同じモデルのタスク単価が約4.5倍変わります。</p><p>Artificial Analysis Intelligence Index v4.3.2(10種の評価)での実測値、2026年9月22日時点。全行が同じベンチマーク群なので、そのまま比較できます。</p><table><thead><tr><th>モデルとエフォート</th><th>Intelligence Index</th><th>タスクあたりコスト</th><th>タスクあたり出力トークン</th><th>コスト性能フロンティア上か</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>いいえ</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>はい</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>はい</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>はい</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>はい</td></tr><tr><td>Opus 5 · high (参考)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>いいえ</td></tr></tbody></table><p>出典:Artificial Analysis。フロンティア上とは、GPT-6 Sol、GPT-6 Astra、Opus 5、Opus 5.5、Fable 5.1 のどの設定も、より安く、より高いスコアを出せないという意味です。Opus 5.5 low は、GPT-6 Sol の xhigh が 0.53ドルで 44.1 を出すため外れます。xhigh から max へ上げると、コスト73%増で1.6ポイント増です。</p><h2>中程度はAnthropicがベンチマークするための設定</h2><p>Anthropicの主要な比較はデフォルトエフォート(中程度)で行われる。Opus 5.5を中程度で実行するとGPT-6 Astraを最大エフォートで実行するよりもナレッジワークタスクあたり約5分の1のコストで上回ると言っている。したがって、Anthropic自身のモデル事例は中程度に基づいており、最大は例外だ。「安全のため」すべての場所で最大に設定するチームは、ローンチベンチマークが必要としなかったトークンに対して支払う。</p><h2>推測なしでエフォートを設定する方法</h2><ol><li><strong>デフォルトは中程度に。</strong>SDKデフォルトが自分の下で変わる可能性がないコード内の明示的な値にする。</li><li><strong>グローバルにではなく、ルートごとにエフォートを上げる。</strong>難しいデバッグ、長期的な計画、最終レビューステップは高または最大を正当化することができる。分類、抽出、ルーチン編集はほぼ決してない。</li><li><strong>各リクエストでエフォートをログ記録する。</strong>リクエストあたりのコストはそれなしに解釈不可能だ。フラットなリクエスト数でのコス支出スパイクは通常、エフォート変更だ。</li><li><strong>同じ再生されたタスクのエフォートレベルを比較する。</strong>各レベルでの完了したタスクあたりの成功率と出力トークンを記録し、成功の改善が停止したらエフォートの引き上げを停止する。</li><li><strong>製品が許可する場合は出力を制限する。</strong>最大トークン制限は最悪の場合を制限する。最大エフォートでは、その制限は、暴走タスクと数ドルのリクエストの間の唯一のものだ。</li></ol><p>$25から$20(トークン100万あたり出力)への削減は20%節約できる。ワークロードを最大から中程度エフォートに移すと、それより大幅に節約できる。エフォートを他のものと同じように所有・レビューされるベンチャーラインとして扱う。</p>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5はどのエフォートレベルをサポートしていますか?",
+          "answer": "low、medium、high、xhigh、max。Mediumがデフォルトで、Anthropicが主要なコスト比較に使用する設定です。"
+        },
+        {
+          "question": "Opus 5.5は最大エフォートでどのくらいのトークンを使用しますか?",
+          "answer": "The Decoderが報告した分析では、最大エフォートでタスクあたり約119,000の出力トークン、つまり$20/100万トークンで約$2.38の出力コストを測定しました。"
+        },
+        {
+          "question": "Opus 5.5を最大エフォートで実行すべきですか?",
+          "answer": "自分のタスクの再生で追加のトークンを正当化する成功率の向上を示す場合のみです。Mediumで開始し、ルートごとにエフォートを上げてください。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5コストモデル"
+        },
+        {
+          "slug": "/ja/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5ファストモードの経済学"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "推論モデルコストガイド"
+        }
+      ]
+    },
+    "ko": {
+      "title": "Opus 5.5의 노력 수준이 실제 가격입니다",
+      "titleCore": "Opus 5.5의 노력 수준이 실제 가격입니다",
+      "description": "Opus 5.5는 토큰당 가격은 저렴하지만 최대 노력 수준에서는 작업당 약 119,000개의 출력 토큰을 소비합니다. 노력 설정은 모델 선택보다 청구액에 더 큰 영향을 미칩니다.",
+      "body": "<p>Claude Opus 5.5는 입력 토큰 백만 개당 $4, 출력 토큰 백만 개당 $20입니다. 이는 Opus 5보다 20% 저렴합니다. 요금은 비용 이야기의 작은 절반일 뿐입니다. 큰 절반은 <code>effort</code> 설정으로, 모델이 답하기 전에 생각하는 데 소비하는 토큰 수를 결정합니다.</p><h2>하나의 모델, 다섯 가지 가격</h2><p>Opus 5.5는 <code>low</code>에서 <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>까지의 노력을 제공합니다. 각 수준은 동일한 토큰 단가의 동일한 모델이지만 매우 다른 수의 토큰을 생성합니다. The Decoder가 보고한 독립적 벤치마킹에 따르면 5개 수준 중 4개가 비용-성능 파레토 경계에 있습니다. 또한 최대 노력에서 Opus 5.5는 작업당 약 119,000개의 출력 토큰을 사용하여 경쟁 모델의 최고 설정보다 훨씬 많다는 것을 발견했습니다.</p><p>100만 토큰당 20달러면 출력 119,200토큰은 입력을 빼고도 작업당 2.38달러입니다. medium에서 Artificial Analysis가 측정한 출력은 25,700토큰, 즉 0.51달러였습니다. 입력까지 포함하면 max는 작업당 5.98달러, medium은 1.34달러로, 요청 파라미터 하나로 같은 모델의 작업당 비용이 약 4.5배 달라집니다.</p><p>Artificial Analysis Intelligence Index v4.3.2(평가 10종)에서 측정, 2026년 9월 22일 기준. 모든 행이 같은 벤치마크 묶음을 쓰므로 바로 비교할 수 있습니다.</p><table><thead><tr><th>모델 및 effort</th><th>Intelligence Index</th><th>작업당 비용</th><th>작업당 출력 토큰</th><th>비용-성능 프런티어 여부</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>아니요</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>예</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>예</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>예</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>예</td></tr><tr><td>Opus 5 · high (참고)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>아니요</td></tr></tbody></table><p>출처: Artificial Analysis. 프런티어에 있다는 것은 GPT-6 Sol, GPT-6 Astra, Opus 5, Opus 5.5, Fable 5.1의 어떤 설정도 더 적은 비용으로 더 높은 점수를 내지 못한다는 뜻입니다. Opus 5.5 low는 GPT-6 Sol xhigh가 0.53달러에 44.1점을 내므로 제외됩니다. xhigh에서 max로 올리면 비용이 73% 늘고 점수는 1.6점 오릅니다.</p><h2>중간이 Anthropic이 벤치마킹하는 설정입니다</h2><p>Anthropic의 주요 비교는 기본 노력인 중간에서 수행됩니다. Opus 5.5는 중간에서 최대 노력의 GPT-6 Astra를 지식 작업에서 약 5분의 1의 작업당 비용으로 능가한다고 말합니다. 따라서 Anthropic 자체의 모델에 대한 사례는 중간에 기반하며 최대는 예외입니다. 모든 곳에 최대를 설정하는 팀은 \"안전을 위해\" 출시 벤치마크가 필요하지 않은 토큰에 대해 비용을 지불합니다.</p><h2>추측 없이 노력을 설정하는 방법</h2><ol><li><strong>기본적으로 중간으로 설정하세요.</strong> SDK 기본값이 변경되지 않도록 코드에서 명시적 값으로 만드세요.</li><li><strong>전체적으로가 아니라 경로마다 노력을 높이세요.</strong> 어려운 디버깅, 장기 계획, 최종 검토 단계는 높음 또는 최대를 정당화할 수 있습니다. 분류, 추출 및 일상적인 편집은 거의 그렇지 않습니다.</li><li><strong>각 요청으로 노력을 기록하세요.</strong> 요청당 비용은 이 없이는 해석할 수 없습니다. 요청 수가 평탄한 상태에서의 지출 급증은 일반적으로 노력 변경입니다.</li><li><strong>동일하게 재생된 작업에서 노력 수준을 비교하세요.</strong> 각 수준에서 완료된 작업당 성공률과 출력 토큰을 기록하고 성공 개선이 멈출 때 노력 상향을 중단하세요.</li><li><strong>제품이 허용하는 경우 출력을 제한하세요.</strong> 최대 토큰 제한은 최악의 경우를 제한합니다. 최대 노력에서는 그 제한이 폭주 작업과 여러 달러 요청 사이의 유일한 것입니다.</li></ol><p>$25에서 $20으로의 인하는 20%를 절약합니다. 워크로드를 최대에서 중간 노력으로 옮기면 그보다 훨씬 더 절약할 수 있습니다. 노력을 다른 항목과 마찬가지로 소유하고 검토하는 예산 항목으로 취급하세요.</p>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5는 어떤 노력 수준을 지원합니까?",
+          "answer": "low, medium, high, xhigh 및 max. 중간이 기본값이며 Anthropic이 주요 비용 비교에 사용하는 설정입니다."
+        },
+        {
+          "question": "Opus 5.5는 최대 노력에서 몇 개의 토큰을 사용합니까?",
+          "answer": "The Decoder가 보고한 벤치마킹에서는 최대 노력에서 작업당 약 119,000개의 출력 토큰, 즉 토큰 백만 개당 $20에서 작업당 약 $2.38의 출력을 측정했습니다."
+        },
+        {
+          "question": "Opus 5.5를 최대 노력으로 실행해야 합니까?",
+          "answer": "자신의 작업 재생에서 추가 토큰을 정당화하는 성공률 향상을 보여주는 경우에만. 중간에서 시작하여 경로당 노력을 높이세요."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 비용 모델"
+        },
+        {
+          "slug": "/ko/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5 빠른 모드 경제학"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "추론 모델 비용 가이드"
+        }
+      ]
+    },
+    "zh": {
+      "title": "Opus 5.5的努力水平才是真实价格",
+      "titleCore": "Opus 5.5的努力水平才是真实价格",
+      "description": "Opus 5.5单位价格更便宜,但在最大努力水平下,每个任务消耗约119,000个输出令牌。努力参数对账单的影响超过了模型选择。",
+      "body": "<p>Claude Opus 5.5的价格是输入令牌每百万$4,输出令牌每百万$20。这比Opus 5便宜20%。价目表只是成本故事较小的一半。较大的一半是<code>effort</code>设置,它决定了模型在回答前思考花费多少个令牌。</p><h2>一个模型,五种价格</h2><p>Opus 5.5从<code>low</code>到<code>medium</code>、<code>high</code>、<code>xhigh</code>和<code>max</code>提供努力水平。每个级别是相同的模型,具有相同的令牌单价,但生成令牌数量相差很大。The Decoder报告的独立基准测试发现,五个级别中的四个位于成本-性能帕累托边界上。它还发现,在最大努力下Opus 5.5每个任务使用约119,000个输出令牌,远超竞争模型在最高设置下的使用量。</p><p>按每百万 20 美元计算,119,200 个输出 token 在不计输入的情况下就是每任务 2.38 美元。在 medium 档,Artificial Analysis 实测输出 25,700 个 token,即 0.51 美元。计入输入后,max 每任务 5.98 美元,medium 1.34 美元:仅一个请求参数,就让同一模型的每任务成本相差约 4.5 倍。</p><p>基于 Artificial Analysis Intelligence Index v4.3.2(十项评测)的实测数据,读取于 2026 年 9 月 22 日。所有行使用同一套基准,可直接比较。</p><table><thead><tr><th>模型与 effort</th><th>Intelligence Index</th><th>每任务成本</th><th>每任务输出 token</th><th>是否在成本–性能前沿</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>否</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>是</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>是</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>是</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>是</td></tr><tr><td>Opus 5 · high (参考)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>否</td></tr></tbody></table><p>来源:Artificial Analysis。位于前沿是指 GPT-6 Sol、GPT-6 Astra、Opus 5、Opus 5.5、Fable 5.1 的任何设置都无法以更低成本拿到更高分。Opus 5.5 low 不在前沿上,因为 GPT-6 Sol 的 xhigh 以 0.53 美元拿到 44.1 分。从 xhigh 升到 max,成本增加 73%,得分只多 1.6 分。</p><h2>中等是Anthropic进行基准测试的设置</h2><p>Anthropic的主要比较是在默认努力(中等)下进行的。它表示Opus 5.5在中等努力下在知识工作上的性能超过最大努力下的GPT-6 Astra,成本仅为其五分之一。因此,Anthropic自身对该模型的论证是建立在中等基础上的,而最大是例外。一个为了\"保险起见\"在所有地方都设置最大努力的团队,会为启动基准测试不需要的令牌付费。</p><h2>如何无需猜测地设置努力水平</h2><ol><li><strong>默认设置为中等。</strong>使其成为代码中的显式值,而不是可能会在你下方改变的SDK默认值。</li><li><strong>按路由提高努力水平,而不是全局提高。</strong>困难的调试、长期规划和最终审查步骤可以证明高等或最大是合理的。分类、提取和常规编辑很少需要。</li><li><strong>每个请求都记录努力水平。</strong>不记录的话就无法解释每个请求的成本。支出尖峰配合平稳的请求计数通常表示努力水平改变。</li><li><strong>在相同的重新执行任务上比较努力水平。</strong>在每个级别上记录成功率和每个完成任务的输出令牌,当成功停止改进时停止提高努力水平。</li><li><strong>在产品允许的地方限制输出。</strong>最大令牌限制限制了最坏的情况。在最大努力下,该限制是避免单个失控任务和多美元请求之间的唯一保障。</li></ol><p>从每百万$25降至$20可节省20%。将工作负载从最大努力改为中等努力可节省更多。将努力视为预算项目,就像其他任何项目一样进行所有权和审查。</p>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5支持哪些努力水平?",
+          "answer": "low、medium、high、xhigh和max。中等是默认值,也是Anthropic用于其主要成本比较的设置。"
+        },
+        {
+          "question": "Opus 5.5在最大努力下使用多少个令牌?",
+          "answer": "The Decoder报告的基准测试测得在最大努力下每个任务约119,000个输出令牌,以$20每百万令牌计算约为每个任务$2.38的输出成本。"
+        },
+        {
+          "question": "我应该以最大努力运行Opus 5.5吗?",
+          "answer": "仅当对你自己的任务的重新执行显示成功率提升足以抵消额外令牌成本时。从中等开始,然后按路由提高努力水平。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5成本模型"
+        },
+        {
+          "slug": "/zh/research/opus-5-5-fast-mode-economics",
+          "label": "Opus 5.5快速模式经济学"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "推理模型成本指南"
+        }
+      ]
+    },
+    "ar": {
+      "title": "مستويات الجهد في Opus 5.5 هي السعر الحقيقي",
+      "titleCore": "مستويات الجهد في Opus 5.5 هي السعر الحقيقي",
+      "description": "Opus 5.5 أرخص لكل رمز، لكن بجهد أقصى ينفق حوالي 119,000 رمز إخراج لكل مهمة. إعداد الجهد يحرك الفاتورة أكثر من اختيار النموذج.",
+      "body": "<p>يتم سرد Claude Opus 5.5 بسعر $4 لكل مليون رمز إدخال و$20 لكل مليون رمز إخراج. هذا أقل بـ 20% من Opus 5. قائمة الأسعار هي النصف الأصغر من قصة التكلفة. النصف الأكبر هو إعداد <code>effort</code>، الذي يحدد عدد الرموز التي ينفقها النموذج في التفكير قبل الإجابة.</p><h2>نموذج واحد، خمسة أسعار</h2><p>يعرض Opus 5.5 الجهد من <code>low</code> إلى <code>medium</code> و <code>high</code> و <code>xhigh</code> و <code>max</code>. كل مستوى هو نفس النموذج بنفس معدل الرمز، لكنه ينتج عدد رموز مختلف جداً. وجدت معايير مستقلة أبلغت عنها The Decoder أن أربعة من المستويات الخمسة تقع على حدود كفاءة التكلفة والأداء. كما وجدت أنه عند جهد أقصى استخدم Opus 5.5 حوالي 119,000 رمز إخراج لكل مهمة، أكثر بكثير من النماذج المنافسة في أعلى إعداداتها.</p><p>بسعر 20 دولارًا لكل مليون، تكلّف 119,200 رمز إخراج 2.38 دولار لكل مهمة قبل احتساب أي إدخال. عند medium قاست Artificial Analysis نحو 25,700 رمز إخراج، أي 0.51 دولار. مع احتساب الإدخال، يكلّف max نحو 5.98 دولار لكل مهمة وmedium نحو 1.34 دولار: النموذج نفسه أغلى بنحو 4.5 أضعاف لكل مهمة بسبب معامل واحد في الطلب.</p><p>مقيس على مؤشر Artificial Analysis Intelligence Index v4.3.2 (عشرة تقييمات)، بتاريخ 22 سبتمبر 2026. كل الصفوف تستخدم مجموعة الاختبارات نفسها، لذا تُقارن مباشرة.</p><table><thead><tr><th>النموذج ومستوى الجهد</th><th>Intelligence Index</th><th>التكلفة لكل مهمة</th><th>رموز الإخراج لكل مهمة</th><th>على حدّ التكلفة والأداء</th></tr></thead><tbody><tr><td>Opus 5.5 · low</td><td>42.3</td><td>$0.55</td><td>10,200</td><td>لا</td></tr><tr><td>Opus 5.5 · medium</td><td>51.2</td><td>$1.34</td><td>25,700</td><td>نعم</td></tr><tr><td>Opus 5.5 · high</td><td>53.6</td><td>$1.82</td><td>35,600</td><td>نعم</td></tr><tr><td>Opus 5.5 · xhigh</td><td>56.0</td><td>$3.46</td><td>65,700</td><td>نعم</td></tr><tr><td>Opus 5.5 · max</td><td>57.6</td><td>$5.98</td><td>119,200</td><td>نعم</td></tr><tr><td>Opus 5 · high (مرجع)</td><td>48.1</td><td>$3.61</td><td>46,200</td><td>لا</td></tr></tbody></table><p>المصدر: Artificial Analysis. الوجود على الحدّ يعني أنه لا يوجد إعداد من GPT-6 Sol أو GPT-6 Astra أو Opus 5 أو Opus 5.5 أو Fable 5.1 يحقق نتيجة أعلى بتكلفة أقل. يخرج Opus 5.5 low منه لأن GPT-6 Sol على xhigh يحقق 44.1 مقابل 0.53 دولار. الانتقال من xhigh إلى max يضيف 1.6 نقطة مقابل تكلفة أعلى بنسبة 73%.</p><h2>الوسط هو الإعداد الذي تقيس عليه Anthropic</h2><p>المقارنة الرئيسية لـ Anthropic يتم إجراؤها بجهد افتراضي، وهو متوسط. تقول إن Opus 5.5 بجهد متوسط يتغلب على GPT-6 Astra بجهد أقصى في عمل المعرفة بحوالي خمس تكلفة المهمة. إذاً حالة Anthropic الخاصة بها للنموذج مبنية على المتوسط، والأقصى هو الاستثناء. الفريق الذي يضع الحد الأقصى في كل مكان \"ليكون آمناً\" يدفع مقابل الرموز التي لم تحتجها معايير الإطلاق.</p><h2>كيفية تعيين الجهد بدون تخمين</h2><ol><li><strong>الافتراضي إلى المتوسط.</strong> اجعله قيمة صريحة في الكود، وليس قيمة افتراضية للمكتبة يمكن أن تتغير تحتك.</li><li><strong>رفع الجهد لكل مسار، وليس عالمياً.</strong> قد تبرر عمليات الاستكشاف الصعبة والتخطيط الطويل الأجل وخطوات المراجعة النهائية الجهد العالي أو الأقصى. التصنيف والاستخراج والتعديلات الروتينية نادراً ما تفعل.</li><li><strong>سجل الجهد مع كل طلب.</strong> التكلفة لكل طلب غير قابلة للتفسير بدونها. ارتفاع النفقات مع عدد طلبات مسطح يكون عادة تغييراً في الجهد.</li><li><strong>قارن مستويات الجهد على نفس المهام المعاد تشغيلها.</strong> سجل معدل النجاح ورموز الإخراج لكل مهمة مكتملة على كل مستوى، وتوقف عن رفع الجهد عندما يتوقف النجاح عن التحسن.</li><li><strong>أغلق الإخراج حيث يسمح المنتج.</strong> حد أقصى للرموز يحد من أسوأ حالة. بجهد أقصى فإن هذا الحد هو الشيء الوحيد بين مهمة هاربة وطلب بعدة دولارات.</li></ol><p>الخفض من $25 إلى $20 لكل مليون رمز إخراج يوفر 20%. نقل عبء العمل من جهد أقصى إلى متوسط يمكن أن يوفر أكثر من ذلك بكثير. تعامل مع الجهد كخط ميزانية، يُملك ويُراجع مثل أي آخر.</p>",
+      "faq": [
+        {
+          "question": "ما مستويات الجهد التي يدعمها Claude Opus 5.5؟",
+          "answer": "low، medium، high، xhigh و max. المتوسط هو الافتراضي والإعداد الذي تستخدمه Anthropic لمقارناتها الرئيسية."
+        },
+        {
+          "question": "كم عدد الرموز التي يستخدمها Opus 5.5 بجهد أقصى؟",
+          "answer": "أبلغت معايير مستقلة عن طريق The Decoder عن حوالي 119,000 رمز إخراج لكل مهمة بجهد أقصى، وهو حوالي $2.38 من الإخراج لكل مهمة بـ $20 لكل مليون رمز."
+        },
+        {
+          "question": "هل يجب أن أشغل Opus 5.5 بجهد أقصى؟",
+          "answer": "فقط على المسارات حيث تظهر إعادة تشغيل مهامك الخاصة كسب معدل نجاح يستحق الرموز الإضافية. ابدأ بالمتوسط وارفع الجهد لكل مسار."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/claude-opus-5-5-cost-model",
+          "label": "نموذج تكلفة Claude Opus 5.5"
+        },
+        {
+          "slug": "/ar/research/opus-5-5-fast-mode-economics",
+          "label": "اقتصاديات الوضع السريع Opus 5.5"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "دليل تكلفة نموذج المنطق"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/opus-5-5-effort-level-cost"
+  }
+}

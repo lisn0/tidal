@@ -1,0 +1,272 @@
+{
+  "slug": "three-agent-budgets",
+  "tags": [
+    "agents",
+    "budgets",
+    "guardrails"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The three budgets every autonomous agent needs",
+      "titleCore": "The three budgets every autonomous agent needs",
+      "description": "A runtime design for request, workflow, and daily budgets that bound autonomous agent spend without hiding quality failures.",
+      "body": "<p>An autonomous agent needs more than a monthly spending alert. It needs three budgets enforced inside its loop: a <strong>request budget</strong> for one model call, a <strong>workflow budget</strong> for the whole task, and a <strong>daily budget</strong> for the owner or tenant. Each catches a different failure mode.</p><h2>1. Request budget</h2><p>The request budget caps tokens, tool fan-out, latency, or dollars for one attempt. It protects against an oversized context, an unexpectedly long output, or a tool that causes a nested call. Enforce it before the provider request and before each tool dispatch. A soft limit can downshift the model; a hard limit rejects the attempt with an explicit reason.</p><h2>2. Workflow budget</h2><p>The workflow budget follows one user intent across turns, retries, fallbacks, and subagents. It needs a correlation ID and a running ledger, not a counter local to one process. Stop when the ledger crosses its ceiling, even if every individual request stayed below its limit. This is the control that catches delegation depth and non-converging loops.</p><h2>3. Daily budget</h2><p>The daily budget limits aggregate spend for a team, tenant, feature, or service account. It is a fairness and blast-radius control. When it is nearly exhausted, route eligible work to batch or smaller models and preserve reserved capacity for high-value workflows. Reset it on a declared timezone and record the reset in the ledger.</p><h2>Make denials useful</h2><p>A budget denial should say which budget fired, how much was consumed, and what recovery is allowed. Return a resumable state, not a silent empty answer. Emit an immutable event for every reservation, spend, release, and denial so finance can reconcile the ledger to provider invoices.</p><h2>Pair budgets with quality</h2><p>Budgets are not permission to degrade every response. Track successful-task cost, completion rate, latency, and user or evaluator quality alongside denials. A budget policy is healthy when it stops runaway work while preserving the quality SLO for the workflows it permits.</p><p>Three budgets create three boundaries: one attempt, one outcome, and one period. Together they turn an unbounded agent into a system that can be operated and audited.</p><h2>Related</h2><ul><li>Agent spend guardrails</li><li>LLM budget governance</li><li>Cost per successful task</li></ul>",
+      "faq": [
+        {
+          "question": "What are the three budgets an autonomous agent needs?",
+          "answer": "A request budget limits one model attempt, a workflow budget limits the complete task, and a daily budget limits aggregate spend for an owner, tenant, or service."
+        },
+        {
+          "question": "Where should agent budgets be enforced?",
+          "answer": "Enforce request limits before provider calls and tool dispatches, workflow limits across the correlation ledger, and daily limits at the shared service or tenant boundary."
+        },
+        {
+          "question": "What should happen when an agent reaches a budget?",
+          "answer": "Return an explicit denial with the budget and amount, emit an auditable event, and provide a defined recovery such as resume, downshift, or human escalation."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/agent-spend-guardrails",
+          "label": "Agent spend guardrails"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-budget-governance",
+          "label": "LLM budget governance"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    },
+    "es": {
+      "title": "Los tres presupuestos que necesita todo agente autónomo",
+      "titleCore": "Los tres presupuestos que necesita todo agente autónomo",
+      "description": "Un diseño de ejecución para limitar el gasto de agentes autónomos sin ocultar fallos de calidad.",
+      "body": "<p>Un agente autónomo necesita tres límites dentro de su bucle: presupuesto de <strong>solicitud</strong>, de <strong>flujo</strong> y <strong>diario</strong>. Cada uno captura un fallo distinto.</p><h2>Solicitud</h2><p>Limita tokens, herramientas, tiempo o dólares de un intento. Se aplica antes de la llamada al proveedor y a cada herramienta.</p><h2>Flujo</h2><p>Sigue una intención completa a través de reintentos, fallbacks y subagentes. Usa un ID de correlación y un libro acumulado para detener bucles que no convergen.</p><h2>Diario</h2><p>Limita el gasto agregado de un equipo, cliente, función o cuenta. Al acercarse al límite, enruta trabajo elegible a modelos menores o batch.</p><h2>Denegaciones útiles</h2><p>Explica qué límite se activó, cuánto se consumió y cuál es la recuperación permitida. Registra reservas, gasto y denegaciones para conciliarlos con la factura.</p><p>Los tres límites convierten un agente ilimitado en un sistema operable y auditable.</p>",
+      "faq": [
+        {
+          "question": "¿Cuáles son los tres presupuestos de un agente?",
+          "answer": "Solicitud para un intento, flujo para una tarea completa y diario para el gasto agregado del responsable o cliente."
+        },
+        {
+          "question": "¿Dónde se aplican?",
+          "answer": "Antes de llamadas y herramientas, en el libro de correlación del flujo y en el límite compartido del servicio o cliente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Límites de gasto de agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Les trois budgets dont tout agent autonome a besoin",
+      "titleCore": "Les trois budgets dont tout agent autonome a besoin",
+      "description": "Une conception d’exécution pour borner les dépenses d’agents sans masquer les échecs de qualité.",
+      "body": "<p>Un agent autonome a besoin de trois limites dans sa boucle: budget de <strong>requête</strong>, de <strong>flux</strong> et <strong>journalier</strong>. Chacune capture un mode d’échec différent.</p><h2>Requête</h2><p>Plafonne tokens, outils, durée ou dollars d’une tentative et s’applique avant le fournisseur et chaque outil.</p><h2>Flux</h2><p>Suit toute l’intention à travers reprises, bascules et sous-agents. Un registre corrélé arrête les boucles qui ne convergent pas.</p><h2>Journalier</h2><p>Limite la dépense agrégée d’une équipe, d’un client ou d’un service. À l’approche du plafond, utilisez une route moins chère ou batch.</p><h2>Refus utiles</h2><p>Indiquez la limite déclenchée, le montant consommé et la récupération possible. Consignez réservations, dépenses et refus pour le rapprochement.</p>",
+      "faq": [
+        {
+          "question": "Quels sont les trois budgets d’un agent autonome?",
+          "answer": "Un budget de requête pour une tentative, un budget de flux pour la tâche complète et un budget journalier pour la dépense agrégée."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Garde-fous de dépense des agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "Die drei Budgets, die jeder autonome Agent braucht",
+      "titleCore": "Die drei Budgets, die jeder autonome Agent braucht",
+      "description": "Ein Laufzeitdesign für Anfrage-, Workflow- und Tagesbudgets zur Begrenzung autonomer Agentenkosten.",
+      "body": "<p>Ein autonomer Agent braucht drei Grenzen in seiner Schleife: Budget für die <strong>Anfrage</strong>, den <strong>Workflow</strong> und den <strong>Tag</strong>. Jede fängt einen anderen Fehler ab.</p><h2>Anfrage</h2><p>Begrenzt Tokens, Tools, Zeit oder Dollar eines Versuchs und greift vor Provider- und Tool-Aufrufen.</p><h2>Workflow</h2><p>Verfolgt eine vollständige Aufgabe über Retries, Fallbacks und Subagenten. Ein korreliertes Ledger stoppt nicht konvergierende Schleifen.</p><h2>Tag</h2><p>Begrenzt die aggregierten Kosten eines Teams, Mandanten oder Dienstes. Nahe am Limit wird auf Batch oder kleinere Modelle geroutet.</p><h2>Nützliche Ablehnungen</h2><p>Zeigen Sie ausgelöstes Budget, Verbrauch und erlaubte Erholung und protokollieren Sie Reservierungen, Kosten und Ablehnungen.</p>",
+      "faq": [
+        {
+          "question": "Welche drei Budgets braucht ein autonomer Agent?",
+          "answer": "Ein Anfragebudget für einen Versuch, ein Workflowbudget für die Aufgabe und ein Tagesbudget für aggregierte Ausgaben."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Leitplanken für Agentenausgaben"
+        }
+      ]
+    },
+    "ja": {
+      "title": "自律エージェントに必要な3つの予算",
+      "titleCore": "自律エージェントに必要な3つの予算",
+      "description": "自律エージェントの支出を制限しながら品質低下を隠さない実行時予算設計です。",
+      "body": "<p>自律エージェントには、ループ内で強制する3つの予算が必要です。1回の<strong>リクエスト</strong>、1つの<strong>ワークフロー</strong>、そして<strong>日次</strong>の予算です。</p><h2>リクエスト予算</h2><p>1回の試行のトークン、ツール、時間、金額を制限し、プロバイダーとツールの呼び出し前に適用します。</p><h2>ワークフロー予算</h2><p>再試行、フォールバック、サブエージェントを含むタスク全体を追跡します。相関ID付きの台帳で収束しないループを止めます。</p><h2>日次予算</h2><p>チーム、テナント、機能の合計支出を制限します。上限に近づけば安価なモデルやバッチへ振り分けます。</p><h2>拒否を記録する</h2><p>発動した予算、消費額、回復方法を示し、予約、支出、拒否を請求と照合できるイベントとして記録します。</p>",
+      "faq": [
+        {
+          "question": "自律エージェントの3つの予算とは何ですか？",
+          "answer": "1回の試行を制限するリクエスト予算、タスク全体を制限するワークフロー予算、合計支出を制限する日次予算です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "エージェント支出のガードレール"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Os três orçamentos de que todo agente autónomo precisa",
+      "titleCore": "Os três orçamentos de que todo agente autónomo precisa",
+      "description": "Um desenho de execução para limitar a despesa de agentes autónomos sem esconder falhas de qualidade.",
+      "body": "<p>Um agente autónomo precisa de três limites dentro do ciclo: orçamento de <strong>pedido</strong>, de <strong>fluxo</strong> e <strong>diário</strong>. Cada um captura uma falha diferente.</p><h2>Pedido</h2><p>Limita tokens, ferramentas, tempo ou dólares de uma tentativa e aplica-se antes das chamadas ao fornecedor e às ferramentas.</p><h2>Fluxo</h2><p>Acompanha a intenção completa através de retries, fallbacks e subagentes. Um livro correlacionado trava ciclos que não convergem.</p><h2>Diário</h2><p>Limita a despesa agregada de uma equipa, cliente ou serviço. Perto do limite, encaminhe trabalho elegível para batch ou modelos menores.</p><h2>Recusas úteis</h2><p>Mostre qual limite disparou, o consumo e a recuperação permitida. Registe reservas, despesa e recusas para reconciliação.</p>",
+      "faq": [
+        {
+          "question": "Quais são os três orçamentos de um agente autónomo?",
+          "answer": "Pedido para uma tentativa, fluxo para a tarefa completa e diário para a despesa agregada do responsável ou cliente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Limites de despesa para agentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "I tre budget operativi per controllare gli agenti IA…",
+      "titleCore": "I tre budget operativi per controllare gli agenti IA…",
+      "description": "Un'architettura di runtime per budget di richiesta, workflow e giornalieri per limitare i costi degli agenti senza degradare la qualità.",
+      "body": "<p>Un agente autonomo necessita di più di un semplice avviso mensile di spesa. Ha bisogno di tre budget applicati direttamente nel suo loop di esecuzione: un <strong>budget di richiesta</strong> per la singola chiamata, un <strong>budget di workflow</strong> per l'intero compito, e un <strong>budget giornaliero</strong> per il team o tenant. Ciascuno previene una diversa modalità di guasto.</p><h2>1. Budget di richiesta</h2><p>Plafona token, chiamate a tool o costi per un singolo tentativo. Protegge da contesti giganti o output prolissi.</p><h2>2. Budget di workflow</h2><p>Traccia l'intento dell'utente attraverso retry, fallback e subagenti delegati tramite un correlation ID. Blocca i loop infiniti.</p><h2>3. Budget giornaliero</h2><p>Limita la spesa complessiva di un team o servizio, controllando il raggio d'impatto.</p><h2>Rendere utili i blocchi</h2><p>Un rifiuto deve spiegare quale limite è scattato, quanto è stato consumato e fornire un percorso di recupero o fallback.</p>",
+      "faq": [
+        {
+          "question": "Quali sono i tre budget di cui ha bisogno un agente autonomo?",
+          "answer": "Un budget di richiesta per il singolo tentativo, un budget di workflow per il task completo e un budget giornaliero per la spesa aggregata."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Limiti di spesa per agenti"
+        }
+      ]
+    },
+    "ko": {
+      "title": "자율형 AI 에이전트의 런타임 지출 통제를 위한 3단계 예산 아키텍처",
+      "titleCore": "자율형 AI 에이전트의 런타임 지출 통제를 위한 3단계 예산 아키텍처",
+      "description": "요청, 워크플로우, 일일 예산의 3단계 런타임 제어를 통해 에이전트 품질 실패를 숨기지 않고 비용을 통제하는 설계 가이드.",
+      "body": "<p>자율형 에이전트에는 단순한 월간 알림 이상의 통제 장치가 필요합니다. 런타임 루프 내부에서 강제되는 <strong>요청 예산</strong>(단일 호출), <strong>워크플로우 예산</strong>(전체 작업), <strong>일일 예산</strong>(팀/테넌트)의 3단계 예산이 각각 다른 실패 모드를 차단합니다.</p><h2>1. 요청 예산</h2><p>단일 시도의 토큰 수, 툴 호출 수, 지연 시간 또는 비용을 제한하여 비정상적인 컨텍스트 비대화를 방지합니다.</p><h2>2. 워크플로우 예산</h2><p>상관관계 ID(Correlation ID)를 통해 재시도, 폴백, 하위 에이전트를 포함한 전체 작업 비용을 추적하고 무한 루프를 차단합니다.</p><h2>3. 일일 예산</h2><p>팀이나 서비스의 일일 누적 지출을 통제하여 시스템 전체의 위험 반경을 제한합니다.</p><h2>차단 피드백의 투명성</h2><p>예산 초과 시 단순히 빈 응답을 반환하지 않고, 초과된 예산과 소모량을 명시하며 재개 가능한 상태를 반환해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "자율형 에이전트에 필요한 3가지 예산은 무엇인가요?",
+          "answer": "단일 호출을 제한하는 요청 예산, 전체 작업을 제한하는 워크플로우 예산, 팀/테넌트의 누적 비용을 제한하는 일일 예산입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "에이전트 지출 가드레일"
+        }
+      ]
+    },
+    "zh": {
+      "title": "自律智能体必备的三层运行时预算",
+      "titleCore": "自律智能体必备的三层运行时预算",
+      "description": "面向单次请求、业务工作流与租户日预算的三层运行时控制架构，防止智能体失控并兼顾交付质量。",
+      "body": "<p>自律AI智能体（Autonomous Agent）需要的绝不仅仅是月底的云账单超支告警。系统必须在其执行循环内部强制实施三层防御预算：针对单次模型调用的<strong>请求预算</strong>、针对端到端任务的<strong>工作流预算</strong>、以及针对业务属主或租户的<strong>日预算</strong>。每一层预算分别防御不同的技术与系统失效模式。</p><h2>1. 单次请求预算</h2><p>请求预算对单次模型交互的Token总数、工具并发扇出数、调用耗时或消费金额设置硬顶。它能有效防范上下文意外膨胀、大模型异常话痨生成、或工具递归调用死锁。必须在向供应商发起请求及分发工具动作前进行校验。达到软上限可自动降级模型，达到硬上限则直接阻断并返回明确拒绝代码。</p><h2>2. 任务工作流预算</h2><p>工作流预算跨越多个对话轮次、重试尝试、备选降级与子智能体委派，紧密跟踪单次用户的真实意图。它依赖全局关联ID（Correlation ID）与分布式账本，而非单机进程的本地计数器。一旦账本累计消费触及阈值必须立即叫停，即使每次单独请求都在单次限额之内。这是捕获委派层级过深和死循环的关键防线。</p><h2>3. 租户日预算</h2><p>日预算用于限制特定业务团队、租户、独立功能或服务账户在自然日内的累计消耗。它起到资源公平调度与故障爆炸半径隔离的作用。当日预算接近枯竭时，将非紧急计算路由至离线批处理或低成本模型，并为核心高价值业务保留配额。在统一时区自动清零并记录账本流水。</p><h2>确保预算拒绝具备业务可恢复性</h2><p>当触发预算熔断时，错误信息应当清晰指明被触发的预算类型、当前累计用量以及允许的恢复策略。返回可断点续跑的状态机快照，而非静默吞掉或抛出空响应。对每笔预算预占、实际扣减、释放及阻断事件生成不可篡改的审计日志，便于财务核对。</p>",
+      "faq": [
+        {
+          "question": "自律智能体需要哪三层预算控制？",
+          "answer": "包括限制单次模型调用的请求预算、限制端到端完整任务的工作流预算、以及限制租户或团队累计支出的日预算。"
+        },
+        {
+          "question": "这三层智能体预算应该在哪里进行拦截？",
+          "answer": "请求预算在发起模型调用和分发工具前拦截，工作流预算基于全局关联账本拦截，日预算则在共享网关或租户边界执行。"
+        },
+        {
+          "question": "当智能体消耗达到预算上限时系统应如何响应？",
+          "answer": "系统应返回包含具体预算类型与超额数据的结构化拒绝响应，记录审计日志，并提供断点恢复、降级模型或人工接管路径。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "智能体支出护栏"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-budget-governance",
+          "label": "LLM预算治理"
+        },
+        {
+          "slug": "/zh/research/cost-per-successful-task",
+          "label": "成功任务单价"
+        }
+      ]
+    },
+    "nl": {
+      "title": "De drie runtime-budgetten voor autonome AI-agents",
+      "titleCore": "De drie runtime-budgetten voor autonome AI-agents",
+      "description": "Een runtime-architectuur voor verzoek-, workflow- en dagbudgetten die AI-agentuitgaven begrenst zonder kwaliteitsverlies te verbergen.",
+      "body": "<p>Een autonome agent heeft meer nodig dan een maandelijkse budgetnotificatie. Er zijn drie geneste budgetten vereist binnen de executielus: een <strong>verzoekbudget</strong> voor één afzonderlijke modelaanroep, een <strong>workflowbudget</strong> voor de gehele taak, en een <strong>dagbudget</strong> voor het team of de tenant. Elk niveau voorkomt een andere foutmodus.</p><h2>1. Verzoekbudget</h2><p>Het verzoekbudget begrenst tokens, tool-fan-out, latentie of kosten per individuele poging. Het beschermt tegen buitenproportionele context, breedsprakige output of recursieve toolcalls. Dwing dit af vóór de provideraanroep en vóór tooluitvoering. Een zachte limiet kan downgraden naar een lichter model; een harde limiet weigert de poging met een expliciete reden.</p><h2>2. Workflowbudget</h2><p>Het workflowbudget bewaakt de intentie van de gebruiker over interactierondes, retries, fallbacks en subagents heen. Het vereist een correlatie-ID en een centraal logboek, geen proces-lokale teller. Stop zodra het totaalplafond wordt overschreden, zelfs als elke individuele aanroep binnen de perken bleef. Dit vangt oneindige lussen en te diepe delegatieboomstructuren op.</p><h2>3. Dagbudget</h2><p>Het dagbudget beperkt de geaggregeerde uitgaven voor een team, tenant of service-account. Het fungeert als blast-radius-controle en waarborgt eerlijke verdeling. Wanneer het limiet nadert, kan niet-urgent werk worden omgeleid naar batch-API's of goedkopere modellen, terwijl capaciteit voor vitale flows behouden blijft.</p><h2>Maak budgetweigeringen bruikbaar</h2><p>Een weigering moet specificeren welk budget is overschreden, hoeveel is verbruikt en welk herstelpad mogelijk is. Retourneer een hervatbare status in plaats van een lege reactie. Registreer onveranderlijke audit-events voor elke reservering, uitgave en weigering ten behoeve van financiële reconciliatie.</p>",
+      "faq": [
+        {
+          "question": "Welke drie budgetten heeft een autonome agent nodig?",
+          "answer": "Een verzoekbudget per aanroep, een workflowbudget voor de gehele bedrijfstaak en een dagbudget voor geaggregeerde team- of tenant-uitgaven."
+        },
+        {
+          "question": "Waar moeten deze agentbudgetten worden afgedwongen?",
+          "answer": "Verzoeklimieten vóór modelaanroepen en toolacties, workflowlimieten via een gecorreleerd transactielogboek en dagbudgetten op tenantniveau."
+        },
+        {
+          "question": "Wat moet er gebeuren als een budgetlimiet wordt bereikt?",
+          "answer": "Geef een expliciete weigering met limiet en verbruik terug, schrijf een audit-event en bied een hervatting, model-downgrade of menselijke escalatie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Budgetbewaking voor AI-agents"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-budget-governance",
+          "label": "LLM-budgetgovernance"
+        },
+        {
+          "slug": "/nl/research/cost-per-successful-task",
+          "label": "Kosten per geslaagde taak"
+        }
+      ]
+    },
+    "ar": {
+      "title": "الميزانيات الثلاث التي يحتاجها كل وكيل مستقل",
+      "titleCore": "الميزانيات الثلاث التي يحتاجها كل وكيل مستقل",
+      "description": "تصميم معماري لتحديد ميزانيات الطلب وسير العمل والميزانية اليومية للوكلاء المستقلين للتحكم في تكاليف الاستهلاك دون التضحية بالجودة.",
+      "body": "<p>يحتاج الوكيل المستقل إلى أكثر من مجرد تنبيه بالإنفاق الشهري. إنه يحتاج إلى ثلاث ميزانيات محددة يتم فرضها داخل حلقة اتخاذ القرار الخاصة به: <strong>ميزانية الطلب</strong> للاستدعاء الواحد، و<strong>ميزانية سير العمل</strong> للمهمة الكاملة، و<strong>الميزانية اليومية</strong> للمالك أو المستأجر.</p>\n\n<h2>1. ميزانية الطلب (Request Budget)</h2>\n<p>تضع حداً أقصى للرموز، واستدعاءات الأدوات، وزمن التأخير، أو التكلفة بالدولار لمحاولة استنتاج واحدة. وهي تحمي من تضخم السياق والمخرجات الطويلة غير المتوقعة. يتم فرضها قبل إرسال الطلب للمزود وقبل تنفيذ أي أداة.</p>\n\n<h2>2. ميزانية سير العمل (Workflow Budget)</h2>\n<p>ترافق نية المستخدم عبر الأدوار والمحاولات ومسارات التراجع وتفويض الوكلاء الفرعيين. تتطلب معرف ربط (correlation ID) ودفتراً حسابياً مستمراً. وتتوقف المهمة فور تجاوز الحد حتى لو كانت كل المحاولات الفردية ضمن النطاق المسموح.</p>\n\n<h2>3. الميزانية اليومية (Daily Budget)</h2>\n<p>تحد من إجمالي الإنفاق لفريق أو عميل أو خاصية. وهي أداة للعدالة واحتواء نطاق الخطأ. وعند اقترابها من النفاد، يمكن توجيه العمل للنماذج الأصغر أو المعالجة المجمعة لحفظ السعة المخصصة للأعمال الحيوية.</p>\n\n<h2>إرجاع أسباب الرفض بشكل مفيد</h2>\n<p>يجب أن يوضح رفض الميزانية أي سقف تم بلوغه، وما تم استهلاكه، ومسار الاستئناف المتاح، مع إصدار حدث قابل للتدقيق المالي ومطابقته مع فواتير المزودين.</p>",
+      "faq": [
+        {
+          "question": "ما هي الميزانيات الثلاث التي يحتاجها الوكيل المستقل؟",
+          "answer": "ميزانية الطلب للمحاولة الواحدة، وميزانية سير العمل للمهمة الشاملة، والميزانية اليومية للإنفاق الإجمالي للفريق أو العميل."
+        },
+        {
+          "question": "أين يتم فرض قيود ميزانية الوكلاء في الكود؟",
+          "answer": "قبل إرسال استدعاءات النماذج والأدوات، وفي دفتر تتبع سير العمل، وعلى حدود الخدمة المشتركة للمستأجرين."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/three-agent-budgets"
+  }
+}

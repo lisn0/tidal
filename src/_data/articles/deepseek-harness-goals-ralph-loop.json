@@ -1,0 +1,363 @@
+{
+  "slug": "deepseek-harness-goals-ralph-loop",
+  "tags": [
+    "deepseek-harness",
+    "goals",
+    "cost-control"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "DeepSeek Harness: Ziele, Ziel-Runden und die Ralph-Schleife",
+      "titleCore": "DeepSeek Harness: Ziele, Ziel-Runden und die Ralph-Schleife",
+      "description": "DeepSeek Harness formalisiert offene Agentenarbeit als Ziele, Ziel-Runden und Ralph-Schleifen. Ein Leitfaden zum Vokabular und dazu, wo das Kostenrisiko sitzt.",
+      "body": "<p>Die meisten Kostenüberraschungen bei Agenten entstehen nicht durch den Preis eines Tokens. Sie entstehen dadurch, wie oft der Agent beschlossen hat, es noch einmal zu versuchen. DeepSeek Harness gibt diesem Verhalten ein Vokabular — der erste Schritt, um eine Zahl daran zu heften.</p>\n\n<h2>Zug, Schritt, Runde</h2>\n<p>Drei Einheiten, im Projektglossar sauber getrennt:</p>\n<table>\n<thead><tr><th>Einheit</th><th>Definition</th><th>Kostenbedeutung</th></tr></thead>\n<tbody>\n<tr><td>Schritt</td><td>Eine Modellanfrage plus die von ihr ausgelösten Werkzeugausführungen</td><td>Das Abrechnungsatom</td></tr>\n<tr><td>Zug</td><td>Ein Leeren der Eingabe, endend wenn das Modell stoppt oder eine Policy eingreift</td><td>Die nutzerseitige Einheit</td></tr>\n<tr><td>Runde</td><td>Eine äußere Policy-Iteration, etwa eine Ziel-Runde oder ein Neuversuch mit frischem Agenten</td><td>Der Multiplikator über den Zügen</td></tr>\n</tbody>\n</table>\n<p>Runden sind die Ebene, die selbstgebaute Kostenmodelle meist ganz auslassen. Wenn Ihre Prognose Anfragen zählt und Ihr System in Runden läuft, misst Ihre Prognose das Falsche.</p>\n\n<h2>Ziele sind dauerhafte Vorgaben</h2>\n<p>Ein Ziel ist eine dauerhafte Abschlussvorgabe mit expliziter Phase — aktiv, pausiert, blockiert oder abgeschlossen. Anders als eine Nachricht überdauert es Züge, der Agent trägt also eine stehende Vorgabe mit sich. Jeder für dieses Ziel zugelassene Fortsetzungszyklus ist eine Ziel-Runde, materialisiert als ein zielgetragener Zug.</p>\n<p>Die Zulassung wird über eine Zielaktivierung gesteuert: eine prozesslokale Erlaubnis, eine weitere Runde zuzulassen, die entweder scharf oder entschärft ist. Dieses eine Bit ist die Drossel für offene Arbeit.</p>\n\n<p class=\"agent-summary\">Eine stehende Vorgabe plus automatische Fortsetzung ist eine Ausgabenermächtigung ohne Obergrenze. Genau deshalb ist dokumentiert, dass das Anlegen und Ändern von Zielen eine direkte menschliche Autorisierung braucht: Jemand muss das Budget für offene Arbeit verantworten.</p>\n\n<h2>Die Ralph-Schleife ist bewusster Neustart</h2>\n<p>Die Ralph-Schleife ist ein Vordergrund-Workflow, der auf ein unveränderliches Ziel hinarbeitet, indem er immer wieder frische Agentensitzungen startet — gebaut auf den Workflow- und Subagenten-Primitiven des Harness. Eine Ralph-Runde ist eine frische Kindsitzung ohne Konversationssaat des Elternteils. Die Kontinuität trägt ein Ralph-Handoff: ein normalisierter, begrenzter, strukturierter Bericht mit Status, Zusammenfassung, Belegen und Blockern.</p>\n<p>Die Ökonomie ist hier wirklich interessant und schneidet in beide Richtungen. Sauber neu zu starten heißt, dass jede Runde nur kleine Eingabekosten zahlt, statt eine immer größere Konversation mitzuschleppen — die Kosten pro Runde bleiben flach statt zu klettern. Aber ein frischer Start garantiert keinerlei Fortschritt, und eine Schleife, die billig neu startet, kann sich viel mehr Neustarts leisten.</p>\n<p>Der begrenzte Handoff ist die Kontrolle, die das Muster tragfähig macht: Er ist der einzige Kanal zwischen den Runden und deckelt so das Kontextwachstum konstruktiv. Beobachten Sie zwei Zahlen — Runden pro Ziel und ob sich die Blocker-Liste des Handoffs wiederholt. Ein Blocker, der in drei aufeinanderfolgenden Handoffs auftaucht, ist eine Schleife, die nicht konvergieren wird, und jede weitere Runde ist reine Verschwendung.</p>\n\n<h2>Kommandos sind keine Werkzeuge</h2>\n<p>Das lohnt die Trennung, weil es beeinflusst, was Sie messen. Ein menschliches Kommando ist eine slash-präfigierte Anweisung, die über die Kommando-Ebene an menschenzugewandte Adapter geht — Discovery, Parsing, Dispatch, Abbruch und Rendering, verantwortet von UI-Adaptern. Es ist ausdrücklich verschieden von einem Modellwerkzeug. Das Ziel-Kommando ist eines davon.</p>\n<p>Praktisch: Ein Mensch, der ein Slash-Kommando tippt, ist nicht das Modell, das Token ausgibt. Rechnen Sie beides getrennt zu, sonst beschuldigen Ihre Sitzungskosten den falschen Akteur.</p>\n\n<h2>Vier Kontrollen für offene Arbeit</h2>\n<ol>\n<li>Eine maximale Rundenzahl pro Ziel, vor der Zulassung durchgesetzt statt hinterher geprüft.</li>\n<li>Ein kumulatives Token-Budget über alle Runden eines Ziels, nicht pro Runde.</li>\n<li>Konvergenzerkennung am Handoff: wiederkehrende Blocker stoppen die Schleife.</li>\n<li>Explizite menschliche Autorisierung beim Anlegen von Zielen, aufbewahrt als Nachweis, wer die Ausgabe genehmigt hat.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Was ist ein Ziel in DeepSeek Harness?",
+          "answer": "Ein Ziel ist eine dauerhafte Abschlussvorgabe, die an eine Sitzung gebunden ist und eine explizite Phase hat: aktiv, pausiert, blockiert oder abgeschlossen. Es überdauert Züge, der Agent hat also eine stehende Vorgabe und nicht nur die aktuelle Nachricht."
+        },
+        {
+          "question": "Was ist eine Ziel-Runde?",
+          "answer": "Eine Ziel-Runde ist ein für das aktuelle Ziel zugelassener Fortsetzungszyklus, materialisiert als ein einzelner zielgetragener Zug. Ob eine weitere Runde zugelassen wird, steuert eine prozesslokale Zielaktivierung, die entweder scharf oder entschärft ist."
+        },
+        {
+          "question": "Was ist die Ralph-Schleife?",
+          "answer": "Die Ralph-Schleife ist ein Vordergrund-Workflow, der wiederholt frische Agentensitzungen gegen ein unveränderliches Ziel startet. Jede Runde ist eine frische Kindsitzung ohne Konversationssaat, und ein begrenzter Handoff trägt Status, Zusammenfassung, Belege und Blocker weiter."
+        },
+        {
+          "question": "Warum sind Zielschleifen für die Kostenkontrolle wichtig?",
+          "answer": "Weil eine stehende Vorgabe plus automatische Fortsetzung eine unbegrenzte Ausgabenermächtigung ist, solange nichts sie entschärft. Dass Zielanlage und -änderung direkte menschliche Autorisierung brauchen, macht den Menschen zum Budgetverantwortlichen für offene Arbeit."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-subagents",
+          "label": "Subagenten und Delegationstiefe (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Ausgaben-Leitplanken im Harness (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "DeepSeek Harness: objetivos, rondas de objetivo y el bucle…",
+      "titleCore": "DeepSeek Harness: objetivos, rondas de objetivo y el bucle…",
+      "description": "DeepSeek Harness formaliza el trabajo abierto como objetivos, rondas de objetivo y bucles Ralph. Guía del vocabulario y de dónde está el riesgo de gasto.",
+      "body": "<p>La mayoría de las sorpresas de coste con agentes no vienen del precio de un token. Vienen de cuántas veces el agente decidió volver a intentarlo. DeepSeek Harness le da un vocabulario a ese comportamiento, que es el primer paso para ponerle un número.</p>\n\n<h2>Turno, paso, ronda</h2>\n<p>Tres unidades, separadas con precisión en el glosario del proyecto:</p>\n<table>\n<thead><tr><th>Unidad</th><th>Definición</th><th>Significado de coste</th></tr></thead>\n<tbody>\n<tr><td>Paso</td><td>Un pedido al modelo más las ejecuciones de herramienta que produce</td><td>El átomo de facturación</td></tr>\n<tr><td>Turno</td><td>Un drenaje de la entrada, que termina cuando el modelo para o interviene una política</td><td>La unidad de cara al usuario</td></tr>\n<tr><td>Ronda</td><td>Una iteración externa de política, como una ronda de objetivo o un intento con agente nuevo</td><td>El multiplicador por encima de los turnos</td></tr>\n</tbody>\n</table>\n<p>Las rondas son la capa que casi todos los modelos de coste caseros omiten por completo. Si su previsión cuenta peticiones y su sistema corre rondas, su previsión mide lo que no es.</p>\n\n<h2>Los objetivos son metas duraderas</h2>\n<p>Un objetivo es una meta de finalización duradera con una fase explícita: activo, en pausa, bloqueado o completo. A diferencia de un mensaje, persiste entre turnos, así que el agente carga una meta permanente. Cada ciclo de continuación admitido para ese objetivo es una ronda de objetivo, materializada como un único turno de origen de objetivo.</p>\n<p>La admisión la controla una activación de objetivo: un permiso local al proceso para admitir otra ronda, que está armado o desarmado. Ese único bit es el estrangulador del trabajo abierto.</p>\n\n<p class=\"agent-summary\">Una meta permanente más continuación automática es una autorización de gasto sin techo. Justo por eso está documentado que crear y editar objetivos exige autorización humana directa: alguien tiene que ser dueño del presupuesto del trabajo abierto.</p>\n\n<h2>El bucle Ralph es reinicio deliberado</h2>\n<p>El bucle Ralph es un flujo en primer plano que itera hacia un objetivo inmutable arrancando sesiones de agente nuevas, construido sobre las primitivas de flujo y subagentes del harness. Una ronda Ralph es una sesión hija nueva sin semilla de conversación del padre. La continuidad la lleva un handoff Ralph: un informe normalizado, acotado y estructurado con estado, resumen, evidencia y bloqueos.</p>\n<p>La economía aquí es interesante de verdad, y corta en los dos sentidos. Reiniciar limpio significa que cada ronda paga un coste de entrada pequeño en vez de arrastrar una conversación siempre creciente, así que el coste por ronda se queda plano en lugar de escalar. Pero nada en un arranque fresco garantiza progreso, y un bucle que reinicia barato puede permitirse reiniciar muchas más veces.</p>\n<p>El handoff acotado es el control que hace viable el patrón: es el único canal entre rondas, así que limita el crecimiento del contexto por construcción. Vigile dos números: rondas por objetivo, y si la lista de bloqueos del handoff se repite. Un bloqueo que aparece en tres handoffs seguidos es un bucle que no va a converger, y cada ronda adicional es puro desperdicio.</p>\n\n<h2>Los comandos no son herramientas</h2>\n<p>Vale la pena separarlo, porque afecta a lo que se mide. Un comando humano es una instrucción con prefijo de barra enrutada por el plano de comandos hacia adaptadores de cara al humano: descubrimiento, parseo, despacho, cancelación y renderizado, propiedad de los adaptadores de UI. Es explícitamente distinto de una herramienta de modelo. El comando de objetivo es uno de ellos.</p>\n<p>En la práctica: un humano tecleando un comando de barra no es el modelo gastando tokens. Atribuya las dos cosas por separado o su coste por sesión culpará al actor equivocado.</p>\n\n<h2>Cuatro controles para el trabajo abierto</h2>\n<ol>\n<li>Un número máximo de rondas por objetivo, aplicado antes de admitir en vez de revisado después.</li>\n<li>Un presupuesto acumulado de tokens que abarque todas las rondas de un objetivo, no por ronda.</li>\n<li>Detección de convergencia sobre el handoff: bloqueos repetidos detienen el bucle.</li>\n<li>Autorización humana explícita para crear objetivos, guardada como registro de auditoría de quién autorizó el gasto.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "¿Qué es un objetivo en DeepSeek Harness?",
+          "answer": "Un objetivo es una meta de finalización duradera adjunta a una sesión, con una fase explícita: activo, en pausa, bloqueado o completo. Sobrevive entre turnos, así que el agente tiene una meta permanente y no solo el mensaje actual."
+        },
+        {
+          "question": "¿Qué es una ronda de objetivo?",
+          "answer": "Una ronda de objetivo es un ciclo de continuación admitido para el objetivo actual, materializado como un único turno originado por el objetivo. Que se admita otra ronda lo controla una activación local al proceso, que está armada o desarmada."
+        },
+        {
+          "question": "¿Qué es el bucle Ralph?",
+          "answer": "El bucle Ralph es un flujo en primer plano que arranca repetidamente sesiones de agente nuevas contra un objetivo inmutable. Cada ronda es una sesión hija nueva sin semilla de conversación, y un handoff acotado lleva estado, resumen, evidencia y bloqueos de una ronda a otra."
+        },
+        {
+          "question": "¿Por qué importan los bucles de objetivo para controlar el coste?",
+          "answer": "Porque una meta permanente más continuación automática es una autorización de gasto sin límite salvo que algo la desarme. Que crear y editar objetivos requiera autorización humana directa convierte al humano en el dueño del presupuesto del trabajo abierto."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-subagents",
+          "label": "Subagentes y profundidad de delegación (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Límites de gasto en el harness (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "DeepSeek Harness : objectifs, tours d'objectif et boucle…",
+      "titleCore": "DeepSeek Harness : objectifs, tours d'objectif et boucle…",
+      "description": "DeepSeek Harness formalise le travail ouvert en objectifs, tours d'objectif et boucles Ralph. Guide du vocabulaire et de l'endroit où se loge le risque de dépense.",
+      "body": "<p>La plupart des mauvaises surprises de coût avec les agents ne tiennent pas au prix d'un token. Elles tiennent au nombre de fois où l'agent a décidé de réessayer. DeepSeek Harness donne un vocabulaire à ce comportement, premier pas pour y mettre un chiffre.</p>\n\n<h2>Tour, étape, round</h2>\n<p>Trois unités, nettement séparées dans le glossaire du projet :</p>\n<table>\n<thead><tr><th>Unité</th><th>Définition</th><th>Sens économique</th></tr></thead>\n<tbody>\n<tr><td>Étape</td><td>Une requête modèle plus les exécutions d'outils qu'elle produit</td><td>L'atome de facturation</td></tr>\n<tr><td>Tour</td><td>Une vidange de l'entrée, close quand le modèle s'arrête ou qu'une politique intervient</td><td>L'unité visible de l'utilisateur</td></tr>\n<tr><td>Round</td><td>Une itération de politique externe, tel un tour d'objectif ou une tentative avec agent neuf</td><td>Le multiplicateur au-dessus des tours</td></tr>\n</tbody>\n</table>\n<p>Les rounds sont la couche que les modèles de coût maison omettent presque toujours. Si votre prévision compte des requêtes et que votre système enchaîne des rounds, votre prévision mesure la mauvaise chose.</p>\n\n<h2>Les objectifs sont des cibles durables</h2>\n<p>Un objectif est une cible d'achèvement durable dotée d'une phase explicite : actif, en pause, bloqué ou terminé. Contrairement à un message, il persiste d'un tour à l'autre, si bien que l'agent porte une cible permanente. Chaque cycle de continuation admis pour cet objectif est un tour d'objectif, matérialisé par un unique tour issu de l'objectif.</p>\n<p>L'admission est régie par une activation d'objectif : une permission locale au processus d'admettre un tour de plus, armée ou désarmée. Ce seul bit est l'étrangleur du travail ouvert.</p>\n\n<p class=\"agent-summary\">Une cible permanente doublée d'une continuation automatique est une autorisation de dépense sans plafond. C'est précisément pourquoi il est documenté que créer et modifier un objectif exige une autorisation humaine directe : quelqu'un doit assumer le budget du travail ouvert.</p>\n\n<h2>La boucle Ralph est un redémarrage délibéré</h2>\n<p>La boucle Ralph est un flux au premier plan qui itère vers un objectif immuable en démarrant des sessions d'agent neuves, bâti sur les primitives de flux et de sous-agents du harness. Un round Ralph est une session enfant neuve, sans amorce de conversation du parent. La continuité est portée par un handoff Ralph : un rapport normalisé, borné et structuré contenant statut, résumé, preuves et blocages.</p>\n<p>L'économie est ici réellement intéressante, et à double tranchant. Repartir propre veut dire que chaque round paie un petit coût d'entrée au lieu de traîner une conversation toujours plus grosse : le coût par round reste plat plutôt que de grimper. Mais rien dans un départ neuf ne garantit un progrès, et une boucle qui redémarre à bas prix peut s'offrir bien plus de redémarrages.</p>\n<p>Le handoff borné est le contrôle qui rend le motif viable : il est le seul canal entre les rounds, donc il plafonne la croissance du contexte par construction. Surveillez deux chiffres — rounds par objectif, et répétition ou non de la liste de blocages du handoff. Un blocage présent dans trois handoffs consécutifs, c'est une boucle qui ne convergera pas, et chaque round de plus est du pur gaspillage.</p>\n\n<h2>Les commandes ne sont pas des outils</h2>\n<p>La distinction compte, car elle change ce que l'on mesure. Une commande humaine est une instruction préfixée d'un slash, routée par le plan de commandes vers les adaptateurs orientés humain : découverte, analyse, dispatch, annulation et rendu, sous la responsabilité des adaptateurs d'interface. Elle est explicitement distincte d'un outil de modèle. La commande d'objectif en fait partie.</p>\n<p>Concrètement : un humain qui tape une commande slash n'est pas le modèle qui dépense des tokens. Imputez les deux séparément, sinon votre coût par session accusera le mauvais acteur.</p>\n\n<h2>Quatre contrôles pour le travail ouvert</h2>\n<ol>\n<li>Un nombre maximal de rounds par objectif, appliqué avant admission plutôt que constaté après coup.</li>\n<li>Un budget de tokens cumulé couvrant tous les rounds d'un objectif, et non par round.</li>\n<li>Une détection de convergence sur le handoff : des blocages répétés arrêtent la boucle.</li>\n<li>Une autorisation humaine explicite pour la création d'objectif, conservée comme trace de qui a autorisé la dépense.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Qu'est-ce qu'un objectif dans DeepSeek Harness ?",
+          "answer": "Un objectif est une cible d'achèvement durable attachée à une session, avec une phase explicite : actif, en pause, bloqué ou terminé. Il survit d'un tour à l'autre, si bien que l'agent porte une cible permanente et pas seulement le message courant."
+        },
+        {
+          "question": "Qu'est-ce qu'un tour d'objectif ?",
+          "answer": "Un tour d'objectif est un cycle de continuation admis pour l'objectif courant, matérialisé par un unique tour issu de l'objectif. L'admission d'un tour supplémentaire est régie par une activation locale au processus, armée ou désarmée."
+        },
+        {
+          "question": "Qu'est-ce que la boucle Ralph ?",
+          "answer": "La boucle Ralph est un flux au premier plan qui démarre à répétition des sessions d'agent neuves face à un objectif immuable. Chaque round est une session enfant neuve sans amorce de conversation, et un handoff borné transporte statut, résumé, preuves et blocages."
+        },
+        {
+          "question": "Pourquoi les boucles d'objectif comptent-elles pour la maîtrise des coûts ?",
+          "answer": "Parce qu'une cible permanente doublée d'une continuation automatique est une autorisation de dépense sans borne tant que rien ne la désarme. Exiger une autorisation humaine directe pour créer ou modifier un objectif fait de l'humain le responsable du budget."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-subagents",
+          "label": "Sous-agents et profondeur de délégation (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Garde-fous de dépense dans le harness (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessのゴール、ゴールラウンド、ラルフループ",
+      "titleCore": "DeepSeek Harnessのゴール、ゴールラウンド、ラルフループ",
+      "description": "DeepSeek Harnessは終わりのない作業をゴール、ゴールラウンド、ラルフループとして定式化します。その語彙と、支出リスクがどこに潜むかを解説します。",
+      "body": "<p>エージェントのコスト事故の多くは、トークン単価のせいではありません。エージェントが何回「もう一度やってみよう」と判断したかのせいです。DeepSeek Harness はその挙動に語彙を与えます。数値を当てはめるための最初の一歩です。</p>\n\n<h2>ターン、ステップ、ラウンド</h2>\n<p>プロジェクトの用語集で厳密に区別される三つの単位です。</p>\n<table>\n<thead><tr><th>単位</th><th>定義</th><th>コスト上の意味</th></tr></thead>\n<tbody>\n<tr><td>ステップ</td><td>一回のモデルリクエストと、それが生むツール実行</td><td>課金の原子</td></tr>\n<tr><td>ターン</td><td>入力の一巡。モデルが停止するかポリシーが介入すると終わる</td><td>ユーザーから見える単位</td></tr>\n<tr><td>ラウンド</td><td>ゴールラウンドや新規エージェントによる再試行などの外側のポリシー反復</td><td>ターンの上に乗る乗数</td></tr>\n</tbody>\n</table>\n<p>ラウンドは、自作のコストモデルがまるごと抜かしがちな層です。予測がリクエスト数を数えているのにシステムがラウンドを回しているなら、その予測は別のものを測っています。</p>\n\n<h2>ゴールは永続的な目標</h2>\n<p>ゴールは、明示的なフェーズ（アクティブ、一時停止、ブロック、完了）を持つ永続的な完了目標です。メッセージと違ってターンをまたいで存続するため、エージェントは常設の目標を抱えます。そのゴールに対して受理された継続サイクルがゴールラウンドであり、一つのゴール由来のターンとして具体化されます。</p>\n<p>受理はゴールアクティベーションが制御します。もう一ラウンド受理してよいというプロセスローカルな許可で、armed か disarmed のいずれかです。この一ビットが、終わりのない作業の絞り弁です。</p>\n\n<p class=\"agent-summary\">常設の目標と自動継続の組み合わせは、上限のない支出許可です。ゴールの作成と編集に人間による直接の承認が必要だと文書化されているのは、まさにそのためです。終わりのない作業には予算の持ち主が要ります。</p>\n\n<h2>ラルフループは意図的な再スタート</h2>\n<p>ラルフループは、不変の目標に向かって新しいエージェントセッションを繰り返し立ち上げるフォアグラウンドのワークフローで、ハーネスのワークフローとサブエージェントのプリミティブの上に構築されています。ラルフラウンドは、親の会話の種を持たない新しい子セッション一つです。継続性はラルフ・ハンドオフ、すなわちステータス、要約、証拠、ブロッカーを含む正規化された有界の構造化レポートが運びます。</p>\n<p>ここの経済性は本当に面白く、両方向に効きます。きれいに再スタートするということは、各ラウンドが膨らみ続ける会話を引きずらず小さな入力コストだけを払うということで、ラウンドあたりのコストは上昇せず横ばいになります。しかし新しい出発が前進を保証するわけではなく、安く再スタートできるループは、より多くの再スタートを許してしまいます。</p>\n<p>この型を成立させている制御が有界ハンドオフです。ラウンド間の唯一のチャネルなので、構造的にコンテキストの膨張を抑えます。見るべき数字は二つ、目標あたりのラウンド数と、ハンドオフのブロッカー一覧が繰り返していないかです。三回続けて同じブロッカーが現れるループは収束しません。以降のラウンドはすべて純粋な無駄です。</p>\n\n<h2>コマンドはツールではない</h2>\n<p>何を計測するかに関わるので分けておく価値があります。人間のコマンドはスラッシュ接頭辞の指示で、コマンドプレーンを通じて人間向けアダプタへ届きます。探索、解析、ディスパッチ、キャンセル、レンダリングは UI アダプタの担当です。モデルのツールとは明示的に別物であり、ゴールコマンドはこちらに属します。</p>\n<p>実務的には、人間がスラッシュコマンドを打つことはモデルがトークンを消費することではありません。両者を分けて帰属させないと、セッション単価が誤った主体を責めることになります。</p>\n\n<h2>終わりのない作業への四つの制御</h2>\n<ol>\n<li>目標あたりの最大ラウンド数を、事後レビューではなく受理の前に強制する。</li>\n<li>ラウンドごとではなく、一つのゴールの全ラウンドをまたぐ累積トークン予算を置く。</li>\n<li>ハンドオフに対する収束検知。ブロッカーの繰り返しでループを止める。</li>\n<li>ゴール作成に明示的な人間の承認を求め、誰が支出を承認したかの監査記録として残す。</li>\n</ol>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness のゴールとは何ですか？",
+          "answer": "ゴールはセッションに紐づく永続的な完了目標で、アクティブ、一時停止、ブロック、完了という明示的なフェーズを持ちます。ターンをまたいで存続するため、エージェントは現在のメッセージだけでなく常設の目標を抱えます。"
+        },
+        {
+          "question": "ゴールラウンドとは何ですか？",
+          "answer": "ゴールラウンドは現在のゴールに対して受理された一回の継続サイクルで、単一のゴール由来ターンとして具体化されます。次のラウンドを受理できるかは、armed か disarmed のいずれかであるプロセスローカルなゴールアクティベーションが制御します。"
+        },
+        {
+          "question": "ラルフループとは何ですか？",
+          "answer": "ラルフループは、不変の目標に対して新しいエージェントセッションを繰り返し立ち上げるフォアグラウンドのワークフローです。各ラウンドは親の会話の種を持たない新しい子セッションで、有界のハンドオフが状態、要約、証拠、ブロッカーを次へ運びます。"
+        },
+        {
+          "question": "なぜゴールループが AI コスト管理で重要なのですか？",
+          "answer": "常設の目標と自動継続の組み合わせは、何かが解除しない限り上限のない支出許可になるからです。ゴールの作成と編集に人間の直接承認を求める設計が、終わりのない作業の予算責任者を人間に定めています。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-subagents",
+          "label": "サブエージェントと委譲の深さ（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "ハーネスの支出ガードレール（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "DeepSeek Harness: objetivos, rodadas de objetivo e o loop…",
+      "titleCore": "DeepSeek Harness: objetivos, rodadas de objetivo e o loop…",
+      "description": "O DeepSeek Harness formaliza trabalho aberto como objetivos, rodadas de objetivo e loops Ralph. Guia do vocabulário e de onde mora o risco de gasto.",
+      "body": "<p>A maioria das surpresas de custo com agentes não vem do preço de um token. Vem de quantas vezes o agente decidiu tentar de novo. O DeepSeek Harness dá um vocabulário a esse comportamento, que é o primeiro passo para colocar um número nele.</p>\n\n<h2>Turno, passo, rodada</h2>\n<p>Três unidades, separadas com precisão no glossário do projeto:</p>\n<table>\n<thead><tr><th>Unidade</th><th>Definição</th><th>Significado de custo</th></tr></thead>\n<tbody>\n<tr><td>Passo</td><td>Um pedido ao modelo mais as execuções de ferramenta que ele produz</td><td>O átomo de faturamento</td></tr>\n<tr><td>Turno</td><td>Uma drenagem da entrada, encerrada quando o modelo para ou uma política intervém</td><td>A unidade voltada ao usuário</td></tr>\n<tr><td>Rodada</td><td>Uma iteração externa de política, como uma rodada de objetivo ou nova tentativa com agente novo</td><td>O multiplicador acima dos turnos</td></tr>\n</tbody>\n</table>\n<p>Rodadas são a camada que quase todo modelo de custo caseiro omite por inteiro. Se sua previsão conta requisições e seu sistema roda rodadas, sua previsão mede a coisa errada.</p>\n\n<h2>Objetivos são metas duráveis</h2>\n<p>Um objetivo é uma meta de conclusão durável com fase explícita: ativo, pausado, bloqueado ou completo. Diferente de uma mensagem, ele persiste entre turnos, então o agente carrega uma meta permanente. Cada ciclo de continuação admitido para esse objetivo é uma rodada de objetivo, materializada como um único turno originado do objetivo.</p>\n<p>A admissão é regida por uma ativação de objetivo: uma permissão local ao processo para admitir mais uma rodada, que está armada ou desarmada. Esse único bit é o estrangulador do trabalho aberto.</p>\n\n<p class=\"agent-summary\">Uma meta permanente somada a continuação automática é uma autorização de gasto sem teto. É exatamente por isso que está documentado que criar e editar objetivos exige autorização humana direta: alguém precisa ser dono do orçamento do trabalho aberto.</p>\n\n<h2>O loop Ralph é reinício deliberado</h2>\n<p>O loop Ralph é um fluxo em primeiro plano que itera rumo a um objetivo imutável iniciando sessões de agente novas, construído sobre as primitivas de fluxo e subagentes do harness. Uma rodada Ralph é uma sessão filha nova, sem semente de conversa do pai. A continuidade é carregada por um handoff Ralph: um relatório normalizado, limitado e estruturado com status, resumo, evidências e bloqueios.</p>\n<p>A economia aqui é genuinamente interessante, e corta dos dois lados. Reiniciar limpo significa que cada rodada paga um custo de entrada pequeno em vez de arrastar uma conversa sempre maior, então o custo por rodada fica plano em vez de subir. Mas nada num começo novo garante progresso, e um loop que reinicia barato pode se dar ao luxo de reiniciar muitas vezes mais.</p>\n<p>O handoff limitado é o controle que torna o padrão viável: é o único canal entre rodadas, então limita o crescimento de contexto por construção. Observe dois números — rodadas por objetivo, e se a lista de bloqueios do handoff se repete. Um bloqueio que aparece em três handoffs seguidos é um loop que não vai convergir, e cada rodada a mais é desperdício puro.</p>\n\n<h2>Comandos não são ferramentas</h2>\n<p>Vale separar, porque muda o que você mede. Um comando humano é uma instrução com prefixo de barra roteada pelo plano de comandos até adaptadores voltados ao humano: descoberta, parsing, despacho, cancelamento e renderização, sob responsabilidade dos adaptadores de UI. É explicitamente distinto de uma ferramenta de modelo. O comando de objetivo é um desses.</p>\n<p>Na prática: um humano digitando um comando de barra não é o modelo gastando tokens. Atribua os dois em separado ou seu custo por sessão vai culpar o ator errado.</p>\n\n<h2>Quatro controles para trabalho aberto</h2>\n<ol>\n<li>Um número máximo de rodadas por objetivo, aplicado antes da admissão em vez de revisado depois.</li>\n<li>Um orçamento cumulativo de tokens abrangendo todas as rodadas de um objetivo, não por rodada.</li>\n<li>Detecção de convergência sobre o handoff: bloqueios repetidos param o loop.</li>\n<li>Autorização humana explícita para criação de objetivo, guardada como registro de auditoria de quem autorizou o gasto.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "O que é um objetivo no DeepSeek Harness?",
+          "answer": "Um objetivo é uma meta de conclusão durável anexada a uma sessão, com fase explícita: ativo, pausado, bloqueado ou completo. Ele sobrevive entre turnos, então o agente tem uma meta permanente e não apenas a mensagem atual."
+        },
+        {
+          "question": "O que é uma rodada de objetivo?",
+          "answer": "Uma rodada de objetivo é um ciclo de continuação admitido para o objetivo atual, materializado como um único turno originado do objetivo. Se outra rodada pode ser admitida é decidido por uma ativação local ao processo, armada ou desarmada."
+        },
+        {
+          "question": "O que é o loop Ralph?",
+          "answer": "O loop Ralph é um fluxo em primeiro plano que inicia repetidamente sessões de agente novas contra um objetivo imutável. Cada rodada é uma sessão filha nova sem semente de conversa, e um handoff limitado carrega status, resumo, evidências e bloqueios adiante."
+        },
+        {
+          "question": "Por que loops de objetivo importam para controlar custo de IA?",
+          "answer": "Porque uma meta permanente com continuação automática é uma autorização de gasto sem limite enquanto nada a desarmar. Exigir autorização humana direta para criar e editar objetivos faz do humano o dono do orçamento do trabalho aberto."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-subagents",
+          "label": "Subagentes e profundidade de delegação (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Limites de gasto no harness (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "حلقات الأهداف وحلقة Ralph في DeepSeek Harness",
+      "titleCore": "حلقات الأهداف وحلقة Ralph في DeepSeek Harness",
+      "description": "كيف يقنن DeepSeek Harness عمل الوكلاء المفتوح في هيئة أهداف وجولات وحلقة Ralph التكرارية. المفاهيم ومكامن المخاطر المالية.",
+      "body": "<p>تعد إدارة المهام المفتوحة (Open-ended Tasks) أكبر تحدٍ مالي وتقني في بناء وكلاء الذكاء الاصطناعي. يقدم DeepSeek Harness نموذجاً دقيقاً لتأطير العمل غير المقيد عبر مفاهيم: الخطوة، والمنعطف، والجولة، والأهداف طويلة المدى، وحلقة Ralph لإعادة المحاولة المنضبطة.</p>\n\n<h2>الخطوة، والمنعطف، والجولة</h2>\n<ul>\n  <li><strong>الخطوة (Step):</strong> استدعاء نموذج واحد وما ينتج عنه من استدعاءات للأدوات.</li>\n  <li><strong>المنعطف (Turn):</strong> تبادل كامل لرسالة المستخدم والرد عليها حتى يتوقف النموذج أو تتدخل سياسة الحوكمة.</li>\n  <li><strong>الجولة (Round):</strong> تكرار خارجي للسياسة عبر عدة منعطفات، مثل محاولة جديدة لتحقيق هدف مفتوح بعد تقييم مرحلي.</li>\n</ul>\n\n<h2>الأهداف بوصفها موجّهات دائمة (Persistent Directives)</h2>\n<p>يتم تعريف الهدف كشرط إنجاز محدد، يظل حياً عبر جولات متعددة حتى يثبت الوكيل تحققه أو يقر بالفشل بعد استنفاد الميزانية.</p>\n\n<h2>حلقة Ralph: إعادة التشغيل الواعية</h2>\n<p>بدلاً من ترك الوكيل يعلق في سياق متضخم مليء بالأخطاء السابقة، تتيح حلقة Ralph إعادة تعيين سياق المحادثة مع الاحتفاظ بالهدف والملخص المرحلي فقط، مما يخفض تكلفة قراءة السياق بنسبة تفوق 70% في المهام الطويلة.</p>\n\n<h2>ضوابط الحوكمة للمهام المفتوحة</h2>\n<p>لمنع انفلات التكاليف في الجولات المتكررة، يفرض النظام سقفاً لعدد الجولات، وميزانية رموز قصوى للهدف، وقواطع دوائر تقطع العمل عند تكرار نفس الأخطاء.</p>",
+      "faq": [
+        {
+          "question": "ما هو الفرق بين الخطوة والجولة في DeepSeek Harness؟",
+          "answer": "الخطوة هي استدعاء فردي للنموذج وأدواته، بينما الجولة هي دورة سياسة عليا تتضمن عدة خطوات وتدير محاولة كاملة لتحقيق الهدف."
+        },
+        {
+          "question": "ما هي حلقة Ralph وما فائدتها المالية؟",
+          "answer": "هي آلية لإعادة ضبط سياق الوكيل مع الحفاظ على الهدف، مما يمنع تضخم الرموز ويقلل تكاليف قراءة السياق الطويل في المهام المعقدة."
+        },
+        {
+          "question": "كيف يمكن تجنب استنزاف الميزانية في المهام المفتوحة؟",
+          "answer": "بفرض حد أقصى لعدد الجولات وميزانية رموز محددة سلفاً للهدف وقواعد إيقاف فورية عند تكرار نفس الإخفاقات."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-guardrails",
+          "label": "حواجز الإنفاق في DeepSeek Harness"
+        },
+        {
+          "slug": "/ar/research/three-agent-budgets",
+          "label": "ميزانيات الوكلاء الثلاث"
+        }
+      ]
+    },
+    "zh": {
+      "title": "目标驱动与 Ralph 循环：控制智能体开销",
+      "titleCore": "目标驱动与 Ralph 循环：控制智能体开销",
+      "description": "DeepSeek Harness 如何将开放式任务形式化为目标、轮次与 Ralph 循环，以及控制长上下文重试成本的架构机制。",
+      "body": "<p>开放式任务（如大型代码重构）极易陷入成本失控。DeepSeek Harness 通过“步骤 (Step)、轮次 (Turn)、循环轮数 (Round)”以及 <strong>Ralph 循环</strong> 构建了严密的控制边界。</p>\n\n<h2>概念分层：Step、Turn 与 Round</h2>\n<ul>\n  <li><strong>Step:</strong> 一次模型推理调用及触发的工具执行，是计费的原子单位。</li>\n  <li><strong>Turn:</strong> 一次完整的用户交互与智能体响应周期。</li>\n  <li><strong>Round:</strong> 针对持久化目标（Goal）的一轮高级策略执行。</li>\n</ul>\n\n<h2>Ralph 循环：重置上下文以节约 Token</h2>\n<p>当智能体在长上下文中不断受挫时，上下文会充满历史错误。Ralph 循环通过优雅重置当前上下文、仅保留核心目标和进度快照，实现有意识的重新开始，大幅降低输入 Token 账单。</p>",
+      "faq": [
+        {
+          "question": "什么是 Ralph 循环？",
+          "answer": "它是一种上下文压缩与重置机制，在保留最终目标的同时清空过往冗余历史，有效遏制长上下文的 Token 浪费。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "什么是 DeepSeek Harness？"
+        },
+        {
+          "slug": "/zh/research/three-agent-budgets",
+          "label": "自主智能体的三层预算模型"
+        }
+      ]
+    },
+    "it": {
+      "title": "Obiettivi e Ralph Loop in DeepSeek Harness",
+      "titleCore": "Obiettivi e Ralph Loop in DeepSeek Harness",
+      "description": "Come DeepSeek Harness formalizza il lavoro autonomo in obiettivi, round e Ralph loop per limitare i costi di contesto lungo.",
+      "body": "<p>Formalizzazione del lavoro iterativo: distinzione tra step, turn e round, e utilizzo del Ralph Loop per resettare il contesto e contenere i token.</p>",
+      "faq": [
+        {
+          "question": "Cos'è il Ralph Loop?",
+          "answer": "Un meccanismo per riavviare consapevolmente il contesto di lavoro preservando gli obiettivi essenziali."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "목표 관리와 Ralph 루프: 에이전트 비용 통제",
+      "titleCore": "목표 관리와 Ralph 루프: 에이전트 비용 통제",
+      "description": "DeepSeek Harness의 목표 지향 루프, 스텝/턴/라운드 분리 및 긴 컨텍스트 비용을 줄이는 Ralph 루프 분석.",
+      "body": "<p>장기 작업 시 컨텍스트 비대화를 방지하고 목표를 달성하기 위해 Ralph 루프를 통해 컨텍스트를 초기화하며 비용을 통제합니다.</p>",
+      "faq": [
+        {
+          "question": "Ralph 루프의 목적은 무엇인가요?",
+          "answer": "과거 실패 기록으로 비대해진 컨텍스트를 초기화하고 목표 요약만 유지하여 토큰 낭비를 차단합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness 개요"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Doelen en de Ralph-loop in DeepSeek Harness",
+      "titleCore": "Doelen en de Ralph-loop in DeepSeek Harness",
+      "description": "Hoe DeepSeek Harness langdurig agentwerk formaliseert met doelen, rondes en de Ralph-loop om contextkosten te beperken.",
+      "body": "<p>Structuur voor autonome taken met doelen en context-resets via de Ralph-loop om dure herhalingen te voorkomen.</p>",
+      "faq": [
+        {
+          "question": "Wat doet de Ralph-loop?",
+          "answer": "Het reset de context met behoud van de hoofddoelen om te voorkomen dat foutieve prompts de tokenrekening opdrijven."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        }
+      ]
+    },
+    "en": {
+      "title": "DeepSeek Harness goals and the Ralph loop",
+      "titleCore": "DeepSeek Harness goals and the Ralph loop",
+      "description": "DeepSeek Harness formalises open-ended agent work as goals, goal rounds, and Ralph loops. A guide to the vocabulary and where the spend risk sits.",
+      "body": "<p>Most agent cost surprises are not about the price of a token. They are about how many times the agent decided to try again. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> gives that behaviour a vocabulary, which is the first step to putting a number on it.</p>\n\n<h2>Turn, step, round</h2>\n<p>Three units, precisely separated in the project glossary:</p>\n<table>\n<thead><tr><th>Unit</th><th>Definition</th><th>Cost meaning</th></tr></thead>\n<tbody>\n<tr><td>Step</td><td>One model request plus the tool executions it produces</td><td>The billing atom</td></tr>\n<tr><td>Turn</td><td>One drain of input, ending when the model stops or policy intervenes</td><td>The user-facing unit</td></tr>\n<tr><td>Round</td><td>An outer policy iteration, such as a goal round or a fresh-agent attempt</td><td>The multiplier above turns</td></tr>\n</tbody>\n</table>\n<p>Rounds are the layer that most homegrown cost models omit entirely. If your forecast counts requests, and your system runs rounds, your forecast is measuring the wrong thing.</p>\n\n<h2>Goals are durable objectives</h2>\n<p>A goal is a durable completion objective with an explicit phase — active, paused, blocked, or complete. Unlike a message, it persists across turns, so the agent carries a standing objective. Each continuation cycle admitted for that goal is a goal round, materialised as one goal-sourced turn.</p>\n<p>Admission is gated by a goal activation: a process-local permission to admit another round, which is either armed or disarmed. That single bit is the throttle on open-ended work.</p>\n\n<div class=\"callout\">A standing objective plus automatic continuation is a spend authorisation with no upper bound. The documented requirement that goal creation and edits need direct human authorisation is precisely why: someone has to own the budget for open-ended work.</div>\n\n<h2>The Ralph loop is deliberate restart</h2>\n<p>The Ralph loop is a foreground workflow that iterates toward an immutable objective by starting fresh agent sessions, built on the harness's workflow and subagent primitives. A Ralph round is one fresh child session with no parent conversation seed. Continuity is carried by a Ralph handoff — described as a normalised, bounded, structured report containing status, summary, evidence, and blockers.</p>\n<p>The economics here are genuinely interesting, and they cut both ways. Restarting clean means each round pays a small input cost instead of dragging an ever-growing conversation forward, so per-round cost stays flat rather than climbing. But nothing about a fresh start guarantees progress, and a loop that restarts cheaply can afford to restart many more times.</p>\n<p>The bounded handoff is the control that makes the pattern viable: it is the only channel between rounds, so it caps context growth by construction. Watch two numbers — rounds per objective, and whether the handoff's blockers list is repeating. A blocker that appears in three consecutive handoffs is a loop that will not converge, and every further round is pure waste.</p>\n\n<h2>Commands are not tools</h2>\n<p>Worth separating, because it affects what you meter. A human command is a slash-prefixed instruction routed through the command plane for human-facing adapters — discovery, parsing, dispatch, cancellation, and rendering, owned by UI adapters. It is explicitly distinct from a model tool. The goal command is one of these.</p>\n<p>Practically: a human typing a slash command is not the model spending tokens. Attribute the two separately or your per-session cost will blame the wrong actor.</p>\n\n<h2>Four controls for open-ended work</h2>\n<ol>\n<li>A maximum round count per objective, enforced before admission rather than reviewed afterwards.</li>\n<li>A cumulative token budget spanning all rounds of one goal, not per round.</li>\n<li>Convergence detection on the handoff: repeated blockers stop the loop.</li>\n<li>Explicit human authorisation for goal creation, kept as the audit record of who authorised the spend.</li>\n</ol>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-subagents\">DeepSeek Harness subagents and delegation depth</a> — the other multiplier.</li>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — where to enforce a round cap.</li>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — where rounds become measurable.</li>\n<li><a href=\"/research/deepseek-harness-tool-scopes\">DeepSeek Harness tool scopes and restrictions</a> — narrowing what a round can do.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "What is a goal in DeepSeek Harness?",
+          "answer": "A goal is a durable completion objective attached to a session, with an explicit phase: active, paused, blocked, or complete. It survives across turns, so the agent has a standing objective rather than only the current message."
+        },
+        {
+          "question": "What is a goal round?",
+          "answer": "A goal round is one continuation cycle admitted for the current goal, materialised as a single goal-sourced turn. Whether another round can be admitted is controlled by a process-local goal activation that is either armed or disarmed."
+        },
+        {
+          "question": "What is the Ralph loop?",
+          "answer": "The Ralph loop is a foreground workflow that repeatedly starts fresh agent sessions against an immutable objective. Each Ralph round is a fresh child session with no parent conversation seed, and a bounded structured handoff carries status, summary, evidence, and blockers from one round to the next."
+        },
+        {
+          "question": "Why do goal loops matter for AI cost control?",
+          "answer": "Because a standing objective plus automatic continuation is an unbounded spend authorisation unless something disarms it. Goal creation and edits are documented as requiring direct human authorisation, which makes the human the budget owner for open-ended work."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-goals-ralph-loop"
+  }
+}

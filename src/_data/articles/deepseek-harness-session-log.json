@@ -1,0 +1,335 @@
+{
+  "slug": "deepseek-harness-session-log",
+  "tags": [
+    "deepseek-harness",
+    "observability",
+    "cost-attribution"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "Das Sitzungsprotokoll von DeepSeek Harness als…",
+      "titleCore": "Das Sitzungsprotokoll von DeepSeek Harness als…",
+      "description": "DeepSeek Harness schreibt jeden Agentenzug in ein append-only Ereignisprotokoll mit Token-Verbrauch pro Schritt. So lesen Sie es als Kostenaufzeichnung.",
+      "body": "<p>Die meisten Agenten-Stacks bekommen Kostenverfolgung nachträglich angeschraubt: ein Wrapper um den Modellaufruf, der Tokens in ein separates System schreibt, das dann irgendwann von der Realität abdriftet. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> geht anders vor. Das Sitzungsprotokoll ist das primäre Artefakt, und der Token-Verbrauch steckt darin.</p>\n\n<h2>Die Sitzung ist ein append-only Ereignisprotokoll</h2>\n<p>Eine Sitzung ist eine geordnete, nur anhängende Folge typisierter <code>SessionEvent</code>-Einträge. Jedes Ereignis trägt vier Felder:</p>\n<table>\n<thead><tr><th>Feld</th><th>Bedeutung</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>Die Ereignisart, etwa <code>assistant/message</code></td></tr>\n<tr><td><code>seq</code></td><td>Monoton steigende Sequenznummer innerhalb der Sitzung</td></tr>\n<tr><td><code>time</code></td><td>Zeitstempel</td></tr>\n<tr><td><code>data</code></td><td>Die typspezifische Nutzlast</td></tr>\n</tbody>\n</table>\n<p>Oberflächenereignisse (das, was eine Benutzeroberfläche darstellt) ergänzen zwei weitere Felder: <code>sourceEventSeqs</code>, das auf die Rohereignisse zurückzeigt, aus denen sie abgeleitet wurden, und <code>surfaceOp</code>. Die Rückverweise sind der Grund, warum sich eine Kostenzahl bis zu genau den Ereignissen zurückverfolgen lässt, die sie erzeugt haben.</p>\n\n<h2>Die Ereignisse, die ein Kostenmodell interessieren</h2>\n<ul>\n<li><code>turn/start</code> und <code>turn/end</code> — die äußere Klammer einer Nutzeranfrage. <code>turn/end</code> trägt einen <code>TurnEndReason</code>, der sagt, ob der Zug fertig wurde, abgebrochen oder abgeschnitten wurde.</li>\n<li><code>step/start</code> und <code>step/end</code> — ein Schritt ist eine Modellanfrage plus die Werkzeugaufrufe, die sie auslöst. Das ist die natürliche Abrechnungseinheit.</li>\n<li><code>assistant/message</code> — Modellausgabe, optional mit <code>TokenUsage</code>.</li>\n<li><code>assistant/chunk</code> — gestreamte Ausgabe, einschließlich Usage-Chunks.</li>\n<li><code>tool/call</code> und <code>tool/result</code> — Werkzeugausführung; das Ergebnis kann <code>meta</code> tragen.</li>\n<li><code>request/header</code> und <code>request/context</code> — der <code>EpochHeader</code> und der Anfragekontext mit Anbieter, Modell und Kontextfenster. Dieses Paar ist es, das einer Kostenzahl einen Preis zuordnet.</li>\n</ul>\n<p>Der Leitsatz aus der Dokumentation lautet: <strong>was für das Modell sichtbar ist, wird protokolliert</strong>. Alles, was in den Kontext des Modells gelangt, hinterlässt ein Ereignis. Damit ist das Protokoll per Konstruktion vollständig, statt vollständig zu sein, solange niemand vergisst, es zu instrumentieren.</p>\n\n<h2>Verbrauch reist mit der Ausgabe</h2>\n<p>Der Token-Verbrauch wird nicht in einen Nebenkanal geschrieben, sondern reist mit der Ausgabe, zu der er gehört. Bevorzugen Sie die Usage-Chunks (<code>assistant/chunk</code> mit <code>{ type: 'usage' }</code>), weil sie am nächsten an dem sitzen, was der Anbieter tatsächlich abgerechnet hat; fallen Sie auf <code>assistant/message.usage</code> zurück, wenn kein Chunk vorliegt. Ein Kostenmodell, das auf diese Weise liest, kann nie eine Zahl einem Schritt zuordnen, der sie nicht erzeugt hat.</p>\n\n<h2>Abgeleitete Historie, keine duplizierte Historie</h2>\n<p>Der Nachrichtenverlauf, den das Modell sieht, wird aus dem Ereignisprotokoll projiziert, statt daneben als zweite Wahrheit gepflegt zu werden. Das ist der Unterschied zwischen einem System, dessen Kostenzahlen mit seiner Ausführung übereinstimmen, und einem System, in dem beide auseinanderdriften und niemand sagen kann, welches recht hat.</p>\n\n<p class=\"agent-summary\">„Modellsichtbar heißt protokolliert“ ist die eine Regel, die eine Kostenrekonstruktion überhaupt möglich macht. Ohne sie ist jede Attributionszahl eine Schätzung mit einem unbekannten Fehlerbalken.</p>\n\n<h2>Worauf man darauf aufbauen sollte</h2>\n<ol>\n<li>Verbinden Sie <code>step/start</code> und <code>step/end</code> zu Schritt-Spans — die Einheit, gegen die Sie Kosten berichten.</li>\n<li>Hängen Sie <code>request/context</code> (Anbieter, Modell, Kontextfenster) und den Preis aus dem Chunk-Verbrauch an jeden Span.</li>\n<li>Zählen Sie die <code>tool/call</code>-Verzweigung pro Schritt: Werkzeug-Fan-out ist der übliche Grund, warum ein Zug plötzlich das Zehnfache kostet.</li>\n<li>Beobachten Sie die Verteilung von <code>TurnEndReason</code>. Abgebrochene und abgeschnittene Züge sind bezahlte Arbeit ohne Ergebnis, und sie sind die erste Kennzahl, die Sie ohne Protokoll nicht haben.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Was ist eine Sitzung in DeepSeek Harness?",
+          "answer": "Eine Sitzung ist eine geordnete, nur anhängende Folge typisierter SessionEvent-Einträge. Jedes Ereignis trägt type, seq, time und data; Oberflächenereignisse ergänzen sourceEventSeqs und surfaceOp, damit sich abgeleitete Ansichten auf die Rohereignisse zurückführen lassen."
+        },
+        {
+          "question": "Wo wird der Token-Verbrauch in DeepSeek Harness aufgezeichnet?",
+          "answer": "Der Verbrauch reist mit der Ausgabe, zu der er gehört. Lesen Sie bevorzugt die Usage-Chunks aus assistant/chunk mit type 'usage' und fallen Sie auf assistant/message.usage zurück, wenn kein Chunk vorliegt. Anbieter, Modell und Kontextfenster stehen in request/context."
+        },
+        {
+          "question": "Was bedeutet „modellsichtbar heißt protokolliert“?",
+          "answer": "Es bedeutet, dass alles, was in den Kontext des Modells gelangt, ein entsprechendes Ereignis im Sitzungsprotokoll hinterlässt. Das Protokoll ist dadurch per Konstruktion vollständig, statt darauf angewiesen zu sein, dass jemand jeden Pfad einzeln instrumentiert."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-plugin-architecture",
+          "label": "Alles ist ein Plugin: die Architektur (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Wo Ausgaben-Leitplanken hingehören (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/opentelemetry-genai-conventions",
+          "label": "OpenTelemetry GenAI-Konventionen (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "El registro de sesión de DeepSeek Harness como registro de…",
+      "titleCore": "El registro de sesión de DeepSeek Harness como registro de…",
+      "description": "DeepSeek Harness graba cada turno del agente como un log de eventos append-only con uso de tokens por paso. Guía para leerlo como un registro de costes.",
+      "body": "<p>La mayoría de stacks de agentes atornillan el seguimiento de coste a posteriori: un wrapper alrededor de la llamada al modelo que escribe tokens en un sistema aparte que, con el tiempo, se separa de la realidad. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> lo hace al revés. El registro de sesión es el artefacto primario y el uso de tokens vive dentro de él.</p>\n\n<h2>La sesión es un log de eventos append-only</h2>\n<p>Una sesión es una secuencia ordenada y solo-anexable de entradas <code>SessionEvent</code> tipadas. Cada evento lleva cuatro campos:</p>\n<table>\n<thead><tr><th>Campo</th><th>Qué significa</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>La clase de evento, por ejemplo <code>assistant/message</code></td></tr>\n<tr><td><code>seq</code></td><td>Número de secuencia monótono dentro de la sesión</td></tr>\n<tr><td><code>time</code></td><td>Marca de tiempo</td></tr>\n<tr><td><code>data</code></td><td>La carga útil específica del tipo</td></tr>\n</tbody>\n</table>\n<p>Los eventos de superficie (lo que una interfaz muestra) añaden dos campos más: <code>sourceEventSeqs</code>, que apunta de vuelta a los eventos crudos de los que se derivaron, y <code>surfaceOp</code>. Esos punteros son la razón por la que una cifra de coste puede rastrearse hasta exactamente los eventos que la produjeron.</p>\n\n<h2>Los eventos que le importan a un modelo de coste</h2>\n<ul>\n<li><code>turn/start</code> y <code>turn/end</code>: el corchete exterior de una petición de usuario. <code>turn/end</code> lleva un <code>TurnEndReason</code> que dice si el turno se completó, se abortó o se truncó.</li>\n<li><code>step/start</code> y <code>step/end</code>: un paso es una petición al modelo más las llamadas a herramientas que provoca. Es la unidad natural de facturación.</li>\n<li><code>assistant/message</code>: salida del modelo, con <code>TokenUsage</code> opcional.</li>\n<li><code>assistant/chunk</code>: salida en streaming, incluidos los chunks de uso.</li>\n<li><code>tool/call</code> y <code>tool/result</code>: ejecución de herramientas; el resultado puede llevar <code>meta</code>.</li>\n<li><code>request/header</code> y <code>request/context</code>: el <code>EpochHeader</code> y el contexto de petición con proveedor, modelo y ventana de contexto. Ese par es lo que asigna un precio a una cifra de uso.</li>\n</ul>\n<p>La regla rectora de la documentación es: <strong>lo visible para el modelo queda registrado</strong>. Todo lo que entra en el contexto del modelo deja un evento. Eso hace el log completo por construcción, en vez de completo mientras nadie olvide instrumentarlo.</p>\n\n<h2>El uso viaja con la salida</h2>\n<p>El uso de tokens no se escribe en un canal lateral: viaja con la salida a la que pertenece. Prefiera los chunks de uso (<code>assistant/chunk</code> con <code>{ type: 'usage' }</code>) porque están lo más cerca posible de lo que el proveedor facturó realmente; recurra a <code>assistant/message.usage</code> cuando no haya chunk. Un modelo de coste que lea así nunca puede atribuir una cifra a un paso que no la generó.</p>\n\n<h2>Historia derivada, no duplicada</h2>\n<p>El historial de mensajes que ve el modelo se proyecta desde el log de eventos en vez de mantenerse al lado como una segunda verdad. Esa es la diferencia entre un sistema cuyas cifras de coste concuerdan con su ejecución y uno donde ambas divergen y nadie puede decir cuál tiene razón.</p>\n\n<p class=\"agent-summary\">«Lo visible para el modelo queda registrado» es la única regla que hace posible reconstruir el coste. Sin ella, toda cifra de atribución es una estimación con una barra de error desconocida.</p>\n\n<h2>Qué construir encima</h2>\n<ol>\n<li>Una <code>step/start</code> con <code>step/end</code> para formar spans de paso: la unidad contra la que reportará coste.</li>\n<li>Adjunte <code>request/context</code> (proveedor, modelo, ventana de contexto) y el precio a partir del uso del chunk a cada span.</li>\n<li>Cuente el fan-out de <code>tool/call</code> por paso: la ramificación de herramientas es la razón habitual de que un turno cueste de pronto diez veces más.</li>\n<li>Vigile la distribución de <code>TurnEndReason</code>. Los turnos abortados y truncados son trabajo pagado sin resultado, y son la primera métrica que no tiene sin un log.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "¿Qué es una sesión en DeepSeek Harness?",
+          "answer": "Una sesión es una secuencia ordenada y solo-anexable de entradas SessionEvent tipadas. Cada evento lleva type, seq, time y data; los eventos de superficie añaden sourceEventSeqs y surfaceOp para que las vistas derivadas puedan rastrearse hasta los eventos crudos."
+        },
+        {
+          "question": "¿Dónde se registra el uso de tokens en DeepSeek Harness?",
+          "answer": "El uso viaja con la salida a la que pertenece. Lea preferentemente los chunks de uso de assistant/chunk con type 'usage' y recurra a assistant/message.usage cuando no haya chunk. El proveedor, el modelo y la ventana de contexto están en request/context."
+        },
+        {
+          "question": "¿Qué significa «lo visible para el modelo queda registrado»?",
+          "answer": "Significa que todo lo que entra en el contexto del modelo deja su evento correspondiente en el log de sesión. Eso hace que el log sea completo por construcción, en vez de depender de que alguien instrumente cada camino por separado."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-plugin-architecture",
+          "label": "Todo es un plugin: la arquitectura (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Dónde poner los límites de gasto (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/opentelemetry-genai-conventions",
+          "label": "Convenciones GenAI de OpenTelemetry (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le journal de session de DeepSeek Harness comme registre…",
+      "titleCore": "Le journal de session de DeepSeek Harness comme registre…",
+      "description": "DeepSeek Harness enregistre chaque tour d’agent dans un journal append-only avec l’usage de tokens par étape. Comment le lire comme registre de coûts.",
+      "body": "<p>La plupart des stacks d'agents boulonnent le suivi des coûts après coup : un wrapper autour de l'appel modèle qui écrit des tokens dans un système séparé, lequel finit par diverger de la réalité. <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> procède à l'inverse. Le journal de session est l'artefact primaire, et l'usage de tokens vit dedans.</p>\n\n<h2>La session est un journal d'événements append-only</h2>\n<p>Une session est une suite ordonnée et seulement extensible d'entrées <code>SessionEvent</code> typées. Chaque événement porte quatre champs :</p>\n<table>\n<thead><tr><th>Champ</th><th>Signification</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>Le genre d'événement, par exemple <code>assistant/message</code></td></tr>\n<tr><td><code>seq</code></td><td>Numéro de séquence monotone dans la session</td></tr>\n<tr><td><code>time</code></td><td>Horodatage</td></tr>\n<tr><td><code>data</code></td><td>La charge utile propre au type</td></tr>\n</tbody>\n</table>\n<p>Les événements de surface (ce qu'une interface affiche) ajoutent deux champs : <code>sourceEventSeqs</code>, qui renvoie aux événements bruts dont ils dérivent, et <code>surfaceOp</code>. Ces renvois sont la raison pour laquelle un chiffre de coût peut être remonté jusqu'aux événements exacts qui l'ont produit.</p>\n\n<h2>Les événements qui comptent pour un modèle de coût</h2>\n<ul>\n<li><code>turn/start</code> et <code>turn/end</code> : le crochet extérieur d'une requête utilisateur. <code>turn/end</code> porte un <code>TurnEndReason</code> indiquant si le tour a abouti, a été interrompu ou tronqué.</li>\n<li><code>step/start</code> et <code>step/end</code> : une étape est une requête modèle plus les appels d'outils qu'elle déclenche. C'est l'unité de facturation naturelle.</li>\n<li><code>assistant/message</code> : sortie du modèle, avec <code>TokenUsage</code> optionnel.</li>\n<li><code>assistant/chunk</code> : sortie en streaming, y compris les chunks d'usage.</li>\n<li><code>tool/call</code> et <code>tool/result</code> : exécution d'outils ; le résultat peut porter <code>meta</code>.</li>\n<li><code>request/header</code> et <code>request/context</code> : l'<code>EpochHeader</code> et le contexte de requête avec fournisseur, modèle et fenêtre de contexte. Ce couple est ce qui met un prix sur un chiffre d'usage.</li>\n</ul>\n<p>La règle directrice de la documentation est : <strong>ce qui est visible du modèle est journalisé</strong>. Tout ce qui entre dans le contexte du modèle laisse un événement. Le journal est donc complet par construction, et non complet tant que personne n'oublie de l'instrumenter.</p>\n\n<h2>L'usage voyage avec la sortie</h2>\n<p>L'usage de tokens n'est pas écrit dans un canal latéral : il voyage avec la sortie à laquelle il appartient. Préférez les chunks d'usage (<code>assistant/chunk</code> avec <code>{ type: 'usage' }</code>) car ils collent au plus près de ce que le fournisseur a réellement facturé ; repliez-vous sur <code>assistant/message.usage</code> en l'absence de chunk. Un modèle de coût qui lit ainsi ne peut jamais attribuer un chiffre à une étape qui ne l'a pas produit.</p>\n\n<h2>Historique dérivé, pas dupliqué</h2>\n<p>L'historique de messages que voit le modèle est projeté depuis le journal d'événements plutôt que maintenu à côté comme une seconde vérité. C'est la différence entre un système dont les chiffres de coût concordent avec son exécution et un système où les deux divergent sans qu'on puisse dire lequel a raison.</p>\n\n<p class=\"agent-summary\">« Visible du modèle veut dire journalisé » est la seule règle qui rende possible une reconstruction des coûts. Sans elle, tout chiffre d'attribution est une estimation dont la marge d'erreur est inconnue.</p>\n\n<h2>Ce qu'il faut bâtir dessus</h2>\n<ol>\n<li>Joignez <code>step/start</code> et <code>step/end</code> pour former des spans d'étape : l'unité sur laquelle vous rapporterez les coûts.</li>\n<li>Attachez <code>request/context</code> (fournisseur, modèle, fenêtre de contexte) et le prix issu de l'usage du chunk à chaque span.</li>\n<li>Comptez l'éventail de <code>tool/call</code> par étape : la démultiplication d'outils est la raison habituelle pour laquelle un tour coûte soudain dix fois plus.</li>\n<li>Surveillez la distribution des <code>TurnEndReason</code>. Les tours interrompus et tronqués sont du travail payé sans résultat, et c'est la première métrique dont vous êtes privé sans journal.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "Qu'est-ce qu'une session dans DeepSeek Harness ?",
+          "answer": "Une session est une suite ordonnée et seulement extensible d'entrées SessionEvent typées. Chaque événement porte type, seq, time et data ; les événements de surface ajoutent sourceEventSeqs et surfaceOp afin que les vues dérivées remontent aux événements bruts."
+        },
+        {
+          "question": "Où l'usage de tokens est-il enregistré dans DeepSeek Harness ?",
+          "answer": "L'usage voyage avec la sortie à laquelle il appartient. Lisez de préférence les chunks d'usage issus d'assistant/chunk avec type 'usage' et repliez-vous sur assistant/message.usage en l'absence de chunk. Le fournisseur, le modèle et la fenêtre de contexte figurent dans request/context."
+        },
+        {
+          "question": "Que signifie « visible du modèle veut dire journalisé » ?",
+          "answer": "Cela signifie que tout ce qui entre dans le contexte du modèle laisse un événement correspondant dans le journal de session. Le journal est ainsi complet par construction, au lieu de dépendre de quelqu'un qui instrumenterait chaque chemin séparément."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-plugin-architecture",
+          "label": "Tout est un plugin : l'architecture (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Où placer les garde-fous de dépense (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/opentelemetry-genai-conventions",
+          "label": "Conventions GenAI d'OpenTelemetry (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "コスト記録としてのDeepSeek Harnessセッションログ",
+      "titleCore": "コスト記録としてのDeepSeek Harnessセッションログ",
+      "description": "DeepSeek Harnessはエージェントの各ターンを追記専用の型付きイベントログとして記録し、ステップ単位のトークン使用量を残します。コスト記録として読む方法を解説します。",
+      "body": "<p>多くのエージェントスタックは、コスト追跡を後付けでボルト留めします。モデル呼び出しをラップして別システムにトークンを書き込み、その別システムはやがて実態からずれていきます。<a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> は逆の順序を取ります。セッションログが一次成果物であり、トークン使用量はその中に住んでいます。</p>\n\n<h2>セッションは追記専用のイベントログ</h2>\n<p>セッションとは、型付き <code>SessionEvent</code> エントリの順序付き追記専用シーケンスです。各イベントは四つのフィールドを持ちます。</p>\n<table>\n<thead><tr><th>フィールド</th><th>意味</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>イベントの種類（例：<code>assistant/message</code>）</td></tr>\n<tr><td><code>seq</code></td><td>セッション内で単調増加するシーケンス番号</td></tr>\n<tr><td><code>time</code></td><td>タイムスタンプ</td></tr>\n<tr><td><code>data</code></td><td>型固有のペイロード</td></tr>\n</tbody>\n</table>\n<p>サーフェスイベント（UI が表示するもの）はさらに二つのフィールドを加えます。派生元の生イベントを指す <code>sourceEventSeqs</code> と、<code>surfaceOp</code> です。この逆参照があるからこそ、コストの数値をそれを生んだ正確なイベントまで遡れます。</p>\n\n<h2>コストモデルが気にするイベント</h2>\n<ul>\n<li><code>turn/start</code> と <code>turn/end</code>：ユーザーリクエストの外枠。<code>turn/end</code> は完了・中断・打ち切りを示す <code>TurnEndReason</code> を持ちます。</li>\n<li><code>step/start</code> と <code>step/end</code>：ステップとは、一回のモデルリクエストとそれが引き起こすツール呼び出しのことです。これが自然な課金単位になります。</li>\n<li><code>assistant/message</code>：モデル出力。任意で <code>TokenUsage</code> を伴います。</li>\n<li><code>assistant/chunk</code>：ストリーミング出力。使用量チャンクを含みます。</li>\n<li><code>tool/call</code> と <code>tool/result</code>：ツール実行。結果は <code>meta</code> を持てます。</li>\n<li><code>request/header</code> と <code>request/context</code>：<code>EpochHeader</code> と、プロバイダ・モデル・コンテキストウィンドウを含むリクエストコンテキスト。この組が使用量の数値に価格を与えます。</li>\n</ul>\n<p>ドキュメントの指針は明快です。<strong>モデルから見えるものはログに残る</strong>。モデルのコンテキストに入るものはすべてイベントを残します。つまりログは構成上完全であり、「誰も計測を忘れない限り完全」ではありません。</p>\n\n<h2>使用量は出力とともに運ばれる</h2>\n<p>トークン使用量はサイドチャネルに書かれるのではなく、それが属する出力とともに運ばれます。プロバイダが実際に課金した内容に最も近いので、使用量チャンク（<code>{ type: 'usage' }</code> の <code>assistant/chunk</code>）を優先し、チャンクが無い場合に <code>assistant/message.usage</code> へフォールバックしてください。このように読むコストモデルは、生成していないステップに数値を割り当てることが原理的にできません。</p>\n\n<h2>複製ではなく導出された履歴</h2>\n<p>モデルが見るメッセージ履歴は、イベントログから射影されます。第二の真実として横に保持されるわけではありません。コストの数値が実行と一致するシステムと、両者が乖離してどちらが正しいか誰にも言えないシステムとの差はここにあります。</p>\n\n<p class=\"agent-summary\">「モデルから見えるものはログに残る」は、コストの再構成を可能にする唯一の規律です。これが無ければ、あらゆる帰属の数値は誤差幅の分からない推定にすぎません。</p>\n\n<h2>この上に何を作るか</h2>\n<ol>\n<li><code>step/start</code> と <code>step/end</code> を結合してステップスパンを作る。コストを報告する単位はこれです。</li>\n<li>各スパンに <code>request/context</code>（プロバイダ、モデル、コンテキストウィンドウ）とチャンク使用量から求めた価格を付与する。</li>\n<li>ステップごとの <code>tool/call</code> のファンアウトを数える。ツールの分岐は、あるターンの費用が突然十倍になる典型的な理由です。</li>\n<li><code>TurnEndReason</code> の分布を監視する。中断・打ち切りのターンは成果のない支払い済み作業であり、ログが無ければ最初に失われる指標です。</li>\n</ol>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness のセッションとは何ですか？",
+          "answer": "セッションとは、型付き SessionEvent エントリの順序付き追記専用シーケンスです。各イベントは type、seq、time、data を持ち、サーフェスイベントはさらに sourceEventSeqs と surfaceOp を加えて、派生ビューを生イベントまで遡れるようにします。"
+        },
+        {
+          "question": "DeepSeek Harness ではトークン使用量はどこに記録されますか？",
+          "answer": "使用量はそれが属する出力とともに運ばれます。type が 'usage' の assistant/chunk にある使用量チャンクを優先して読み、チャンクが無い場合は assistant/message.usage にフォールバックします。プロバイダ、モデル、コンテキストウィンドウは request/context にあります。"
+        },
+        {
+          "question": "「モデルから見えるものはログに残る」とはどういう意味ですか？",
+          "answer": "モデルのコンテキストに入るものはすべて、対応するイベントをセッションログに残すという意味です。これによりログは構成上完全になり、誰かが経路ごとに個別の計測を入れることに依存しなくなります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-plugin-architecture",
+          "label": "すべてがプラグイン：その構造（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "支出ガードレールを置く場所（英語）"
+        },
+        {
+          "slug": "https://finopsllm.com/research/opentelemetry-genai-conventions",
+          "label": "OpenTelemetryのGenAI規約（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O log de sessão do DeepSeek Harness como registro de custos",
+      "titleCore": "O log de sessão do DeepSeek Harness como registro de custos",
+      "description": "O DeepSeek Harness grava cada turno do agente como um log de eventos append-only com uso de tokens por passo. Um guia para lê-lo como registro de custos.",
+      "body": "<p>A maioria das stacks de agentes aparafusa o rastreio de custo depois: um wrapper em volta da chamada ao modelo que escreve tokens num sistema separado, o qual acaba divergindo da realidade. O <a href=\"https://github.com/deepseek-ai/deepseek-harness\">DeepSeek Harness</a> faz o contrário. O log de sessão é o artefato primário, e o uso de tokens mora dentro dele.</p>\n\n<h2>A sessão é um log de eventos append-only</h2>\n<p>Uma sessão é uma sequência ordenada e apenas-acrescentável de entradas <code>SessionEvent</code> tipadas. Cada evento carrega quatro campos:</p>\n<table>\n<thead><tr><th>Campo</th><th>O que significa</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>O tipo de evento, por exemplo <code>assistant/message</code></td></tr>\n<tr><td><code>seq</code></td><td>Número de sequência monotônico dentro da sessão</td></tr>\n<tr><td><code>time</code></td><td>Carimbo de tempo</td></tr>\n<tr><td><code>data</code></td><td>A carga útil específica do tipo</td></tr>\n</tbody>\n</table>\n<p>Eventos de superfície (o que uma interface exibe) acrescentam dois campos: <code>sourceEventSeqs</code>, que aponta de volta para os eventos brutos dos quais derivam, e <code>surfaceOp</code>. Esses ponteiros são a razão de um número de custo poder ser rastreado até exatamente os eventos que o produziram.</p>\n\n<h2>Os eventos que interessam a um modelo de custo</h2>\n<ul>\n<li><code>turn/start</code> e <code>turn/end</code>: o colchete externo de um pedido do usuário. <code>turn/end</code> carrega um <code>TurnEndReason</code> dizendo se o turno concluiu, foi abortado ou truncado.</li>\n<li><code>step/start</code> e <code>step/end</code>: um passo é um pedido ao modelo mais as chamadas de ferramenta que ele dispara. É a unidade natural de cobrança.</li>\n<li><code>assistant/message</code>: saída do modelo, com <code>TokenUsage</code> opcional.</li>\n<li><code>assistant/chunk</code>: saída em streaming, incluindo chunks de uso.</li>\n<li><code>tool/call</code> e <code>tool/result</code>: execução de ferramentas; o resultado pode carregar <code>meta</code>.</li>\n<li><code>request/header</code> e <code>request/context</code>: o <code>EpochHeader</code> e o contexto do pedido com provedor, modelo e janela de contexto. Esse par é o que coloca preço num número de uso.</li>\n</ul>\n<p>A regra que guia a documentação é: <strong>o que é visível ao modelo fica registrado</strong>. Tudo o que entra no contexto do modelo deixa um evento. Isso torna o log completo por construção, em vez de completo enquanto ninguém esquecer de instrumentá-lo.</p>\n\n<h2>O uso viaja com a saída</h2>\n<p>O uso de tokens não é escrito num canal lateral: viaja com a saída à qual pertence. Prefira os chunks de uso (<code>assistant/chunk</code> com <code>{ type: 'usage' }</code>) porque ficam o mais perto possível do que o provedor de fato cobrou; recorra a <code>assistant/message.usage</code> quando não houver chunk. Um modelo de custo que lê assim nunca consegue atribuir um número a um passo que não o gerou.</p>\n\n<h2>Histórico derivado, não duplicado</h2>\n<p>O histórico de mensagens que o modelo vê é projetado a partir do log de eventos, em vez de mantido ao lado como uma segunda verdade. Essa é a diferença entre um sistema cujos números de custo concordam com sua execução e um em que os dois divergem e ninguém sabe qual está certo.</p>\n\n<p class=\"agent-summary\">«Visível ao modelo significa registrado» é a única regra que torna possível reconstruir custo. Sem ela, todo número de atribuição é uma estimativa com margem de erro desconhecida.</p>\n\n<h2>O que construir em cima</h2>\n<ol>\n<li>Junte <code>step/start</code> e <code>step/end</code> para formar spans de passo: a unidade contra a qual você reportará custo.</li>\n<li>Anexe <code>request/context</code> (provedor, modelo, janela de contexto) e o preço a partir do uso do chunk a cada span.</li>\n<li>Conte o fan-out de <code>tool/call</code> por passo: a ramificação de ferramentas é o motivo habitual de um turno passar a custar dez vezes mais.</li>\n<li>Observe a distribuição de <code>TurnEndReason</code>. Turnos abortados e truncados são trabalho pago sem resultado, e são a primeira métrica que você não tem sem um log.</li>\n</ol>",
+      "faq": [
+        {
+          "question": "O que é uma sessão no DeepSeek Harness?",
+          "answer": "Uma sessão é uma sequência ordenada e apenas-acrescentável de entradas SessionEvent tipadas. Cada evento carrega type, seq, time e data; eventos de superfície acrescentam sourceEventSeqs e surfaceOp para que visões derivadas possam ser rastreadas até os eventos brutos."
+        },
+        {
+          "question": "Onde o uso de tokens é registrado no DeepSeek Harness?",
+          "answer": "O uso viaja com a saída à qual pertence. Leia preferencialmente os chunks de uso vindos de assistant/chunk com type 'usage' e recorra a assistant/message.usage quando não houver chunk. Provedor, modelo e janela de contexto ficam em request/context."
+        },
+        {
+          "question": "O que significa «visível ao modelo significa registrado»?",
+          "answer": "Significa que tudo o que entra no contexto do modelo deixa um evento correspondente no log de sessão. Isso torna o log completo por construção, em vez de depender de alguém instrumentar cada caminho separadamente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-plugin-architecture",
+          "label": "Tudo é um plugin: a arquitetura (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Onde colocar os limites de gasto (EN)"
+        },
+        {
+          "slug": "https://finopsllm.com/research/opentelemetry-genai-conventions",
+          "label": "Convenções GenAI do OpenTelemetry (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "سجل الجلسة كمصدر وحيد للحقيقة وسجل التكاليف",
+      "titleCore": "سجل الجلسة كمصدر وحيد للحقيقة وسجل التكاليف",
+      "description": "يسجل DeepSeek Harness أحداث الوكيل في سجل إلحاق فقط مع استهلاك الرموز لكل خطوة. كيفية استخدامه كسجل محاسبي وتدقيقي موثوق.",
+      "body": "<p>في بيئات الإنتاج، لا يمكن إدارة ما لا يمكن قياسه وتدقيقه بدقة. يعتمد DeepSeek Harness مبدأً معمارياً صارماً: الجلسة عبارة عن سجل أحداث للإلحاق فقط (Append-Only Event Log). لا يتم تعديل الأحداث الماضية إطلاقاً، وكل تفاعل يمثل حدثاً مطبوعاً وموثقاً زمنياً.</p>\n\n<h2>استهلاك الرموز يسافر مع المخرجات</h2>\n<p>الميزة الأهم لفرق FinOps هي أن بيانات استهلاك الرموز (رموز الإدخال، ورموز الإخراج، ورموز التخزين المؤقت، وزمن الاستجابة) ترتبط مباشرة بالحدث البرمجي الذي ولّدها في السجل. لا توجد تخمينات أو أرقام متوسطة؛ يمكنك تتبع التكلفة الدقيقة لكل سطر كود أو قرار اتخذه الوكيل.</p>\n\n<h2>تاريخ مشتق دون تكرار للبيانات</h2>\n<p>بدلاً من تكرار حفظ تاريخ المحادثة في كل خطوة، يتم اشتقاق السياق ديناميكياً من سجل الأحداث الأصلي، مما يضمن توافق الرؤية بين النموذج، وأدوات التصحيح، ونظام المحاسبة المالية.</p>\n\n<h2>بناء أنظمة المحاسبة والفوترة على السجل</h2>\n<p>يتيح هذا التصميم استخراج تقارير تكلفة فورية، ومطابقة فواتير المزودين، واكتشاف محاولات إعادة التنفيذ المهدرة عبر قراءة تدفق الأحداث مباشرة دون الحاجة لتثبيت برمجيات مراقبة دخيلة.</p>",
+      "faq": [
+        {
+          "question": "كيف يعمل سجل الجلسات في DeepSeek Harness؟",
+          "answer": "يعمل كسجل أحداث غير قابل للتعديل (Append-only) يوثق كل استدعاء وأداة وقرار مع كامل بيانات استهلاك الرموز المرتبطة به."
+        },
+        {
+          "question": "لماذا يعد ارتباط استهلاك الرموز بالحدث أمراً مهماً؟",
+          "answer": "لأنه يتيح إسناد التكلفة المالية بدقة متناهية إلى الوظيفة أو الأداة المحددة التي تسببت في الإنفاق داخل مسار العمل."
+        },
+        {
+          "question": "هل يمكن استخدام سجل الجلسات في التدقيق المالي؟",
+          "answer": "نعم، يعتبر السجل مصدراً وحيداً للحقيقة وقابلاً للتدقيق المحاسبي لمطابقة فواتير المزودين وإثبات العائد على الاستثمار."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "إسناد تكاليف نماذج الذكاء الاصطناعي"
+        },
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "/ar/research/focus-1-5-ai-token-tracking",
+          "label": "معيار FOCUS 1.5 لتتبع الرموز"
+        }
+      ]
+    },
+    "zh": {
+      "title": "会话日志：作为唯一事实来源与成本账本",
+      "titleCore": "会话日志：作为唯一事实来源与成本账本",
+      "description": "DeepSeek Harness 将智能体每次交互写入仅追加事件日志，Token 消耗与输出绑定。如何将其作为精确的财务审计账本。",
+      "body": "<p>在生产环境中，没有精确的日志就没有 FinOps 治理。DeepSeek Harness 采用严格的<strong>仅追加事件日志 (Append-only Event Log)</strong> 规范。</p>\n<h2>Token 消耗与输出强绑定</h2>\n<p>每次模型调用的输入、输出、缓存与推理 Token 统计，均作为不可变字段直接附着在生成事件上。系统历史由事件流动态投影生成，杜绝数据冗余与账目偏差。</p>",
+      "faq": [
+        {
+          "question": "会话日志如何支持成本归因？",
+          "answer": "因为每次推理的 Token 消耗与耗时均直接与产生它的事件绑定，为按功能或团队核算成本提供了精确依据。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/focus-1-5-ai-token-tracking",
+          "label": "FOCUS 1.5 标准与 Token 追踪"
+        }
+      ]
+    },
+    "it": {
+      "title": "Registro di sessione: unica fonte di verità e costi",
+      "titleCore": "Registro di sessione: unica fonte di verità e costi",
+      "description": "DeepSeek Harness registra ogni turno in un log append-only con consumo di token per step: come usarlo per l'audit finanziario.",
+      "body": "<p>Tracciamento dettagliato del consumo di token associato a ogni singolo output per una contabilità granulare.</p>",
+      "faq": [
+        {
+          "question": "Come funziona il log di sessione?",
+          "answer": "È un registro immutabile che unisce eventi di business e consumo esatto di token."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Guida a DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "세션 로그: 단일 진실 공급원이자 비용 원장",
+      "titleCore": "세션 로그: 단일 진실 공급원이자 비용 원장",
+      "description": "추가 전용(Append-only) 이벤트 로그로 기록되는 DeepSeek Harness 세션 로그와 스텝별 토큰 과금 감사 활용법.",
+      "body": "<p>생성된 출력 이벤트마다 토큰 사용량이 직접 결합되어 기록되므로 완벽한 금융 감사 및 비용 귀속이 가능합니다.</p>",
+      "faq": [
+        {
+          "question": "세션 로그의 장점은 무엇인가요?",
+          "answer": "토큰 소모 내역이 출력 이벤트에 직접 첨부되어 정확한 원가 산출이 가능합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness 개요"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Het sessielogboek als kostenadministratie",
+      "titleCore": "Het sessielogboek als kostenadministratie",
+      "description": "DeepSeek Harness schrijft elke beurt naar een append-only logboek met tokenverbruik per stap voor betrouwbare audit.",
+      "body": "<p>Elk event bevat het exacte tokenverbruik voor waterdichte financiële toewijzing en declaratie.</p>",
+      "faq": [
+        {
+          "question": "Wat is het voordeel van een append-only log?",
+          "answer": "Het fungeert als onveranderlijke audit-trail voor alle gemaakte modelkosten."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        }
+      ]
+    },
+    "en": {
+      "title": "The DeepSeek Harness session log as a cost record",
+      "titleCore": "The DeepSeek Harness session log as a cost record",
+      "description": "DeepSeek Harness records every agent turn as an append-only typed event log with per-step token usage. A guide to reading it as a cost record.",
+      "body": "<p>Most agent cost tracking is bolted on. You wrap the provider SDK, emit a span, hope nobody adds a second call path, and discover six weeks later that the subagent traffic never got instrumented. DeepSeek Harness takes a different route: the session log is the primary artefact, and token accounting rides inside it.</p>\n\n<h2>The session is an append-only event log</h2>\n<p>The docs put it directly: a <code>Session</code> is an append-only log of typed <code>SessionEvent</code>s, and it is the single source of truth for an agent's whole interaction history. Every event carries four fields:</p>\n<table>\n<thead><tr><th>Field</th><th>Meaning</th></tr></thead>\n<tbody>\n<tr><td><code>type</code></td><td>Event category, a key from the extensible <code>SessionEventMap</code></td></tr>\n<tr><td><code>seq</code></td><td>Monotonic sequence number, equal to the log length at append time</td></tr>\n<tr><td><code>time</code></td><td>Unix epoch milliseconds</td></tr>\n<tr><td><code>data</code></td><td>Type-specific, JSON-serialisable payload</td></tr>\n</tbody>\n</table>\n<p>Surface events carry two more: <code>sourceEventSeqs</code>, referencing the events they derive from, and <code>surfaceOp</code>, describing how the event enters the message surface.</p>\n\n<h2>The events a cost model cares about</h2>\n<ul>\n<li><strong><code>turn/start</code> and <code>turn/end</code></strong> — open and close a turn, the latter with a <code>TurnEndReason</code>. A turn is the user-facing unit of work.</li>\n<li><strong><code>step/start</code> and <code>step/end</code></strong> — a step is one model call plus its tool calls. This is the billing unit.</li>\n<li><strong><code>assistant/message</code></strong> — model output, with optional <code>TokenUsage</code> attached.</li>\n<li><strong><code>assistant/chunk</code></strong> — raw stream tokens, kept for replay fidelity. Usage arrives here as chunks of type <code>usage</code>.</li>\n<li><strong><code>tool/call</code> and <code>tool/result</code></strong> — the model's tool invocation and its outcome, the latter with an optional <code>meta</code> payload.</li>\n<li><strong><code>request/header</code></strong> — the full <code>EpochHeader</code>: config, system prompt, and tool set for the request.</li>\n<li><strong><code>request/context</code></strong> — route metadata: provider, model, context window.</li>\n</ul>\n<p>That last pair is the piece most homegrown telemetry misses. <code>request/context</code> tells you which provider and model actually served the step, and <code>request/header</code> tells you what was sent. Together they let you reconstruct the cost of a step from the log alone, without trusting a separately maintained pricing lookup keyed off an assumed model.</p>\n\n<h2>Usage travels with output</h2>\n<p>The docs are careful about this: an <code>assistant/message</code> carries the step's <code>usage</code> when the adapter reported token accounting, so the model output and its accounting travel together. The reader prefers per-step <code>assistant/chunk { type: 'usage' }</code> records and falls back to <code>assistant/message.usage</code>.</p>\n<p>The practical effect is that you cannot end up with orphaned usage numbers you can no longer attribute to a step, which is the single most common defect in retrofitted agent cost tracking.</p>\n\n<h2>Derived history, not duplicated history</h2>\n<p>Message history is derived from surface events and never stored separately. The projection rules are simple: <code>user/message</code> becomes a user message, <code>assistant/message</code> becomes an assistant message with raw chunks skipped, <code>tool/result</code> becomes a user message carrying a tool-result block. Everything else stays log-only.</p>\n<p>For a FinOps team this is the useful property. There is one place to read, and reading it does not risk disagreeing with what the model actually saw.</p>\n\n<div class=\"callout\">The governing principle of the harness is \"model-visible means logged\" — the session log must be able to reconstitute the run. A log complete enough to replay a session is, by construction, complete enough to cost it.</div>\n\n<h2>What to build on top</h2>\n<ol>\n<li>Join <code>step/start</code> and <code>step/end</code> to get step duration and count per turn. Step count per turn is your orchestration multiplier, and it is the number that surprises finance.</li>\n<li>Attach <code>request/context</code> to each step for the provider and model, then price the usage from the same step's <code>assistant/chunk</code> usage record.</li>\n<li>Count <code>tool/call</code> events per step. High tool-call fan-out per step is where latency and retry cost concentrate.</li>\n<li>Watch <code>TurnEndReason</code> distributions. Turns ending for reasons other than completion are paid-for work that produced nothing.</li>\n</ol>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-plugin-architecture\">DeepSeek Harness: what \"everything is a plugin\" buys you</a> — the seam model underneath.</li>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — acting on what the log shows.</li>\n<li><a href=\"https://finopsllm.com/research/opentelemetry-genai-conventions\">OpenTelemetry GenAI conventions</a> — the standard-based alternative.</li>\n<li><a href=\"https://finopsllm.com/research/what-is-llm-cost-attribution\">What is LLM cost attribution</a> — the underlying discipline.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "What is a session in DeepSeek Harness?",
+          "answer": "A session is an append-only log of typed SessionEvents, described in the docs as the single source of truth for an agent's whole interaction history. Message history is derived from the log rather than stored separately."
+        },
+        {
+          "question": "Where is token usage recorded in DeepSeek Harness?",
+          "answer": "Usage travels with model output. The system reads per-step assistant/chunk records of type 'usage', with assistant/message.usage as a fallback, so a step's token accounting and the text it produced stay attached to each other."
+        },
+        {
+          "question": "What does 'model-visible means logged' mean?",
+          "answer": "It is the governing principle of the harness: anything the model could see must appear in the session log, so the log can reconstitute the run. For cost work this means the log is complete by construction rather than by instrumentation discipline."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-session-log"
+  }
+}

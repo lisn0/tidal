@@ -1,0 +1,142 @@
+{
+  "slug": "claude-fable-5-1-cost-model",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Claude Fable 5.1 cost model",
+      "titleCore": "Claude Fable 5.1 cost model",
+      "description": "Fable 5.1 costs twice Opus 5 on list input and output, but half as much on cached input. A FinOps model for when the premium is real and when it is not.",
+      "body": "<p>Claude Fable 5.1 (<code>claude-fable-5-1</code>) is priced at $10 per million input tokens and $50 per million output tokens. Opus 5 is $5 and $25. Read only those four numbers and Fable looks like a flat 2&times; premium. That is the wrong model. The cached-input rate moves in the opposite direction, and for a production workload the cache is usually where most of the tokens are.</p><h2>The four rates that matter</h2><p>A model is not one price. Fable 5.1 bills five different token types, and only two of them are on the headline.</p><table><thead><tr><th>Token type</th><th>Fable 5.1</th><th>Opus 5</th></tr></thead><tbody><tr><td>Input (uncached)</td><td>$10.00 / MTok</td><td>$5.00 / MTok</td></tr><tr><td>Output</td><td>$50.00 / MTok</td><td>$25.00 / MTok</td></tr><tr><td>Cache write (5-minute)</td><td>$12.50 / MTok</td><td>$6.25 / MTok</td></tr><tr><td>Cache write (1-hour)</td><td>$20.00 / MTok</td><td>$10.00 / MTok</td></tr><tr><td>Cache read</td><td>$0.25 / MTok</td><td>$0.50 / MTok</td></tr></tbody></table><p>The cache read is the outlier. It is 2.5% of Fable's own list input price, and it is <em>half</em> what the same cached token costs on Opus 5. Every other row is 2&times;; that one row is 0.5&times;.</p><h2>What that does to a real workload</h2><p>Take an agent with a 100,000-token system prompt, tool schema, and retrieved context, reused across a session. On a cold call the prefix costs $1.00 on Fable and $0.50 on Opus 5. On a warm call it costs $0.025 on Fable and $0.05 on Opus 5. The provider that was twice as expensive is now half the price, on the same prompt, because the only thing that changed is whether the prefix hit.</p><p>So the break-even is a cache hit ratio, not a model preference. Below roughly 50% of input tokens served from cache, Fable's input premium dominates and Opus 5 is cheaper on prefix. Above it, Fable's cached rate pulls ahead and keeps pulling. Output tokens stay 2&times; either way, which is why the second lever is output length, not model choice.</p><h2>Output is the uncapped side</h2><p>Fable 5.1 accepts a 1M-token context window and can emit up to 128K output tokens in one response. At $50 per million, a single 128K response is $6.40 of output. Extended thinking is always on for this model &mdash; there is no way to switch it off, and the old <code>budget_tokens</code> control is rejected with a 400. What you get instead is an <code>effort</code> setting from low to max. That is now a cost dial, and it belongs in your routing policy next to model choice, not in application defaults nobody revisits.</p><p>Raw reasoning is never returned, so your telemetry cannot reconstruct thinking cost from response text. You must read it from the <code>usage</code> block on every call and store it. There is no Priority Tier on this model either, so latency cannot be bought &mdash; capacity planning has to be done with concurrency and queueing on your side.</p><h2>What to instrument before you route traffic</h2><p>Three fields decide whether Fable 5.1 is cheap or expensive for you, and none of them appear on a price sheet.</p><ul><li><strong>Cache hit ratio by feature.</strong> Not an account-level average &mdash; a chat surface at 90% and a batch job at 0% cancel each other into a meaningless 45%.</li><li><strong>Cache write amplification.</strong> A 1-hour write costs 2&times; list input. A prefix that is rewritten more often than it is read is a net loss at any TTL.</li><li><strong>Output tokens per successful task.</strong> The 2&times; output premium is only justified if fewer attempts are needed. Measure cost per successful task, not cost per call.</li></ul><p>Then run the comparison as a variance bridge against your current model, splitting rate from volume from mix. A model that is twice the list price and half the cached price will show up as two large offsetting movements, and an average will hide both.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/prompt-caching-economics\">Prompt caching economics</a></li><li><a href=\"https://finopsllm.com/research/reasoning-model-cost-guide\">Reasoning model cost guide</a></li><li><a href=\"/research/model-routing\">Model routing</a></li></ul>",
+      "faq": [
+        {
+          "question": "How much does Claude Fable 5.1 cost?",
+          "answer": "$10 per million input tokens and $50 per million output tokens. Cache writes are $12.50 per million for the 5-minute TTL and $20.00 for the 1-hour TTL, and cache reads are $0.25 per million."
+        },
+        {
+          "question": "Is Fable 5.1 more expensive than Opus 5?",
+          "answer": "On list input and output it is exactly twice the price. On cached input it is half the price: $0.25 per million against $0.50. Which one you pay depends on your cache hit ratio."
+        },
+        {
+          "question": "Can I turn off extended thinking to save money on Fable 5.1?",
+          "answer": "No. Thinking is always on for this model and sending an explicit thinking configuration returns a 400. The cost dial is the effort setting, from low to max."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/reasoning-model-cost-guide",
+          "label": "Reasoning model cost guide"
+        },
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing"
+        }
+      ]
+    },
+    "es": {
+      "title": "Modelo de coste de Claude Fable 5.1",
+      "titleCore": "Modelo de coste de Claude Fable 5.1",
+      "description": "Fable 5.1 cuesta el doble que Opus 5 en tarifa de lista y la mitad en entrada cacheada. Cuándo la prima es real.",
+      "body": "<p>Claude Fable 5.1 (<code>claude-fable-5-1</code>) cuesta 10 dólares por millón de tokens de entrada y 50 por millón de salida. Opus 5 cuesta 5 y 25. Parece una prima fija del doble, pero es un modelo equivocado: la tarifa de caché va en dirección contraria.</p><h2>Las cuatro tarifas que importan</h2><p>La escritura en caché cuesta 12,50 dólares por millón (TTL de 5 minutos) y 20,00 (TTL de una hora). La lectura de caché cuesta 0,25 por millón: el 2,5% de su propio precio de entrada y la <em>mitad</em> de lo que cuesta el mismo token cacheado en Opus 5. Todas las filas son 2&times;; esa única fila es 0,5&times;.</p><h2>Qué ocurre con una carga real</h2><p>Un prefijo de 100.000 tokens cuesta 1,00 dólar en frío con Fable y 0,50 con Opus 5. En caliente cuesta 0,025 con Fable y 0,05 con Opus 5. El proveedor más caro pasa a ser el más barato sin cambiar el prompt. El punto de equilibrio es una tasa de acierto de caché cercana al 50%, no una preferencia de modelo.</p><h2>La salida no tiene tope</h2><p>El contexto llega a un millón de tokens y la salida máxima a 128.000. A 50 dólares por millón, una sola respuesta de 128K cuesta 6,40. El razonamiento extendido siempre está activo y la configuración explícita devuelve un error 400: el control de coste es el parámetro <code>effort</code>, de bajo a máximo. Tampoco hay Priority Tier, así que la latencia se gestiona con concurrencia propia.</p><h2>Qué instrumentar antes de enrutar tráfico</h2><p>Mide la tasa de acierto de caché por función (no una media de cuenta), la amplificación de escrituras de caché y los tokens de salida por tarea exitosa. Después compara con tu modelo actual mediante un puente de variación que separe tarifa, volumen y mezcla; un promedio esconde los dos movimientos opuestos.</p>",
+      "faq": [
+        {
+          "question": "¿Cuánto cuesta Claude Fable 5.1?",
+          "answer": "10 dólares por millón de tokens de entrada y 50 por millón de salida. La escritura en caché cuesta 12,50 o 20,00 según el TTL y la lectura 0,25 por millón."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economía del caché de prompts"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Modèle de coût de Claude Fable 5.1",
+      "titleCore": "Modèle de coût de Claude Fable 5.1",
+      "description": "Fable 5.1 coûte le double d’Opus 5 au tarif public et la moitié sur l’entrée en cache. Quand la prime est réelle.",
+      "body": "<p>Claude Fable 5.1 (<code>claude-fable-5-1</code>) est facturé 10 dollars par million de tokens d’entrée et 50 par million en sortie, contre 5 et 25 pour Opus 5. On y voit une prime uniforme de 2&times;. C’est faux : le tarif du cache va dans l’autre sens.</p><h2>Les quatre tarifs qui comptent</h2><p>L’écriture en cache coûte 12,50 dollars par million (TTL 5 minutes) et 20,00 (TTL 1 heure). La lecture en cache coûte 0,25 par million, soit 2,5% de son propre prix d’entrée et la <em>moitié</em> du même token mis en cache chez Opus 5. Toutes les lignes sont à 2&times;; cette ligne-là est à 0,5&times;.</p><h2>Sur une charge réelle</h2><p>Un préfixe de 100 000 tokens coûte 1,00 dollar à froid avec Fable et 0,50 avec Opus 5. À chaud, 0,025 contre 0,05. Le fournisseur deux fois plus cher devient deux fois moins cher, sur le même prompt. Le point d’équilibre est un taux de succès du cache proche de 50%, pas une préférence de modèle.</p><h2>La sortie n’est pas plafonnée</h2><p>La fenêtre atteint un million de tokens et la sortie 128 000. À 50 dollars le million, une seule réponse de 128K coûte 6,40. Le raisonnement étendu est toujours actif et toute configuration explicite renvoie une erreur 400 : le levier de coût est le paramètre <code>effort</code>, de faible à maximal. Pas de Priority Tier non plus, donc la latence se gère par la concurrence côté client.</p><h2>À instrumenter avant de router du trafic</h2><p>Mesurez le taux de succès du cache par fonctionnalité, l’amplification des écritures de cache et les tokens de sortie par tâche réussie. Comparez ensuite via un pont de variation séparant tarif, volume et mix : une moyenne masque les deux mouvements opposés.</p>",
+      "faq": [
+        {
+          "question": "Combien coûte Claude Fable 5.1?",
+          "answer": "10 dollars par million de tokens d’entrée et 50 par million en sortie. L’écriture en cache est à 12,50 ou 20,00 selon le TTL et la lecture à 0,25 par million."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Économie du cache de prompts"
+        }
+      ]
+    },
+    "de": {
+      "title": "Kostenmodell von Claude Fable 5.1",
+      "titleCore": "Kostenmodell von Claude Fable 5.1",
+      "description": "Fable 5.1 kostet doppelt so viel wie Opus 5 im Listenpreis und halb so viel bei zwischengespeicherter Eingabe.",
+      "body": "<p>Claude Fable 5.1 (<code>claude-fable-5-1</code>) kostet 10 Dollar je Million Eingabe-Tokens und 50 je Million Ausgabe-Tokens; Opus 5 kostet 5 und 25. Das sieht nach einem pauschalen Aufschlag von 2&times; aus. Der Cache-Tarif läuft jedoch in die Gegenrichtung.</p><h2>Die vier relevanten Tarife</h2><p>Cache-Schreibvorgänge kosten 12,50 Dollar je Million (TTL 5 Minuten) und 20,00 (TTL 1 Stunde). Ein Cache-Lesevorgang kostet 0,25 je Million &mdash; 2,5% des eigenen Eingabepreises und die <em>Hälfte</em> dessen, was derselbe Token bei Opus 5 kostet. Jede andere Zeile ist 2&times;, diese eine ist 0,5&times;.</p><h2>Wirkung auf eine echte Last</h2><p>Ein Präfix von 100.000 Tokens kostet kalt 1,00 Dollar bei Fable und 0,50 bei Opus 5. Warm sind es 0,025 gegenüber 0,05. Der teurere Anbieter wird beim gleichen Prompt zum günstigeren. Der Break-even ist eine Cache-Trefferquote von rund 50%, keine Modellpräferenz.</p><h2>Die Ausgabeseite ist ungedeckelt</h2><p>Das Kontextfenster reicht bis eine Million Tokens, die Ausgabe bis 128.000. Bei 50 Dollar je Million kostet eine einzige 128K-Antwort 6,40. Erweitertes Denken ist dauerhaft aktiv, eine explizite Konfiguration führt zu einem 400er-Fehler. Der Kostenregler ist der Parameter <code>effort</code> von niedrig bis maximal. Einen Priority Tier gibt es nicht; Latenz steuern Sie über eigene Nebenläufigkeit.</p><h2>Was vor dem Routing instrumentiert gehört</h2><p>Messen Sie die Cache-Trefferquote je Funktion, die Verstärkung der Cache-Schreibvorgänge und die Ausgabe-Tokens je erfolgreicher Aufgabe. Vergleichen Sie anschließend über eine Abweichungsbrücke aus Tarif, Volumen und Mix &mdash; ein Durchschnitt verdeckt beide Gegenbewegungen.</p>",
+      "faq": [
+        {
+          "question": "Was kostet Claude Fable 5.1?",
+          "answer": "10 Dollar je Million Eingabe-Tokens und 50 je Million Ausgabe-Tokens. Cache-Schreibvorgänge kosten je nach TTL 12,50 oder 20,00, Cache-Lesevorgänge 0,25 je Million."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Ökonomie des Prompt-Cachings"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Modelo de custo do Claude Fable 5.1",
+      "titleCore": "Modelo de custo do Claude Fable 5.1",
+      "description": "O Fable 5.1 custa o dobro do Opus 5 no preço de tabela e metade na entrada em cache.",
+      "body": "<p>O Claude Fable 5.1 (<code>claude-fable-5-1</code>) custa 10 dólares por milhão de tokens de entrada e 50 por milhão de saída; o Opus 5 custa 5 e 25. Parece um prémio fixo de 2&times;, mas o tarifário de cache vai no sentido oposto.</p><h2>As quatro tarifas que importam</h2><p>A escrita em cache custa 12,50 dólares por milhão (TTL de 5 minutos) e 20,00 (TTL de uma hora). A leitura de cache custa 0,25 por milhão: 2,5% do próprio preço de entrada e <em>metade</em> do que o mesmo token em cache custa no Opus 5. Todas as linhas são 2&times;; essa é 0,5&times;.</p><h2>Numa carga real</h2><p>Um prefixo de 100.000 tokens custa 1,00 dólar a frio no Fable e 0,50 no Opus 5. A quente, 0,025 contra 0,05. O fornecedor mais caro passa a ser o mais barato com o mesmo prompt. O ponto de equilíbrio é uma taxa de acerto de cache perto de 50%.</p><h2>A saída não tem tecto</h2><p>O contexto chega a um milhão de tokens e a saída a 128.000. A 50 dólares por milhão, uma única resposta de 128K custa 6,40. O raciocínio alargado está sempre activo e a configuração explícita devolve erro 400: o controlo de custo é o parâmetro <code>effort</code>, de baixo a máximo. Não há Priority Tier, pelo que a latência se gere com concorrência própria.</p><h2>O que instrumentar antes de encaminhar tráfego</h2><p>Meça a taxa de acerto de cache por funcionalidade, a amplificação das escritas em cache e os tokens de saída por tarefa bem-sucedida. Compare depois com uma ponte de variação que separe tarifa, volume e mistura; uma média esconde os dois movimentos opostos.</p>",
+      "faq": [
+        {
+          "question": "Quanto custa o Claude Fable 5.1?",
+          "answer": "10 dólares por milhão de tokens de entrada e 50 por milhão de saída. A escrita em cache custa 12,50 ou 20,00 consoante o TTL e a leitura 0,25 por milhão."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Economia do cache de prompts"
+        }
+      ]
+    },
+    "ja": {
+      "title": "Claude Fable 5.1 のコストモデル",
+      "titleCore": "Claude Fable 5.1 のコストモデル",
+      "description": "Fable 5.1 は定価では Opus 5 の 2 倍、キャッシュ入力では半額です。割高になる条件を整理します。",
+      "body": "<p>Claude Fable 5.1（<code>claude-fable-5-1</code>）は入力 100 万トークンあたり 10 ドル、出力 50 ドルです。Opus 5 は 5 ドルと 25 ドルなので一律 2 倍に見えますが、キャッシュ料金だけは逆方向に動きます。</p><h2>重要な 4 つの単価</h2><p>キャッシュ書き込みは 100 万トークンあたり 12.50 ドル（TTL 5 分）と 20.00 ドル（TTL 1 時間）。キャッシュ読み取りは 0.25 ドルで、自身の入力価格の 2.5%、そして Opus 5 の同じトークンの<em>半額</em>です。他の行はすべて 2 倍、この 1 行だけが 0.5 倍です。</p><h2>実際の負荷での挙動</h2><p>10 万トークンの前置きはコールド時に Fable で 1.00 ドル、Opus 5 で 0.50 ドル。ウォーム時は 0.025 ドルと 0.05 ドルです。同じプロンプトのまま、高い方が安い方に入れ替わります。損益分岐点はモデルの好みではなく、約 50% のキャッシュヒット率です。</p><h2>出力側に上限はない</h2><p>コンテキストは 100 万トークン、最大出力は 12 万 8000 トークンです。100 万あたり 50 ドルなので、128K の応答 1 回で 6.40 ドルになります。拡張思考は常時有効で、明示的な設定は 400 エラーになります。コスト調整は low から max までの <code>effort</code> です。Priority Tier もないため、レイテンシは自社側の並列制御で管理します。</p><h2>トラフィックを流す前に計測すること</h2><p>機能単位のキャッシュヒット率、キャッシュ書き込みの増幅、成功タスクあたりの出力トークンを測定してください。その上で単価・数量・構成に分解した差異ブリッジで既存モデルと比較します。平均値は相反する 2 つの動きを隠します。</p>",
+      "faq": [
+        {
+          "question": "Claude Fable 5.1 の料金はいくらですか？",
+          "answer": "入力 100 万トークンあたり 10 ドル、出力 50 ドルです。キャッシュ書き込みは TTL に応じて 12.50 ドルまたは 20.00 ドル、キャッシュ読み取りは 0.25 ドルです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "プロンプトキャッシュの経済性"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/claude-fable-5-1-cost-model"
+  }
+}

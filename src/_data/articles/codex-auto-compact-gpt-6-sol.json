@@ -1,0 +1,57 @@
+{
+  "slug": "codex-auto-compact-gpt-6-sol",
+  "tags": [
+    "llm-costs",
+    "cost-optimization",
+    "agents",
+    "openai"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Codex auto-compact on GPT-6 Sol: the defaults in the…",
+      "titleCore": "Codex auto-compact on GPT-6 Sol: the defaults in the…",
+      "description": "Codex compacts GPT-6 Sol at 244,800 tokens: 90% of a 272K window. Why a higher limit is silently ignored, and why a bigger window can double the price per turn.",
+      "faq": [
+        {
+          "question": "At what token count does Codex auto-compact GPT-6 Sol?",
+          "answer": "At 244,800 tokens by default. Codex gives GPT-6 Sol a 272,000-token window and compacts at 90% of it. No compaction limit is shipped for the model, so this computed value applies."
+        },
+        {
+          "question": "Can I raise model_auto_compact_token_limit above 244,800?",
+          "answer": "Not on its own. Codex uses the smaller of your limit and 90% of the context window, so a higher value is silently ignored. To compact later you also have to raise model_context_window."
+        },
+        {
+          "question": "Should I raise the Codex context window to 872K for GPT-6 Sol?",
+          "answer": "Usually not. Past 272K input tokens the whole request is billed at 2x input and 1.5x output. A turn with 400K of cached context costs about 3.3 times one at 240K. No one has published GPT-6 Sol quality numbers at that length yet."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-sol-long-context-benchmarks",
+          "label": "GPT-6 Sol long-context benchmarks: what has actually been measured"
+        },
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing and the 272K long-context price jump"
+        },
+        {
+          "slug": "/research/context-window-paid-twice",
+          "label": "You pay for the context window twice"
+        },
+        {
+          "slug": "/research/codex-usage-limits-chatgpt-pro",
+          "label": "How much Codex does ChatGPT Pro include?"
+        }
+      ],
+      "body": "<p><strong>Codex auto-compacts a GPT-6 Sol session at 244,800 tokens: 90% of the 272,000-token window it assigns the model.</strong> Raising <code>model_auto_compact_token_limit</code> above that number does nothing unless you also raise <code>model_context_window</code>. If you raise the window past 272K, every turn that crosses the line is billed at long-context rates. We read the numbers from the Codex 0.157.1 source code and from the model catalog Codex downloads.</p>\n\n<h2>What context window does Codex give GPT-6 Sol?</h2>\n\n<p><strong>272,000 tokens, even though the API accepts up to 922,000.</strong> Codex downloads a model catalog and caches it in <code>~/.codex/models_cache.json</code>. The entry for <code>gpt-6-sol</code> lists a <code>context_window</code> of 272,000 and a <code>max_context_window</code> of 872,000. It also sets <code>effective_context_window_percent</code> to 95 and leaves <code>auto_compact_token_limit</code> empty. GPT-6 Astra and GPT-6 Luna have the same values.</p>\n\n<p>272K is not an arbitrary number. It is exactly where <a href=\"/research/gpt-6-pricing\">GPT-6 long-context pricing</a> starts.</p>\n\n<table>\n<thead><tr><th>Value</th><th>Tokens</th><th>Where it comes from</th></tr></thead>\n<tbody>\n<tr><td>Context window</td><td>272,000</td><td><code>context_window</code> in the model catalog</td></tr>\n<tr><td>Usable window</td><td>258,400</td><td>95% of the window (<code>effective_context_window_percent</code>)</td></tr>\n<tr><td>Auto-compact threshold</td><td>244,800</td><td>90% of the window, computed in code</td></tr>\n<tr><td>Largest window allowed</td><td>872,000</td><td><code>max_context_window</code> in the model catalog</td></tr>\n<tr><td>API input limit</td><td>922,000</td><td>OpenAI model spec (1.05M total with output)</td></tr>\n</tbody>\n</table>\n\n<h2>How does Codex decide when to compact?</h2>\n\n<p><strong>It takes the smaller of your configured limit and 90% of the context window.</strong> In <code>codex-rs/protocol/src/openai_models.rs</code>, <code>auto_compact_token_limit()</code> computes <code>context_window * 9 / 10</code>. It returns that value or your configured limit, whichever is lower. The catalog ships no limit for GPT-6 Sol, so by default the result is 272,000 &times; 0.9 = 244,800.</p>\n\n<p>So the setting can only move compaction earlier. Put <code>model_auto_compact_token_limit = 300000</code> in <code>config.toml</code> with the default window, and Codex still compacts at 244,800 without any warning. To compact later you also have to raise <code>model_context_window</code>, and that moves the ceiling too: at the 872,000 maximum, the default threshold becomes 784,800.</p>\n\n<p>A second setting, <code>model_auto_compact_token_limit_scope</code>, defaults to <code>total</code>, which counts the whole active context. The alternative, <code>body_after_prefix</code>, counts only what the conversation adds after the context it carried in from before.</p>\n\n<h2>What does raising the Codex window past 272K cost?</h2>\n\n<p><strong>Per turn, a lot more than the extra tokens.</strong> Once a GPT-6 Sol request has more than 272K input tokens, the whole request is billed at long-context rates. Input and cached input cost twice as much, and output costs 1.5 times as much. In a long agent session almost every turn sends the whole history again, so most of that input is cached prefix.</p>\n\n<table>\n<thead><tr><th>Context per turn</th><th>Cached input rate</th><th>Cached context cost per turn</th><th>Uncached cost per turn</th></tr></thead>\n<tbody>\n<tr><td>240K (compacts at the default)</td><td>$0.20 / 1M</td><td>$0.048</td><td>$0.48</td></tr>\n<tr><td>270K</td><td>$0.20 / 1M</td><td>$0.054</td><td>$0.54</td></tr>\n<tr><td>300K (window raised)</td><td>$0.40 / 1M</td><td>$0.12</td><td>$1.20</td></tr>\n<tr><td>400K (window raised)</td><td>$0.40 / 1M</td><td>$0.16</td><td>$1.60</td></tr>\n</tbody>\n</table>\n\n<p>Going from 270K to 300K adds 11% more tokens and multiplies the cost of each turn by 2.2. On a ChatGPT plan you don&rsquo;t see a bill, but the same tokens count against your <a href=\"/research/codex-usage-limits-chatgpt-pro\">5-hour and weekly Codex limits</a>, so a bigger window uses them up faster. The <a href=\"/research/context-window-paid-twice\">context-window-paid-twice</a> write-up explains why this repeat charge dominates long sessions.</p>\n\n<h2>Is GPT-6 Sol still accurate near 244K tokens?</h2>\n\n<p><strong>Nobody has measured that yet.</strong> The only independent long-context score for GPT-6 Sol is Artificial Analysis AA-LCR: 84%, the same as GPT-5.6 Sol. The documents in that test average about 100K tokens. The MRCR figures you see quoted for &ldquo;Sol&rdquo; at 256K&ndash;512K belong to GPT-5.6 Sol. Our <a href=\"/research/gpt-6-sol-long-context-benchmarks\">GPT-6 Sol long-context benchmark roundup</a> lists what has and hasn&rsquo;t been published as of 27 September 2026.</p>\n\n<h2>What should you set?</h2>\n\n<p><strong>For most teams, nothing. The default is already the cost-safe choice.</strong> Compacting at 244,800 keeps every request under the 272K price line, with room for output. Three situations call for a change:</p>\n\n<ul>\n<li><strong>You want compaction earlier</strong>, for example because long threads start dropping earlier instructions. Set <code>model_auto_compact_token_limit</code> lower, say 200000. Values below 244,800 do take effect.</li>\n<li><strong>You want the current defaults written down</strong> so a future catalog update can&rsquo;t change them silently. Set <code>model_context_window = 272000</code> and a limit at or below 244,800.</li>\n<li><strong>You need more than 258K of live context</strong> in one session. Raise <code>model_context_window</code> and accept long-context pricing on every turn above 272K. Alert on it, because nothing in the Codex interface flags the price change.</li>\n</ul>\n\n<pre><code># ~/.codex/config.toml\nmodel = \"gpt-6-sol\"\nmodel_context_window = 272000          # pin the default window, below the 272K price line\nmodel_auto_compact_token_limit = 240000 # anything above 244,800 is ignored at this window</code></pre>\n\n<h2>Sources</h2>\n\n<ul>\n<li><a href=\"https://github.com/openai/codex/blob/rust-v0.157.1/codex-rs/protocol/src/openai_models.rs\">Codex 0.157.1 source: <code>auto_compact_token_limit()</code> and <code>usable_context_window()</code></a></li>\n<li><a href=\"https://github.com/openai/codex/blob/rust-v0.157.1/codex-rs/models-manager/src/model_info.rs\">Codex 0.157.1 source: config overrides applied to model info</a></li>\n<li><a href=\"https://github.com/openai/codex/blob/rust-v0.157.1/codex-rs/core/src/session/context_window.rs\">Codex 0.157.1 source: compaction scope and the hard context cap</a></li>\n<li><a href=\"https://developers.openai.com/api/docs/pricing\">OpenAI API pricing</a></li>\n<li><a href=\"https://artificialanalysis.ai/models/comparisons/gpt-6-sol-vs-gpt-5-6-sol\">Artificial Analysis: GPT-6 Sol vs GPT-5.6 Sol</a></li>\n</ul>\n"
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/codex-auto-compact-gpt-6-sol"
+  }
+}

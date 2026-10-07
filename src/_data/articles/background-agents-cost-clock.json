@@ -1,0 +1,285 @@
+{
+  "slug": "background-agents-cost-clock",
+  "tags": [
+    "finops",
+    "agents",
+    "background-jobs",
+    "budgeting"
+  ],
+  "datePublished": "2026-09-10",
+  "dateModified": "2026-09-10",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Background agents change the FinOps clock",
+      "titleCore": "Background agents change the FinOps clock",
+      "description": "Background execution lets agents continue after the user leaves. Budget by task, enforce time and tool limits, and close the loop when work finishes.",
+      "body": "<p>Background execution is one of the most useful new patterns in agent products: a task can continue after the user closes the app, while the agent waits, calls tools, and returns later with a result. It is also a break from the old request-response cost model. Spend is no longer concentrated in a visible session; it can accumulate while nobody is watching.</p><p>Google's <a href=\"https://blog.google/innovation-and-ai/technology/developers-tools/expanding-managed-agents-gemini-api/\">Managed Agents update</a> describes background execution together with remote MCP, custom functions, and credential refresh. Each capability expands what an agent can do, but also expands the number of billable steps and the time during which a task can remain active.</p><h2>Budget the task, not the chat turn</h2><p>A chat-turn budget is too small a boundary for a background agent. Create a task budget that follows the work across model calls, tool calls, retries, waiting periods, and resumptions. The budget should have both a dollar limit and a step limit. A task that has spent little money but made hundreds of low-value tool calls is still unhealthy.</p><p>Keep a ledger keyed by task ID. Record start time, end time, model calls, input and output tokens, tool calls, external service charges, retries, and final outcome. This lets you distinguish productive long-running work from an agent that is alive but making no progress.</p><h2>Use timeouts as financial controls</h2><p>Timeouts are not only reliability settings. A stale task consumes capacity and can wake up again after a deployment or credential refresh. Set separate limits for total wall-clock lifetime, idle time between steps, maximum model calls, and maximum tool calls. When a limit is reached, pause for human approval or terminate with a useful partial result.</p><p>Resumption needs idempotency. A task that is resumed without a durable checkpoint may repeat expensive searches, retrievals, or tool actions. Store the last completed step and the outputs needed to continue. Reconcile resumed work under the original task ID so the second run does not look like a new, unrelated feature.</p><h2>Charge for value, not runtime</h2><p>Longer execution is not automatically more valuable. Track completion rate, time to useful result, human interventions, and cost per completed task. A background agent that spends ten minutes and produces the same result as a two-minute workflow is a routing and prompt problem, even if the user experience hides the delay.</p><h2>A production control loop</h2><ul><li>Give every background task a dollar, step, wall-clock, and idle-time budget.</li><li>Persist checkpoints before expensive or irreversible tool calls.</li><li>Require approval before crossing a risk or spend threshold.</li><li>Terminate stalled tasks and report the reason to the owner.</li><li>Review cost per completed task by workflow version, not only by model.</li></ul><h2>Related</h2><ul><li><a href=\"/research/agent-spend-guardrails-production\">Agent spend guardrails in production</a></li><li><a href=\"/research/agent-total-cost-of-ownership\">Agent total cost of ownership</a></li><li><a href=\"/research/three-agent-budgets\">Three budgets every agent needs</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why do background agents need a different cost model?",
+          "answer": "They can continue after a user leaves and accumulate spend across model calls, tool calls, retries, waits, and resumptions. A single chat-turn budget cannot contain work that persists beyond the session."
+        },
+        {
+          "question": "What limits should a background agent have?",
+          "answer": "Set separate dollar, step, wall-clock, idle-time, model-call, and tool-call limits. Each catches a different failure mode, from an expensive loop to a task that remains alive without making progress."
+        },
+        {
+          "question": "How should resumed agent work be accounted for?",
+          "answer": "Use a durable checkpoint and keep the same task ID across resumptions. Record completed steps and resumed spend together so repeated work is visible instead of being misclassified as a new workload."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/agent-spend-guardrails-production",
+          "label": "Agent spend guardrails in production"
+        },
+        {
+          "slug": "/research/agent-total-cost-of-ownership",
+          "label": "Agent total cost of ownership"
+        },
+        {
+          "slug": "/research/three-agent-budgets",
+          "label": "Three budgets every agent needs"
+        }
+      ]
+    },
+    "ar": {
+      "title": "الوكلاء في الخلفية يغيرون ساعة FinOps",
+      "titleCore": "الوكلاء في الخلفية يغيرون ساعة FinOps",
+      "description": "تنفيذ الوكلاء في الخلفية يستمر بعد مغادرة المستخدم. وضع ميزانيات للمهام وفرض حدود الوقت والأدوات وإغلاق الحلقة عند اكتمال العمل.",
+      "body": "<p>يغير التنفيذ في الخلفية (Background Execution) العلاقة الكلاسيكية بين زمن تواجد المستخدم وتكلفة الحوسبة. عندما يعمل الوكيل بشكل غير متزامن، فإن استهلاك الرموز، واستدعاءات الأدوات، ومحاولات إعادة التنفيذ تستمر في العمل لساعات طويلة بعد أن يغلق المستخدم متصفحه أو يغادر مكتبه، مما يحول ساعة التكلفة إلى تدفق مستمر لا ينام.</p>\n\n<h2>ساعة التكلفة غير المتزامنة</h2>\n<p>في التطبيقات التفاعلية، يتوقف الإنفاق فور توقف المستخدم عن الكتابة. أما في مهام الخلفية (مثل مسح المستودعات البرمجية، أو تدقيق آلاف المستندات، أو مراقبة البيانات)، فإن الوكلاء يعملون بحرية تامة. في غياب حواجز الميزانية الصارمة، يمكن لخلل منطقي بسيط في التخطيط الذاتي أن يولد ملايين الرموز في ليلة واحدة دون أي رقابة بشرية.</p>\n\n<h2>الضوابط الثلاث للوكلاء في الخلفية</h2>\n<p>للسيطرة على إنفاق المهام غير المتزامنة:</p>\n<ul>\n  <li><strong>ميزانية قصوى لكل مهمة (Task Budget Cap):</strong> تخصيص سقف مالي محدد لكل مهمة خلفية؛ فور بلوغه يتوقف الوكيل ويحفظ حالته في انتظار الموافقة البشرية.</li>\n  <li><strong>مهلة زمنية صارمة (Strict Wall-Clock Timeout):</strong> تحديد حد أقصى للوقت المسموح للمهمة بالعمل فيه، لمنع العلوق في حلقات تفكير مفرغة.</li>\n  <li><strong>إغلاق الحلقة والتوثيق (Loop Closure):</strong> إشعار المستخدم فور اكتمال العمل وتوثيق التكلفة الإجمالية المحققة في سجلات النظام.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "كيف يغير تشغيل الوكلاء في الخلفية ساعة التكاليف؟",
+          "answer": "لأن الوكيل يستمر في استهلاك الرموز وتشغيل الأدوات لساعات بعد انتهاء جلسة المستخدم دون إشراف بشري مباشر ومستمر."
+        },
+        {
+          "question": "ما هي الضوابط المعمارية للوكلاء المستقلين بالخلفية؟",
+          "answer": "فرض حدود زمنية صارمة وسقوف لميزانية الرموز لكل مهمة وقواطع دوائر تقطع التنفيذ عند الدخول في حلقات مفرغة."
+        },
+        {
+          "question": "كيف تحاسب الفرق المالية على مهام الخلفية المستقلة؟",
+          "answer": "بربط تكلفة المعالجة بالنتيجة التجارية النهائية المعتمدة وتصنيف المهام غير المكتملة كخسائر تشغيلية صريحة."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/three-agent-budgets",
+          "label": "ميزانيات الوكلاء الثلاث"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "حواجز إنفاق الوكلاء المستقلين"
+        },
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        }
+      ]
+    },
+    "de": {
+      "title": "Hintergrund-Agenten verändern die FinOps-Uhr",
+      "titleCore": "Hintergrund-Agenten verändern die FinOps-Uhr",
+      "description": "Asynchrone Agenten laufen nach Nutzersitzungen weiter. Aufgabenbudgets, Zeit- und Toollimits schützen vor unkontrollierten Nachtkosten.",
+      "body": "<p>Hintergrundausführung entkoppelt Agentenkosten von der Anwesenheit des Nutzers. Nach dem Schließen des Browsers können Agenten stundenlang Tools aufrufen, Zwischenschritte wiederholen und Tokens verbrauchen. Das erfordert ein völlig neues FinOps-Zeitmodell.</p>\n<h2>Aufgabenbudget statt Sitzungsbudget</h2>\n<p>Ein interaktives Sitzungslimit greift hier nicht mehr. Jede asynchrone Aufgabe benötigt ein eigenes Dollar- und Schrittlimit sowie Checkpoints für fehlerfreie Wiederaufnahme.</p>",
+      "faq": [
+        {
+          "question": "Warum erfordern Hintergrund-Agenten ein neues Kostenmodell?",
+          "answer": "Weil sie autonom weiterarbeiten, wenn niemand zuschaut, und Tokenkosten über Stunden hinweg in Abwesenheit des Benutzers auflaufen können."
+        },
+        {
+          "question": "Welche Schutzmaßnahmen verhindern unkontrollierte Kosten?",
+          "answer": "Harte Zeitlimits für die Gesamtlaufzeit, maximale Schrittzahlen pro Aufgabe und dauerhafte Checkpoints vor teuren Tool-Ausführungen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/three-agent-budgets",
+          "label": "Drei Budgets für jeden Agenten"
+        }
+      ]
+    },
+    "es": {
+      "title": "Agentes en segundo plano y el reloj FinOps",
+      "titleCore": "Agentes en segundo plano y el reloj FinOps",
+      "description": "La ejecución asíncrona sigue activa tras cerrar la app. Fije presupuestos por tarea, límites de tiempo y puntos de control duraderos.",
+      "body": "<p>Los agentes en segundo plano rompen el ciclo petición-respuesta. El gasto se acumula mientras nadie vigila. Establezca presupuestos por tarea y tiempos máximos de ejecución para evitar consumos desmedidos.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué los agentes en segundo plano alteran el gasto?",
+          "answer": "Porque continúan consumiendo tokens y ejecutando llamadas a herramientas mucho después de que el usuario final haya cerrado la sesión."
+        },
+        {
+          "question": "¿Qué controles deben aplicarse a tareas en segundo plano?",
+          "answer": "Definir límites de gasto monetario por tarea, tiempos de espera máximos y puntos de control para reanudar sin duplicar llamadas caras."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/three-agent-budgets",
+          "label": "Tres presupuestos para agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Agents en arrière-plan et horloge FinOps",
+      "titleCore": "Agents en arrière-plan et horloge FinOps",
+      "description": "L'exécution asynchrone continue après le départ de l'utilisateur. Budgétisez par tâche et fixez des limites de temps et d'outils.",
+      "body": "<p>L'exécution en tâche de fond permet aux agents d'accomplir des travaux complexes en l'absence de l'utilisateur. Définissez des plafonds budgétaires et des timeouts stricts pour chaque tâche.</p>",
+      "faq": [
+        {
+          "question": "Quel est le risque financier des agents en tâche de fond?",
+          "answer": "Les agents peuvent boucler indéfiniment en l'absence de supervision directe et engendrer des coûts massifs d'inférence en arrière-plan."
+        },
+        {
+          "question": "Comment sécuriser l'exécution en arrière-plan?",
+          "answer": "En instaurant des plafonds financiers par tâche, des timeouts stricts d'inactivité et des sauvegardes d'étapes idempotentes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/three-agent-budgets",
+          "label": "Trois budgets pour chaque agent"
+        }
+      ]
+    },
+    "ja": {
+      "title": "バックグラウンドエージェントとFinOpsの時間軸",
+      "titleCore": "バックグラウンドエージェントとFinOpsの時間軸",
+      "description": "非同期実行はユーザー離脱後もコストが蓄積します。タスク単位の予算、実行時間制限、チェックポイントによる暴走防止が不可欠です。",
+      "body": "<p>バックグラウンドエージェントはリクエスト・レスポンス型の枠組みを超え、夜間や不在時にもトークンを消費し続けます。タスク単位での予算上限とタイムアウト制御が必須です。</p>",
+      "faq": [
+        {
+          "question": "なぜバックグラウンド実行は別個の費用管理が必要ですか？",
+          "answer": "ユーザーが画面を閉じた後も自律的に推論とツール実行が継続し、気付かないうちに莫大な課金が発生する恐れがあるためです。"
+        },
+        {
+          "question": "どのような財務ガードレールを設定すべきですか？",
+          "answer": "タスクIDごとの上限金額とステップ数、最大実行時間制限、および再開時に二重課金を防ぐ永続チェックポイントを設けます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/three-agent-budgets",
+          "label": "自律エージェントに必要な3つの予算"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Agentes em segundo plano e o relógio do FinOps",
+      "titleCore": "Agentes em segundo plano e o relógio do FinOps",
+      "description": "A execução assíncrona continua acumulando gastos após a saída do usuário. Defina limites por tarefa, tempo máximo e pontos de verificação.",
+      "body": "<p>Agentes que operam em segundo plano quebram o modelo de sessão tradicional. O consumo de tokens pode explodir sem supervisão. Implemente tetos orçamentários por tarefa.</p>",
+      "faq": [
+        {
+          "question": "Por que agentes em segundo plano exigem atenção especial?",
+          "answer": "Porque o consumo de inferência e ferramentas ocorre sem a presença do operador humano, podendo acumular custos invisíveis."
+        },
+        {
+          "question": "Quais limites devem ser configurados em tarefas assíncronas?",
+          "answer": "Tetos orçamentários em dólares por tarefa, limites de tempo de inatividade e pontos de controle para evitar repetição de chamadas caras."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/three-agent-budgets",
+          "label": "Três orçamentos para agentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "Agenti in background e l'orologio FinOps",
+      "titleCore": "Agenti in background e l'orologio FinOps",
+      "description": "L'esecuzione asincrona prosegue dopo l'uscita dell'utente. Imposta budget per task, limiti temporali e checkpoint di ripresa sicuri.",
+      "body": "<p>Gli agenti asincroni continuano a generare token e chiamare tool anche a sessione chiusa. È indispensabile un budget per task con timeout rigidi.</p>",
+      "faq": [
+        {
+          "question": "Perché gli agenti in background richiedono nuove metriche?",
+          "answer": "Perché la spesa non è concentrata nella sessione attiva ma si accumula autonomamente nel tempo senza la supervisione continua dell'utente."
+        },
+        {
+          "question": "Come proteggere il budget dai task in background?",
+          "answer": "Assegnando a ogni task un tetto massimo di spesa e tempo, oltre a checkpoint persistenti per riprendere il lavoro senza sprechi."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/three-agent-budgets",
+          "label": "Tre budget per ogni agente"
+        }
+      ]
+    },
+    "ko": {
+      "title": "백그라운드 에이전트와 FinOps 비용 시계",
+      "titleCore": "백그라운드 에이전트와 FinOps 비용 시계",
+      "description": "비동기 에이전트는 사용자가 떠난 후에도 비용을 발생시킵니다. 작업 단위 예산, 타임아웃, 영구 체크포인트 통제가 필수입니다.",
+      "body": "<p>백그라운드 실행은 세션이 닫힌 뒤에도 추론 비용을 누적시킵니다. 대화 턴 예산이 아닌 작업(Task) 단위 총예산과 엄격한 타임아웃을 설정해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "백그라운드 에이전트가 새로운 비용 문제를 일으키는 이유는?",
+          "answer": "사용자가 자리를 비운 상태에서도 자율 루프가 지속적으로 토큰을 소모하며 유휴 시간 동안 과도한 지출이 쌓일 수 있기 때문입니다."
+        },
+        {
+          "question": "비동기 에이전트 비용을 제어하는 핵심 수단은?",
+          "answer": "작업 ID별 최대 지출 금액과 총 소요 시간 제한을 두고, 중단 시 재작업 방지를 위한 멱등 체크포인트를 저장하는 것입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/three-agent-budgets",
+          "label": "에이전트 3단계 예산 모델"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Achtergrond-agents en de FinOps-klok",
+      "titleCore": "Achtergrond-agents en de FinOps-klok",
+      "description": "Asynchrone agents draaien door als de gebruiker weg is. Beheer taakbudgetten, stel tijdlimieten in en zorg voor idempotente herstarts.",
+      "body": "<p>Achtergrondtaken accumuleren kosten zonder toezicht. Beveilig asynchrone agent-uitvoeringen met strikte taakplafonds en persistente checkpoints.</p>",
+      "faq": [
+        {
+          "question": "Waarom vereisen achtergrond-agents een ander kostenmodel?",
+          "answer": "Omdat de tokenuitgaven doorgaan na het sluiten van de sessie, waardoor onbewaakte taken urenlang API-kosten kunnen blijven maken."
+        },
+        {
+          "question": "Welke limieten zijn noodzakelijk voor achtergrond-agents?",
+          "answer": "Stel harde budgetplafonds in euro's per taak in, begrens de totale wandkloktijd en leg veilige checkpoints vast voor dure tools."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/three-agent-budgets",
+          "label": "Drie budgetten voor agents"
+        }
+      ]
+    },
+    "zh": {
+      "title": "后台智能体与 FinOps 成本时钟",
+      "titleCore": "后台智能体与 FinOps 成本时钟",
+      "description": "异步智能体在用户离线后仍持续运行。必须按任务核算全局预算，设置运行时限与空闲熔断，并依靠持久化快照安全恢复。",
+      "body": "<p>后台异步执行彻底打破了传统的即时交互计费边界。当用户合上笔记本后，自主智能体仍会在云端继续循环拆解任务、调用工具与重试。若缺乏任务维度的硬性预算与执行超时封顶，几行死循环逻辑就能在无人值守的深夜产生惊人的推理账单。</p>",
+      "faq": [
+        {
+          "question": "为什么后台智能体需要截然不同的成本模型？",
+          "answer": "因为传统会话单轮预算无法约束跨小时、跨天运行的异步任务，智能体在用户离线状态下产生的消耗需要独立审计。"
+        },
+        {
+          "question": "控制后台任务开销的核心工程防线有哪些？",
+          "answer": "为每个任务设立美元支出上限与物理时间熔断点，在昂贵工具调用前落盘状态快照，确保重启时不重复产生开销。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/three-agent-budgets",
+          "label": "自主智能体的三层预算模型"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/background-agents-cost-clock"
+  }
+}

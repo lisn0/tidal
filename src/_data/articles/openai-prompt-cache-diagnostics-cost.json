@@ -1,0 +1,53 @@
+{
+  "slug": "openai-prompt-cache-diagnostics-cost",
+  "tags": [
+    "finops",
+    "prompt-caching",
+    "cost-attribution",
+    "openai"
+  ],
+  "datePublished": "2026-09-26",
+  "dateModified": "2026-09-26",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Find the cache miss behind your OpenAI bill",
+      "titleCore": "Find the cache miss behind your OpenAI bill",
+      "description": "Use OpenAI Prompt Cache Diagnostics to trace unexpected cache misses, fix accidental prefix changes, and verify savings from billed token usage.",
+      "body": "<p>A prompt-cache dashboard can tell you that reuse fell. It cannot, by itself, tell you which request change caused the fall or how much it cost. OpenAI's <a href=\"https://developers.openai.com/api/docs/changelog\">September 8, 2026 release</a> made Prompt Cache Diagnostics generally available in the Responses API for GPT-5.6 and later supported models. The useful FinOps move is to turn a drop in cached tokens into a short, repeatable investigation.</p><h2>Compare the request that missed</h2><p>Save the ID of a recent, completed response whose prefix you expected to reuse. On the next comparable Responses API request from the same organization, set <code>prompt_cache_options.comparison_response_id</code> to that ID. Then read <code>prompt_cache_diagnostics</code> on the new response, alongside <code>usage.input_tokens_details.cached_tokens</code>. The comparison option requests a diagnosis; it does not load the earlier conversation or change cache behavior. OpenAI's <a href=\"https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics\">diagnostics guide</a> includes working request examples.</p><pre><code>const next = await client.responses.create({\n  model: model,\n  instructions: stableInstructions,\n  input: nextInput,\n  tools: stableTools,\n  prompt_cache_options: { comparison_response_id: baseline.id }\n});\nconsole.log(next.prompt_cache_diagnostics);\nconsole.log(next.usage.input_tokens_details.cached_tokens);</code></pre><p>The snippet assumes <code>baseline</code> is a recent completed response and the other variables are your own request data. Keep a stable prefix long enough to cache: OpenAI documents a 1,024-token minimum for GPT-5.6 and later. A small or radically different prompt is not a meaningful cache-miss test.</p><h2>Fix the cause, not the metric</h2><p>A <code>cache_miss</code> result may point to a changed model, service tier, tool definitions or ordering, cache key, response format, reasoning effort, verbosity, or compacted context. For example, a harmless-looking tool-schema rename can invalidate the reusable prefix. Compare request configuration and the earliest prompt bytes, restore stability where the change was accidental, and rerun the comparison against the same baseline. OpenAI reports the first cause it finds, so another cause may appear after the first fix.</p><p>Do not force a hit if the change was deliberate. A different model may lower total task cost even while losing cache reuse; compaction may reduce future context. Judge the entire request and task, not cache-hit percentage in isolation. An expired baseline or an <code>unavailable</code> result is inconclusive, not proof that caching failed.</p><h2>Translate the finding into money</h2><p><code>cache_missed_tokens</code> estimates the reusable tokens lost relative to the comparison response. It is <em>not</em> a billed-token count. A <code>cache_hit</code> result likewise does not establish dollar savings. For realized input cost, collect each response's total <code>input_tokens</code>, <code>cached_tokens</code>, and <code>cache_write_tokens</code>, then apply the current rate for that model and processing tier. For GPT-5.6 and later, OpenAI's <a href=\"https://developers.openai.com/api/docs/guides/prompt-caching\">prompt-caching guide</a> states that cache reads cost 0.1 times the uncached input rate and cache writes cost 1.25 times that rate.</p><pre><code>ordinary = input_tokens - cached_tokens - cache_write_tokens\nweighted_input = ordinary + 0.1 * cached_tokens + 1.25 * cache_write_tokens\ninput_cost = weighted_input * input_price_per_million / 1_000_000</code></pre><p>Those are exclusive token categories: do not add a cache-write surcharge to tokens already counted at the write rate. This formula covers input only; include output, tool, retry, and other charges when calculating cost per successful task. Use the provider's current price table rather than a hard-coded article price.</p><h2>A useful weekly check</h2><ol><li>Group comparable traffic by workload, model, and service tier; chart cached-token share and input cost per completed task.</li><li>Sample a sudden regression, compare it with a recent baseline, and record the diagnostic reason and owning code change.</li><li>Fix accidental prefix or configuration drift; keep intentional quality or routing changes if total task economics improve.</li><li>Validate the result across representative production traffic and reconcile the observed savings with billing.</li></ol><p>Diagnostics themselves have no extra feature fee, but extra test requests are billed normally. The payoff is not a prettier hit-rate graph. It is a defensible explanation for why a particular workload's input cost changed—and whether the proposed fix really lowered its bill.</p><h2>Questions teams ask</h2><h3>Does a cache-hit diagnosis prove a request was cheaper?</h3><p>No. It says no miss was detected against the selected baseline. Check actual <code>cached_tokens</code> and the request's priced token categories before claiming savings.</p><h3>Can diagnostics compare any two OpenAI requests?</h3><p>No. Use a recent completed baseline from the same organization, and only expect this workflow on supported GPT-5.6-and-later Responses API models. A comparison record can expire.</p><h3>Should every cache miss be removed?</h3><p>No. A model switch, different service tier, or compacted context can be intentional. Compare quality, latency, and cost per successful task before reversing the change.</p>",
+      "faq": [
+        {
+          "question": "Does a cache-hit diagnosis prove a request was cheaper?",
+          "answer": "No. It means no cache miss was detected against the selected baseline. Check actual cached tokens and the priced token categories before claiming savings."
+        },
+        {
+          "question": "Can diagnostics compare any two OpenAI requests?",
+          "answer": "No. Use a recent completed baseline from the same organization on a supported GPT-5.6-or-later Responses API model. The comparison record can expire."
+        },
+        {
+          "question": "Should every cache miss be removed?",
+          "answer": "No. Model switches, service-tier changes, and context compaction may be intentional. Compare quality, latency, and cost per successful task before reversing them."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/prompt-cache-attribution",
+          "label": "Prompt-cache attribution"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-prompt-cache-diagnostics-cost"
+  }
+}

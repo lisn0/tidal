@@ -1,0 +1,285 @@
+{
+  "slug": "model-price-cuts-routing-budget",
+  "tags": [
+    "finops",
+    "model-routing",
+    "pricing",
+    "budgeting"
+  ],
+  "datePublished": "2026-09-10",
+  "dateModified": "2026-09-10",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Model price cuts and the routing budget",
+      "titleCore": "Model price cuts and the routing budget",
+      "description": "Falling model prices create savings only when workloads move to the right tier. Rebaseline unit economics, quality, latency, and capacity after every pricing change.",
+      "body": "<p>Model prices are falling quickly, but a lower list price does not automatically produce a lower company bill. Teams often respond to a price cut by increasing usage, keeping premium routing in place, or expanding context and output limits until the savings disappear. The relevant question is not whether price per token fell; it is whether cost per successful task fell.</p><p>OpenAI's <a href=\"https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/\">GPT-5.6 pricing update</a> illustrates the pattern: lower-cost models are positioned for high-volume work, while faster or more capable tiers serve workloads where quality or latency justifies a premium. The same announcement highlights Batch, Flex processing, and prompt caching as ways to match capacity and workload shape to cost.</p><h2>Rebaseline by workload</h2><p>Do not apply a single percentage reduction to the whole invoice. Split spend by workload class: interactive support, extraction, coding, agent planning, evaluation, and batch enrichment. For each class record quality, latency, success rate, tokens, and provider price. Then calculate the current cost per successful task before deciding what to move.</p><p>A price cut can change the routing frontier. A model that was previously too expensive for classification may now be the cheapest option after accounting for retries and failure rates. Conversely, a cheap model that produces more invalid outputs can cost more after repair calls and human review.</p><h2>Use the right lane</h2><p>Interactive work needs predictable latency. Repeated context may benefit from caching. Non-urgent work may fit batch or flexible processing. High-volume production may justify committed capacity. The savings come from matching the workload to the commercial lane, not from choosing the lowest token price in isolation.</p><p>Keep routing behind a feature flag and run a quality-and-cost comparison long enough to cover normal traffic variation. Compare total task cost, including fallback calls, cache behavior, tool calls, and post-processing. If the new route fails its quality SLO, roll it back even when its token price looks attractive.</p><h2>Make price changes operational</h2><ul><li>Track provider price history with effective dates.</li><li>Recalculate budgets and forecasts when a price changes.</li><li>Notify workload owners when their routing frontier moves.</li><li>Measure realized savings against invoices, not a spreadsheet estimate.</li><li>Use the freed budget deliberately: more users, better quality, or lower spend.</li></ul><p>Price changes are opportunities to improve allocation, not reasons to stop measuring. A mature FinOps program treats every new model tier as a routing experiment with an owner, baseline, and success metric.</p><h2>Related</h2><ul><li><a href=\"/research/model-routing\">Model routing</a></li><li><a href=\"/research/provider-prices-not-comparable\">Why provider prices are not comparable</a></li><li><a href=\"/research/cost-per-successful-task\">Cost per successful task</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why do model price cuts not automatically reduce total AI spend?",
+          "answer": "Usage can expand, premium routing can remain unchanged, and teams can consume the savings with longer context or larger outputs. Total spend falls only when workloads are reallocated and unit economics are measured."
+        },
+        {
+          "question": "What should be measured after a model price change?",
+          "answer": "Recalculate cost per successful task by workload, including quality, latency, retries, fallbacks, cache behavior, tool calls, and post-processing. Compare realized savings with provider invoices after the change."
+        },
+        {
+          "question": "How should cheaper models be introduced safely?",
+          "answer": "Route them behind a feature flag, compare them against a locked quality and cost baseline across normal traffic, and roll back when the quality SLO fails even if the token price is lower."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing"
+        },
+        {
+          "slug": "/research/provider-prices-not-comparable",
+          "label": "Why provider prices are not comparable"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    },
+    "ar": {
+      "title": "تخفيضات أسعار النماذج لا تخفض الفاتورة تلقائياً",
+      "titleCore": "تخفيضات أسعار النماذج لا تخفض الفاتورة تلقائياً",
+      "description": "هبوط أسعار النماذج يوفر المال فقط عند نقل أعباء العمل للمستوى المناسب. إعادة معايرة اقتصاديات الوحدة والجودة بعد كل تغيير سعري.",
+      "body": "<p>تتسابق شركات الذكاء الاصطناعي على خفض أسعار الرموز بنسب تصل إلى 60% و 80%. ومع ذلك، تفاجأ العديد من المؤسسات بأن فواتيرها الشهرية لا تتغير أو حتى تسجل ارتفاعاً ملحوظاً. الحقيقة أن انخفاض الأسعار في السوق لا يترجم تلقائياً إلى وفورات مالية إلا إذا أعادت الفرق الهندسية هيكلة مسارات التوجيه وقواعد التقييم.</p>\n\n<h2>لماذا لا تنعكس التخفيضات تلقائياً؟</h2>\n<p>تظل معظم التطبيقات مربوطة بأسماء ونقاط نهاية ثابتة لنماذج قديمة أعلى سعراً. ما لم يتم تعديل الكود أو تحديث محرك التوجيه (Router)، يستمر الاستهلاك وفق الأسعار السابقة. بالإضافة إلى ذلك، يشجع انخفاض الأسعار المطورين على زيادة أطوال السياق وإضافة مزيد من الوكلاء والأدوات، مما يلتهم الوفر السعري بالكامل.</p>\n\n<h2>إعادة المعايرة بعد كل إعلان سعري</h2>\n<p>فور إعلان المزودين عن تخفيضات جديدة، ينبغي لفرق FinOps اتخاذ الخطوات التالية:</p>\n<ul>\n  <li>تحديث جداول الأسعار في أنظمة التتبع والبوابات الداخلية فوراً لمطابقة الفواتير بدقة.</li>\n  <li>اختبار النماذج الاقتصادية الأحدث على مجموعات بيانات التقييم للتأكد من استيفائها شروط الجودة والأمان.</li>\n  <li>تحويل أعباء العمل الروتينية والمهام غير الحساسة لزمن الاستجابة إلى المستويات السعرية الأرخص.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "لماذا لا تؤدي تخفيضات الأسعار لتوفير تلقائي؟",
+          "answer": "لأن التوفير لا يتحقق إلا بتحديث مسارات التوجيه ونقل حركة المرور للنماذج المخفضة وإعادة تقييم معايير الجودة."
+        },
+        {
+          "question": "ما الذي يجب تحديثه فور إعلان تخفيضات الأسعار؟",
+          "answer": "تحديث جداول أسعار البوابات ومطابقة فواتير المزودين وإعادة قياس التكلفة لكل مهمة وتعديل قواعد التوجيه الذكية."
+        },
+        {
+          "question": "كيف تستفيد المؤسسة بأقصى قدر من هبوط الأسعار؟",
+          "answer": "ببناء طبقة تجريد تدعم التوجيه الديناميكي المتعدد ونقل المهام الروتينية للنماذج الاقتصادية فور طرحها رسمياً."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/model-routing",
+          "label": "التوجيه الذكي للنماذج"
+        },
+        {
+          "slug": "/ar/research/provider-prices-not-comparable",
+          "label": "أسعار المزودين غير قابلة للمقارنة المباشرة"
+        },
+        {
+          "slug": "/ar/research/cost-switching-llm-providers",
+          "label": "التكلفة الحقيقية للتبديل بين المزودين"
+        }
+      ]
+    },
+    "de": {
+      "title": "Modell-Preissenkungen und das Routing-Budget",
+      "titleCore": "Modell-Preissenkungen und das Routing-Budget",
+      "description": "Sinkende Modellpreise sparen nur bei gezielter Workload-Verlagerung. Stückkosten, Latenz und Qualität nach Preisanpassungen neu messen.",
+      "body": "<p>Niedrigere Listenpreise führen selten automatisch zu sinkenden Ausgaben. Teams erweitern oft Context-Fenster oder behalten teure Routings bei. Entscheidend ist, ob die Kosten je erfolgreicher Aufgabe sinken.</p>\n<h2>Routing neu tarieren</h2>\n<p>Klassifizieren Sie Workloads nach Qualität und Latenzanforderungen und testen Sie neue, günstigere Modell-Tiers hinter Feature-Flags.</p>",
+      "faq": [
+        {
+          "question": "Warum führen Preissenkungen nicht automatisch zu Ersparnissen?",
+          "answer": "Weil der Jevons-Effekt zu längeren Prompts und höherer Nutzung führt, wenn Routings und Task-Budgets nicht aktiv angepasst werden."
+        },
+        {
+          "question": "Wie nutzt man Modellpreissenkungen optimal aus?",
+          "answer": "Durch Neubewertung der Stückkosten je Aufgabe, Überprüfung der Qualitäts-SLOs und schrittweises Umschalten per Feature-Flag."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/cost-per-successful-task",
+          "label": "Kosten je erfolgreicher Aufgabe"
+        }
+      ]
+    },
+    "es": {
+      "title": "Rebajas de modelos y el presupuesto de enrutamiento",
+      "titleCore": "Rebajas de modelos y el presupuesto de enrutamiento",
+      "description": "La caída de precios genera ahorros solo si se reasignan cargas. Recalibre la economía unitaria, calidad y latencia tras cada cambio.",
+      "body": "<p>Los precios por token caen, pero la factura total suele mantenerse si el tráfico no se mueve a los nuevos modelos o se expande el contexto sin control.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué una rebaja de precio no reduce el total gastado?",
+          "answer": "Porque las aplicaciones suelen mantener modelos caros por inercia o expanden el volumen de tokens consumidos compensando la rebaja."
+        },
+        {
+          "question": "¿Cómo aprovechar las reducciones de precio de proveedores?",
+          "answer": "Midiendo el costo por tarea completada, reevaluando la precisión en bancos de prueba y actualizando las reglas del router inteligente."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/cost-per-successful-task",
+          "label": "Coste por tarea exitosa"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Baisses de prix des modèles et budget de routage",
+      "titleCore": "Baisses de prix des modèles et budget de routage",
+      "description": "Les baisses de prix ne créent d'économies que si les tâches migrent. Réévaluez la qualité, la latence et le coût unitaire à chaque baisse.",
+      "body": "<p>Une baisse du prix du token ne garantit pas une facture allégée si les flux restent orientés vers les modèles haut de gamme. Ajustez votre routage dynamique.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi les réductions de prix ne suffisent-elles pas?",
+          "answer": "Parce que les équipes augmentent souvent la taille des prompts ou conservent d'anciens modèles sans adapter leur logique de routage."
+        },
+        {
+          "question": "Comment convertir une baisse de prix en économies réelles?",
+          "answer": "En recalculant le coût par tâche réussie et en validant les modèles plus économiques sur des jeux d'évaluation avant migration."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/cost-per-successful-task",
+          "label": "Coût par tâche réussie"
+        }
+      ]
+    },
+    "ja": {
+      "title": "モデル値下げとルーティングバジェット",
+      "titleCore": "モデル値下げとルーティングバジェット",
+      "description": "モデル単価の低下は適切な階層へ移行して初めて節約になります。価格改定のたびにユニットエコノミクスと品質を再測定すべきです。",
+      "body": "<p>API単価が下がっても、プロンプトの肥大化や旧モデルへの固定ルーティングによって総請求額が減少しないケースが多発します。タスク単価で再評価が必要です。</p>",
+      "faq": [
+        {
+          "question": "モデルの値下げが総額削減に直結しない理由は？",
+          "answer": "トークン単価が下がってもコンテキスト長が増加したり、高価格帯モデルをルーティングしたまま放置されたりするためです。"
+        },
+        {
+          "question": "価格改定を確実にコスト削減へ繋げるには？",
+          "answer": "ワークロードごとに品質評価テストを実施し、成功タスク単価を算出した上でフィーチャーフラグで段階移行します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/cost-per-successful-task",
+          "label": "成功タスクあたりのコスト"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Cortes de preço e orçamento de roteamento",
+      "titleCore": "Cortes de preço e orçamento de roteamento",
+      "description": "Preços menores só geram economia se as tarefas forem migradas. Recalcule economia unitária, latência e qualidade após cada reajuste.",
+      "body": "<p>A queda no custo unitário de tokens não garante redução na fatura corporativa sem reestruturação das regras de roteamento e controle de consumo.</p>",
+      "faq": [
+        {
+          "question": "Por que cortes de preço não reduzem gastos de imediato?",
+          "answer": "Porque o consumo costuma crescer ou o tráfego permanece apontado para rotas caras se a arquitetura não for atualizada ativamente."
+        },
+        {
+          "question": "Qual o procedimento recomendado após uma baixa de preços?",
+          "answer": "Recalcular o custo por tarefa bem-sucedida, validar o modelo mais econômico contra metas de qualidade e atualizar o roteador."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/cost-per-successful-task",
+          "label": "Custo por tarefa concluída"
+        }
+      ]
+    },
+    "it": {
+      "title": "Tagli di prezzo dei modelli e routing budget",
+      "titleCore": "Tagli di prezzo dei modelli e routing budget",
+      "description": "I prezzi inferiori creano risparmi solo riallocando i carichi di lavoro. Ricalcola economia unitaria, qualità e latenza a ogni variazione.",
+      "body": "<p>Un listino prezzi più basso genera risparmi solo se i carichi migrano verso i tier opportuni. Misura sempre il costo per task completato.</p>",
+      "faq": [
+        {
+          "question": "Perché un taglio di prezzo non abbassa subito la fattura?",
+          "answer": "Perché le applicazioni continuano a chiamare i vecchi endpoint o aumentano il contesto vanificando il risparmio unitario ottenuto."
+        },
+        {
+          "question": "Come convertire i ribassi in veri risparmi aziendali?",
+          "answer": "Aggiornando il motore di routing dinamico e verificando che la qualità dell'output rispetti i criteri stabiliti per la produzione."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/cost-per-successful-task",
+          "label": "Costo per task completato"
+        }
+      ]
+    },
+    "ko": {
+      "title": "모델 가격 인하와 라우팅 예산 관리",
+      "titleCore": "모델 가격 인하와 라우팅 예산 관리",
+      "description": "모델 단가 인하는 워크로드를 재배치해야만 비용 절감이 됩니다. 가격 변동 후 단위 경제성과 품질, 지연 시간을 재측정하세요.",
+      "body": "<p>토큰 단가가 낮아져도 컨텍스트 길이가 늘어나거나 고가 모델 라우팅이 유지되면 총비용은 줄어들지 않습니다. 성공 작업당 단가를 재평가해야 합니다.</p>",
+      "faq": [
+        {
+          "question": "모델 가격 인하가 자동 절감으로 이어지지 않는 이유는?",
+          "answer": "단가 인하 후 프롬프트 길이가 비대해지거나 이전 엔드포인트를 그대로 사용하여 총비용이 유지되는 제본스 역설 때문입니다."
+        },
+        {
+          "question": "가격 인하를 실질적 비용 절감으로 연결하는 방법은?",
+          "answer": "워크로드별로 저가 모델의 성공률과 지연 시간을 벤치마크하고 피처 플래그를 통해 점진적으로 트래픽을 전환하는 것입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/cost-per-successful-task",
+          "label": "성공 작업당 비용"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Prijsverlagingen en het routeringsbudget",
+      "titleCore": "Prijsverlagingen en het routeringsbudget",
+      "description": "Lagere modelprijzen besparen alleen geld als workloads migreren. Herbereken unit-economics, kwaliteit en latentie na elke prijswijziging.",
+      "body": "<p>Een daling van tokenprijzen resulteert pas in besparingen wanneer routeringsregels actief worden bijgewerkt naar voordeligere modellen.</p>",
+      "faq": [
+        {
+          "question": "Waarom verlaagt een prijsdaling de totale factuur niet direct?",
+          "answer": "Omdat applicaties vaak vastzitten aan duurdere modellen of meer tokens gaan verbruiken zodra de eenheidsprijs omlaag gaat."
+        },
+        {
+          "question": "Wat is de juiste aanpak na een prijsverlaging?",
+          "answer": "Test goedkopere modellen tegen kwaliteits-SLO's, bereken de kosten per succesvolle taak en routeer verkeer stapsgewijs om."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/cost-per-successful-task",
+          "label": "Kosten per voltooide taak"
+        }
+      ]
+    },
+    "zh": {
+      "title": "大模型降价与动态路由预算",
+      "titleCore": "大模型降价与动态路由预算",
+      "description": "模型单价下调只有在工作负载精准迁移时才能沉淀为利润。每次价格调整后必须重新核算单元经济效益与质量门槛。",
+      "body": "<p>主流厂商竞相下调 Token 单价，但企业的月末发票往往不降反升。这通常是因为业务端借降价契机扩大了输入上下文、放宽了重试限制，或者应用代码仍旧硬编码了老旧昂贵的旗舰模型。降价是重新审视动态路由边界的战略契机。</p>",
+      "faq": [
+        {
+          "question": "为什么模型单价暴跌未能让企业总成本下降？",
+          "answer": "因为杰文斯悖论会导致更廉价的单价刺激更庞大的调用量，若不主动优化路由规则，总支出往往不降反升。"
+        },
+        {
+          "question": "厂商降价后 FinOps 团队应采取哪些行动？",
+          "answer": "立即在基准测试集上评估降价模型或轻量梯队的精度，重算任务单位成本，并通过特征开关逐步分流生产流量。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/cost-per-successful-task",
+          "label": "按成功任务核算成本"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/model-price-cuts-routing-budget"
+  }
+}

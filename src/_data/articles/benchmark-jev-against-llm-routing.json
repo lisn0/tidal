@@ -1,0 +1,54 @@
+{
+  "slug": "benchmark-jev-against-llm-routing",
+  "tags": [
+    "finops",
+    "agents",
+    "evaluation",
+    "jev",
+    "model-routing"
+  ],
+  "datePublished": "2026-09-21",
+  "dateModified": "2026-09-21",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "What independent Jev tests say about cost",
+      "titleCore": "What independent Jev tests say about cost",
+      "description": "Early independent Jev tests support a cheap, fast decision layer—but the size of the saving depends on the LLM path it replaces.",
+      "body": "<p>Early independent testing supports the basic Jev story: it is a fast, inexpensive way to make typed decisions. It also adds a needed qualification: the saving depends on what it replaces. Comparing Jev with a slow reasoning call produces a dramatic result. Comparing it with a small structured-output model produces a smaller, but still useful, difference.</p><p>The most detailed reproducible test we found is <a href=\"https://github.com/WallerChen/jev-measured\">jev-measured</a>, which called Jev through OpenRouter across eight cases including routing, tool selection, moderation, reranking, lead scoring, and guardrails. Its reported decision costs fell between $0.0000153 and $0.0000254. In its head-to-head runs, Jev's median latency was 352 ms and its mean cost was $0.0000188.</p><h2>Where the savings are real</h2><p>Against GPT-5 Nano in that test, Jev cost about 18 times less per fixture and returned much faster. That is meaningful when the old workflow asks a generation model to read state, reason, produce a formatted response, then have code pull a single decision from the text.</p><p>Against Gemini Flash Lite and Mistral Small, the measured cost gap was only 1.7 times and 1.4 times respectively. On one single-question case, a small model was cheaper. That is not a failure for Jev. It defines the actual opportunity: Jev is strongest when one call can replace a repeated decision step or several decision questions can be evaluated together—not when it is forced into every trivial classification.</p><h2>Typed output removes a real cost</h2><p>The same benchmark initially found schema errors in the chat-model baselines: booleans where probabilities were requested, probability strings instead of numbers, and missing fields. Strict JSON schema mode removed those errors. That correction is important. Good FinOps writing does not hide the baseline's best configuration. It does show that output validation, repair, retries, and parsing are costs in their own right—and Jev removes that whole category for its own output contract.</p><h2>Accuracy and calibration still decide the rollout</h2><p>Cost and latency do not answer whether a decision is good enough to automate. An independent physical-AI test reported 91.3% agreement with its own 300 incident templates, while a small support-ticket test found no evidence to support a blanket claim that Jev is more accurate than all chat models. Both are early, narrow experiments. They point to the correct production test: evaluate Jev on your own labelled cases and inspect accuracy at each confidence level.</p><p>A practical scorecard has five lines: decision accuracy, confidence calibration, median and P95 latency, cost per correct decision, and escalation rate. That produces an actionable result: route these cases to Jev above this threshold; send the rest to a larger model or review. It is more useful than either launch hype or a generic warning to distrust the model.</p>",
+      "faq": [
+        {
+          "question": "How much does a Jev decision cost in independent tests?",
+          "answer": "One reproducible live-API project reported roughly $0.000015–$0.000025 per decision across eight representative use cases. Results vary with input size and provider."
+        },
+        {
+          "question": "Is Jev always much cheaper than an LLM?",
+          "answer": "No. The largest savings appear when Jev replaces a reasoning or generation-heavy path. The gap against a fast, small structured-output LLM can be much smaller."
+        },
+        {
+          "question": "What should teams measure before routing production traffic to Jev?",
+          "answer": "Measure accuracy, calibration by confidence band, tail latency, cost per correct decision, and the rate at which cases escalate to a model or person."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals are a cost control"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        },
+        {
+          "slug": "/research/provider-prices-not-comparable",
+          "label": "Why provider prices are not comparable"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/benchmark-jev-against-llm-routing"
+  }
+}

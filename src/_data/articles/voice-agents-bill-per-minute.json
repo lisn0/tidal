@@ -1,0 +1,143 @@
+{
+  "slug": "voice-agents-bill-per-minute",
+  "tags": [
+    "finops",
+    "unit-economics",
+    "pricing",
+    "architecture"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The unit economics of realtime and audio APIs",
+      "titleCore": "The unit economics of realtime and audio APIs",
+      "description": "Realtime and audio APIs price in seconds of audio, not tokens. Silence, interruptions and hold time all cost money, and none of it is in your token dashboard.",
+      "body": "<p>Every cost model built for text LLMs breaks on voice. Text is billed by tokens, and tokens are proportional to information. Audio is billed by duration, and duration is proportional to <em>time</em> &mdash; including all the time in which nothing useful is happening.</p><h2>What you are actually paying for</h2><p>A voice interaction is usually three or four billed things stacked. Speech-to-text on the inbound audio. The model call itself, which on realtime speech-to-speech APIs is priced per minute of audio in and out rather than per token. Text-to-speech on the way back, if the stack is not end-to-end. And often a separate charge for the session staying open.</p><p>That last one is the trap. A session held open while a user thinks, reads something on screen, or steps away is still a session. On a per-minute meter, dead air is a full-price product.</p><h2>Where the estimates go wrong</h2><p>Teams model voice cost as <em>speaking time &times; rate</em> and land well under actual. Four things are missing. <strong>Latency and pauses</strong> are billed but not modelled. <strong>Interruptions</strong> mean audio generated and paid for that the caller never heard. <strong>Retries and re-prompts</strong> replay the whole exchange, and a voice retry is far more expensive than a text one because it repeats the audio, not just the tokens. And <strong>abandoned calls</strong> cost the full duration to the point of hangup while producing nothing.</p><h2>The metric that works</h2><p>Cost per completed conversation, not cost per minute. Per-minute is the meter, not the unit of business value &mdash; and a change that shortens calls by improving the model may increase the per-minute rate while lowering the cost of getting a caller to an answer.</p><p>Then instrument the parts nobody sees: median and p95 session duration, ratio of billed to spoken time, abandonment rate, and cost of abandoned sessions as a share of the total. Close idle sessions aggressively; an idle timeout is usually the single largest saving available in a voice stack. And treat barge-in support as a cost feature as much as a UX one, since every second of speech a user talks over is a second you paid to generate.</p><h2>Related</h2><ul><li><a href=\"/research/agent-economics\">Agent economics</a></li><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"/research/server-tools-are-a-separate-invoice\">Server tools are a separate invoice</a></li></ul>",
+      "faq": [
+        {
+          "question": "How are realtime voice APIs priced?",
+          "answer": "By duration of audio in and out, typically per minute, rather than by text tokens. Speech-to-text, the model call, text-to-speech and an open session can each be billed separately."
+        },
+        {
+          "question": "Why do voice cost estimates come in low?",
+          "answer": "They model speaking time only. Pauses, latency, audio the caller interrupted, full-exchange retries and abandoned calls are all billed and usually left out of the model."
+        },
+        {
+          "question": "What is the biggest saving in a voice stack?",
+          "answer": "An aggressive idle timeout. Sessions held open while a user thinks or steps away are billed at full rate for producing nothing, and closing them is usually the largest single lever."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/agent-economics",
+          "label": "Agent economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "/research/server-tools-are-a-separate-invoice",
+          "label": "Server tools are a separate invoice"
+        }
+      ]
+    },
+    "es": {
+      "title": "Economía unitaria de las APIs de audio en tiempo real",
+      "titleCore": "Economía unitaria de las APIs de audio en tiempo real",
+      "description": "Las APIs de voz cobran por segundos de audio, no por tokens. Los silencios, las interrupciones y la espera cuestan dinero y no salen en tu panel de tokens.",
+      "body": "<p>Todo modelo de coste pensado para texto se rompe con la voz. El texto se factura por tokens, proporcionales a la información. El audio se factura por duración, proporcional al <em>tiempo</em> &mdash; incluido todo el tiempo en que no pasa nada útil.</p><h2>Qué pagas de verdad</h2><p>Una interacción de voz suele apilar tres o cuatro cargos: transcripción de entrada, la llamada al modelo (por minuto de audio en las APIs realtime), síntesis de salida y, a menudo, la sesión abierta. Ese último es la trampa: el silencio, a precio de minuto, es producto a tarifa completa.</p><h2>Dónde fallan las estimaciones</h2><p>Se modela <em>tiempo hablado × tarifa</em> y se queda corto. Faltan las pausas y la latencia, el audio generado que el usuario interrumpió, los reintentos (que repiten audio, no solo tokens) y las llamadas abandonadas.</p><h2>La métrica que funciona</h2><p>Coste por conversación completada, no por minuto. Y cierra las sesiones inactivas: suele ser el mayor ahorro disponible.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo se factura una API de voz en tiempo real?",
+          "answer": "Por duración del audio de entrada y salida, normalmente por minuto, no por tokens de texto. La transcripción, la llamada al modelo, la síntesis y la sesión abierta pueden cobrarse por separado."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/agent-economics",
+          "label": "Economía de los agentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Économie unitaire des API audio temps réel",
+      "titleCore": "Économie unitaire des API audio temps réel",
+      "description": "Les API vocales facturent des secondes d’audio, pas des tokens. Silences, interruptions et attente coûtent, et rien de tout cela n’apparaît côté tokens.",
+      "body": "<p>Tout modèle de coût conçu pour le texte se casse sur la voix. Le texte se facture en tokens, proportionnels à l’information. L’audio se facture en durée, proportionnelle au <em>temps</em> &mdash; y compris tout le temps où rien d’utile ne se passe.</p><h2>Ce que vous payez réellement</h2><p>Une interaction vocale empile trois ou quatre facturations : transcription en entrée, appel modèle (à la minute d’audio sur les API temps réel), synthèse en sortie, et souvent la session ouverte. C’est ce dernier point le piège : au compteur à la minute, le silence est un produit à plein tarif.</p><h2>Où les estimations dérapent</h2><p>On modélise <em>temps de parole × tarif</em> et on tombe trop bas. Manquent les pauses et la latence, l’audio généré que l’appelant a interrompu, les reprises (qui rejouent l’audio, pas seulement les tokens) et les appels abandonnés.</p><h2>La bonne métrique</h2><p>Coût par conversation aboutie, pas par minute. Et fermez les sessions inactives : c’est en général la plus grosse économie disponible.</p>",
+      "faq": [
+        {
+          "question": "Comment sont facturées les API vocales temps réel?",
+          "answer": "À la durée de l’audio entrant et sortant, généralement à la minute, et non en tokens de texte. Transcription, appel modèle, synthèse et session ouverte peuvent être facturés séparément."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/agent-economics",
+          "label": "Économie des agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "Stückkosten von Realtime- und Audio-APIs",
+      "titleCore": "Stückkosten von Realtime- und Audio-APIs",
+      "description": "Sprach-APIs rechnen Audiosekunden ab, keine Tokens. Stille, Unterbrechungen und Wartezeit kosten Geld und tauchen im Token-Dashboard nirgends auf.",
+      "body": "<p>Jedes für Text gebaute Kostenmodell bricht bei Sprache. Text wird nach Tokens abgerechnet, die proportional zur Information sind. Audio wird nach Dauer abgerechnet, proportional zur <em>Zeit</em> &mdash; einschließlich aller Zeit, in der nichts Nützliches passiert.</p><h2>Wofür Sie wirklich zahlen</h2><p>Eine Sprachinteraktion stapelt drei oder vier Posten: Transkription eingehend, der Modellaufruf (bei Realtime-APIs pro Audiominute), Sprachsynthese ausgehend, und oft die offene Session. Letzteres ist die Falle: Am Minutenzähler ist Stille ein Produkt zum vollen Preis.</p><h2>Wo Schätzungen danebenliegen</h2><p>Man rechnet <em>Sprechzeit × Tarif</em> und landet deutlich zu niedrig. Es fehlen Pausen und Latenz, generiertes Audio, das der Anrufer unterbrochen hat, Wiederholungen (die Audio wiederholen, nicht nur Tokens) und abgebrochene Anrufe.</p><h2>Die brauchbare Kennzahl</h2><p>Kosten pro abgeschlossenem Gespräch, nicht pro Minute. Und schließen Sie Leerlauf-Sessions konsequent &mdash; meist der größte verfügbare Hebel.</p>",
+      "faq": [
+        {
+          "question": "Wie werden Realtime-Sprach-APIs abgerechnet?",
+          "answer": "Nach Dauer des ein- und ausgehenden Audios, meist pro Minute, nicht nach Text-Tokens. Transkription, Modellaufruf, Sprachsynthese und die offene Session können jeweils separat berechnet werden."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/agent-economics",
+          "label": "Ökonomie von Agenten"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Economia unitária das APIs de áudio em tempo real",
+      "titleCore": "Economia unitária das APIs de áudio em tempo real",
+      "description": "As APIs de voz cobram segundos de áudio, não tokens. Silêncios, interrupções e espera custam dinheiro e não aparecem no seu painel de tokens.",
+      "body": "<p>Qualquer modelo de custo feito para texto parte-se na voz. O texto é faturado por tokens, proporcionais à informação. O áudio é faturado por duração, proporcional ao <em>tempo</em> &mdash; incluindo todo o tempo em que nada de útil acontece.</p><h2>O que paga de facto</h2><p>Uma interação de voz empilha três ou quatro cobranças: transcrição à entrada, a chamada ao modelo (ao minuto de áudio nas APIs realtime), síntese à saída e, muitas vezes, a sessão aberta. É esta a armadilha: ao minuto, o silêncio é produto a preço inteiro.</p><h2>Onde as estimativas falham</h2><p>Modela-se <em>tempo falado × tarifa</em> e fica-se muito abaixo. Faltam pausas e latência, áudio gerado que o utilizador interrompeu, repetições (que repetem áudio, não só tokens) e chamadas abandonadas.</p><h2>A métrica que funciona</h2><p>Custo por conversa concluída, não por minuto. E feche sessões inativas: costuma ser a maior poupança disponível.</p>",
+      "faq": [
+        {
+          "question": "Como são faturadas as APIs de voz em tempo real?",
+          "answer": "Por duração do áudio de entrada e saída, normalmente ao minuto, e não por tokens de texto. Transcrição, chamada ao modelo, síntese e sessão aberta podem ser cobradas em separado."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/agent-economics",
+          "label": "Economia dos agentes"
+        }
+      ]
+    },
+    "ja": {
+      "title": "リアルタイム音声 API のユニットエコノミクス",
+      "titleCore": "リアルタイム音声 API のユニットエコノミクス",
+      "description": "リアルタイム音声 API はテキストのトークンではなく音声の秒数で課金します。無音も割り込みも保留も費用で、トークンのダッシュボードには現れません。",
+      "body": "<p>テキスト LLM 向けに作ったコストモデルは、音声で必ず壊れます。テキストはトークン課金で、トークンは情報量に比例します。音声は時間課金で、<em>時間</em>に比例します &mdash; 有用なことが何も起きていない時間も含めて。</p><h2>実際に何に払っているのか</h2><p>音声の 1 往復には通常 3〜4 種類の課金が積み上がります。入力音声の音声認識。モデル呼び出しそのもの（リアルタイム音声 API ではトークンではなく入出力音声の分単位）。エンドツーエンドでなければ戻りの音声合成。そしてしばしば、セッションを開いたままにしていること自体への課金です。</p><p>最後のものが罠です。利用者が考えている間、画面を読んでいる間、席を外している間も、セッションはセッションです。分単位のメーターでは、無音も定価の商品です。</p><h2>見積もりがずれる理由</h2><p>「発話時間 × 単価」で計算すると実績を大きく下回ります。抜けているのは 4 つ。課金されるのにモデル化されない<strong>待ち時間と間</strong>。発信者が聞いていないのに生成して支払った<strong>割り込み分の音声</strong>。やり取り全体を再生する<strong>リトライ</strong>（音声のリトライはトークンだけでなく音声を繰り返すためテキストよりはるかに高い）。そして切断までの全時間を払って何も生まない<strong>放棄された通話</strong>です。</p><h2>機能する指標</h2><p>分あたりコストではなく、完了会話あたりコストです。分単価はメーターであって事業価値の単位ではありません。モデル改善で通話が短くなる変更は、分単価を上げつつ「答えに到達させるコスト」を下げることがあります。</p><p>そのうえで誰も見ていない部分を計測してください &mdash; セッション時間の中央値と p95、課金時間と発話時間の比、放棄率、放棄セッションのコスト比率。アイドルセッションは積極的に切ること。音声スタックでは通常これが最大の削減余地です。バージイン対応は UX 機能であると同時にコスト機能でもあります。利用者が被せて話した 1 秒は、生成に金を払った 1 秒だからです。</p>",
+      "faq": [
+        {
+          "question": "リアルタイム音声 API はどう課金されますか？",
+          "answer": "テキストのトークンではなく、入出力音声の長さ（通常は分単位）で課金されます。音声認識、モデル呼び出し、音声合成、そして開いたままのセッションが、それぞれ別に課金されることがあります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/agent-economics",
+          "label": "エージェントの経済学"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/voice-agents-bill-per-minute"
+  }
+}

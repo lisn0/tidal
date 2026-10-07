@@ -1,0 +1,58 @@
+{
+  "slug": "openai-api-usage-tiers-build-launch-grow",
+  "tags": [
+    "openai",
+    "api-costs",
+    "rate-limits",
+    "spend-controls",
+    "finops"
+  ],
+  "datePublished": "2026-10-07",
+  "dateModified": "2026-10-07",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "OpenAI API usage tiers explained: Build, Launch, Grow and…",
+      "titleCore": "OpenAI API usage tiers explained: Build, Launch, Grow and…",
+      "description": "OpenAI’s October 2026 API tiers use cumulative credit purchases to unlock limits. Learn why tier thresholds are not spend caps and how to govern them.",
+      "body": "<p class=\"lede\">OpenAI simplified its paid API tiers to Build, Launch, and Grow on October 6, 2026. Organizations move up automatically when cumulative credit purchases cross each threshold, generally unlocking higher rate limits. The tier is a capacity and monthly-usage allowance signal; it is separate from project or organization spend limits, which must be configured as budget controls.</p>\n<h2>What changed in OpenAI API usage tiers?</h2>\n<p>OpenAI’s <a href=\"https://developers.openai.com/api/docs/changelog\">October 6 changelog</a> says the API platform moved from five paid tiers to three: Build, Launch, and Grow. The current <a href=\"https://developers.openai.com/api/docs/guides/rate-limits\">rate-limit guide</a> lists these qualification levels: Build at $5 in total credit purchases, Launch at $100, and Grow at $500. It also lists a $100-per-month usage limit for eligible free-tier users. OpenAI says higher tiers generally receive higher model rate limits.</p>\n<p>The purchase amounts are cumulative thresholds used to determine tier eligibility. They are not a monthly subscription price, nor a promise that your organization will spend exactly that amount each month. The published guide describes them as total credit purchases. Check your organization’s dashboard for its actual tier, approved monthly usage limit, and per-model limits; the organization’s status is what matters for operational planning.</p>\n<h2>What does a higher tier give a team?</h2>\n<p>Rate limits can constrain requests per minute (RPM), tokens per minute (TPM), daily volume, image throughput, or queued Batch work. A job may be under its monthly usage limit and still hit a per-minute limit. The current guide shows model-specific differences: for GPT-6 Astra, Sol, and Terra, its standard RPM/TPM examples increase from 5,000 RPM and 1 million TPM at Build to 10,000 RPM and 4 million TPM at Launch, and 15,000 RPM and 40 million TPM at Grow. GPT-6 Luna’s listed standard limits differ again. These are published reference values, not a substitute for the limits shown for your organization, model, and project.</p>\n<p>That distinction matters during launches. A team may forecast enough monthly allowance but still throttle when a new workload sends traffic too quickly or exceeds its request/token throughput. Rate limits can also apply at both organization and project levels, and different models may share a limit. Read the response headers and dashboard before treating a tier name as a capacity guarantee.</p>\n<h2>Are usage tiers a way to cap monthly spend?</h2>\n<p>No. OpenAI documents monthly approved usage limits separately from configurable organization or project spend limits. A spend alert sends a notification while API traffic continues. A hard spend limit blocks affected API requests with a 429 response when the configured amount is reached. Choose the hard cap when enforcement matters; an alert is visibility, not a circuit breaker.</p>\n<p>This also means that purchasing credits to cross a tier threshold is not, by itself, a safe cost-control policy. The tier can improve throughput, but it does not replace per-project ownership, alert routing, usage forecasting, or a deliberate hard cap. An engineering group that needs more launch capacity should model both the purchase threshold needed to qualify and the separate monthly spend ceiling Finance wants enforced.</p>\n<h2>How should Finance and engineering govern tier upgrades?</h2>\n<ol><li><strong>Inventory the organization and projects.</strong> Record the tier, monthly usage allowance, model-specific RPM/TPM, shared limits, and owners for each production project.</li><li><strong>Set explicit spend controls.</strong> Configure project-level hard limits where traffic must stop at a fixed budget and alerts where teams need early warning. Avoid assuming the tier allowance supplies this control.</li><li><strong>Estimate a workload ramp.</strong> Forecast requests and tokens per minute as well as monthly token spend. A service can hit a throughput limit long before it reaches a monthly dollar ceiling.</li><li><strong>Gate tier-related purchases.</strong> Treat additional credit purchases that advance the cumulative threshold as an access/capacity decision. Require a workload forecast, owner, and review of existing controls before requesting them.</li><li><strong>Observe the actual response.</strong> Use rate-limit headers and logs to distinguish request, token, and other limit exhaustion. Apply backoff to temporary rate-limit responses instead of creating a retry storm.</li></ol>\n<p>For example, hypothetically, a product team expects a launch campaign to triple requests per minute but keep monthly token use below Finance’s cap. The operational question is whether the project’s model-specific RPM and TPM can handle the ramp. The financial question is whether the hard spend limit is set at the approved campaign budget. Those are related reviews, but they are different controls.</p>\n<h2>How should a team decide whether to move from Build to Launch?</h2>\n<p>Start from workload evidence rather than the tier label. If production logs show repeated limit exhaustion at the current tier, estimate the required RPM and TPM headroom, identify which model and project limits apply, and confirm the tier’s effect in the dashboard. Then compare the credit purchase required to qualify with the business value and the budget policy. If current limits are sufficient, upgrading only because the next tier exists adds no operational benefit.</p>\n<p>OpenAI notes that higher tiers generally raise limits, and the published thresholds can change. Recheck the rate-limit guide and dashboard before a budget cycle or material traffic change. Keep the spend alert and hard cap review in the same monthly FinOps routine as model mix, retries, and cost per successful task.</p>\n<h2>What is the practical takeaway?</h2>\n<p>Build, Launch, and Grow answer a capacity question: what limits and usage allowance may apply as an organization’s cumulative purchases rise? Your spend controls answer a budget question: when should teams be warned, and when should requests stop? Track both. A tier upgrade can unlock throughput, but only a separately configured hard limit enforces a monthly cost boundary.</p>\n<h2>Which related research should teams read?</h2><ul><li><a href=\"/research/rate-limits-are-cost-control\">Rate limits are a cost control</a></li><li><a href=\"/research/committed-spend-discounts\">Committed spend is a bet on your forecast</a></li><li><a href=\"/research/llm-cost-spike-runbook\">A production runbook for an LLM cost spike</a></li></ul>",
+      "faq": [
+        {
+          "question": "What are OpenAI API Build, Launch, and Grow tiers?",
+          "answer": "They are the three paid API usage tiers announced October 6, 2026. OpenAI lists cumulative credit-purchase thresholds of $5, $100, and $500 respectively; higher tiers generally provide higher rate limits."
+        },
+        {
+          "question": "Does the Grow tier mean you spend $500 per month?",
+          "answer": "No. OpenAI lists $500 in total credit purchases as the Grow qualification threshold. It does not define the tier as a $500 monthly subscription or a spend cap."
+        },
+        {
+          "question": "Do OpenAI API usage tiers stop spending at the monthly limit?",
+          "answer": "The monthly usage allowance and configurable spend controls are separate. Spend alerts notify but allow traffic to continue; a hard spend limit blocks affected requests when reached."
+        },
+        {
+          "question": "How can I check my organization’s real rate limits?",
+          "answer": "OpenAI directs administrators to Settings > Organization > Limits. Limits vary by model and may apply at organization and project levels; response headers can show remaining requests and tokens."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/rate-limits-are-cost-control",
+          "label": "Rate limits are a cost control"
+        },
+        {
+          "slug": "/research/committed-spend-discounts",
+          "label": "Committed spend and forecasts"
+        },
+        {
+          "slug": "/research/llm-cost-spike-runbook",
+          "label": "LLM cost spike runbook"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-api-usage-tiers-build-launch-grow"
+  }
+}

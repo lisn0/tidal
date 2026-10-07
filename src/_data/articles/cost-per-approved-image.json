@@ -1,0 +1,143 @@
+{
+  "slug": "cost-per-approved-image",
+  "tags": [
+    "finops",
+    "unit-economics",
+    "cost-optimization",
+    "quality"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Cost per approved asset in image and video",
+      "titleCore": "Cost per approved asset in image and video",
+      "description": "Generation is priced per image or per second of video. Your real unit cost is per asset a human approved, and the gap between the two is the whole story.",
+      "body": "<p>Image and video pricing looks unusually simple: a price per image, or per second of output. That simplicity is why almost every team budgets it wrong. The provider charges per <em>generation</em>. Your business consumes <em>approved assets</em>. Those are not the same number, and on visual work they are usually not even close.</p><h2>The acceptance rate is the whole model</h2><p>Nobody ships the first render. A designer generates, looks, adjusts the prompt, generates again. For a well-defined style with a mature prompt, acceptance might be one in three. For open-ended creative exploration, one in ten or worse. Video is harsher still, because a clip can fail on motion, on temporal consistency, or on a single bad frame &mdash; and you pay for the whole clip either way.</p><p>So the useful arithmetic is not the sticker price. It is sticker price divided by acceptance rate. At one in eight, an asset with a list price of a few cents costs closer to a quarter, and a video generation priced per second becomes a genuinely material line the moment a team starts iterating.</p><h2>What actually moves the number</h2><p>Resolution and duration are the obvious levers and the least interesting ones, because they trade directly against the output you wanted. The levers that matter are the ones that raise acceptance. <strong>Iterating at low resolution</strong> and only upscaling the chosen frame changes the economics more than any per-image discount. <strong>A prompt library</strong> for known styles turns one-in-ten exploration into one-in-three execution. <strong>Reference images and seeds</strong> convert a fresh gamble into a controlled variation. And <strong>a written brief before the first generation</strong> removes the most expensive failure mode there is: iterating toward a target nobody had defined.</p><h2>Measure the right thing</h2><p>Track generations per approved asset, per project and per person, and cost per approved asset as your headline number. Both are cheap to instrument and immediately actionable &mdash; a team at fifteen generations per approval has a brief problem or a tooling problem, not a pricing problem, and no provider switch will fix it.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"https://finopsllm.com/research/how-to-budget-for-ai-spend\">How to budget for AI spend</a></li><li><a href=\"/research/evals-cost-control\">Evals as cost control</a></li></ul>",
+      "faq": [
+        {
+          "question": "How do you calculate the real cost of a generated image?",
+          "answer": "Divide the list price per generation by your acceptance rate. At one approved image in eight, an asset listed at a few cents actually costs closer to a quarter."
+        },
+        {
+          "question": "What lowers image generation cost the most?",
+          "answer": "Anything that raises the acceptance rate: iterating at low resolution before upscaling the chosen result, a prompt library for known styles, reference images and fixed seeds, and a written brief before the first generation."
+        },
+        {
+          "question": "Why is video generation harder to budget?",
+          "answer": "A clip can fail on motion, temporal consistency or a single bad frame, and you pay for the full clip regardless. Per-second pricing makes iteration materially expensive very quickly."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "https://finopsllm.com/research/how-to-budget-for-ai-spend",
+          "label": "How to budget for AI spend"
+        },
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals as cost control"
+        }
+      ]
+    },
+    "es": {
+      "title": "Coste por activo aprobado en imagen y vídeo",
+      "titleCore": "Coste por activo aprobado en imagen y vídeo",
+      "description": "La generación se cobra por imagen o por segundo de vídeo. Tu coste unitario real es por activo aprobado por una persona, y la diferencia lo explica todo.",
+      "body": "<p>El precio de imagen y vídeo parece simple: tanto por imagen, tanto por segundo. Esa simplicidad es justo por lo que casi todos lo presupuestan mal. El proveedor cobra por <em>generación</em>. Tu negocio consume <em>activos aprobados</em>.</p><h2>La tasa de aceptación es el modelo entero</h2><p>Nadie publica el primer render. Con un estilo maduro, quizá aceptes uno de cada tres; en exploración creativa, uno de cada diez. El vídeo es peor: un clip falla por movimiento, consistencia temporal o un solo fotograma, y pagas el clip entero igual.</p><p>La aritmética útil no es el precio de tarifa, sino el precio dividido por la aceptación.</p><h2>Qué mueve de verdad el número</h2><p>No la resolución, sino todo lo que sube la aceptación: iterar en baja resolución y escalar solo lo elegido, una biblioteca de prompts para estilos conocidos, imágenes de referencia y semillas fijas, y un brief escrito antes de la primera generación.</p><h2>Mide lo correcto</h2><p>Generaciones por activo aprobado y coste por activo aprobado. Quince por aprobación es un problema de brief, no de precio.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo se calcula el coste real de una imagen generada?",
+          "answer": "Divide el precio de tarifa por generación entre tu tasa de aceptación. Con una imagen aprobada de cada ocho, un activo de unos céntimos cuesta en realidad cerca de un cuarto de dólar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribución de costes de LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Coût par asset validé en image et vidéo",
+      "titleCore": "Coût par asset validé en image et vidéo",
+      "description": "La génération se facture à l’image ou à la seconde de vidéo. Votre vrai coût unitaire est par asset validé par un humain, et l’écart raconte toute l’histoire.",
+      "body": "<p>La tarification image et vidéo semble simple : tant par image, tant par seconde. C’est précisément cette simplicité qui fait que presque tout le monde la budgète mal. Le fournisseur facture des <em>générations</em>. L’entreprise consomme des <em>assets validés</em>.</p><h2>Le taux d’acceptation est tout le modèle</h2><p>Personne ne livre le premier rendu. Avec un style mûr, on accepte peut-être un sur trois ; en exploration créative, un sur dix. La vidéo est pire : un plan échoue sur le mouvement, la cohérence temporelle ou une seule image &mdash; et le clip entier est payé.</p><p>L’arithmétique utile n’est pas le prix affiché, mais le prix divisé par le taux d’acceptation.</p><h2>Ce qui déplace vraiment le chiffre</h2><p>Pas la résolution, mais tout ce qui augmente l’acceptation : itérer en basse résolution et n’upscaler que le retenu, une bibliothèque de prompts pour les styles connus, des images de référence et des seeds fixes, et un brief écrit avant la première génération.</p><h2>Mesurez la bonne chose</h2><p>Générations par asset validé et coût par asset validé. Quinze générations par validation, c’est un problème de brief, pas de prix.</p>",
+      "faq": [
+        {
+          "question": "Comment calculer le coût réel d’une image générée?",
+          "answer": "Divisez le prix affiché par génération par votre taux d’acceptation. À une image validée sur huit, un asset affiché à quelques centimes coûte en réalité près d’un quart de dollar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Attribution des coûts LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Kosten je freigegebenem Asset bei Bild und Video",
+      "titleCore": "Kosten je freigegebenem Asset bei Bild und Video",
+      "description": "Generierung wird pro Bild oder Videosekunde berechnet. Ihre echten Stückkosten gelten je freigegebenem Asset, und die Lücke dazwischen ist die ganze Geschichte.",
+      "body": "<p>Bild- und Videopreise wirken ungewöhnlich einfach: so viel pro Bild, so viel pro Sekunde. Genau diese Einfachheit führt dazu, dass fast jedes Team falsch budgetiert. Der Anbieter berechnet <em>Generierungen</em>. Ihr Geschäft verbraucht <em>freigegebene Assets</em>.</p><h2>Die Annahmequote ist das ganze Modell</h2><p>Niemand liefert den ersten Render aus. Bei reifem Stil vielleicht eines von drei; bei kreativer Exploration eines von zehn. Video ist härter: Ein Clip scheitert an Bewegung, zeitlicher Konsistenz oder einem einzigen Frame &mdash; bezahlt wird er ganz.</p><p>Die nützliche Rechnung ist nicht der Listenpreis, sondern der Listenpreis geteilt durch die Annahmequote.</p><h2>Was die Zahl wirklich bewegt</h2><p>Nicht die Auflösung, sondern alles, was die Annahmequote hebt: in niedriger Auflösung iterieren und nur das Gewählte hochskalieren, eine Prompt-Bibliothek für bekannte Stile, Referenzbilder und feste Seeds, und ein schriftliches Briefing vor der ersten Generierung.</p><h2>Das Richtige messen</h2><p>Generierungen je freigegebenem Asset und Kosten je freigegebenem Asset. Fünfzehn je Freigabe ist ein Briefing-Problem, kein Preisproblem.</p>",
+      "faq": [
+        {
+          "question": "Wie berechnet man die echten Kosten eines generierten Bildes?",
+          "answer": "Teilen Sie den Listenpreis je Generierung durch Ihre Annahmequote. Bei einem freigegebenen Bild von acht kostet ein Asset mit Cent-Listenpreis real eher einen Vierteldollar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM-Kostenzuordnung"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Custo por ativo aprovado em imagem e vídeo",
+      "titleCore": "Custo por ativo aprovado em imagem e vídeo",
+      "description": "A geração é cobrada por imagem ou por segundo de vídeo. O seu custo unitário real é por ativo aprovado por uma pessoa, e a diferença conta a história toda.",
+      "body": "<p>O preço de imagem e vídeo parece invulgarmente simples: tanto por imagem, tanto por segundo. É essa simplicidade que faz quase toda a gente orçamentar mal. O fornecedor cobra <em>gerações</em>. O negócio consome <em>ativos aprovados</em>.</p><h2>A taxa de aceitação é o modelo inteiro</h2><p>Ninguém publica o primeiro render. Com um estilo maduro, talvez aceite um em três; em exploração criativa, um em dez. O vídeo é pior: um clipe falha por movimento, consistência temporal ou um único fotograma &mdash; e paga o clipe todo à mesma.</p><p>A aritmética útil não é o preço de tabela, mas o preço a dividir pela taxa de aceitação.</p><h2>O que move mesmo o número</h2><p>Não a resolução, mas tudo o que sobe a aceitação: iterar em baixa resolução e só escalar o escolhido, uma biblioteca de prompts para estilos conhecidos, imagens de referência e seeds fixas, e um briefing escrito antes da primeira geração.</p><h2>Meça o que interessa</h2><p>Gerações por ativo aprovado e custo por ativo aprovado. Quinze por aprovação é problema de briefing, não de preço.</p>",
+      "faq": [
+        {
+          "question": "Como se calcula o custo real de uma imagem gerada?",
+          "answer": "Divida o preço de tabela por geração pela sua taxa de aceitação. Com uma imagem aprovada em cada oito, um ativo listado a poucos cêntimos custa na verdade perto de um quarto de dólar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribuição de custos de LLM"
+        }
+      ]
+    },
+    "ja": {
+      "title": "画像・動画生成の承認済みアセット単価",
+      "titleCore": "画像・動画生成の承認済みアセット単価",
+      "description": "生成は 1 枚あたり、または動画 1 秒あたりで課金されます。実際の単価は「人が承認したアセット 1 件あたり」で、その差こそが本題です。",
+      "body": "<p>画像と動画の価格は珍しく単純に見えます &mdash; 1 枚いくら、1 秒いくら。その単純さゆえに、ほとんどのチームが予算を外します。プロバイダは<em>生成</em>に課金し、事業が消費するのは<em>承認されたアセット</em>です。両者は同じ数字ではなく、ビジュアル制作では近くすらありません。</p><h2>採用率がモデルのすべて</h2><p>最初のレンダーをそのまま出す人はいません。生成し、見て、プロンプトを直し、また生成する。スタイルが確立していて成熟したプロンプトなら採用は 3 回に 1 回、自由な探索なら 10 回に 1 回かそれ以下です。動画はさらに厳しく、モーション、時間的一貫性、たった 1 フレームの破綻でクリップが没になり、それでもクリップ全体の料金を払います。</p><p>したがって有用な計算は定価ではなく、定価 ÷ 採用率です。8 回に 1 回なら、数セントの定価のアセットは実質 25 セント近くになります。</p><h2>数字を本当に動かすもの</h2><p>解像度と尺は分かりやすいレバーですが、欲しかった成果物そのものと引き換えなので面白くありません。効くのは採用率を上げる側です。<strong>低解像度で反復し、選んだものだけアップスケールする</strong>のは、どんな単価割引よりも経済性を変えます。既知スタイルの<strong>プロンプトライブラリ</strong>は、10 分の 1 の探索を 3 分の 1 の実行に変えます。<strong>参照画像とシード</strong>は、新規の賭けを制御された変奏に変えます。そして<strong>最初の生成前に書かれたブリーフ</strong>は、最も高くつく失敗 &mdash; 誰も定義していない目標に向かって反復すること &mdash; を消します。</p><h2>正しいものを測る</h2><p>プロジェクト別・担当者別の「承認 1 件あたり生成回数」と、看板指標としての「承認済みアセット単価」を追ってください。どちらも計測が安く、すぐ行動に移せます。承認 1 件に 15 回生成しているチームは、価格の問題ではなくブリーフかツールの問題を抱えており、プロバイダを替えても直りません。</p>",
+      "faq": [
+        {
+          "question": "生成画像の本当のコストはどう計算しますか？",
+          "answer": "1 生成あたりの定価を採用率で割ります。8 枚に 1 枚しか承認されないなら、定価で数セントのアセットの実質コストは 25 セント近くになります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM コストの帰属"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/cost-per-approved-image"
+  }
+}

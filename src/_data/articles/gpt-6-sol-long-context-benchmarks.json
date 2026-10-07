@@ -1,0 +1,53 @@
+{
+  "slug": "gpt-6-sol-long-context-benchmarks",
+  "tags": [
+    "llm-costs",
+    "quality",
+    "evals",
+    "openai"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "GPT-6 Sol long-context benchmarks: what has actually been…",
+      "titleCore": "GPT-6 Sol long-context benchmarks: what has actually been…",
+      "description": "GPT-6 Sol's only independent long-context score is AA-LCR 84% at about 100K tokens, tied with GPT-5.6 Sol. The widely quoted 91.5% MRCR is GPT-5.6 Sol.",
+      "faq": [
+        {
+          "question": "How good is GPT-6 Sol at long context?",
+          "answer": "It scores 84% on Artificial Analysis AA-LCR v1.1 at max effort, the same as GPT-5.6 Sol and above GPT-6 Astra's 80.7%. AA-LCR documents average about 100K tokens, and as of 27 September 2026 no one has published GPT-6 Sol results broken down by context length."
+        },
+        {
+          "question": "Is the 91.5% MRCR score for GPT-6 Sol?",
+          "answer": "No. 91.5% at 256K-512K and 73.8% at 512K-1M on MRCR v2 8-needle are GPT-5.6 Sol's scores. GPT-6 Sol has no published MRCR result yet, and Context Arena has not added it."
+        },
+        {
+          "question": "Is GPT-6 Sol on the Context Arena MRCR leaderboard?",
+          "answer": "Not as of 27 September 2026. Context Arena's model list and 8-needle results contain no GPT-6 models. Its newest OpenAI entries are GPT-5.6 Sol, Terra and Luna."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/codex-auto-compact-gpt-6-sol",
+          "label": "Codex auto-compact on GPT-6 Sol: the real defaults"
+        },
+        {
+          "slug": "/research/gpt-6-sol-cost-model",
+          "label": "GPT-6 Sol pricing and cost model"
+        },
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing and the 272K long-context price jump"
+        }
+      ],
+      "body": "<p><strong>As of 27 September 2026, GPT-6 Sol has exactly one independent long-context score: 84% on Artificial Analysis AA-LCR v1.1, tied with GPT-5.6 Sol.</strong> The test&rsquo;s documents average about 100K tokens. No one has yet published how GPT-6 Sol holds up at 256K, 512K or 1M tokens. Most &ldquo;Sol&rdquo; long-context numbers online, including the 91.5% MRCR score, are for GPT-5.6 Sol. GPT-6 Sol came out on 22 September.</p>\n\n<p>This matters for cost because long context is where GPT-6 prices jump. Above 272K input tokens the <a href=\"/research/gpt-6-pricing\">whole request is billed at long-context rates</a>. Deciding how much context an agent keeps means weighing that price against quality data that doesn&rsquo;t exist yet.</p>\n\n<h2>What long-context scores does GPT-6 Sol have?</h2>\n\n<p><strong>One aggregate score, at around 100K tokens.</strong></p>\n\n<table>\n<thead><tr><th>Model</th><th>AA-LCR v1.1</th><th>Rank</th></tr></thead>\n<tbody>\n<tr><td>GPT-6 Sol (max)</td><td>84.0%</td><td>7</td></tr>\n<tr><td>GPT-5.6 Sol (max)</td><td>84.0%</td><td>7</td></tr>\n<tr><td>GPT-6 Astra</td><td>80.7%</td><td>27</td></tr>\n<tr><td>Kimi K3 (leader, 24 Sep 2026)</td><td>88.7%</td><td>1</td></tr>\n</tbody>\n</table>\n\n<p>AA-LCR has 100 hand-written questions over document sets that average 99,325 tokens. The answers have to be put together from several passages rather than found in one. It tests reasoning over a long input. It doesn&rsquo;t show how accuracy changes as the input grows, because every question is about the same length.</p>\n\n<h2>Which long-context numbers are GPT-5.6 Sol, not GPT-6 Sol?</h2>\n\n<p><strong>The MRCR scores.</strong> Launch coverage of GPT-6 Astra compared it with &ldquo;Sol&rdquo; on OpenAI&rsquo;s MRCR v2 8-needle test. That Sol was GPT-5.6 Sol, and Vellum&rsquo;s write-up confirms it.</p>\n\n<table>\n<thead><tr><th>MRCR v2, 8-needle</th><th>256K&ndash;512K</th><th>512K&ndash;1M</th></tr></thead>\n<tbody>\n<tr><td>GPT-6 Astra</td><td>100%</td><td>96.3%</td></tr>\n<tr><td>GPT-5.6 Sol</td><td>91.5%</td><td>73.8%</td></tr>\n<tr><td>GPT-6 Sol</td><td colspan=\"2\">not published</td></tr>\n</tbody>\n</table>\n\n<p>OrcaRouter&rsquo;s GPT-6 Sol review makes the same point: GPT-5.6 Sol has a published long-context retrieval result, and GPT-6 Sol has nothing equivalent.</p>\n\n<h2>Where have we looked?</h2>\n\n<p><strong>The places that would publish it, all checked on 27 September 2026:</strong></p>\n\n<ul>\n<li><strong>Context Arena</strong>, the MRCR leaderboard. Its model list and 8-needle results have no GPT-6 entries. Its newest OpenAI models are GPT-5.6 Sol, Terra and Luna.</li>\n<li><strong>OpenAI</strong>: the GPT-6 launch post and the system card appendix for Sol and Luna. Neither gives Sol results by context length.</li>\n<li><strong>Artificial Analysis</strong>: AA-LCR only, as above.</li>\n<li><strong>Vals, Vellum, DataCamp, emergent.sh, llm-stats and OrcaRouter</strong>: no long-context results by length for GPT-6 Sol.</li>\n</ul>\n\n<h2>What should teams do until per-length data exists?</h2>\n\n<p><strong>Keep GPT-6 Sol requests under 272K input tokens and compact early.</strong> The evidence so far shows GPT-6 Sol matching GPT-5.6 Sol at about 100K. GPT-5.6 Sol held 91.5% up to 512K on MRCR but fell to 73.8% beyond that. It&rsquo;s reasonable to expect GPT-6 Sol to be usable up to about 250K, but that is an inference, not a measurement. Above 272K you pay double for input on quality nobody has measured.</p>\n\n<p>In Codex this is already the default. It gives GPT-6 Sol a 272K window and <a href=\"/research/codex-auto-compact-gpt-6-sol\">compacts at 244,800 tokens</a>. For your own agents, alert on requests that cross 272K and treat any increase as something to test. Run your own retrieval check on your own documents before relying on context beyond 256K.</p>\n\n<p>We will update this page when Context Arena or another independent evaluator publishes GPT-6 Sol results by context length.</p>\n\n<h2>Sources</h2>\n\n<ul>\n<li><a href=\"https://artificialanalysis.ai/models/comparisons/gpt-6-sol-vs-gpt-5-6-sol\">Artificial Analysis: GPT-6 Sol vs GPT-5.6 Sol</a></li>\n<li><a href=\"https://artificialanalysis.ai/articles/announcing-aa-lcr\">Artificial Analysis: announcing AA-LCR</a></li>\n<li><a href=\"https://benchlm.ai/benchmarks/lcr\">BenchLM: AA-LCR leaderboard</a></li>\n<li><a href=\"https://www.vellum.ai/blog/gpt-6-astra-benchmarks-explained\">Vellum: GPT-6 Astra benchmarks explained</a></li>\n<li><a href=\"https://www.orcarouter.ai/blog/gpt-6-sol-vs-gpt-5-6-sol\">OrcaRouter: GPT-6 Sol vs GPT-5.6 Sol</a></li>\n<li><a href=\"https://contextarena.ai\">Context Arena: MRCR leaderboard</a></li>\n</ul>\n"
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/gpt-6-sol-long-context-benchmarks"
+  }
+}

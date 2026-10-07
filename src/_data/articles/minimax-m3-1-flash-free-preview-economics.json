@@ -1,0 +1,36 @@
+{
+  "slug": "minimax-m3-1-flash-free-preview-economics",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization",
+    "free-tier",
+    "minimax"
+  ],
+  "datePublished": "2026-09-26",
+  "dateModified": "2026-09-26",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Minimax M3.1 Flash free preview economics",
+      "titleCore": "Minimax M3.1 Flash free preview economics",
+      "description": "Minimax M3.1 Flash is free during preview. How to route to it, what it replaces, and how to fail over when pricing lands.",
+      "body": "<h2>What we know</h2><ul><li><strong>Free preview</strong> on Minimax Code (duration unspecified)</li><li><strong>Focus:</strong> speed + efficiency for daily coding tasks</li></ul><h2>Cost model: $0 during preview</h2><p>During the free preview, M3.1 Flash is a $0 marginal cost model for supported workloads.</p><h2>The catch: preview ends</h2><p>Free previews are customer acquisition. When it ends, expect pricing in the $1-3 per 1M input / $5-15 per 1M output range.</p>",
+      "faq": [
+        {
+          "question": "How long is the free preview?",
+          "answer": "Duration unspecified. Treat it as temporary."
+        },
+        {
+          "question": "What is expected pricing after preview?",
+          "answer": "Unannounced. Flash models typically land at $1-3 input / $5-15 output per million tokens."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/minimax-m3-1-flash-free-preview-economics"
+  }
+}

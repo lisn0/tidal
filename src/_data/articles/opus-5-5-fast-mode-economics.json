@@ -1,0 +1,392 @@
+{
+  "slug": "opus-5-5-fast-mode-economics",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "latency",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-22",
+  "dateModified": "2026-09-22",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Opus 5.5 fast mode economics",
+      "titleCore": "Opus 5.5 fast mode economics",
+      "description": "Opus 5.5 fast mode costs $8/$40 per million tokens, double the standard rate, for up to 2.5x speed. It pays when a person is waiting and wastes money when nobody is.",
+      "body": "<p>Claude Opus 5.5 has two price lists. Standard is $4 per million input tokens and $20 per million output tokens. Fast mode is $8 and $40, exactly double, for up to 2.5&times; the output speed. The model is the same. The extra money buys time and nothing else, so the only question is whose time.</p><h2>What the premium buys</h2><p>Take a step that produces 5,000 output tokens. At standard rates the output costs $0.10. In fast mode it costs $0.20. If the step takes 60 seconds at standard speed, a 2.5&times; speedup brings it to about 24 seconds. You pay an extra $0.10 to save 36 seconds.</p><p>That works out to about $10 for each hour of waiting removed. Step length does not change the ratio, because the extra cost and the time saved both grow with output tokens. It does depend on your standard-mode speed: this example assumes about 83 output tokens per second, so plug in your own. Input also doubles, so prefix-heavy steps pay a bit more per second saved.</p><h2>When that is cheap</h2><ul><li><strong>A developer waiting on an interactive coding agent.</strong> At $10 per hour of waiting removed, fast mode costs far less than the time of anyone who is paid to sit there.</li><li><strong>A customer-facing answer where latency affects conversion.</strong> Price the speedup against drop-off, not against the token bill.</li><li><strong>An incident, where every minute has a cost.</strong></li></ul><h2>When it is pure waste</h2><ul><li><strong>Background agents, nightly jobs and batch pipelines.</strong> Nobody is waiting, so the extra spend buys nothing.</li><li><strong>Evals and replays.</strong> These are exactly the workloads that multiply token counts and run on a schedule.</li><li><strong>Subagents that run in parallel.</strong> Wall-clock time is set by the slowest branch and the orchestrator, not by each call.</li></ul><p>Standard Opus 5.5 is already about 30% faster than Opus 5, per Anthropic. Some latency complaints that would have justified fast mode on Opus 5 may be solved by the upgrade alone. Measure the standard speed before paying for more.</p><h2>Controls to put in place</h2><ol><li><strong>Make fast mode an explicit, per-route decision.</strong> It should never be a global default or a flag that an engineer turned on once and forgot.</li><li><strong>Tag spend by mode.</strong> A fast-mode request at double the unit price looks like a normal request on a dashboard that groups by model only.</li><li><strong>Alert on the fast-mode share of output tokens.</strong> If it rises on routes where no user is waiting, something was switched on that should not have been.</li><li><strong>Budget effort and speed together.</strong> Max effort multiplies the token count, and fast mode doubles the price of each token. The combination is the most expensive way to run the model.</li></ol>",
+      "faq": [
+        {
+          "question": "How much does Claude Opus 5.5 fast mode cost?",
+          "answer": "$8 per million input tokens and $40 per million output tokens, twice the standard $4 and $20 rates."
+        },
+        {
+          "question": "How much faster is Opus 5.5 fast mode?",
+          "answer": "Anthropic says up to 2.5 times faster. The standard mode is already about 30% faster than Opus 5."
+        },
+        {
+          "question": "When is Opus 5.5 fast mode worth it?",
+          "answer": "When a person is waiting on the response, such as interactive coding or a customer-facing answer. It is wasted on batch jobs, evals and background agents."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        },
+        {
+          "slug": "/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 effort levels are the real price"
+        },
+        {
+          "slug": "/research/subagent-fan-out-concurrency-limits",
+          "label": "Subagent fan-out and concurrency limits"
+        }
+      ]
+    },
+    "es": {
+      "title": "Economía de Opus 5.5 fast mode",
+      "titleCore": "Economía de Opus 5.5 fast mode",
+      "description": "Opus 5.5 fast mode cuesta $8/$40 por millón de tokens, el doble de la tarifa estándar, por hasta 2,5x velocidad. Vale la pena cuando una persona espera.",
+      "body": "<p>Claude Opus 5.5 tiene dos listas de precios. La estándar es $4 por millón de tokens de entrada y $20 por millón de salida. Fast mode es $8 y $40, exactamente el doble, para hasta 2,5&times; la velocidad de salida. El modelo es el mismo. El dinero extra compra tiempo y nada más, así que la única pregunta es de quién.</p><h2>Qué compra el premium</h2><p>Toma un paso que produce 5.000 tokens de salida. A tasas estándar el coste es $0,10. En fast mode cuesta $0,20. Si el paso tarda 60 segundos a velocidad estándar, una aceleración de 2,5&times; lo trae a unos 24 segundos. Pagas $0,10 extra para ahorrar 36 segundos.</p><p>Eso resulta en unos $10 por cada hora de espera eliminada. La longitud del paso no cambia el ratio, porque el coste extra y el tiempo ahorrado crecen con los tokens de salida. Depende de tu velocidad en modo estándar: este ejemplo asume unos 83 tokens de salida por segundo, así que calcula la tuya. La entrada también se duplica, así que los pasos con mucho prefijo pagan un poco más por segundo ahorrado.</p><h2>Cuándo es barato</h2><ul><li><strong>Un desarrollador esperando a un agente de codificación interactivo.</strong> A $10 por hora de espera eliminada, fast mode cuesta mucho menos que el tiempo de cualquiera pagado.</li><li><strong>Una respuesta cara al cliente donde la latencia afecta la conversión.</strong> Compara la aceleración contra el abandono, no contra la factura de tokens.</li><li><strong>Un incidente, donde cada minuto tiene un coste.</strong></li></ul><h2>Cuándo es puro desperdicio</h2><ul><li><strong>Agentes en background, trabajos nocturnos y tuberías batch.</strong> Nadie espera, así que el gasto extra no compra nada.</li><li><strong>Evals y replays.</strong> Son exactamente las cargas de trabajo que multiplican recuentos de tokens y se ejecutan en un cronograma.</li><li><strong>Subagentes que se ejecutan en paralelo.</strong> El tiempo de reloj se establece por la rama más lenta y el orquestador, no por cada llamada.</li></ul><p>Opus 5.5 estándar ya es aproximadamente 30% más rápido que Opus 5, según Anthropic. Algunas quejas de latencia que habrían justificado fast mode en Opus 5 pueden resolverse solo con la actualización. Mide la velocidad estándar antes de pagar por más.</p><h2>Controles a poner en su lugar</h2><ol><li><strong>Haz que fast mode sea una decisión explícita y por ruta.</strong> Nunca debe ser un valor global por defecto o una bandera que un ingeniero activó una vez y olvidó.</li><li><strong>Etiqueta el gasto por modo.</strong> Una solicitud de fast mode a doble precio por unidad se ve como una solicitud normal en un panel que agrupa solo por modelo.</li><li><strong>Alerta sobre la fracción de fast mode de tokens de salida.</strong> Si sube en rutas donde ningún usuario espera, algo fue activado que no debería haber sido.</li><li><strong>Presupuesta esfuerzo y velocidad juntos.</strong> Max effort multiplica el recuento de tokens, y fast mode duplica el precio de cada token. La combinación es la forma más cara de ejecutar el modelo.</li></ol>",
+      "faq": [
+        {
+          "question": "¿Cuánto cuesta Claude Opus 5.5 fast mode?",
+          "answer": "$8 por millón de tokens de entrada y $40 por millón de salida, el doble de las tarifas estándar de $4 y $20."
+        },
+        {
+          "question": "¿Qué tan rápido es Opus 5.5 fast mode?",
+          "answer": "Anthropic dice hasta 2,5 veces más rápido. El modo estándar ya es aproximadamente 30% más rápido que Opus 5."
+        },
+        {
+          "question": "¿Cuándo vale la pena Opus 5.5 fast mode?",
+          "answer": "Cuando una persona espera la respuesta, como codificación interactiva o una respuesta cara al cliente. Se desperdicia en trabajos batch, evals y agentes en background."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/claude-opus-5-5-cost-model",
+          "label": "Modelo de coste de Claude Opus 5.5"
+        },
+        {
+          "slug": "/es/research/opus-5-5-effort-level-cost",
+          "label": "Los niveles de esfuerzo de Opus 5.5 son el precio real"
+        },
+        {
+          "slug": "/es/research/subagent-fan-out-concurrency-limits",
+          "label": "Límites de fan-out y concurrencia de subagentes"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Économie d'Opus 5.5 fast mode",
+      "titleCore": "Économie d'Opus 5.5 fast mode",
+      "description": "Opus 5.5 fast mode coûte $8/$40 par million de tokens, le double du tarif standard, pour jusqu'à 2,5x la vitesse. Rentable quand quelqu'un attend.",
+      "body": "<p>Claude Opus 5.5 a deux listes de prix. Standard est $4 par million de tokens d'entrée et $20 par million de sortie. Fast mode est $8 et $40, exactement le double, pour jusqu'à 2,5&times; la vitesse de sortie. Le modèle est identique. L'argent supplémentaire achète du temps et rien d'autre, donc la seule question est le temps de qui.</p><h2>Ce que paie le premium</h2><p>Prenez une étape qui produit 5.000 tokens de sortie. Aux tarifs standard, le coût est $0,10. En fast mode, c'est $0,20. Si l'étape prend 60 secondes à vitesse standard, une accélération 2,5&times; la ramène à environ 24 secondes. Vous payez $0,10 supplémentaires pour économiser 36 secondes.</p><p>Cela revient à environ $10 pour chaque heure d'attente éliminée. La longueur de l'étape ne change pas le ratio, car le coût supplémentaire et le temps économisé augmentent avec les tokens de sortie. Cela dépend de votre vitesse en mode standard : cet exemple suppose environ 83 tokens de sortie par seconde. L'entrée double aussi, donc les étapes à fort préfixe paient un peu plus par seconde économisée.</p><h2>Quand c'est bon marché</h2><ul><li><strong>Un développeur qui attend un agent de codage interactif.</strong> À $10 par heure d'attente supprimée, fast mode coûte bien moins que le temps de quiconque est payé.</li><li><strong>Une réponse client où la latence affecte la conversion.</strong> Évaluez l'accélération par rapport à l'abandon, pas par rapport à la facture de tokens.</li><li><strong>Un incident, où chaque minute a un coût.</strong></li></ul><h2>Quand c'est du gaspillage pur</h2><ul><li><strong>Agents en arrière-plan, travaux nocturnes et pipelines batch.</strong> Personne n'attend, donc la dépense supplémentaire n'achète rien.</li><li><strong>Évals et replays.</strong> Ce sont exactement les charges de travail qui multiplient les comptages de tokens et s'exécutent selon un calendrier.</li><li><strong>Sous-agents qui s'exécutent en parallèle.</strong> Le temps mural est défini par la branche la plus lente et l'orchestrateur, pas par chaque appel.</li></ul><p>Opus 5.5 standard est déjà environ 30% plus rapide qu'Opus 5, selon Anthropic. Certaines plaintes de latence qui auraient justifié fast mode sur Opus 5 peuvent être résolues par la mise à niveau seule. Mesurez la vitesse standard avant de payer pour plus.</p><h2>Contrôles à mettre en place</h2><ol><li><strong>Faites de fast mode une décision explicite, par route.</strong> Cela ne devrait jamais être un défaut global ou un drapeau qu'un ingénieur a activé une fois et oublié.</li><li><strong>Marquez les dépenses par mode.</strong> Une demande de fast mode au double du prix unitaire ressemble à une demande normale sur un tableau de bord qui regroupe uniquement par modèle.</li><li><strong>Alertez sur la part de fast mode des tokens de sortie.</strong> Si elle augmente sur des routes où aucun utilisateur n'attend, quelque chose a été activé qui ne devrait pas l'être.</li><li><strong>Budgétisez l'effort et la vitesse ensemble.</strong> L'effort maximal multiplie le nombre de tokens, et fast mode double le prix de chaque token. C'est la manière la plus chère d'exécuter le modèle.</li></ol>",
+      "faq": [
+        {
+          "question": "Combien coûte Claude Opus 5.5 fast mode?",
+          "answer": "$8 par million de tokens d'entrée et $40 par million de sortie, deux fois les tarifs standard de $4 et $20."
+        },
+        {
+          "question": "Quelle est la vitesse d'Opus 5.5 fast mode?",
+          "answer": "Anthropic dit jusqu'à 2,5 fois plus rapide. Le mode standard est déjà environ 30% plus rapide qu'Opus 5."
+        },
+        {
+          "question": "Quand Opus 5.5 fast mode en vaut-il la peine?",
+          "answer": "Quand quelqu'un attend la réponse, comme le codage interactif ou une réponse client. C'est du gaspillage sur les travaux batch, les évals et les agents en arrière-plan."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/claude-opus-5-5-cost-model",
+          "label": "Modèle de coût Claude Opus 5.5"
+        },
+        {
+          "slug": "/fr/research/opus-5-5-effort-level-cost",
+          "label": "Les niveaux d'effort d'Opus 5.5 sont le vrai prix"
+        },
+        {
+          "slug": "/fr/research/subagent-fan-out-concurrency-limits",
+          "label": "Limites de fan-out et concurrence des sous-agents"
+        }
+      ]
+    },
+    "de": {
+      "title": "Opus 5.5 Fast-Mode Ökonomie",
+      "titleCore": "Opus 5.5 Fast-Mode Ökonomie",
+      "description": "Opus 5.5 fast mode kostet $8/$40 pro Million Token, doppelt der Standardrate, für bis zu 2,5x Geschwindigkeit. Lohnt sich, wenn jemand wartet.",
+      "body": "<p>Claude Opus 5.5 hat zwei Preislisten. Standard ist $4 pro Million Input-Token und $20 pro Million Output-Token. Fast mode ist $8 und $40, genau das Doppelte, für bis zu 2,5&times; die Output-Geschwindigkeit. Das Modell ist identisch. Das zusätzliche Geld kauft Zeit und sonst nichts, also die einzige Frage ist wessen Zeit.</p><h2>Was die Prämie kauft</h2><p>Nehmen Sie einen Schritt, der 5.000 Output-Token produziert. Zu Standard-Sätzen kostet der Output $0,10. Im Fast Mode kostet es $0,20. Wenn der Schritt bei Standard-Geschwindigkeit 60 Sekunden dauert, reduziert eine 2,5&times; Beschleunigung ihn auf etwa 24 Sekunden. Sie zahlen $0,10 extra, um 36 Sekunden zu sparen.</p><p>Das läuft auf etwa $10 für jede eingesparte Stunde Wartezeit hinaus. Die Schrittlänge ändert nicht das Verhältnis, da die zusätzlichen Kosten und die eingesparte Zeit mit Output-Token wachsen. Es hängt von Ihrer Standard-Geschwindigkeit ab: Dieses Beispiel geht von etwa 83 Output-Token pro Sekunde aus. Die Eingabe verdoppelt sich auch, also zahlen prefix-intensive Schritte etwas mehr pro eingesparter Sekunde.</p><h2>Wann ist das billig</h2><ul><li><strong>Ein Entwickler, der auf einen interaktiven Coding Agent wartet.</strong> Bei $10 pro eingesparter Stunde Wartezeit kostet fast mode viel weniger als die Zeit von jemandem, der bezahlt wird.</li><li><strong>Eine kundenorientierte Antwort, bei der Latenz die Umwandlung beeinflusst.</strong> Bewerten Sie die Beschleunigung gegen Abbruch, nicht gegen die Token-Rechnung.</li><li><strong>Ein Vorfall, bei dem jede Minute Kosten hat.</strong></li></ul><h2>Wann ist es reiner Verschwendung</h2><ul><li><strong>Background Agents, nächtliche Jobs und Batch-Pipelines.</strong> Niemand wartet, also kauft die zusätzliche Ausgabe nichts.</li><li><strong>Evals und Wiederholungen.</strong> Dies sind genau die Workloads, die Token-Anzahlen vervielfachen und nach Zeitplan ausgeführt werden.</li><li><strong>Subagenten, die parallel laufen.</strong> Die Wanduhr-Zeit wird durch den langsamsten Branch und den Orchestrator bestimmt, nicht durch jeden Aufruf.</li></ul><p>Standard Opus 5.5 ist bereits etwa 30% schneller als Opus 5, laut Anthropic. Einige Latenz-Beschwerden, die Fast Mode auf Opus 5 gerechtfertigt hätten, können allein durch das Upgrade behoben werden. Messen Sie die Standard-Geschwindigkeit, bevor Sie für mehr zahlen.</p><h2>Kontrollen zum Implementieren</h2><ol><li><strong>Machen Sie Fast Mode zur expliziten, pro-Route Entscheidung.</strong> Es sollte nie ein globaler Standard oder ein Flag sein, den ein Ingenieur einmal aktiviert und vergessen hat.</li><li><strong>Markieren Sie Ausgaben nach Modus.</strong> Eine Fast-Mode Anfrage zum doppelten Unit-Preis sieht wie eine normale Anfrage auf einem Dashboard aus, das nur nach Modell gruppiert.</li><li><strong>Warnen Sie vor der Fast-Mode Quote der Output-Token.</strong> Wenn sie auf Routes ansteigt, wo kein Benutzer wartet, wurde etwas aktiviert, das nicht sein sollte.</li><li><strong>Budget Aufwand und Geschwindigkeit zusammen.</strong> Max Aufwand vervielfacht die Token-Anzahl, und Fast Mode verdoppelt den Preis jedes Tokens. Das ist die teuerste Art, das Modell zu betreiben.</li></ol>",
+      "faq": [
+        {
+          "question": "Wie viel kostet Claude Opus 5.5 fast mode?",
+          "answer": "$8 pro Million Input-Token und $40 pro Million Output-Token, doppelt die Standard-Sätze von $4 und $20."
+        },
+        {
+          "question": "Wie schnell ist Opus 5.5 fast mode?",
+          "answer": "Anthropic sagt bis zu 2,5 mal schneller. Standard Mode ist bereits etwa 30% schneller als Opus 5."
+        },
+        {
+          "question": "Wann lohnt sich Opus 5.5 fast mode?",
+          "answer": "Wenn jemand auf die Antwort wartet, wie interaktives Coding oder eine kundenorientierte Antwort. Es ist Verschwendung bei Batch Jobs, Evals und Background Agents."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 Kostenmodell"
+        },
+        {
+          "slug": "/de/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 Aufwandstufen sind der echte Preis"
+        },
+        {
+          "slug": "/de/research/subagent-fan-out-concurrency-limits",
+          "label": "Subagent Fan-out und Parallelitätsgrenzen"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Economia do Opus 5.5 fast mode",
+      "titleCore": "Economia do Opus 5.5 fast mode",
+      "description": "Opus 5.5 fast mode custa $8/$40 por milhão de tokens, o dobro da taxa padrão, para até 2,5x de velocidade. Vale a pena quando alguém está esperando.",
+      "body": "<p>Claude Opus 5.5 tem duas listas de preços. Padrão é $4 por milhão de tokens de entrada e $20 por milhão de saída. Fast mode é $8 e $40, exatamente o dobro, para até 2,5&times; a velocidade de saída. O modelo é o mesmo. O dinheiro extra compra tempo e mais nada, então a única pergunta é o tempo de quem.</p><h2>O que o prêmio compra</h2><p>Tome uma etapa que produz 5.000 tokens de saída. Às taxas padrão, o custo de saída é $0,10. Em fast mode custa $0,20. Se a etapa leva 60 segundos à velocidade padrão, uma aceleração de 2,5&times; a traz para cerca de 24 segundos. Você paga $0,10 extra para poupar 36 segundos.</p><p>Isso resulta em cerca de $10 para cada hora de espera removida. O comprimento da etapa não altera o índice, pois o custo extra e o tempo economizado crescem com os tokens de saída. Depende de sua velocidade em modo padrão: este exemplo assume cerca de 83 tokens de saída por segundo. A entrada também dobra, então etapas com muito prefixo pagam um pouco mais por segundo economizado.</p><h2>Quando é barato</h2><ul><li><strong>Um desenvolvedor esperando em um agente de codificação interativo.</strong> A $10 por hora de espera removida, fast mode custa muito menos que o tempo de qualquer pessoa paga.</li><li><strong>Uma resposta voltada para o cliente onde latência afeta conversão.</strong> Avalie o speedup contra abandono, não contra a fatura de tokens.</li><li><strong>Um incidente, onde cada minuto tem um custo.</strong></li></ul><h2>Quando é puro desperdício</h2><ul><li><strong>Agentes em background, trabalhos noturnos e pipelines em lote.</strong> Ninguém está esperando, então o gasto extra não compra nada.</li><li><strong>Evals e replays.</strong> Essas são exatamente as cargas de trabalho que multiplicam contagens de tokens e rodam em um cronograma.</li><li><strong>Subagentes que executam em paralelo.</strong> O tempo de relógio é definido pelo ramo mais lento e pelo orquestrador, não por cada chamada.</li></ul><p>Opus 5.5 padrão já é cerca de 30% mais rápido que Opus 5, segundo Anthropic. Algumas reclamações de latência que teriam justificado fast mode em Opus 5 podem ser resolvidas apenas pela atualização. Meça a velocidade padrão antes de pagar por mais.</p><h2>Controles a colocar em prática</h2><ol><li><strong>Faça fast mode uma decisão explícita, por rota.</strong> Nunca deve ser um padrão global ou um sinalizador que um engenheiro ativou uma vez e esqueceu.</li><li><strong>Etiquete o gasto por modo.</strong> Uma solicitação de fast mode ao dobro do preço unitário parece uma solicitação normal em um painel que agrupa apenas por modelo.</li><li><strong>Alerte sobre a fração de fast mode dos tokens de saída.</strong> Se aumentar em rotas onde nenhum usuário está esperando, algo foi ativado que não deveria ter sido.</li><li><strong>Orçamento esforço e velocidade juntos.</strong> Esforço máximo multiplica a contagem de tokens, e fast mode dobra o preço de cada token. É a forma mais cara de executar o modelo.</li></ol>",
+      "faq": [
+        {
+          "question": "Quanto custa Claude Opus 5.5 fast mode?",
+          "answer": "$8 por milhão de tokens de entrada e $40 por milhão de saída, o dobro das taxas padrão de $4 e $20."
+        },
+        {
+          "question": "Qual é a velocidade do Opus 5.5 fast mode?",
+          "answer": "Anthropic diz até 2,5 vezes mais rápido. O modo padrão já é cerca de 30% mais rápido que Opus 5."
+        },
+        {
+          "question": "Quando Opus 5.5 fast mode vale a pena?",
+          "answer": "Quando alguém está esperando a resposta, como codificação interativa ou uma resposta voltada para o cliente. É desperdício em trabalhos em lote, evals e agentes em background."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/claude-opus-5-5-cost-model",
+          "label": "Modelo de custo Claude Opus 5.5"
+        },
+        {
+          "slug": "/pt/research/opus-5-5-effort-level-cost",
+          "label": "Níveis de esforço do Opus 5.5 são o preço real"
+        },
+        {
+          "slug": "/pt/research/subagent-fan-out-concurrency-limits",
+          "label": "Limites de fan-out e concorrência de subagentes"
+        }
+      ]
+    },
+    "it": {
+      "title": "Economia di Opus 5.5 fast mode",
+      "titleCore": "Economia di Opus 5.5 fast mode",
+      "description": "Opus 5.5 fast mode costa $8/$40 per milione di token, il doppio della tariffa standard, per fino a 2,5x velocità. Conveniente quando qualcuno aspetta la risposta.",
+      "body": "<p>Claude Opus 5.5 ha due listini. Standard è $4 per milione di token in ingresso e $20 per milione di uscita. Fast mode è $8 e $40, esattamente il doppio, per fino a 2,5&times; la velocità di uscita. Il modello è identico. Il denaro aggiuntivo acquista tempo e basta, quindi l'unica domanda è il tempo di chi.</p><h2>Cosa acquista il premio</h2><p>Prendi uno step che produce 5.000 token di uscita. Ai tariffari standard il costo è $0,10. In fast mode costa $0,20. Se lo step impiega 60 secondi a velocità standard, un speedup di 2,5&times; lo riduce a circa 24 secondi. Paghi $0,10 in più per risparmiare 36 secondi.</p><p>Equivale a circa $10 per ogni ora di attesa eliminata. La lunghezza dello step non cambia il rapporto, perché il costo aggiuntivo e il tempo risparmiato crescono con i token di uscita. Dipende dalla tua velocità in modalità standard: questo esempio assume circa 83 token di uscita al secondo. Anche l'ingresso raddoppia, quindi gli step ricchi di prefisso pagano un po' più per secondo risparmiato.</p><h2>Quando è conveniente</h2><ul><li><strong>Uno sviluppatore che attende un agente di coding interattivo.</strong> A $10 per ora di attesa eliminata, fast mode costa molto meno del tempo di chiunque sia pagato.</li><li><strong>Una risposta rivolte al cliente dove la latenza influisce sulla conversione.</strong> Valuta il miglioramento di velocità contro l'abbandono, non contro la fattura dei token.</li><li><strong>Un incidente, dove ogni minuto ha un costo.</strong></li></ul><h2>Quando è puro spreco</h2><ul><li><strong>Agenti in background, lavori notturni e pipeline batch.</strong> Nessuno aspetta, quindi la spesa aggiuntiva non compra nulla.</li><li><strong>Evals e replay.</strong> Sono esattamente i carichi di lavoro che moltiplicano i conteggi di token ed eseguono secondo una pianificazione.</li><li><strong>Subagenti che eseguono in parallelo.</strong> Il tempo wall-clock è impostato dal ramo più lento e dall'orchestratore, non da ogni chiamata.</li></ul><p>Opus 5.5 standard è già circa il 30% più veloce di Opus 5, secondo Anthropic. Alcuni lamenti sulla latenza che avrebbero giustificato fast mode su Opus 5 potrebbero essere risolti solo dall'upgrade. Misura la velocità standard prima di pagare per più.</p><h2>Controlli da implementare</h2><ol><li><strong>Rendi fast mode una decisione esplicita, per route.</strong> Non dovrebbe mai essere un default globale o un flag che un ingegnere ha attivato una volta e dimenticato.</li><li><strong>Contrassegna la spesa per modalità.</strong> Una richiesta di fast mode al doppio del prezzo unitario appare come una richiesta normale su un dashboard che raggruppa solo per modello.</li><li><strong>Avvisa sulla quota di fast mode dei token di uscita.</strong> Se aumenta su route dove nessun utente aspetta, qualcosa è stato attivato che non dovrebbe essere.</li><li><strong>Bilancia sforzo e velocità insieme.</strong> Lo sforzo massimo moltiplica il conteggio dei token, e fast mode raddoppia il prezzo di ogni token. È il modo più costoso di eseguire il modello.</li></ol>",
+      "faq": [
+        {
+          "question": "Quanto costa Claude Opus 5.5 fast mode?",
+          "answer": "$8 per milione di token in ingresso e $40 per milione di uscita, il doppio delle tariffe standard di $4 e $20."
+        },
+        {
+          "question": "Quanto è veloce Opus 5.5 fast mode?",
+          "answer": "Anthropic dice fino a 2,5 volte più veloce. La modalità standard è già circa il 30% più veloce di Opus 5."
+        },
+        {
+          "question": "Quando Opus 5.5 fast mode ne vale la pena?",
+          "answer": "Quando qualcuno aspetta la risposta, come il coding interattivo o una risposta rivolta al cliente. È sprecata su job batch, evals e agenti in background."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/claude-opus-5-5-cost-model",
+          "label": "Modello di costo Claude Opus 5.5"
+        },
+        {
+          "slug": "/it/research/opus-5-5-effort-level-cost",
+          "label": "I livelli di sforzo di Opus 5.5 sono il vero prezzo"
+        },
+        {
+          "slug": "/it/research/subagent-fan-out-concurrency-limits",
+          "label": "Limiti di fan-out e concorrenza dei subagenti"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Economie van Opus 5.5 fast mode",
+      "titleCore": "Economie van Opus 5.5 fast mode",
+      "description": "Opus 5.5 fast mode kost $8/$40 per miljoen tokens, het dubbele van standaardtarief, voor tot 2,5x snelheid. Het loont als iemand op antwoord wacht.",
+      "body": "<p>Claude Opus 5.5 heeft twee prijslijsten. Standaard is $4 per miljoen invoertokens en $20 per miljoen uitvoertokens. Fast mode is $8 en $40, exact het dubbele, voor tot 2,5&times; de uitvoersnelheid. Het model is identiek. Het extra geld koopt tijd en niets anders, dus de enige vraag is wiens tijd.</p><h2>Wat de premie koopt</h2><p>Neem een stap die 5.000 uitvoertokens produceert. Bij standaardtarieven kost de uitvoer $0,10. In fast mode kost het $0,20. Als de stap 60 seconden duurt met standaardsnelheid, brengt een 2,5&times; versnelling het terug tot ongeveer 24 seconden. Je betaalt $0,10 extra om 36 seconden te besparen.</p><p>Dat komt neer op ongeveer $10 voor elk uur wachttijd dat je elimineert. De staplengte verandert de verhouding niet, omdat de extra kosten en bespaard tijd beide groeien met uitvoertokens. Het hangt af van je standaardsnelheid: dit voorbeeld gaat uit van ongeveer 83 uitvoertokens per seconde. Invoer verdubbelt ook, dus stappen met veel prefix betalen iets meer per seconde bespaard.</p><h2>Wanneer is het goedkoop</h2><ul><li><strong>Een ontwikkelaar die wacht op een interactieve coderingagent.</strong> Bij $10 per uur bespaard wachttijd kost fast mode veel minder dan de tijd van iemand die betaald wordt.</li><li><strong>Een klantgericht antwoord waarbij latentie de conversie beïnvloedt.</strong> Zet de snelheidsverbetering af tegen uitval, niet tegen de tokenfactuur.</li><li><strong>Een incident, waarbij elk moment kosten heeft.</strong></li></ul><h2>Wanneer is het pure verspilling</h2><ul><li><strong>Achtergrondbronnen, nachtelijke taken en batchpijplijnen.</strong> Niemand wacht, dus de extra uitgave koopt niets.</li><li><strong>Evals en replays.</strong> Dit zijn precies de workloads die tokentellingen vermenigvuldigen en volgens schema draaien.</li><li><strong>Subagenten die parallel draaien.</strong> Wandtijd wordt bepaald door de langzaamste tak en de orchestrator, niet door elk aanroep.</li></ul><p>Standaard Opus 5.5 is al ongeveer 30% sneller dan Opus 5, volgens Anthropic. Sommige latentiecomplaints die fast mode op Opus 5 zouden rechtvaardigen, kunnen alleen door de upgrade worden opgelost. Meet de standaardsnelheid voordat je voor meer betaalt.</p><h2>Maatregelen om in te voeren</h2><ol><li><strong>Maak fast mode een expliciete, per-route beslissing.</strong> Het mag nooit een globale standaard zijn of een vlag die een ingenieur eenmaal inschakelde en vergat.</li><li><strong>Markeer uitgaven per modus.</strong> Een fast-mode verzoek tegen het dubbele unitprijs ziet er hetzelfde uit als een normaal verzoek op een dashboard dat alleen op model groepeert.</li><li><strong>Waarschuw voor het fast-mode aandeel van uitvoertokens.</strong> Als het stijgt op routes waar geen gebruiker wacht, is iets ingeschakeld dat niet zou moeten.</li><li><strong>Begroting inspanning en snelheid samen.</strong> Maximale inspanning vermenigvuldigt de tokentellingen, en fast mode verdubbelt de prijs van elk token. Dit is de duurste manier om het model uit te voeren.</li></ol>",
+      "faq": [
+        {
+          "question": "Hoeveel kost Claude Opus 5.5 fast mode?",
+          "answer": "$8 per miljoen invoertokens en $40 per miljoen uitvoertokens, het dubbele van standaardtarieven van $4 en $20."
+        },
+        {
+          "question": "Hoe snel is Opus 5.5 fast mode?",
+          "answer": "Anthropic zegt tot 2,5 keer sneller. Standaardmodus is al ongeveer 30% sneller dan Opus 5."
+        },
+        {
+          "question": "Wanneer loont Opus 5.5 fast mode het?",
+          "answer": "Wanneer iemand op het antwoord wacht, zoals interactief coderen of een klantgericht antwoord. Het is verspilling op bachtaken, evals en achtergrondbronnen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 kostenmodel"
+        },
+        {
+          "slug": "/nl/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 inspanningsniveaus zijn de echte prijs"
+        },
+        {
+          "slug": "/nl/research/subagent-fan-out-concurrency-limits",
+          "label": "Limieten voor fan-out en concurrency van subagenten"
+        }
+      ]
+    },
+    "ja": {
+      "title": "Opus 5.5 fast modeの経済性",
+      "titleCore": "Opus 5.5 fast modeの経済性",
+      "description": "Opus 5.5 fast modeは標準の2倍である100万トークンあたり$8/$40で、最大2.5倍の速度を実現します。誰かが待っているときに価値があります。",
+      "body": "<p>Claude Opus 5.5には2つの価格表があります。標準は入力トークン100万あたり$4、出力トークン100万あたり$20です。Fast modeは$8と$40で、ちょうど2倍で、出力速度は最大2.5&times;です。モデルは同じです。追加のお金は時間を買うだけなので、唯一の問題は誰の時間かです。</p><h2>プレミアムが買うもの</h2><p>5,000の出力トークンを生成するステップを取ります。標準レートでは出力コストは$0.10です。Fast modeでは$0.20です。ステップが標準速度で60秒かかり、2.5&times;の高速化で約24秒になる場合、36秒節約するために$0.10追加で支払います。</p><p>これは削除された待ち時間1時間あたり約$10に相当します。出力トークンで増加するため、ステップ長は比率を変えません。標準モード速度に依存します。この例は1秒あたり約83の出力トークンを想定しているので、自分の値を使用してください。入力も2倍になるため、プレフィックスが多いステップは節約された1秒あたりの費用がやや増えます。</p><h2>安い場合</h2><ul><li><strong>対話的コーディングエージェントを待機している開発者。</strong> 削除された待ち時間1時間あたり$10の場合、fast modeの費用は給与を支払われている誰かの時間よりはるかに低くなります。</li><li><strong>レイテンシが変換に影響する顧客向けの回答。</strong> トークン代金に対してではなく、ドロップオフに対して高速化を価格設定します。</li><li><strong>インシデント、ここで毎分コストがあります。</strong></li></ul><h2>純粋な無駄の場合</h2><ul><li><strong>バックグラウンドエージェント、夜間ジョブ、バッチパイプライン。</strong> 誰も待っていないため、追加支出は何も購入しません。</li><li><strong>Evalsとリプレイ。</strong> これらは正確にはトークン数を乗算して実行スケジュールで実行されるワークロードです。</li><li><strong>並行実行するサブエージェント。</strong> ウォールクロック時間は最も遅いブランチとオーケストレーターによって設定され、各呼び出しではありません。</li></ul><p>標準Opus 5.5はすでにAnthropicによるとOpus 5より約30%高速です。Opus 5でfast modeを正当化した一部のレイテンシの苦情はアップグレードだけで解決されるかもしれません。より多く支払う前に標準速度を測定してください。</p><h2>実装するコントロール</h2><ol><li><strong>Fast modeを明示的なルート単位の決定にします。</strong> グローバルデフォルトや、エンジニアが一度オンにして忘れたフラグであってはいけません。</li><li><strong>モードごとに支出にタグを付けます。</strong> 単価の2倍でのfast modeリクエストは、モデルのみでグループ化されるダッシュボード上の通常のリクエストのように見えます。</li><li><strong>出力トークンのfast mode共有で警告します。</strong> ユーザーが待機していないルートで上昇する場合、アクティブになったものが何かがあります。</li><li><strong>努力と速度を一緒に予算化します。</strong> 最大努力はトークンカウントを乗算し、fast modeは各トークンの価格を2倍にします。これはモデルを実行する最も高価な方法です。</li></ol>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5 fast modeの費用はいくらですか?",
+          "answer": "入力トークン100万あたり$8、出力トークン100万あたり$40で、標準レート$4と$20の2倍です。"
+        },
+        {
+          "question": "Opus 5.5 fast modeはどのくらい速いですか?",
+          "answer": "Anthropicは最大2.5倍高速と言います。標準モードはすでにOpus 5より約30%高速です。"
+        },
+        {
+          "question": "Opus 5.5 fast modeが価値があるのはいつですか?",
+          "answer": "対話的コーディングや顧客向けの回答など、誰かが応答を待機している場合です。バッチジョブ、eval、バックグラウンドエージェントでは無駄です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5コストモデル"
+        },
+        {
+          "slug": "/ja/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5努力レベルが実際の価格です"
+        },
+        {
+          "slug": "/ja/research/subagent-fan-out-concurrency-limits",
+          "label": "サブエージェントのファンアウトと同時実行性の制限"
+        }
+      ]
+    },
+    "ko": {
+      "title": "Opus 5.5 fast mode 경제성",
+      "titleCore": "Opus 5.5 fast mode 경제성",
+      "description": "Opus 5.5 fast mode는 표준 요금의 2배인 100만 토큰당 $8/$40이며 최대 2.5배 속도를 제공합니다. 누군가 응답을 기다릴 때 가치가 있습니다.",
+      "body": "<p>Claude Opus 5.5에는 두 개의 가격표가 있습니다. 표준은 입력 토큰 100만당 $4, 출력 토큰 100만당 $20입니다. Fast mode는 $8과 $40으로, 정확히 2배이며 출력 속도는 최대 2.5&times;입니다. 모델은 동일합니다. 추가 비용은 시간만 구매할 뿐입니다. 유일한 질문은 누구의 시간인지입니다.</p><h2>프리미엄이 구매하는 것</h2><p>5,000개의 출력 토큰을 생성하는 단계를 가정합시다. 표준 요금에서 출력 비용은 $0.10입니다. Fast mode에서는 $0.20입니다. 표준 속도에서 단계가 60초 걸리고 2.5배 속도로 약 24초가 되는 경우, 36초를 절약하기 위해 $0.10을 더 지불합니다.</p><p>이는 제거된 대기 시간 시간당 약 $10에 해당합니다. 출력 토큰으로 증가하기 때문에 단계 길이는 비율을 변경하지 않습니다. 표준 모드 속도에 따라 다릅니다. 이 예제는 초당 약 83개의 출력 토큰을 가정하므로 직접 계산하세요. 입력도 2배가 되므로 접두사가 많은 단계는 초당 저장된 비용이 약간 더 높습니다.</p><h2>저렴한 경우</h2><ul><li><strong>대화형 코딩 에이전트를 기다리는 개발자.</strong> 제거된 대기 시간 시간당 $10에서 fast mode 비용은 급여를 받는 누구나의 시간보다 훨씬 낮습니다.</li><li><strong>레이턴시가 전환에 영향을 주는 고객 대면 응답.</strong> 토큰 청구에 대해서가 아니라 이탈률에 대해 속도 향상을 가격 책정합니다.</li><li><strong>사건, 모든 분이 비용을 발생시킵니다.</strong></li></ul><h2>순수한 낭비인 경우</h2><ul><li><strong>백그라운드 에이전트, 야간 작업 및 배치 파이프라인.</strong> 아무도 기다리지 않으므로 추가 지출은 아무것도 구매하지 않습니다.</li><li><strong>평가 및 재생.</strong> 이들은 정확히 토큰 수를 곱하고 일정에 따라 실행되는 워크로드입니다.</li><li><strong>병렬로 실행되는 서브에이전트.</strong> 벽시계 시간은 가장 느린 분기와 오케스트레이터로 설정되지만, 각 호출이 아닙니다.</li></ul><p>표준 Opus 5.5는 이미 Anthropic에 따르면 Opus 5보다 약 30% 빠릅니다. Opus 5에서 fast mode를 정당화했을 일부 지연 불만은 업그레이드만으로 해결될 수 있습니다. 더 많이 지불하기 전에 표준 속도를 측정하세요.</p><h2>시행할 컨트롤</h2><ol><li><strong>Fast mode를 명시적인 경로당 결정으로 만듭니다.</strong> 글로벌 기본값이거나 엔지니어가 한 번 켜고 잊어버린 플래그여야 합니다.</li><li><strong>모드별 지출에 태그를 지정합니다.</strong> 단위 가격의 2배인 fast mode 요청은 모델만으로 그룹화되는 대시보드의 일반 요청처럼 보입니다.</li><li><strong>출력 토큰의 fast mode 공유에 대해 경고합니다.</strong> 사용자가 기다리지 않는 경로에서 증가하면 켜져야 할 것이 켜집니다.</li><li><strong>노력과 속도를 함께 예산화합니다.</strong> 최대 노력은 토큰 수를 곱하고 fast mode는 각 토큰의 가격을 2배로 합니다. 이것은 모델을 실행하는 가장 비용이 많이 드는 방법입니다.</li></ol>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5 fast mode의 비용은 얼마입니까?",
+          "answer": "입력 토큰 100만당 $8, 출력 토큰 100만당 $40으로 표준 요금 $4와 $20의 2배입니다."
+        },
+        {
+          "question": "Opus 5.5 fast mode는 얼마나 빠릅니까?",
+          "answer": "Anthropic은 최대 2.5배 빠르다고 말합니다. 표준 모드는 이미 Opus 5보다 약 30% 빠릅니다."
+        },
+        {
+          "question": "Opus 5.5 fast mode가 가치 있을 때는 언제입니까?",
+          "answer": "대화형 코딩 또는 고객 대면 응답과 같이 누군가가 응답을 기다릴 때입니다. 배치 작업, 평가 및 백그라운드 에이전트에서는 낭비입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 비용 모델"
+        },
+        {
+          "slug": "/ko/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5 노력 수준이 실제 가격입니다"
+        },
+        {
+          "slug": "/ko/research/subagent-fan-out-concurrency-limits",
+          "label": "서브에이전트 팬아웃 및 동시성 제한"
+        }
+      ]
+    },
+    "zh": {
+      "title": "Opus 5.5 fast mode经济学",
+      "titleCore": "Opus 5.5 fast mode经济学",
+      "description": "Opus 5.5 fast mode每百万token价格为$8/$40,是标准价格的两倍,速度可达2.5倍。在有人等待时划算。",
+      "body": "<p>Claude Opus 5.5有两份价单。标准价格是每百万输入token $4,每百万输出token $20。Fast mode是$8和$40,恰好是两倍,输出速度最高可达2.5&times;。模型完全相同。额外的费用只是换取时间,所以唯一的问题是谁的时间。</p><h2>溢价购买的是什么</h2><p>假设一个步骤产生5000个输出token。按标准费率,输出成本是$0.10。Fast mode下是$0.20。如果该步骤在标准速度下耗时60秒,2.5倍加速可减少到约24秒。你多花$0.10节省36秒。</p><p>这相当于每减少一小时等待时间花费约$10。步骤长度不会改变比例,因为额外成本和节省时间都随输出token增加。这取决于你的标准模式速度:本例假设约每秒83个输出token,请代入你自己的数字。输入也会翻倍,所以前缀密集的步骤每秒节省的成本会略微增加。</p><h2>划算的情况</h2><ul><li><strong>一个在等待交互式代码编写代理的开发者。</strong> 按每小时等待时间$10计,fast mode的成本远低于领工资的任何人的时间成本。</li><li><strong>客户面向的回答,其中延迟影响转化率。</strong> 将速度提升与用户流失对比,而非与token账单。</li><li><strong>事故响应,每一分钟都有成本。</strong></li></ul><h2>纯粹浪费的情况</h2><ul><li><strong>后台代理、夜间任务和批处理管道。</strong> 没人等待,所以额外支出毫无用处。</li><li><strong>评估和重放。</strong> 这些工作负载正好是那种会成倍增加token计数且按计划运行的。</li><li><strong>并行运行的子代理。</strong> 墙上时间由最慢的分支和编排器决定,不是由每个调用。</li></ul><p>按Anthropic的说法,标准Opus 5.5已比Opus 5快约30%。一些在Opus 5上会为fast mode辩护的延迟投诉可能仅通过升级就能解决。在为更快速度付费前,先衡量标准速度。</p><h2>需要实施的控制措施</h2><ol><li><strong>让fast mode成为明确的逐路线决策。</strong> 不应该是全局默认值,也不应该是某个工程师激活后就遗忘的开关。</li><li><strong>按模式标记支出。</strong> 以单价两倍计价的fast mode请求在仅按模型分组的仪表板上看起来就像普通请求。</li><li><strong>对输出token的fast mode占比设置警报。</strong> 如果在没人等待的路线上增加,说明被激活了不应该被激活的东西。</li><li><strong>将努力和速度一起计预算。</strong> 最大努力会成倍增加token计数,fast mode会让每个token价格翻倍。这是运行模型成本最高的方式。</li></ol>",
+      "faq": [
+        {
+          "question": "Claude Opus 5.5 fast mode价格是多少?",
+          "answer": "每百万输入token $8,每百万输出token $40,是标准价格$4和$20的两倍。"
+        },
+        {
+          "question": "Opus 5.5 fast mode有多快?",
+          "answer": "Anthropic称fast mode最高可达标准模式2.5倍的输出速度。标准模式本身已比Opus 5快约30%,所以很多交互场景不开fast mode也够用。"
+        },
+        {
+          "question": "什么时候值得用Opus 5.5 fast mode?",
+          "answer": "当有人等待回应时,比如交互式编码或面向客户的回答。在批任务、评估和后台代理上则是浪费。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5成本模型"
+        },
+        {
+          "slug": "/zh/research/opus-5-5-effort-level-cost",
+          "label": "Opus 5.5努力级别是真实价格"
+        },
+        {
+          "slug": "/zh/research/subagent-fan-out-concurrency-limits",
+          "label": "子代理扇出和并发限制"
+        }
+      ]
+    },
+    "ar": {
+      "title": "اقتصاديات Opus 5.5 fast mode",
+      "titleCore": "اقتصاديات Opus 5.5 fast mode",
+      "description": "يكلف Opus 5.5 fast mode $8/$40 لكل مليون رمز، ضعف السعر القياسي، للحصول على سرعة تصل إلى 2.5x. يستحق عندما ينتظر الشخص الاستجابة.",
+      "body": "<p>Claude Opus 5.5 لديها قائمتا سعر. القياسية هي $4 لكل مليون رمز إدخال و $20 لكل مليون رمز إخراج. Fast mode هي $8 و $40، بالضبط الضعف، بسرعة إخراج تصل إلى 2.5&times;. النموذج متطابق. المال الإضافي يشتري الوقت وحسب، لذا السؤال الوحيد هو وقت من.</p><h2>ما يشتريه القسط</h2><p>خذ خطوة تنتج 5000 رمز إخراج. بالأسعار القياسية، تكلفة الإخراج $0.10. في fast mode تكلف $0.20. إذا استغرقت الخطوة 60 ثانية بسرعة قياسية، فإن تسارع 2.5&times; يعيدها إلى حوالي 24 ثانية. تدفع $0.10 إضافياً لتوفير 36 ثانية.</p><p>هذا يصل إلى حوالي $10 لكل ساعة انتظار يتم حذفها. طول الخطوة لا يغير النسبة، لأن التكلفة الإضافية والوقت المحفوظ كلاهما ينمو مع رموز الإخراج. يعتمد على سرعة الوضع القياسي لديك: يفترض هذا المثال حوالي 83 رمز إخراج في الثانية. الإدخال أيضاً يتضاعف، لذا الخطوات الغنية بالبادئة تدفع أكثر قليلاً لكل ثانية محفوظة.</p><h2>عندما يكون رخيصاً</h2><ul><li><strong>مطور ينتظر وكيل ترميز تفاعلي.</strong> بـ $10 لكل ساعة انتظار يتم حذفها، يكلف fast mode أقل بكثير من وقت أي شخص يتقاضى راتباً.</li><li><strong>إجابة موجهة للعميل حيث يؤثر الكمون على التحويل.</strong> سعّر التسارع مقابل الهجران وليس مقابل فاتورة الرموز.</li><li><strong>حادث، حيث لكل دقيقة تكلفة.</strong></li></ul><h2>عندما يكون إهداراً محضاً</h2><ul><li><strong>وكلاء خلفيين وأعمال ليلية وأنابيب دفعية.</strong> لا أحد ينتظر، لذا الإنفاق الإضافي لا يشتري شيء.</li><li><strong>Evals وإعادة التشغيل.</strong> هذه هي بالضبط أحمال العمل التي تضاعف عدد الرموز وتعمل وفقاً لجدول زمني.</li><li><strong>وكلاء فرعيون يعملون بالتوازي.</strong> يتم تعيين وقت الساعة من قبل الفرع الأبطأ والمنسق، وليس كل نداء.</li></ul><p>Opus 5.5 القياسي أسرع بالفعل بحوالي 30% من Opus 5، وفقاً لـ Anthropic. قد يتم حل بعض شكاوى الكمون التي كانت ستبرر fast mode على Opus 5 من خلال الترقية وحدها. قيس السرعة القياسية قبل الدفع لمزيد.</p><h2>ضوابط للتنفيذ</h2><ol><li><strong>اجعل fast mode قراراً واضحاً لكل مسار.</strong> يجب أن لا يكون إعداداً عاماً أو علماً قام به مهندس مرة واحدة ونسيه.</li><li><strong>وسم النفقات حسب الوضع.</strong> طلب fast mode بسعر مضاعف يبدو مثل طلب عادي في لوحة تجميع حسب الموديل فقط.</li><li><strong>تنبيه على حصة fast mode من رموز الإخراج.</strong> إذا زادت على المسارات حيث لا ينتظر المستخدم، فقد تم تنشيط شيء لا ينبغي تنشيطه.</li><li><strong>الميزانية الجهد والسرعة معاً.</strong> الحد الأقصى من الجهد يضاعف عدد الرموز، و fast mode يضاعف سعر كل رمز. هذه هي الطريقة الأغلى لتشغيل النموذج.</li></ol>",
+      "faq": [
+        {
+          "question": "كم تكلفة Claude Opus 5.5 fast mode؟",
+          "answer": "$8 لكل مليون رمز إدخال و $40 لكل مليون رمز إخراج، ضعف الأسعار القياسية $4 و $20."
+        },
+        {
+          "question": "ما سرعة Opus 5.5 fast mode؟",
+          "answer": "تقول Anthropic حتى 2.5 مرة أسرع. الوضع القياسي أسرع بالفعل من Opus 5 بحوالي 30%."
+        },
+        {
+          "question": "متى يستحق Opus 5.5 fast mode؟",
+          "answer": "عندما ينتظر الشخص الرد، مثل الترميز التفاعلي أو الرد موجه للعميل. إنه مهدر على الأعمال الدفعية و evals والوكلاء الخلفيين."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ar/research/claude-opus-5-5-cost-model",
+          "label": "نموذج تكلفة Claude Opus 5.5"
+        },
+        {
+          "slug": "/ar/research/opus-5-5-effort-level-cost",
+          "label": "مستويات جهد Opus 5.5 هي السعر الحقيقي"
+        },
+        {
+          "slug": "/ar/research/subagent-fan-out-concurrency-limits",
+          "label": "حدود المروحة والتزامن للوكلاء الفرعيين"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/opus-5-5-fast-mode-economics"
+  }
+}

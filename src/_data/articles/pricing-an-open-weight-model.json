@@ -1,0 +1,143 @@
+{
+  "slug": "pricing-an-open-weight-model",
+  "tags": [
+    "finops",
+    "open-source",
+    "unit-economics",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Pricing an open-weight model",
+      "titleCore": "Pricing an open-weight model",
+      "description": "Qwen3.8-Flash-Next shipped as open weights with no hosted rate. Here is the arithmetic that turns an instance-hour into a cost per million tokens.",
+      "body": "<p>Qwen3.8-Flash-Next arrived on 26 August 2026 as an open-weight preview of the Qwen4 architecture: roughly 6B active parameters, a 262,144-token native context, and no hosted pricing announced. That combination breaks the usual comparison. Every closed model gives you a number per million tokens; an open-weight release gives you a checkpoint and leaves the number to you.</p><p>The number is not hard to compute. It is just that most teams never compute it, and instead compare a $0 download against a $3.00/MTok API and conclude the download is cheaper. It might be. The arithmetic decides, and the arithmetic has exactly one term people forget.</p><h2>The formula</h2><p>Cost per million tokens is the hourly price of the instance divided by how many tokens that instance produces in an hour:</p><pre><code>cost per MTok = hourly_price / (tokens_per_second * 3600) * 1,000,000</code></pre><p>At $2.00 per hour and a measured 1,500 tokens per second, that is 2.00 / 5,400,000 * 1,000,000 = <strong>$0.37 per million tokens</strong>. Against a hosted model at $3.00/MTok output, self-hosting looks like an eight-fold saving. That figure is also wrong, because it assumes the GPU is busy every second you pay for.</p><h2>The term everyone forgets: utilisation</h2><p>You rent the hour; you use a fraction of it. Divide by that fraction:</p><table><thead><tr><th>Utilisation</th><th>Effective cost per MTok</th></tr></thead><tbody><tr><td>100%</td><td>$0.37</td></tr><tr><td>60%</td><td>$0.62</td></tr><tr><td>30%</td><td>$1.23</td></tr><tr><td>10%</td><td>$3.70</td></tr></tbody></table><p>At 10% utilisation the self-hosted model costs more than the hosted API it was meant to replace. Most first deployments sit between 10% and 30%, because traffic is bursty and the instance is provisioned for the peak. The saving is real, but it is a saving on <em>utilisation</em>, not on weights.</p><h2>What else belongs in the number</h2><p>Storage and egress for the checkpoint. Idle time between the instance booting and the model being warm &mdash; on a large-context model, loading is minutes, and you pay for all of them. Redundancy, if the workload needs more than one instance to survive a node failure. And engineering time, which is not billed hourly but is the largest line in year one.</p><p>None of that argues against self-hosting. It argues against comparing a free download to a per-token rate without doing the division.</p><h2>Measure before you commit</h2><p>Run the model on the instance you would actually rent, with your own prompt shapes and your own context lengths, and record tokens per second under concurrency &mdash; not the single-stream number from the model card. Then take your real hourly traffic profile and compute utilisation. Two numbers, one division, and the decision makes itself.</p><p>The long context is where this bites hardest. A 262K-token context is a memory footprint before it is a feature: it dictates the instance class, and the instance class dictates the hourly price at the top of the formula. Price the context you actually send, not the context the model supports.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/open-source-vs-closed-cost\">Open source vs closed model cost</a></li><li><a href=\"https://finopsllm.com/research/cost-per-request-kpi\">Cost per request as a KPI</a></li><li><a href=\"/research/provider-arbitrage\">Provider arbitrage</a></li></ul>",
+      "faq": [
+        {
+          "question": "How do I convert an instance hourly price into a cost per million tokens?",
+          "answer": "Divide the hourly price by tokens per second times 3600, then multiply by one million. At $2.00/hour and 1,500 tokens per second that is $0.37 per million tokens — before adjusting for utilisation."
+        },
+        {
+          "question": "Why does utilisation change the cost so much?",
+          "answer": "You pay for the whole hour but only generate tokens for part of it. Divide the ideal cost by your utilisation: $0.37 per million at full load becomes $1.23 at 30% and $3.70 at 10%, at which point a hosted API is cheaper."
+        },
+        {
+          "question": "Does an open-weight model with no published price mean it is free?",
+          "answer": "No. Open weights remove the licence cost, not the serving cost. The real rate is set by your instance price, your throughput under concurrency, and your utilisation — plus storage, warm-up time, redundancy and engineering hours."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Open source vs closed model cost"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "Cost per request as a KPI"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        }
+      ]
+    },
+    "es": {
+      "title": "Precio de un modelo de pesos abiertos",
+      "titleCore": "Precio de un modelo de pesos abiertos",
+      "description": "Qwen3.8-Flash-Next salió con pesos abiertos y sin tarifa alojada. Esta es la aritmética que convierte una hora de instancia en coste por millón de tokens.",
+      "body": "<p>Qwen3.8-Flash-Next apareció el 26 de agosto de 2026 como vista previa de pesos abiertos de la arquitectura Qwen4: unos 6B de parámetros activos, contexto nativo de 262.144 tokens y ninguna tarifa alojada anunciada. Eso rompe la comparación habitual: un modelo cerrado te da un número por millón de tokens; unos pesos abiertos te dan un checkpoint y te dejan el número a ti.</p><h2>La fórmula</h2><pre><code>coste por MTok = precio_hora / (tokens_por_segundo * 3600) * 1.000.000</code></pre><p>A 2,00 $ la hora y 1.500 tokens por segundo medidos, son <strong>0,37 $ por millón de tokens</strong>. Frente a una API a 3,00 $/MTok parece un ahorro de ocho veces. También es una cifra equivocada, porque supone que la GPU está ocupada cada segundo que pagas.</p><h2>El término que todos olvidan: la utilización</h2><p>Alquilas la hora y usas una fracción. Divide por esa fracción: al 60% son 0,62 $; al 30%, 1,23 $; al 10%, 3,70 $ &mdash; más caro que la API que ibas a sustituir. La mayoría de los primeros despliegues están entre el 10% y el 30%, porque el tráfico es irregular y la instancia se dimensiona para el pico. El ahorro es real, pero es un ahorro de utilización, no de pesos.</p><h2>Mide antes de comprometerte</h2><p>Ejecuta el modelo en la instancia que alquilarías de verdad, con tus prompts y tus longitudes de contexto, y anota los tokens por segundo bajo concurrencia, no el número de flujo único de la ficha del modelo. Después calcula la utilización con tu perfil real de tráfico. Dos números, una división, y la decisión se toma sola. Ponle precio al contexto que envías, no al que el modelo admite.</p>",
+      "faq": [
+        {
+          "question": "¿Un modelo de pesos abiertos sin precio publicado es gratis?",
+          "answer": "No. Los pesos abiertos eliminan el coste de licencia, no el de servir. La tarifa real la fijan el precio de la instancia, el rendimiento bajo concurrencia y la utilización, más almacenamiento, arranque, redundancia y horas de ingeniería."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Coste de modelos abiertos frente a cerrados"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Chiffrer un modèle à poids ouverts",
+      "titleCore": "Chiffrer un modèle à poids ouverts",
+      "description": "Qwen3.8-Flash-Next est sorti en poids ouverts, sans tarif hébergé. Voici le calcul qui transforme une heure d’instance en coût par million de tokens.",
+      "body": "<p>Qwen3.8-Flash-Next est arrivé le 26 août 2026 comme préversion à poids ouverts de l’architecture Qwen4 : environ 6 milliards de paramètres actifs, un contexte natif de 262 144 tokens, et aucun tarif hébergé annoncé. La comparaison habituelle ne tient plus : un modèle fermé fournit un prix au million de tokens; des poids ouverts fournissent un checkpoint et vous laissent le calcul.</p><h2>La formule</h2><pre><code>coût par MTok = prix_horaire / (tokens_par_seconde * 3600) * 1 000 000</code></pre><p>À 2,00 $ l’heure et 1 500 tokens par seconde mesurés, cela fait <strong>0,37 $ par million de tokens</strong>. Face à une API à 3,00 $/MTok, l’économie semble d’un facteur huit. Ce chiffre est faux : il suppose que le GPU travaille chaque seconde que vous payez.</p><h2>Le terme oublié : le taux d’utilisation</h2><p>Vous louez l’heure, vous en utilisez une fraction. Divisez par cette fraction : 0,62 $ à 60 %, 1,23 $ à 30 %, 3,70 $ à 10 % &mdash; plus cher que l’API à remplacer. La plupart des premiers déploiements se situent entre 10 et 30 %, parce que le trafic est irrégulier et l’instance dimensionnée pour le pic. L’économie est réelle, mais elle porte sur l’utilisation, pas sur les poids.</p><h2>Mesurez avant de vous engager</h2><p>Faites tourner le modèle sur l’instance que vous loueriez réellement, avec vos prompts et vos longueurs de contexte, et relevez les tokens par seconde en concurrence &mdash; pas le chiffre en flux unique de la fiche modèle. Calculez ensuite le taux d’utilisation sur votre profil de trafic réel. Deux nombres, une division, la décision se prend seule. Chiffrez le contexte que vous envoyez, pas celui que le modèle accepte.</p>",
+      "faq": [
+        {
+          "question": "Un modèle à poids ouverts sans prix publié est-il gratuit?",
+          "answer": "Non. Les poids ouverts suppriment le coût de licence, pas celui du service. Le tarif réel dépend du prix de l’instance, du débit en concurrence et du taux d’utilisation, auxquels s’ajoutent stockage, préchauffage, redondance et heures d’ingénierie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Coût des modèles ouverts et fermés"
+        }
+      ]
+    },
+    "de": {
+      "title": "Kosten eines Open-Weight-Modells",
+      "titleCore": "Kosten eines Open-Weight-Modells",
+      "description": "Qwen3.8-Flash-Next erschien mit offenen Gewichten und ohne gehosteten Tarif. Diese Rechnung macht aus einer Instanzstunde einen Preis pro Million Token.",
+      "body": "<p>Qwen3.8-Flash-Next erschien am 26. August 2026 als Open-Weight-Vorschau der Qwen4-Architektur: rund 6 Milliarden aktive Parameter, 262.144 Token nativer Kontext und kein angekündigter gehosteter Tarif. Damit bricht der übliche Vergleich: Ein geschlossenes Modell nennt einen Preis pro Million Token; offene Gewichte liefern einen Checkpoint und überlassen Ihnen die Zahl.</p><h2>Die Formel</h2><pre><code>Kosten pro MTok = Stundenpreis / (Token_pro_Sekunde * 3600) * 1.000.000</code></pre><p>Bei 2,00 $ pro Stunde und gemessenen 1.500 Token pro Sekunde sind das <strong>0,37 $ pro Million Token</strong>. Gegenüber einer API zu 3,00 $/MTok sieht das nach achtfacher Ersparnis aus. Die Zahl ist trotzdem falsch, denn sie unterstellt, dass die GPU jede bezahlte Sekunde arbeitet.</p><h2>Der vergessene Faktor: die Auslastung</h2><p>Sie mieten die Stunde und nutzen einen Bruchteil davon. Teilen Sie durch diesen Bruchteil: 0,62 $ bei 60 %, 1,23 $ bei 30 %, 3,70 $ bei 10 % &mdash; teurer als die API, die ersetzt werden sollte. Die meisten ersten Deployments liegen zwischen 10 und 30 %, weil der Verkehr stoßweise kommt und die Instanz auf die Spitze ausgelegt ist. Die Ersparnis ist echt, aber sie entsteht durch Auslastung, nicht durch offene Gewichte.</p><h2>Erst messen, dann festlegen</h2><p>Betreiben Sie das Modell auf der Instanz, die Sie tatsächlich mieten würden, mit Ihren Prompts und Kontextlängen, und messen Sie Token pro Sekunde unter Nebenläufigkeit &mdash; nicht den Einzelstromwert aus der Modellkarte. Berechnen Sie dann die Auslastung aus Ihrem realen Lastprofil. Zwei Zahlen, eine Division, und die Entscheidung trifft sich selbst. Bepreisen Sie den Kontext, den Sie senden, nicht den, den das Modell unterstützt.</p>",
+      "faq": [
+        {
+          "question": "Ist ein Open-Weight-Modell ohne veröffentlichten Preis kostenlos?",
+          "answer": "Nein. Offene Gewichte beseitigen die Lizenzkosten, nicht die Servingkosten. Der echte Tarif ergibt sich aus Instanzpreis, Durchsatz unter Nebenläufigkeit und Auslastung, dazu Speicher, Warmlaufzeit, Redundanz und Entwicklungsstunden."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Open Source gegen geschlossene Modelle"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Preço de um modelo de pesos abertos",
+      "titleCore": "Preço de um modelo de pesos abertos",
+      "description": "O Qwen3.8-Flash-Next saiu com pesos abertos e sem tarifa alojada. Esta é a aritmética que transforma uma hora de instância em custo por milhão de tokens.",
+      "body": "<p>O Qwen3.8-Flash-Next chegou a 26 de agosto de 2026 como pré-visualização de pesos abertos da arquitetura Qwen4: cerca de 6 mil milhões de parâmetros ativos, contexto nativo de 262 144 tokens e nenhuma tarifa alojada anunciada. A comparação habitual deixa de funcionar: um modelo fechado dá um preço por milhão de tokens; pesos abertos dão um checkpoint e deixam a conta consigo.</p><h2>A fórmula</h2><pre><code>custo por MTok = preço_hora / (tokens_por_segundo * 3600) * 1 000 000</code></pre><p>A 2,00 $ por hora e 1500 tokens por segundo medidos, dá <strong>0,37 $ por milhão de tokens</strong>. Face a uma API a 3,00 $/MTok parece uma poupança de oito vezes. Também está errado, porque assume que a GPU trabalha em cada segundo que paga.</p><h2>O termo esquecido: a utilização</h2><p>Aluga a hora e usa uma fração dela. Divida por essa fração: 0,62 $ a 60%, 1,23 $ a 30%, 3,70 $ a 10% &mdash; mais caro do que a API que ia substituir. A maioria das primeiras implementações fica entre 10% e 30%, porque o tráfego é irregular e a instância é dimensionada para o pico. A poupança é real, mas vem da utilização, não dos pesos.</p><h2>Meça antes de decidir</h2><p>Execute o modelo na instância que alugaria mesmo, com os seus prompts e comprimentos de contexto, e registe tokens por segundo em concorrência &mdash; não o valor de fluxo único do cartão do modelo. Depois calcule a utilização com o seu perfil real de tráfego. Dois números, uma divisão, e a decisão faz-se sozinha. Ponha preço ao contexto que envia, não ao que o modelo suporta.</p>",
+      "faq": [
+        {
+          "question": "Um modelo de pesos abertos sem preço publicado é gratuito?",
+          "answer": "Não. Os pesos abertos eliminam o custo de licença, não o de servir. A tarifa real resulta do preço da instância, do débito em concorrência e da utilização, mais armazenamento, aquecimento, redundância e horas de engenharia."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Custo de modelos abertos e fechados"
+        }
+      ]
+    },
+    "ja": {
+      "title": "オープンウェイトモデルの価格計算",
+      "titleCore": "オープンウェイトモデルの価格計算",
+      "description": "Qwen3.8-Flash-Next はホスト価格なしで公開されました。インスタンス時間を 100 万トークンあたりのコストに変える計算です。",
+      "body": "<p>Qwen3.8-Flash-Next は 2026 年 8 月 26 日、Qwen4 アーキテクチャのオープンウェイト・プレビューとして公開されました。アクティブパラメータは約 60 億、ネイティブコンテキストは 262,144 トークン、そしてホスト価格の発表はありません。ここで通常の比較が成り立たなくなります。クローズドモデルは 100 万トークンあたりの数字をくれますが、オープンウェイトはチェックポイントだけを渡し、数字の算出はこちらに委ねます。</p><h2>計算式</h2><pre><code>MTok あたりコスト = 時間単価 / (毎秒トークン数 * 3600) * 1,000,000</code></pre><p>時間単価 2.00 ドル、実測 1,500 tok/s なら <strong>100 万トークンあたり 0.37 ドル</strong>。3.00 ドル/MTok のホスト API と比べれば 8 倍の節約に見えます。しかしこの数字は誤りです。支払っている毎秒 GPU が稼働している前提だからです。</p><h2>忘れられる項：稼働率</h2><p>借りるのは 1 時間、使うのはその一部です。稼働率で割ってください。60% なら 0.62 ドル、30% なら 1.23 ドル、10% なら 3.70 ドル &mdash; 置き換えるはずだった API より高くなります。初回の運用はトラフィックがバースト的でピークに合わせて確保するため、たいてい 10〜30% に収まります。節約は本物ですが、それは稼働率の節約であって、重みの節約ではありません。</p><h2>決める前に測る</h2><p>実際に借りるインスタンス上で、自社のプロンプト形状とコンテキスト長を使ってモデルを動かし、同時実行下の毎秒トークン数を記録してください。モデルカードの単一ストリームの数字ではありません。次に実際のトラフィックから稼働率を出します。数字は 2 つ、割り算は 1 回、それで結論は出ます。モデルが対応するコンテキストではなく、実際に送るコンテキストに価格をつけてください。</p>",
+      "faq": [
+        {
+          "question": "価格が公表されていないオープンウェイトモデルは無料ですか？",
+          "answer": "いいえ。オープンウェイトが取り除くのはライセンス費用であって、提供コストではありません。実際の単価はインスタンス価格、同時実行下のスループット、稼働率で決まり、さらにストレージ、ウォームアップ、冗長化、エンジニアリング工数が加わります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "オープンモデルとクローズドモデルのコスト"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/pricing-an-open-weight-model"
+  }
+}

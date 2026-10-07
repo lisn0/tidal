@@ -1,0 +1,260 @@
+{
+  "slug": "provider-prices-not-comparable",
+  "tags": [
+    "provider-arbitrage",
+    "pricing",
+    "model-routing"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "AI provider list prices are not directly comparable",
+      "titleCore": "AI provider list prices are not directly comparable",
+      "description": "How engineering teams normalize provider pricing by token type, workload, quality, latency, and operational overhead.",
+      "body": "<p>Comparing AI providers by the headline price per million tokens produces false savings. Providers bill different token types, discounts, context rules, regions, and tool calls. A useful comparison measures <strong>effective cost per successful task</strong> for the same workload and quality target.</p><h2>Normalize the billable unit</h2><p>Build a price sheet keyed by provider, model, endpoint, region, token type, cache state, batch status, and effective date. Keep input, output, cache-read, cache-write, reasoning, image, audio, and tool charges separate. Record minimum commitments and credits outside the unit rate so the comparison does not hide a contract assumption.</p><h2>Normalize the workload</h2><p>Replay a fixed sample with the same prompts, context, output constraints, tool permissions, and success test. Measure p50 and p95 latency, completion rate, retries, human repair, and output quality. A model that is 30% cheaper per token but needs twice as many retries may be more expensive per successful task.</p><h2>Include operating cost</h2><p>Provider arbitrage has an engineering price. Add gateway changes, observability, routing logic, evaluation, support, data-transfer cost, and failure handling. Run the calculation over a realistic traffic mix, not a single ideal prompt. The cheapest model for summarization may be the wrong model for extraction or high-value reasoning.</p><h2>Route by capability-per-dollar</h2><p>Use a capability matrix with a minimum quality score and a maximum effective cost per workload. Route eligible requests to the cheapest provider that passes both. Keep a fallback route, but count its expected cost and test it during failover drills. Record why each request was routed so savings can be reconciled to invoices.</p><p>Provider price comparison is not a leaderboard. It is a controlled experiment with a common workload, a quality bar, and a fully loaded denominator.</p><h2>Related</h2><ul><li>LLM provider arbitrage</li><li>Model routing without quality regressions</li><li>Cost per successful task</li></ul>",
+      "faq": [
+        {
+          "question": "Why are AI provider list prices hard to compare?",
+          "answer": "Providers differ in token types, cache discounts, batch rates, regions, commitments, tool charges, and quality, so headline token prices describe different units."
+        },
+        {
+          "question": "What is the right comparison metric?",
+          "answer": "Compare effective cost per successful task for the same workload, quality target, latency requirement, retries, and operating overhead."
+        },
+        {
+          "question": "What belongs in an AI provider price sheet?",
+          "answer": "Track provider, model, endpoint, region, token type, cache state, batch status, effective date, commitments, credits, and all non-token charges."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "LLM provider arbitrage"
+        },
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing without quality regressions"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    },
+    "es": {
+      "title": "Precios de proveedores IA: comparación real",
+      "titleCore": "Precios de proveedores IA: comparación real",
+      "description": "Cómo normalizar precios por tipo de token, carga, calidad, latencia y coste operativo.",
+      "body": "<p>Comparar proveedores por el precio anunciado por millón de tokens produce falsos ahorros. Miden unidades, descuentos y calidades distintas. Compara el <strong>coste efectivo por tarea exitosa</strong> con la misma carga y objetivo de calidad.</p><h2>Normaliza la factura</h2><p>Usa una tabla por proveedor, modelo, región, tipo de token, caché, batch y fecha. Separa entrada, salida, caché, razonamiento, imagen, audio y herramientas. Registra compromisos y créditos aparte.</p><h2>Normaliza la carga</h2><p>Reproduce las mismas instrucciones, contexto, límites de salida y pruebas de éxito. Mide latencia p50 y p95, finalización, reintentos, reparación humana y calidad.</p><h2>Incluye el coste operativo</h2><p>Añade gateway, observabilidad, routing, evaluación, soporte y transferencia. Enruta cada solicitud al proveedor más barato que supere la calidad y el coste efectivo permitidos.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué no se comparan bien los precios de IA?",
+          "answer": "Porque cambian los tipos de token, descuentos, regiones, compromisos, herramientas y calidad."
+        },
+        {
+          "question": "¿Qué métrica debe usarse?",
+          "answer": "El coste efectivo por tarea exitosa con la misma carga, calidad, latencia y coste operativo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraje entre proveedores LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Prix des fournisseurs IA non comparables",
+      "titleCore": "Prix des fournisseurs IA non comparables",
+      "description": "Comment normaliser prix, charge, qualité, latence et coûts opérationnels entre fournisseurs.",
+      "body": "<p>Comparer le prix affiché par million de tokens crée de fausses économies. Les unités, remises et qualités diffèrent. Comparez le <strong>coût effectif par tâche réussie</strong> sur la même charge et le même seuil de qualité.</p><h2>Normaliser la facture</h2><p>Indexez la grille par fournisseur, modèle, région, type de token, cache, batch et date. Séparez entrée, sortie, cache, raisonnement, image, audio et outils.</p><h2>Normaliser la charge</h2><p>Rejouez les mêmes prompts, contextes et tests de réussite. Mesurez latence p50/p95, réussite, reprises, réparation humaine et qualité.</p><h2>Ajouter le coût d’exploitation</h2><p>Incluez passerelle, observabilité, routage, évaluation et support. Routez vers le fournisseur le moins cher qui respecte qualité et coût effectif.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi les prix IA sont-ils difficiles à comparer?",
+          "answer": "Les types de tokens, remises, régions, engagements, outils et niveaux de qualité diffèrent selon les fournisseurs."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitrage entre fournisseurs LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "KI-Anbieterpreise sind nicht direkt vergleichbar",
+      "titleCore": "KI-Anbieterpreise sind nicht direkt vergleichbar",
+      "description": "Wie Teams Preise nach Tokentyp, Workload, Qualität, Latenz und Betrieb normalisieren.",
+      "body": "<p>Der Vergleich des Listenpreises je Million Tokens erzeugt Scheineinsparungen. Anbieter rechnen unterschiedliche Einheiten und Rabatte ab. Vergleichen Sie die <strong>effektiven Kosten je erfolgreicher Aufgabe</strong> für denselben Workload.</p><h2>Rechnung normalisieren</h2><p>Führen Sie eine Preistabelle nach Anbieter, Modell, Region, Tokentyp, Cache, Batch und Datum. Trennen Sie Ein- und Ausgabe, Cache, Reasoning, Bild, Audio und Tools.</p><h2>Workload normalisieren</h2><p>Wiederholen Sie dieselben Prompts, Kontexte und Erfolgstests. Messen Sie p50/p95-Latenz, Abschluss, Retries, Nacharbeit und Qualität.</p><h2>Betrieb einrechnen</h2><p>Berücksichtigen Sie Gateway, Observability, Routing, Evaluation und Support. Routen Sie zum günstigsten Anbieter, der Qualitäts- und Kostengrenze erfüllt.</p>",
+      "faq": [
+        {
+          "question": "Warum sind KI-Preise schwer vergleichbar?",
+          "answer": "Tokentypen, Rabatte, Regionen, Verpflichtungen, Tools und Qualität unterscheiden sich zwischen Anbietern."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLM-Anbieterarbitrage"
+        }
+      ]
+    },
+    "ja": {
+      "title": "AIプロバイダーの価格表をそのまま比較できない理由",
+      "titleCore": "AIプロバイダーの価格表をそのまま比較できない理由",
+      "description": "トークン種別、ワークロード、品質、遅延、運用費をそろえて価格を比較する方法です。",
+      "body": "<p>100万トークンあたりの表示価格だけを比べると、見かけの節約になります。請求単位、割引、品質が異なるためです。同じワークロードで<strong>成功タスク単価</strong>を比較します。</p><h2>請求単位をそろえる</h2><p>プロバイダー、モデル、地域、トークン種別、キャッシュ、バッチ、日付ごとの価格表を作ります。入力、出力、キャッシュ、推論、画像、音声、ツールを分けます。</p><h2>ワークロードをそろえる</h2><p>同じプロンプト、コンテキスト、出力制限、成功条件を再生し、遅延、完了率、リトライ、人手修正、品質を測ります。</p><h2>運用費を含める</h2><p>ゲートウェイ、監視、ルーティング、評価、サポートも含め、品質と実効コストを満たす最安の経路へ振り分けます。</p>",
+      "faq": [
+        {
+          "question": "AI価格を比較しにくいのはなぜですか？",
+          "answer": "トークン種別、割引、地域、契約、ツール料金、品質がプロバイダーごとに異なるためです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLMプロバイダー間の裁定"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Comparar preços de fornecedores IA",
+      "titleCore": "Comparar preços de fornecedores IA",
+      "description": "Como normalizar preços por tipo de token, carga, qualidade, latência e operação.",
+      "body": "<p>Comparar o preço anunciado por milhão de tokens cria poupanças falsas. As unidades, descontos e qualidades diferem. Compare o <strong>custo efetivo por tarefa bem-sucedida</strong> com a mesma carga e qualidade.</p><h2>Normalize a fatura</h2><p>Use uma tabela por fornecedor, modelo, região, tipo de token, cache, batch e data. Separe entrada, saída, cache, raciocínio, imagem, áudio e ferramentas.</p><h2>Normalize a carga</h2><p>Reproduza os mesmos prompts, contextos e testes de sucesso. Meça latência p50/p95, conclusão, retries, reparação humana e qualidade.</p><h2>Inclua a operação</h2><p>Some gateway, observabilidade, routing, avaliação e suporte. Encaminhe para o fornecedor mais barato que cumpra qualidade e custo efetivo.</p>",
+      "faq": [
+        {
+          "question": "Porque são difíceis de comparar os preços de IA?",
+          "answer": "Porque variam os tipos de token, descontos, regiões, compromissos, ferramentas e qualidade."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitragem entre fornecedores LLM"
+        }
+      ]
+    },
+    "it": {
+      "title": "Perché i prezzi di listino dei provider IA non sono…",
+      "titleCore": "Perché i prezzi di listino dei provider IA non sono…",
+      "description": "Come normalizzare i prezzi dei modelli linguistici per tipo di token, carico di lavoro, qualità, latenza e costi operativi di routing.",
+      "body": "<p>Confrontare i provider IA solo in base al prezzo nominale per milione di token produce risparmi fittizi. I provider fatturano tipi di token differenti, sconti su cache, regole di contesto e chiamate a strumenti eterogenee. Un confronto attendibile calcola il <strong>costo effettivo per task completato con successo</strong> a parità di workload e soglia qualitativa.</p><h2>Normalizzare l'unità fatturabile</h2><p>Costruite una matrice prezzi basata su provider, modello, endpoint, regione, tipologia di token, hit/miss della cache, esecuzione batch e data di validità. Separate input, output, cache-read, cache-write, reasoning token e tool execution. Mantenete impegni minimi e crediti fuori dalla tariffa unitaria base.</p><h2>Normalizzare il carico di lavoro</h2><p>Eseguite un set di prompt uniforme con identici vincoli di contesto, formato di output e test di convalida. Monitorate latenza p50 e p95, tasso di completamento, retry, revisione manuale e accuratezza. Un modello più economico del 30% che richiede il doppio dei retry genera un costo per task superiore.</p><h2>Includere i costi operativi</h2><p>L'arbitraggio tra fornitori comporta complessità ingegneristica: routing dinamico, modifiche al gateway, telemetria, test di conformità ed egress di rete. Indirizzate le richieste verso il provider più economico che soddisfa contemporaneamente soglia di qualità e budget unitario.</p>",
+      "faq": [
+        {
+          "question": "Perché i prezzi dei provider IA sono difficili da confrontare?",
+          "answer": "Perché variano per tipologia di token, sconti cache, tariffe batch, latenza, disponibilità regionale, impegni di spesa e qualità degli output."
+        },
+        {
+          "question": "Qual è la metrica di costo corretta per i modelli LLM?",
+          "answer": "Il costo effettivo per task riuscito, calcolato includendo re-invii, chiamate a tool, revisione umana e costi infrastrutturali."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraggio tra provider LLM"
+        }
+      ]
+    },
+    "ko": {
+      "title": "AI 공급업체 정가를 직접 비교할 수 없는 이유: 유효 작업 비용",
+      "titleCore": "AI 공급업체 정가를 직접 비교할 수 없는 이유: 유효 작업 비용",
+      "description": "토큰 유형, 캐시 상태, 워크로드 표본, 품질 및 운영 오버헤드를 반영하여 AI 공급업체 가격을 엔지니어링 관점에서 정규화하는 방법.",
+      "body": "<p>100만 토큰당 표시 정가만으로 AI 공급업체를 비교하면 잘못된 비용 절감 판단을 내리게 됩니다. 공급업체마다 과금하는 토큰 유형, 캐시 할인율, 컨텍스트 윈도우 규칙 및 툴 호출 단가가 완전히 다릅니다. 진정한 비교 척도는 동일한 워크로드와 품질 기준에서 측정한 <strong>성공 작업당 실효 비용(Cost per Successful Task)</strong>입니다.</p><h2>과금 단위 표준화</h2><p>공급업체, 모델, 엔드포인트, 리전, 토큰 유형, 프롬프트 캐시 상태, 배치 여부별로 단가표를 구성하십시오. 입력, 출력, 캐시 읽기/쓰기, 추론 토큰, 도구 호출 비용을 명확히 분리하고, 최소 약정과 크레딧을 별도로 추적합니다.</p><h2>워크로드 및 품질 정규화</h2><p>동일한 프롬프트, 컨텍스트 제약, 평가 기준으로 고정 워크로드를 벤치마크하십시오. p50/p95 지연 시간, 완료율, 재시도 횟수, 사람의 검토 개입을 측정합니다. 단가가 30% 저렴해도 재시도가 2배 늘어나면 성공 작업당 비용은 오히려 증가합니다.</p><h2>운영 오버헤드 반영</h2><p>라우팅 로직, API 게이트웨이 유지보수, 관측성, 데이터 전송 비용을 포함하십시오. 품질 최소 점수와 작업당 최대 허용 비용을 모두 만족하는 최적 공급업체로 동적 라우팅을 구현합니다.</p>",
+      "faq": [
+        {
+          "question": "AI 공급업체 정가 비교가 어려운 이유는 무엇인가요?",
+          "answer": "토큰 유형, 캐시 할인, 배치 요율, 리전 프리미엄, 도구 호출 과금 체계 및 실제 출력 품질이 공급업체마다 상이하기 때문입니다."
+        },
+        {
+          "question": "가장 신뢰할 수 있는 AI 비용 비교 지표는 무엇인가요?",
+          "answer": "동일한 작업 요구사항, 목표 지연 시간, 재시도 횟수 및 엔지니어링 오버헤드를 반영한 성공 작업당 유효 비용입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLM 공급업체 차익거래"
+        }
+      ]
+    },
+    "zh": {
+      "title": "为什么AI供应商刊例价无法直接对比：有效任务成本",
+      "titleCore": "为什么AI供应商刊例价无法直接对比：有效任务成本",
+      "description": "工程团队如何根据Token类型、工作负载、输出质量、延迟与网关运营开销全面归一化AI模型定价。",
+      "body": "<p>仅凭每百万Token的刊例价格来挑选AI供应商，往往产生虚假的降本错觉。不同厂商对各类Token的定义、缓存命中扣费规则、上下文窗口计算方式以及工具调用计费大相径庭。唯有针对相同工作负载和质量底线测算<strong>单个成功任务的有效成本（Cost per Successful Task）</strong>，才具备决策价值。</p><h2>规范计费度量单位</h2><p>按供应商、模型、API端点、区域、Token类型、缓存状态及批处理标志建立价目矩阵。输入、输出、缓存读写、思维链推理Token和函数调用费用必须严格分列。</p><h2>基准化测试工作负载</h2><p>重放固定的Prompt样本集，保持上下文大小、格式规范和验证测试一致。度量p50与p95延迟、任务完成率、重试次数及输出质量。单价低30%但重试翻倍的模型，完成单次任务的成本反而更高。</p><h2>计入工程运维成本</h2><p>供应商套利存在工程代价：API网关维护、路由逻辑编排、可观测性监控和跨云网络出网费。将请求动态路由至同时满足质量门槛与单位成本上限的最优节点。</p>",
+      "faq": [
+        {
+          "question": "为什么AI供应商的刊例价难以直接对比？",
+          "answer": "因为各厂商在Token计量、缓存折扣、批处理计费、区域溢价和模型输出质量上存在显著差异。"
+        },
+        {
+          "question": "衡量大模型成本的最优指标是什么？",
+          "answer": "在相同业务工作负载、输出质量要求和延迟约束条件下，计算得出的单个成功任务综合有效成本（Cost per Successful Task）。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "大模型供应商套利与动态路由"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Waarom AI-lijstprijzen niet direct vergelijkbaar zijn",
+      "titleCore": "Waarom AI-lijstprijzen niet direct vergelijkbaar zijn",
+      "description": "Hoe engineeringteams prijzen normaliseren op basis van tokentype, werklast, kwaliteit, latency en operationele overhead.",
+      "body": "<p>AI-leveranciers vergelijken op basis van de geadverteerde prijs per miljoen tokens creëert schijnbezuinigingen. Leveranciers factureren verschillende tokentypes, cachingregels en tool-calls. Een zinvolle vergelijking meet de <strong>effectieve kosten per geslaagde taak</strong> voor dezelfde werklast en kwaliteitsnorm.</p><h2>Normaliseer de facturatie-eenheid</h2><p>Bouw een prijsmatrix op basis van provider, model, regio, tokentype, cachestatus en batchmogelijkheden. Houd input, output, cache en reasoning tokens gescheiden van vaste commitments.</p><h2>Normaliseer de werklast</h2><p>Voer een vaste steekproef uit met identieke context en succescriteria. Meet p50/p95 latency, voltooiingspercentages, retries en handmatige correcties. Een model dat 30% goedkoper is maar twee keer zoveel retries nodig heeft, is per geslaagde taak duurder.</p><h2>Reken operationele kosten mee</h2><p>Multi-provider arbitrage vergt engineering: gateway-aanpassingen, monitoring, routering en failover-tests. Stuur verzoeken dynamisch naar de goedkoopste provider die aan de kwaliteitseisen voldoet.</p>",
+      "faq": [
+        {
+          "question": "Waarom zijn AI-lijstprijzen moeilijk te vergelijken?",
+          "answer": "Omdat tokentypes, cachingkortingen, regio-opslagen, commitments en modelkwaliteit per leverancier sterk verschillen."
+        },
+        {
+          "question": "Wat is de juiste vergelijkingsmaatstaf?",
+          "answer": "De effectieve kosten per geslaagde taak voor dezelfde werklast, inclusief retries en operationele overhead."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "LLM provider arbitrage"
+        }
+      ]
+    },
+    "ar": {
+      "title": "أسعار مزودي الذكاء الاصطناعي غير قابلة للمقارنة",
+      "titleCore": "أسعار مزودي الذكاء الاصطناعي غير قابلة للمقارنة",
+      "description": "كيف تقوم الفرق الهندسية بمعايرة أسعار مزودي النماذج اللغوية حسب نوع الرمز والعمل وجودة المخرجات والتكلفة التشغيلية الفعلية.",
+      "body": "<p>مقارنة مزودي الذكاء الاصطناعي بالاعتماد فقط على السعر المعلن لكل مليون رمز تؤدي إلى وفورات وهمية. فالمزودون يختلفون في تسعير أنواع الرموز، وخصومات التخزين المؤقت، وتكاليف الاستدلال، والأقاليم الجغرافية، ورسوم استدعاء الأدوات. المقارنة السليمة تقيس <strong>التكلفة الفعلية لكل مهمة ناجحة</strong> لنفس عبء العمل ومعايير الجودة.</p>\n\n<h2>توحيد وحدة الفوترة</h2>\n<p>أنشئ جدول تسعير مصنفاً حسب المزود، والنموذج، ونقطة النهاية، والإقليم، ونوع الرمز، وحالة التخزين المؤقت، ونظام الدفعات (Batch). افصل تكاليف رموز الإدخال، والإخراج، وقراءة/كتابة الكاش، ورموز التفكير، واستدعاءات الأدوات. وسجل الالتزامات الدنيا والأرصدة الترويجية خارج السعر الأساسي لضمان الشفافية.</p>\n\n<h2>معايرة عبء العمل</h2>\n<p>أعد تشغيل عينة ثابتة من المطالبات بالبيانات والسياق وقيود الإخراج واختبارات النجاح نفسها. قس زمن الاستجابة p50 وp95، ومعدل الإكمال، وإعادة المحاولة، والتدخل البشري. فالنموذج الأرخص بنسبة 30% والذي يتطلب ضعف المحاولات يكون في الواقع أكثر تكلفة لكل مهمة منجزة.</p>\n\n<h2>احتساب التكاليف التشغيلية</h2>\n<p>التبديل بين المزودين له تكلفة هندسية: تعديل بوابات API، وأنظمة المراقبة، ومنطق التوجيه، ونقل البيانات بين السحب. وجه الطلبات ديناميكياً إلى المزود الأقل تكلفة الذي يلبي معايير الجودة وزمن الاستجابة معاً.</p>",
+      "faq": [
+        {
+          "question": "لماذا يصعب مقارنة أسعار مزودي الذكاء الاصطناعي؟",
+          "answer": "بسبب الاختلاف الجذري في تصنيف الرموز وخصومات الكاش والرسوم الإقليمية وجودة المخرجات وتكاليف الأدوات المرافقة."
+        },
+        {
+          "question": "ما هو المقياس الصحيح للمقارنة بين المزودين؟",
+          "answer": "التكلفة الفعالة لكل مهمة ناجحة لنفس عبء العمل مع احتساب نسب الفشل والتأخير والتكاليف الهندسية للتشغيل."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "الموازنة والمفاضلة بين مزودي النماذج"
+        },
+        {
+          "slug": "/ar/research/cost-per-successful-task",
+          "label": "التكلفة لكل مهمة ناجحة"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/provider-prices-not-comparable"
+  }
+}

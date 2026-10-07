@@ -1,0 +1,143 @@
+{
+  "slug": "re-embedding-is-recurring",
+  "tags": [
+    "finops",
+    "forecasting",
+    "architecture",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The recurring cost of embeddings and vector stores",
+      "titleCore": "The recurring cost of embeddings and vector stores",
+      "description": "Embedding is budgeted as a one-off migration and behaves like a subscription. Model changes, chunking changes and content churn all re-bill the whole corpus.",
+      "body": "<p>Embedding cost gets approved as a project line: a corpus of a few million documents, a one-time run, a number that looks small next to generation spend. Then it never stops, because three separate forces re-embed things you already paid to embed.</p><h2>The three refresh drivers</h2><p><strong>Content churn</strong> is the honest one and the smallest. Documents change, new ones arrive, deleted ones need removing. It scales with your business and it is straightforwardly forecastable.</p><p><strong>Chunking and pipeline changes</strong> are the sneaky one. Every adjustment to chunk size, overlap, metadata or preprocessing invalidates <em>every vector in the store</em>. A retrieval-quality experiment that sounds like a config tweak is a full re-embed of the entire corpus, and teams run several of these in a good quarter.</p><p><strong>Model changes</strong> are the big one. Embedding spaces are not compatible across models, so adopting a better or cheaper embedding model means re-embedding everything before you can query anything. There is no incremental path and no partial migration &mdash; you run both stores in parallel or you take an outage.</p><h2>The store is its own line</h2><p>Vectors also cost to keep. Managed vector databases charge for storage and for the compute serving queries, and dimensionality drives both: a higher-dimensional model that is marginally better at retrieval can be materially more expensive to host forever. That tradeoff is usually made by whoever picked the model, on quality grounds alone, with no view of the hosting bill.</p><h2>Budget it as an annuity</h2><p>Forecast a full corpus re-embed at least once a year and treat it as scheduled, not exceptional. Price a candidate embedding model on <em>re-embed cost plus a year of storage and query serving</em>, not on the per-token rate. Keep the raw source content addressable so a re-embed is a batch job rather than a re-ingestion project &mdash; and run those jobs through a batch endpoint, since a full re-embed is the most latency-tolerant workload you own and therefore the one where batch pricing pays best.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/rag-cost-optimization\">RAG cost optimization</a></li><li><a href=\"https://finopsllm.com/research/batch-api-finops\">Batch API FinOps</a></li><li><a href=\"https://finopsllm.com/research/long-context-vs-rag-cost\">Long context vs RAG cost</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why is embedding cost recurring rather than one-off?",
+          "answer": "Content churn, chunking or pipeline changes, and embedding model changes each force a re-embed. The last two invalidate every vector in the store, so the whole corpus is re-billed."
+        },
+        {
+          "question": "Can you migrate embedding models incrementally?",
+          "answer": "No. Embedding spaces are not compatible across models, so the corpus must be fully re-embedded before queries work. In practice you run both stores in parallel or accept an outage."
+        },
+        {
+          "question": "How should an embedding model be priced?",
+          "answer": "On re-embed cost plus a year of storage and query serving, not the per-token rate. Dimensionality drives hosting cost, so a marginally better model can be materially more expensive to keep."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "RAG cost optimization"
+        },
+        {
+          "slug": "https://finopsllm.com/research/batch-api-finops",
+          "label": "Batch API FinOps"
+        },
+        {
+          "slug": "https://finopsllm.com/research/long-context-vs-rag-cost",
+          "label": "Long context vs RAG cost"
+        }
+      ]
+    },
+    "es": {
+      "title": "El coste recurrente de embeddings y vectores",
+      "titleCore": "El coste recurrente de embeddings y vectores",
+      "description": "El embedding se presupuesta como migración única y se comporta como suscripción. Cambios de modelo, de chunking y de contenido refacturan todo el corpus.",
+      "body": "<p>El coste de embeddings se aprueba como partida de proyecto: unos millones de documentos, una ejecución única, una cifra pequeña al lado de la generación. Luego no para nunca, porque tres fuerzas distintas vuelven a embeber lo que ya pagaste.</p><h2>Los tres motores de refresco</h2><p><strong>Rotación de contenido</strong>: la honesta y la más pequeña, escala con el negocio y se predice bien.</p><p><strong>Cambios de chunking o pipeline</strong>: la traicionera. Cualquier ajuste de tamaño de chunk, solape o preprocesado invalida <em>todos</em> los vectores. Un experimento de calidad de recuperación que suena a cambio de config es un re-embed completo.</p><p><strong>Cambios de modelo</strong>: la grande. Los espacios de embedding no son compatibles entre modelos, así que no hay migración parcial: o mantienes dos almacenes en paralelo o asumes corte.</p><h2>Presupuéstalo como una anualidad</h2><p>Prevé al menos un re-embed completo al año. Valora un modelo por <em>coste de re-embed más un año de almacenamiento y consultas</em>, no por precio por token. Y lanza esos trabajos por batch: es tu carga más tolerante a latencia.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué el coste de embeddings es recurrente?",
+          "answer": "La rotación de contenido, los cambios de chunking o pipeline y los cambios de modelo obligan a re-embeber. Los dos últimos invalidan todos los vectores, así que se refactura el corpus entero."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "Optimización de costes de RAG"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le coût récurrent des embeddings et du vector store",
+      "titleCore": "Le coût récurrent des embeddings et du vector store",
+      "description": "L’embedding est budgété comme une migration unique et se comporte comme un abonnement. Modèle, chunking et contenu refacturent le corpus entier.",
+      "body": "<p>Le coût des embeddings est approuvé comme une ligne de projet : quelques millions de documents, un run unique, un chiffre modeste à côté de la génération. Puis cela ne s’arrête jamais, car trois forces distinctes ré-embeddent ce que vous avez déjà payé.</p><h2>Les trois moteurs de rafraîchissement</h2><p><strong>Le churn de contenu</strong> : le plus honnête et le plus petit, il suit l’activité et se prévoit bien.</p><p><strong>Les changements de chunking ou de pipeline</strong> : le sournois. Tout ajustement de taille de chunk, de recouvrement ou de prétraitement invalide <em>tous</em> les vecteurs. Une expérience de qualité de recherche qui ressemble à un réglage de config est un ré-embedding complet.</p><p><strong>Les changements de modèle</strong> : le gros. Les espaces d’embedding ne sont pas compatibles entre modèles : pas de migration partielle, deux stores en parallèle ou une coupure.</p><h2>Budgétez-le comme une annuité</h2><p>Prévoyez au moins un ré-embedding complet par an. Évaluez un modèle sur <em>le coût de ré-embedding plus un an de stockage et de requêtes</em>, pas sur le prix par token. Et passez ces jobs en batch : c’est votre charge la plus tolérante à la latence.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi le coût des embeddings est-il récurrent?",
+          "answer": "Le churn de contenu, les changements de chunking ou de pipeline et les changements de modèle imposent un ré-embedding. Les deux derniers invalident tous les vecteurs, donc le corpus entier est refacturé."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "Optimisation des coûts RAG"
+        }
+      ]
+    },
+    "de": {
+      "title": "Laufende Kosten von Embeddings und Vector Stores",
+      "titleCore": "Laufende Kosten von Embeddings und Vector Stores",
+      "description": "Embedding wird als einmalige Migration budgetiert und verhält sich wie ein Abo. Modell-, Chunking- und Inhaltsänderungen berechnen den ganzen Korpus neu.",
+      "body": "<p>Embedding-Kosten werden als Projektposten genehmigt: ein paar Millionen Dokumente, ein einmaliger Lauf, eine kleine Zahl neben den Generierungskosten. Dann hört es nie auf, weil drei getrennte Kräfte neu einbetten, wofür Sie schon bezahlt haben.</p><h2>Die drei Auslöser</h2><p><strong>Inhalts-Churn</strong>: der ehrlichste und kleinste, skaliert mit dem Geschäft und ist gut prognostizierbar.</p><p><strong>Chunking- und Pipeline-Änderungen</strong>: der heimtückische. Jede Anpassung von Chunkgröße, Overlap oder Vorverarbeitung entwertet <em>alle</em> Vektoren. Ein Retrieval-Qualitätsexperiment, das nach Konfigänderung klingt, ist ein vollständiges Neu-Embedding.</p><p><strong>Modellwechsel</strong>: der große. Embedding-Räume sind zwischen Modellen nicht kompatibel &mdash; keine Teilmigration, entweder zwei Stores parallel oder eine Ausfallzeit.</p><h2>Als Annuität budgetieren</h2><p>Planen Sie mindestens ein vollständiges Neu-Embedding pro Jahr ein. Bewerten Sie ein Modell nach <em>Neu-Embedding-Kosten plus einem Jahr Speicher und Abfragebetrieb</em>, nicht nach Tokenpreis. Und fahren Sie diese Jobs über Batch: die latenztoleranteste Last, die Sie haben.</p>",
+      "faq": [
+        {
+          "question": "Warum sind Embedding-Kosten wiederkehrend?",
+          "answer": "Inhalts-Churn, Chunking- oder Pipeline-Änderungen und Modellwechsel erzwingen ein Neu-Embedding. Die letzten beiden entwerten alle Vektoren, sodass der gesamte Korpus erneut berechnet wird."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "RAG-Kostenoptimierung"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O custo recorrente de embeddings e vector stores",
+      "titleCore": "O custo recorrente de embeddings e vector stores",
+      "description": "O embedding é orçamentado como migração única e comporta-se como subscrição. Mudanças de modelo, de chunking e de conteúdo refaturam o corpus inteiro.",
+      "body": "<p>O custo de embeddings é aprovado como rubrica de projeto: uns milhões de documentos, uma execução única, um número pequeno ao lado da geração. Depois nunca mais para, porque três forças distintas voltam a embeber o que já pagou.</p><h2>Os três motores de refrescamento</h2><p><strong>Rotação de conteúdo</strong>: o mais honesto e o mais pequeno, acompanha o negócio e prevê-se bem.</p><p><strong>Mudanças de chunking ou pipeline</strong>: o traiçoeiro. Qualquer ajuste de tamanho de chunk, sobreposição ou pré-processamento invalida <em>todos</em> os vetores. Uma experiência de qualidade de recuperação que parece um ajuste de config é um re-embed completo.</p><p><strong>Mudanças de modelo</strong>: o grande. Os espaços de embedding não são compatíveis entre modelos &mdash; não há migração parcial: ou mantém dois stores em paralelo ou aceita indisponibilidade.</p><h2>Orçamente como anuidade</h2><p>Preveja pelo menos um re-embed completo por ano. Avalie um modelo pelo <em>custo de re-embed mais um ano de armazenamento e consultas</em>, não pelo preço por token. E corra esses jobs em batch: é a carga mais tolerante a latência que tem.</p>",
+      "faq": [
+        {
+          "question": "Porque é que o custo de embeddings é recorrente?",
+          "answer": "A rotação de conteúdo, as mudanças de chunking ou pipeline e as mudanças de modelo obrigam a re-embeber. As duas últimas invalidam todos os vetores, pelo que o corpus inteiro é refaturado."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "Otimização de custos de RAG"
+        }
+      ]
+    },
+    "ja": {
+      "title": "埋め込みとベクトルストアの継続コスト",
+      "titleCore": "埋め込みとベクトルストアの継続コスト",
+      "description": "埋め込みは一度きりの移行として予算化され、実際にはサブスクのように振る舞います。モデル変更もチャンク変更も内容更新も、コーパス全体を再課金します。",
+      "body": "<p>埋め込みコストはプロジェクト費目として承認されます &mdash; 数百万ドキュメント、一度きりの実行、生成コストと並べれば小さな数字。ところが止まりません。すでに支払った埋め込みを、3 つの別々の力がやり直させるからです。</p><h2>3 つの更新要因</h2><p><strong>コンテンツの入れ替わり</strong>。最も正直で最も小さい要因です。事業規模に比例し、素直に予測できます。</p><p><strong>チャンク分割・パイプラインの変更</strong>。これが厄介です。チャンクサイズ、オーバーラップ、メタデータ、前処理を少しでも変えると、<em>ストア内の全ベクトル</em>が無効になります。設定変更のように聞こえる検索品質の実験が、コーパス全体の再埋め込みです。好調な四半期にはこれを何度も回します。</p><p><strong>モデルの変更</strong>。これが最大です。埋め込み空間はモデル間で互換性がないため、より良い／安いモデルへ移るには、検索できるようになる前に全件を埋め込み直す必要があります。段階的な経路も部分移行もありません &mdash; 2 つのストアを並走させるか、停止を受け入れるかです。</p><h2>ストア自体も費目</h2><p>ベクトルは保持にも費用がかかります。マネージドのベクトル DB はストレージとクエリ処理の双方に課金し、どちらも次元数に効きます。検索精度がわずかに良い高次元モデルは、ホスティング費用が恒久的に大きく高くなり得ます。この判断は通常、モデルを選んだ人が品質だけを見て、ホスティング請求を見ないまま行われます。</p><h2>年金のように予算化する</h2><p>コーパス全体の再埋め込みを年 1 回以上は見込み、例外ではなく定例として扱ってください。候補モデルの評価は、トークン単価ではなく<em>再埋め込み費用 + 1 年分のストレージとクエリ処理</em>で行います。元データを常に参照可能な形で保持しておけば、再埋め込みは再取り込みプロジェクトではなくバッチジョブになります &mdash; そしてそのジョブはバッチ API で流してください。全件再埋め込みは、自社で最もレイテンシに寛容なワークロードであり、バッチ料金が最も効く対象です。</p>",
+      "faq": [
+        {
+          "question": "なぜ埋め込みコストは一度きりではなく継続的なのですか？",
+          "answer": "内容の入れ替わり、チャンク分割やパイプラインの変更、埋め込みモデルの変更が、それぞれ再埋め込みを強制します。後者 2 つはストア内の全ベクトルを無効化するため、コーパス全体が再課金されます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/rag-cost-optimization",
+          "label": "RAG のコスト最適化"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/re-embedding-is-recurring"
+  }
+}

@@ -1,0 +1,296 @@
+{
+  "slug": "cost-per-successful-task",
+  "tags": [
+    "unit-economics",
+    "llm-costs",
+    "observability"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Cost per successful task beats cost per request",
+      "titleCore": "Cost per successful task beats cost per request",
+      "description": "Why production AI teams should measure the cost of a successful outcome, not only the cost of an API request.",
+      "body": "<p>Cost per request is useful, but it is not the unit that users buy. A request that fails, retries three times, or produces an unusable answer is not a successful unit of work. For production AI, the stronger metric is <strong>cost per successful task</strong>: all provider and tool costs divided by tasks that meet a defined quality threshold.</p><h2>The metric</h2><p>Use <code>successful_task_cost = total attributable spend / successful tasks</code>. Include input, output, cache, reasoning, tool, retry, and fallback costs. Define success before measuring it: a support answer accepted by the user, a classification above its confidence threshold, or a workflow completed without human repair.</p><h2>Why request averages mislead</h2><p>Request averages improve when you count cheap failed attempts. They also hide the long tail: a feature can have a low median request cost while its failed cases consume expensive reasoning calls and human review. Segment by feature, model, customer cohort, and outcome. Report p50 and p95 successful-task cost alongside success rate.</p><h2>Instrument the denominator</h2><p>Every model span needs a request ID and feature tag; the application must then emit an outcome event linked to that ID. Record success, failure reason, human repair, latency, and revenue or service value where available. Reconcile provider invoices to the numerator and sample completed tasks to validate the denominator.</p><h2>Use it to choose an optimization</h2><p>If request cost is high but success rate is high, routing or caching may help. If request cost is low but successful-task cost is high, quality is the problem: retries, weak models, missing context, or poor stopping rules. Optimize the metric that includes the failure cost, then verify quality does not regress.</p><h2>Related</h2><ul><li>LLM cost monitoring</li><li>Cost per request as a product KPI</li><li>LLM cost attribution</li></ul>",
+      "faq": [
+        {
+          "question": "What is cost per successful task?",
+          "answer": "It is total attributable model, tool, retry, and fallback spend divided by tasks that meet a predefined quality or completion threshold."
+        },
+        {
+          "question": "Why is cost per request incomplete?",
+          "answer": "It counts attempts rather than outcomes, so failures, retries, human repair, and long-tail expensive cases can remain invisible."
+        },
+        {
+          "question": "How should teams define success?",
+          "answer": "Define an observable acceptance condition for each workflow, such as user acceptance, a confidence threshold, or completion without human repair."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM cost monitoring"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "Cost per request as a product KPI"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        }
+      ]
+    },
+    "es": {
+      "title": "El coste por tarea exitosa supera al coste por solicitud",
+      "titleCore": "El coste por tarea exitosa supera al coste por solicitud",
+      "description": "Por qué los equipos de IA deben medir el coste de un resultado exitoso, no solo de una solicitud API.",
+      "body": "<p>El coste por solicitud es útil, pero no es la unidad que compra el usuario. Una solicitud fallida o repetida no es trabajo terminado. El indicador más fuerte es el <strong>coste por tarea exitosa</strong>: todo el gasto atribuible dividido por las tareas que superan un umbral de calidad.</p><h2>La fórmula</h2><p><code>coste por tarea = gasto atribuible / tareas exitosas</code>. Incluye tokens, herramientas, reintentos y fallbacks. Define éxito antes de medirlo: aceptación del usuario, confianza mínima o flujo completado sin reparación humana.</p><h2>Por qué el promedio engaña</h2><p>El promedio por solicitud oculta la cola larga y los fallos caros. Segmenta por función, modelo, cohorte y resultado. Publica p50 y p95 junto con la tasa de éxito.</p><h2>Instrumenta el denominador</h2><p>Une cada span de modelo con un evento de resultado mediante un ID de solicitud. Registra éxito, motivo de fallo, reparación humana y latencia. Concilia el numerador con la factura del proveedor.</p><p>Si la solicitud es barata pero la tarea exitosa es cara, el problema es la calidad, los reintentos o las reglas de parada.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es el coste por tarea exitosa?",
+          "answer": "Es el gasto total atribuible dividido por las tareas que cumplen un umbral de calidad o finalización definido."
+        },
+        {
+          "question": "¿Por qué no basta el coste por solicitud?",
+          "answer": "Porque oculta fallos, reintentos, reparación humana y casos caros de la cola larga."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitoreo de costes LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le coût par tâche réussie vaut mieux que le coût par requête",
+      "titleCore": "Le coût par tâche réussie vaut mieux que le coût par requête",
+      "description": "Pourquoi mesurer le coût d’un résultat réussi plutôt que celui d’une simple requête API.",
+      "body": "<p>Le coût par requête est utile, mais une requête échouée n’est pas une unité de travail terminée. Le meilleur indicateur est le <strong>coût par tâche réussie</strong>: toute la dépense attribuable divisée par les tâches qui atteignent un seuil de qualité.</p><h2>La formule</h2><p><code>coût par tâche = dépense attribuable / tâches réussies</code>. Incluez tokens, outils, reprises et bascules. Définissez la réussite avant la mesure: acceptation utilisateur, seuil de confiance ou flux terminé sans réparation humaine.</p><h2>Mesurer le dénominateur</h2><p>Liez chaque trace modèle à un événement de résultat. Enregistrez succès, cause d’échec, réparation humaine et latence, puis rapprochez la dépense des factures.</p><p>Un coût par requête faible mais un coût par tâche réussi élevé signale un problème de qualité, de reprises ou de règle d’arrêt.</p>",
+      "faq": [
+        {
+          "question": "Qu’est-ce que le coût par tâche réussie?",
+          "answer": "C’est la dépense totale attribuable divisée par les tâches qui atteignent un seuil de qualité ou d’achèvement défini."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Suivi des coûts LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Kosten pro erfolgreicher Aufgabe schlagen Kosten pro Anfrage",
+      "titleCore": "Kosten pro erfolgreicher Aufgabe schlagen Kosten pro Anfrage",
+      "description": "Warum Produktionsteams die Kosten eines erfolgreichen Ergebnisses messen sollten.",
+      "body": "<p>Kosten pro Anfrage sind nützlich, aber eine fehlgeschlagene Anfrage ist keine fertige Arbeit. Der bessere Wert sind <strong>Kosten pro erfolgreicher Aufgabe</strong>: alle zurechenbaren Kosten geteilt durch Aufgaben über einer definierten Qualitätsschwelle.</p><h2>Die Formel</h2><p><code>Kosten je Aufgabe = zurechenbarer Aufwand / erfolgreiche Aufgaben</code>. Zählen Sie Tokens, Tools, Retries und Fallbacks. Erfolg muss vorher definiert werden.</p><h2>Den Nenner instrumentieren</h2><p>Verknüpfen Sie jeden Modell-Span mit einem Ergebnisereignis. Erfassen Sie Erfolg, Fehlergrund, menschliche Reparatur und Latenz und gleichen Sie die Kosten mit der Provider-Rechnung ab.</p><p>Niedrige Anfragekosten bei hohen Kosten pro Erfolg bedeuten meist ein Qualitäts-, Retry- oder Stoppregelproblem.</p>",
+      "faq": [
+        {
+          "question": "Was sind Kosten pro erfolgreicher Aufgabe?",
+          "answer": "Die gesamten zurechenbaren Modell-, Tool-, Retry- und Fallback-Kosten geteilt durch Aufgaben, die eine festgelegte Qualitätsgrenze erreichen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM-Kostenüberwachung"
+        }
+      ]
+    },
+    "ja": {
+      "title": "リクエスト単価より成功タスク単価を測る",
+      "titleCore": "リクエスト単価より成功タスク単価を測る",
+      "description": "APIリクエストではなく、成功した成果のコストを測る理由を説明します。",
+      "body": "<p>リクエスト単価は便利ですが、失敗や再試行は完了した仕事ではありません。重要なのは<strong>成功タスク単価</strong>、つまり品質基準を満たしたタスク1件あたりの帰属コストです。</p><h2>計算方法</h2><p><code>成功タスク単価 = 帰属支出 / 成功タスク数</code>。トークン、ツール、再試行、フォールバックを含めます。成功条件は先に定義します。</p><h2>分母を計測する</h2><p>モデルのスパンと結果イベントをリクエストIDで結び、成功、失敗理由、人手修正、遅延を記録します。プロバイダー請求とも照合します。</p><p>リクエストは安いのに成功タスクが高い場合、品質、再試行、停止ルールを見直します。</p>",
+      "faq": [
+        {
+          "question": "成功タスク単価とは何ですか？",
+          "answer": "定義した品質や完了条件を満たしたタスク数で、モデル・ツール・再試行などの帰属費用を割った値です。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLMコスト監視"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O custo por tarefa bem-sucedida supera o custo por pedido",
+      "titleCore": "O custo por tarefa bem-sucedida supera o custo por pedido",
+      "description": "Porque as equipas de IA devem medir o custo de um resultado bem-sucedido, não apenas de um pedido API.",
+      "body": "<p>O custo por pedido é útil, mas um pedido falhado não é trabalho concluído. O indicador mais forte é o <strong>custo por tarefa bem-sucedida</strong>: toda a despesa atribuível dividida pelas tarefas que atingem um limite de qualidade.</p><h2>A fórmula</h2><p><code>custo por tarefa = despesa atribuível / tarefas bem-sucedidas</code>. Inclua tokens, ferramentas, retries e fallbacks. Defina sucesso antes da medição.</p><h2>Meça o denominador</h2><p>Ligue cada span do modelo a um evento de resultado. Registe sucesso, motivo da falha, reparação humana e latência, e reconcilie o custo com a fatura.</p><p>Pedido barato com tarefa bem-sucedida cara indica um problema de qualidade, retries ou regras de paragem.</p>",
+      "faq": [
+        {
+          "question": "O que é o custo por tarefa bem-sucedida?",
+          "answer": "É a despesa total atribuível dividida pelas tarefas que cumprem um limite de qualidade ou conclusão definido."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitorização de custos LLM"
+        }
+      ]
+    },
+    "it": {
+      "title": "Il costo per task riuscito supera il semplice costo per…",
+      "titleCore": "Il costo per task riuscito supera il semplice costo per…",
+      "description": "Perché i team di produzione AI devono misurare il costo dei risultati validi anziché la sola spesa per chiamata API.",
+      "body": "<p>Il costo per richiesta è un parametro utile, ma non rappresenta l'unità acquistata dagli utenti. Una chiamata che fallisce, esegue tre retry o produce un output inutilizzabile non è lavoro completato. Per i sistemi AI in produzione, la metrica determinante è il <strong>costo per task completato con successo</strong>: tutta la spesa per modelli e tool divisa per i task che superano una soglia di qualità definita.</p><h2>La formula di calcolo</h2><p>Utilizzate <code>costo_task_riuscito = spesa totale attribuibile / task con esito positivo</code>. Includete token di input, output, cache, ragionamento, chiamate a tool e fallback. Definite il successo prima della misurazione: risposta accettata dal cliente o flusso eseguito senza interventi manuali.</p><h2>Perché le medie per richiesta ingannano</h2><p>Il costo medio per richiesta sembra migliorare quando aumentano i tentativi economici falliti. Inoltre nasconde la coda lunga: una funzionalità può avere un costo mediano basso ma generare casi limite che richiedono passaggi di ragionamento complessi e correzioni umane. Monitorate i percentili p50 e p95 del costo per task riuscito.</p><h2>Strumentare il denominatore</h2><p>Ogni span del modello necessita di un ID richiesta e di un tag funzionale; l'applicazione deve poi emettere un evento di completamento collegato a quell'ID. Riconciliate le fatture dei provider con il numeratore e campionate i task completati per convalidare il denominatore.</p>",
+      "faq": [
+        {
+          "question": "Che cos'è il costo per task riuscito nei sistemi AI?",
+          "answer": "È la spesa totale attribuibile per modelli, tool, retry e fallback divisa per i task che soddisfano una soglia qualitativa predefinita."
+        },
+        {
+          "question": "Perché il costo per richiesta è incompleto?",
+          "answer": "Perché misura i tentativi invece dei risultati effettivi, rendendo invisibili fallimenti, retry e interventi manuali correttivi."
+        },
+        {
+          "question": "Come definire la condizione di successo?",
+          "answer": "Stabilendo criteri oggettivi e osservabili come l'accettazione dell'utente, un punteggio di confidenza o l'assenza di revisione umana."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitoraggio dei costi LLM"
+        }
+      ]
+    },
+    "ko": {
+      "title": "요청당 비용보다 성공 작업당 비용을 측정해야 하는 이유",
+      "titleCore": "요청당 비용보다 성공 작업당 비용을 측정해야 하는 이유",
+      "description": "단순 API 요청 비용이 아니라 품질 임계값을 충족한 실제 작업 결과물의 단위 경제성을 측정하는 FinOps 가이드.",
+      "body": "<p>요청당 비용(Cost per request)은 유용한 지표이지만, 사용자가 구매하는 최종 결과 단위가 아닙니다. 실패하거나, 3번 재시도하거나, 사용할 수 없는 답변을 낸 요청은 완료된 작업이 아닙니다. 프로덕션 AI 환경에서 실질적인 경쟁력을 결정짓는 지표는 <strong>성공 작업당 비용(Cost per successful task)</strong>입니다. 즉, 정의된 품질 임계값을 충족한 작업 수로 모든 공급업체 및 도구 비용을 나눈 값입니다.</p><h2>핵심 산식</h2><p><code>성공 작업당 비용 = 귀속 총지출 / 성공 작업 수</code> 산식을 적용하십시오. 입력, 출력, 캐시, 추론 토큰 및 도구 호출, 재시도, 폴백 비용을 모두 분자에 포함해야 합니다. 사용자가 수락한 응답, 신뢰도 임계값을 넘은 분류 결과, 수동 개입 없는 완료 등 성공 기준을 사전에 확정하십시오.</p><h2>요청당 평균의 함정</h2><p>실패한 저가 호출이 많아지면 요청당 평균 단가는 오히려 저렴해 보이는 착시가 발생합니다. 또한 롱테일 고비용 이상치를 은폐합니다. 기능의 중위 요청 비용은 낮을 수 있지만, 실패 사례가 값비싼 추론 호출과 사람의 검토 시간을 대량으로 소모할 수 있습니다. 성공률과 함께 p50 및 p95 성공 작업당 단가를 측정하십시오.</p><h2>분모의 계측</h2><p>모든 모델 스팬에 요청 ID와 기능 태그를 부여하고, 애플리케이션은 해당 ID와 연결된 결과 이벤트를 발행해야 합니다. 공급업체 청구서와 분자를 대사하고, 완료된 작업을 샘플링하여 분모의 유효성을 정기적으로 검증하십시오.</p>",
+      "faq": [
+        {
+          "question": "성공 작업당 비용이란 무엇인가요?",
+          "answer": "사전 정의된 품질 또는 완료 기준을 충족한 작업 수로 모델, 도구, 재시도 등 전체 귀속 지출을 나눈 지표입니다."
+        },
+        {
+          "question": "요청당 비용 측정만으로 부족한 이유는 무엇인가요?",
+          "answer": "결과물이 아닌 시도 횟수만 세기 때문에 실패, 재시도, 사람의 수정 개입 및 롱테일 고비용 사례가 가려지기 때문입니다."
+        },
+        {
+          "question": "성공 기준을 어떻게 정의해야 하나요?",
+          "answer": "사용자 수락, 신뢰도 임계값 충족, 수동 개입 없는 자동 처리 등 각 워크플로에 측정 가능한 기준을 사전에 수립합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM 비용 모니터링"
+        }
+      ]
+    },
+    "zh": {
+      "title": "成功任务单价优于单次请求成本",
+      "titleCore": "成功任务单价优于单次请求成本",
+      "description": "为什么生产环境AI团队应衡量每次成功业务交付的成本，而非仅仅关注单次API请求费用。",
+      "body": "<p>单次请求成本指标固然有用，但它不是最终客户采购的工作单元。一次失败报错、经历三次重试或生成不可用结果的请求，不能算作有效交付。在生产环境AI系统中，更稳健的核心指标是<strong>成功任务单价</strong>：将全部模型与工具调用支出除以满足预定质量阈值的成功任务数。</p><h2>核心指标公式</h2><p>计算公式为：<code>单次成功任务成本 = 全部可归因支出 / 成功任务总数</code>。分子需涵盖输入、输出、上下文缓存、思考推理Token、工具调用、失败重试及备选路由成本。在统计前必须先明确定义成功：例如用户接受客服回答、分类置信度达标、或无需人工介入修复即可闭环的业务流程。</p><h2>单次请求平均值的误导性</h2><p>当系统中充斥着低成本但无效的失败尝试时，单次请求平均成本反而会显得“便宜”。它还会彻底掩盖昂贵的长尾异常：某项功能的中位数请求成本可能极低，但其失败用例却消耗了大量高阶推理调用和人工审核工时。建议按功能、模型、客户分群和交付结果细分，并同步报告p50和p95成功任务单价与任务完成率。</p><h2>精确埋点与分母度量</h2><p>每个模型调用Span都应绑定唯一请求ID与功能标签；应用程序必须在任务终态发出关联该ID的结果事件。记录成功状态、失败归因、人工修正标记、端到端延迟及业务价值。将云厂商发票对齐分子，并定期抽样已交付任务以验证分母的真实性。</p><h2>依据指标驱动系统优化</h2><p>如果请求单价偏高但成功率稳定，应重点引入语义缓存或轻量模型路由。如果请求单价很低但成功任务单价极高，说明质量存在缺陷：频繁重试、弱模型推理失败、缺少上下文或停止条件不合理。始终优化包含失败代价的真实成本，并确保质量SLO不出现回退。</p>",
+      "faq": [
+        {
+          "question": "什么是单次成功任务成本？",
+          "answer": "它是指在特定周期内，归属的所有模型、工具调用、重试与降级备用支出总额，除以满足预定质量与完成度阈值的有效任务总数。"
+        },
+        {
+          "question": "为什么仅监控单次请求成本是不够的？",
+          "answer": "因为单次请求成本只记录尝试次数而非最终可用成果，会掩盖静默失败、反复重试、人工修复工时以及代价高昂的恶性长尾调用案例。"
+        },
+        {
+          "question": "工程与产品团队应如何定义任务成功？",
+          "answer": "团队应为每个业务工作流设定可客观观测的验收条件，例如终端用户的确认采纳、高于置信度阈值的分类结果，或无人工接管的端到端自动化完成。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM成本监控"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "单次请求成本产品KPI"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM成本归因"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Kosten per geslaagde taak versus kosten per verzoek",
+      "titleCore": "Kosten per geslaagde taak versus kosten per verzoek",
+      "description": "Waarom AI-productieteams de kosten van een succesvol resultaat moeten meten en niet alleen de uitgaven per API-aanroep.",
+      "body": "<p>Kosten per API-verzoek zijn informatief, maar vertegenwoordigen niet de eenheid die gebruikers afnemen. Een aanroep die faalt, drie keer opnieuw probeert of een onbruikbaar antwoord oplevert, is geen voltooide taak. Voor AI-productiesystemen is de doorslaggevende metriek de <strong>kosten per geslaagde taak</strong>: alle toewijsbare model- en toolkosten gedeeld door het aantal taken dat aan een vooraf gedefinieerde kwaliteitsdrempel voldoet.</p><h2>De berekening</h2><p>Gebruik de formule: <code>kosten_geslaagde_taak = totale toewijsbare uitgaven / geslaagde taken</code>. Neem input-, output-, cache-, reasoning-, tool-, retry- en fallback-kosten mee. Definieer succes vooraf: een door de eindgebruiker geaccepteerd supportantwoord, een classificatie boven een betrouwbaarheidsdrempel of een workflow die zonder menselijke herstelactie is afgerond.</p><h2>Waarom gemiddelden per verzoek misleidend zijn</h2><p>Gemiddelden per verzoek lijken gunstiger te worden wanneer goedkope, mislukte pogingen worden meegeteld. Bovendien verbergen ze de dure lange staart: een functionaliteit kan een lage mediane aanroepkost hebben, terwijl mislukte gevallen dure redeneermodellen en handmatige reviews verslinden. Segmenteer op feature, model, klantcohort en uitkomst, en rapporteer p50- en p95-kosten per geslaagde taak naast het succespercentage.</p><h2>Instrumenteer de noemer</h2><p>Elke model-span heeft een request-ID en feature-tag nodig; de applicatie moet vervolgens een uitkomst-event uitzenden dat aan die ID is gekoppeld. Registreer succes, storingsreden, handmatige correcties, latentie en zakelijke waarde. Reconcilieer providerfacturen met de teller en neem steekproeven van voltooide taken om de noemer te valideren.</p><h2>Gebruik de metriek voor gerichte optimalisatie</h2><p>Als de aanroepkost hoog is maar het succespercentage optimaal, bieden caching of slimmere modelroutering uitkomst. Als de aanroepkost laag is maar de kosten per geslaagde taak hoog zijn, is kwaliteit het probleem: overmatige retries, ontoereikende modellen of slechte stopcondities. Optimaliseer altijd de metriek die faalkosten meerekent en bewaak de kwaliteits-SLO.</p>",
+      "faq": [
+        {
+          "question": "Wat zijn kosten per geslaagde taak?",
+          "answer": "Dit zijn de totale toewijsbare uitgaven voor modellen, tools, retries en fallbacks gedeeld door taken die voldoen aan een vooraf vastgestelde kwaliteits- of voltooiingsnorm."
+        },
+        {
+          "question": "Waarom zijn kosten per verzoek ontoereikend?",
+          "answer": "Omdat ze pogingen tellen in plaats van bruikbare uitkomsten, waardoor mislukte aanroepen, retries, handmatige reparaties en dure uitschieters onzichtbaar blijven."
+        },
+        {
+          "question": "Hoe moeten teams succes definiëren?",
+          "answer": "Stel per workflow een observeerbare acceptatieconditie vast, zoals gebruikersacceptatie, een minimale betrouwbaarheidsscore of een flow zonder menselijke interventie."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM-kostenmonitoring"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "Kosten per verzoek als product-KPI"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM-kostentoewijzing"
+        }
+      ]
+    },
+    "ar": {
+      "title": "التكلفة لكل مهمة ناجحة مقابل تكلفة الطلب",
+      "titleCore": "التكلفة لكل مهمة ناجحة مقابل تكلفة الطلب",
+      "description": "لماذا يجب على فرق الذكاء الاصطناعي قياس تكلفة النتيجة الناجحة بدلاً من تكلفة طلب API فقط، وكيفية حسابها والتحكم فيها.",
+      "body": "<p>يعد قياس التكلفة لكل طلب مفيداً، لكنه ليس الوحدة التي يشتريها المستخدم. الطلب الذي يفشل، أو يعيد المحاولة ثلاث مرات، أو ينتج إجابة غير صالحة للاستخدام لا يمثل وحدة عمل ناجحة. في بيئات الإنتاج، المقياس الأكثر دقة وموثوقية هو <strong>التكلفة لكل مهمة ناجحة</strong>: إجمالي تكاليف النماذج والأدوات مقسوماً على المهام التي حققت معايير الجودة المطلوبة.</p>\n\n<h2>المعادلة الحسابية</h2>\n<p>استخدم المعادلة: <code>تكلفة المهمة الناجحة = إجمالي الإنفاق المنسوب / عدد المهام الناجحة</code>. يشمل ذلك تكاليف رموز الإدخال والإخراج، والتخزين المؤقت، ورموز التفكير الاستدلالي (reasoning)، واستدعاء الأدوات، وإعادة المحاولة، ومسارات التراجع (fallback). حدد شروط النجاح مسبقاً: مثل قبول إجابة الدعم من العميل، أو تصنيف يتجاوز حد الثقة، أو سير عمل اكتمل دون تدخل بشري للتصحيح.</p>\n\n<h2>لماذا تضلل متوسطات الطلبات</h2>\n<p>تنخفض متوسطات تكلفة الطلب ظاهرياً عند احتساب المحاولات الفاشلة الرخيصة. كما تخفي الحالات الشاذة المكلفة: قد يكون لخاصية معينة متوسط تكلفة منخفض، بينما تستهلك حالاتها الفاشلة استدلالاً مكلفاً ومراجعة بشرية مطولة. قم بتقسيم البيانات حسب الخاصية والنموذج وفئة العملاء والنتيجة، واعرض تكلفة المهام الناجحة عند الشريحتين p50 وp95.</p>\n\n<h2>مراقبة مقام المعادلة بدقة</h2>\n<p>يحتاج كل استدعاء للنموذج إلى معرف طلب (request ID) ووسم للخاصية؛ ويجب على التطبيق إصدار حدث بالنتيجة مرتبط بهذا المعرف. سجل النجاح، وسبب الفشل، وزمن الاستجابة، وأي تصحيح بشري. قم بمطابقة فواتير المزودين في البسط وعاين عينات من المهام للتحقق من المقام.</p>\n\n<h2>توجيه التحسينات الهندسية</h2>\n<p>إذا كانت تكلفة الطلب مرتفعة ولكن معدل النجاح ممتاز، فإن التخزين المؤقت أو التوجيه الذكي قد يساعدان. أما إذا كانت تكلفة الطلب منخفضة ولكن تكلفة المهمة الناجحة مرتفعة، فالمشكلة في الجودة: تكرار المحاولات، أو سياق غير كافٍ، أو قواعد توقف ضعيفة.</p>",
+      "faq": [
+        {
+          "question": "ما هي التكلفة لكل مهمة ناجحة؟",
+          "answer": "هي إجمالي الإنفاق المنسوب على النماذج والأدوات وإعادة المحاولة مقسوماً على عدد المهام التي اجتازت شروط الجودة المحددة."
+        },
+        {
+          "question": "لماذا لا تكفي تكلفة الطلب وحدها؟",
+          "answer": "لأنها تقيس المحاولات بدلاً من النتائج المفيدة، مما يخفي تكلفة الفشل وإعادة المحاولات والتدخل البشري لمعالجة الأخطاء."
+        },
+        {
+          "question": "كيف تحدد الفرق الهندسية معيار النجاح؟",
+          "answer": "عبر تعريف شرط قبول صريح وملاحظ لكل سير عمل، مثل رضا المستخدم، أو تخطي عتبة ثقة محددة، أو الإكمال دون إصلاح يدوي."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "مراقبة تكاليف النماذج اللغوية"
+        },
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "توزيع تكاليف الذكاء الاصطناعي"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/cost-per-successful-task"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "slug": "ox-alpha-was-glm-5-3",
+  "tags": [
+    "pricing",
+    "open-source",
+    "model-routing",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Ox Alpha was GLM-5.3",
+      "titleCore": "Ox Alpha was GLM-5.3",
+      "description": "The stealth model that ran free on OpenRouter for six days turned out to be GLM-5.3-Flash. The FinOps lesson is about the cliff after the window, not the model.",
+      "body": "<p>Between 20 and 26 August 2026, a model listed on OpenRouter as <code>stealth/ox-alpha</code> was served free of charge. It has since been identified as GLM-5.3-Flash: 320 billion total parameters with 18 billion active, hybrid linear and sparse attention, native text, image and video input, a 1,048,576-token context window, 131K maximum output, and MIT-licensed weights.</p><p>The uptake was not marginal. Within three days of the listing, OpenCode reported roughly 16 trillion tokens processed, 221,000 unique users, more than five million sessions, and the number two position by recent usage. That is production traffic, not evaluation traffic &mdash; and for six days it cost nothing.</p><h2>Free is a rate, not an absence</h2><p>The finance problem with a free stealth endpoint is that most cost telemetry treats a $0 line as no line at all. Requests that were routed to Ox Alpha during that week appear in usage dashboards as zero-cost, so they carry no weight in any spend forecast, budget alert, or per-feature unit-economics view. Then the window closes, the model is renamed, a rate is applied, and the same traffic reappears as a step change nobody modelled.</p><p>The fix is to price every call at a shadow rate, including the free ones. Record the token counts as normal and multiply by the list price of the model you would otherwise have used. Your dashboard then shows what the promotion is worth per month, and what the bill becomes the day it ends. Sixteen trillion tokens at a typical flash-tier rate is not a rounding error.</p><p>The rate is no longer hypothetical. GLM-5.3-Flash now lists at $0.15 per million input tokens and $0.50 per million output. Sixteen trillion input tokens at that rate is roughly $2.4 million &mdash; that is what six days of free tokens were worth, and the size of the step if that traffic simply stayed where it was.</p><h2>The three exposures to check</h2><table><thead><tr><th>Exposure</th><th>Question to ask</th><th>Control</th></tr></thead><tbody><tr><td>Rate cliff</td><td>What does this traffic cost at list price tomorrow?</td><td>Shadow pricing on free endpoints, with the same budget alerts.</td></tr><tr><td>Identity drift</td><td>Which model is behind the alias this week?</td><td>Pin model IDs; never route production to a stealth alias without a fallback.</td></tr><tr><td>Quality coupling</td><td>Did prompts get tuned to a model you cannot keep?</td><td>Run evals against the named replacement before the window ends.</td></tr></tbody></table><h2>MIT weights change the buy-versus-build maths</h2><p>The identity reveal matters for a second reason. GLM-5.3-Flash ships under an MIT licence, which means the self-hosting option is real rather than theoretical. With 18 billion active parameters out of 320 billion total, serving cost is closer to a mid-size dense model than the headline count suggests &mdash; but only if you have consistently high utilisation. Below roughly 40&ndash;50% GPU utilisation, per-token API pricing usually still wins, because idle accelerators bill at full rate while an idle API call bills nothing.</p><p>So the decision is not open-weights versus API. It is a utilisation threshold. Measure your sustained tokens per second over a full week, including nights and weekends, and only then compare a reserved-capacity quote against the same volume at list API rates. Include engineering time for serving, evaluation, and upgrades in the self-hosted column; that is the line most build cases forget.</p><h2>What to do when the next stealth model appears</h2><p>Treat every free window as a fixed-term contract with an unnamed counterparty. Evaluate the model properly &mdash; free tokens are a genuinely cheap way to run an eval suite. But route production traffic to it only behind a fallback, keep the shadow price in your dashboards, and diary the end of the window as a forecast event. The model was excellent and the price was zero; only one of those two facts was durable.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/open-source-vs-closed-cost\">Open source versus closed model cost</a></li><li><a href=\"/research/provider-arbitrage\">Provider arbitrage</a></li><li><a href=\"https://finopsllm.com/research/model-deprecation-migration-costs\">Model deprecation and migration costs</a></li></ul>",
+      "faq": [
+        {
+          "question": "What model was stealth/ox-alpha on OpenRouter?",
+          "answer": "GLM-5.3-Flash. It was served free under the Ox Alpha alias from 20 to 26 August 2026, with 320 billion total parameters, 18 billion active, a 1,048,576-token context window and MIT-licensed weights."
+        },
+        {
+          "question": "Why does a free model create a budget problem?",
+          "answer": "Because zero-cost calls carry no weight in spend forecasts and budget alerts. When the promotional window closes, the same traffic reappears as an unmodelled step change in the bill."
+        },
+        {
+          "question": "Should we self-host GLM-5.3-Flash instead of paying per token?",
+          "answer": "Only above a sustained utilisation threshold, usually somewhere around 40 to 50 percent of your GPU capacity. Idle accelerators bill at full rate; idle API calls bill nothing."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Open source versus closed model cost"
+        },
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/model-deprecation-migration-costs",
+          "label": "Model deprecation and migration costs"
+        }
+      ]
+    },
+    "es": {
+      "title": "Ox Alpha era GLM-5.3",
+      "titleCore": "Ox Alpha era GLM-5.3",
+      "description": "El modelo sigiloso que estuvo gratis seis días en OpenRouter era GLM-5.3-Flash. La lección es el precipicio posterior.",
+      "body": "<p>Entre el 20 y el 26 de agosto de 2026, OpenRouter sirvió gratis un modelo llamado <code>stealth/ox-alpha</code>. Después se identificó como GLM-5.3-Flash: 320.000 millones de parámetros totales con 18.000 millones activos, atención híbrida lineal y dispersa, entrada nativa de texto, imagen y vídeo, contexto de 1.048.576 tokens y pesos con licencia MIT.</p><p>La adopción no fue marginal: en tres días, OpenCode informó de unos 16 billones de tokens procesados, 221.000 usuarios únicos y más de cinco millones de sesiones. Eso es tráfico de producción, y durante seis días no costó nada.</p><h2>Gratis es una tarifa, no una ausencia</h2><p>El problema financiero es que la telemetría trata una línea de 0 dólares como si no existiera. Ese tráfico no pesa en ninguna previsión ni alerta de presupuesto. Cuando la ventana se cierra y aparece una tarifa, el mismo tráfico se convierte en un salto que nadie modeló.</p><p>La solución es aplicar un precio sombra a cada llamada gratuita: registra los tokens y multiplícalos por la tarifa de lista del modelo que habrías usado. Así el panel muestra cuánto vale la promoción al mes y cuál será la factura el día que termine.</p><p>La tarifa ya no es hipotética: GLM-5.3-Flash cuesta 0,15 dólares por millón de tokens de entrada y 0,50 de salida. Dieciséis billones de tokens de entrada a ese precio son unos 2,4 millones de dólares: el valor de seis días gratis y el tamaño del salto si ese tráfico se queda.</p><h2>Tres exposiciones que revisar</h2><p>Precipicio de tarifa: ¿cuánto cuesta este tráfico mañana a precio de lista? Deriva de identidad: ¿qué modelo hay detrás del alias esta semana? Acoplamiento de calidad: ¿se ajustaron los prompts a un modelo que no puedes conservar? Fija identificadores de modelo y evalúa el sustituto antes de que acabe la ventana.</p><h2>Los pesos MIT cambian el cálculo</h2><p>Con licencia MIT, el autoalojamiento es una opción real. Con 18.000 millones de parámetros activos, el coste de servir se parece al de un modelo denso mediano, pero solo con utilización alta y sostenida. Por debajo del 40&ndash;50% de uso de GPU suele ganar la API: una GPU inactiva factura igual, una llamada que no ocurre no factura nada.</p>",
+      "faq": [
+        {
+          "question": "¿Qué modelo era stealth/ox-alpha?",
+          "answer": "GLM-5.3-Flash, servido gratis con el alias Ox Alpha del 20 al 26 de agosto de 2026, con 320.000 millones de parámetros totales, 18.000 millones activos y pesos MIT."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Coste de modelos abiertos frente a cerrados"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ox Alpha était GLM-5.3",
+      "titleCore": "Ox Alpha était GLM-5.3",
+      "description": "Le modèle furtif gratuit pendant six jours sur OpenRouter était GLM-5.3-Flash. La leçon porte sur la falaise tarifaire.",
+      "body": "<p>Du 20 au 26 août 2026, OpenRouter a servi gratuitement un modèle nommé <code>stealth/ox-alpha</code>. Il s’agissait de GLM-5.3-Flash : 320 milliards de paramètres au total dont 18 milliards actifs, attention hybride linéaire et éparse, entrée native texte, image et vidéo, fenêtre de 1 048 576 tokens et poids sous licence MIT.</p><p>L’adoption n’a rien eu de marginal : en trois jours, OpenCode a rapporté environ 16 000 milliards de tokens traités, 221 000 utilisateurs uniques et plus de cinq millions de sessions. C’est du trafic de production, et il n’a rien coûté pendant six jours.</p><h2>Gratuit est un tarif, pas une absence</h2><p>La télémétrie de coût traite une ligne à 0 dollar comme une ligne inexistante. Ce trafic ne pèse donc dans aucune prévision ni alerte budgétaire. Quand la fenêtre se ferme et qu’un tarif s’applique, le même trafic réapparaît sous forme de marche non modélisée.</p><p>Appliquez un prix fictif à chaque appel gratuit : enregistrez les tokens et multipliez-les par le tarif public du modèle que vous auriez utilisé. Le tableau de bord montre alors la valeur mensuelle de la promotion et la facture du jour où elle s’arrête.</p><p>Le tarif n’est plus hypothétique : GLM-5.3-Flash est facturé 0,15 dollar par million de tokens d’entrée et 0,50 en sortie. Seize mille milliards de tokens d’entrée à ce tarif représentent environ 2,4 millions de dollars &mdash; la valeur de six jours gratuits, et la hauteur de la marche si ce trafic reste en place.</p><h2>Trois expositions à vérifier</h2><p>La falaise tarifaire : combien coûte ce trafic demain au prix public? La dérive d’identité : quel modèle se cache derrière l’alias cette semaine? Le couplage qualité : les prompts ont-ils été ajustés à un modèle que vous ne pouvez pas garder? Épinglez les identifiants de modèle et évaluez le remplaçant avant la fin de la fenêtre.</p><h2>Les poids MIT changent le calcul</h2><p>Sous licence MIT, l’auto-hébergement devient une vraie option. Avec 18 milliards de paramètres actifs, le coût de service ressemble à celui d’un modèle dense moyen, mais uniquement à forte utilisation soutenue. En dessous de 40 à 50% d’utilisation GPU, l’API l’emporte généralement : un accélérateur inactif se facture plein tarif, un appel qui n’a pas lieu ne coûte rien.</p>",
+      "faq": [
+        {
+          "question": "Quel modèle était stealth/ox-alpha?",
+          "answer": "GLM-5.3-Flash, servi gratuitement sous l’alias Ox Alpha du 20 au 26 août 2026, avec 320 milliards de paramètres au total, 18 milliards actifs et des poids MIT."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Coût des modèles ouverts et fermés"
+        }
+      ]
+    },
+    "de": {
+      "title": "Ox Alpha war GLM-5.3",
+      "titleCore": "Ox Alpha war GLM-5.3",
+      "description": "Das sechs Tage lang kostenlose Stealth-Modell auf OpenRouter war GLM-5.3-Flash. Die Lehre ist die Tarifklippe danach.",
+      "body": "<p>Vom 20. bis 26. August 2026 wurde auf OpenRouter ein Modell namens <code>stealth/ox-alpha</code> kostenlos ausgeliefert. Inzwischen ist klar: Es war GLM-5.3-Flash &mdash; 320 Milliarden Parameter insgesamt, 18 Milliarden aktiv, hybride lineare und dünn besetzte Attention, native Text-, Bild- und Videoeingabe, ein Kontextfenster von 1.048.576 Tokens und MIT-lizenzierte Gewichte.</p><p>Die Nutzung war erheblich: Innerhalb von drei Tagen meldete OpenCode rund 16 Billionen verarbeitete Tokens, 221.000 eindeutige Nutzer und über fünf Millionen Sitzungen. Das ist Produktionsverkehr &mdash; und er war sechs Tage lang kostenlos.</p><h2>Kostenlos ist ein Tarif, keine Abwesenheit</h2><p>Kostentelemetrie behandelt eine 0-Dollar-Zeile meist so, als gäbe es sie nicht. Dieser Verkehr fließt in keine Prognose und in keinen Budgetalarm ein. Schließt sich das Fenster und greift ein Tarif, erscheint derselbe Verkehr als nicht modellierter Sprung.</p><p>Bepreisen Sie deshalb jeden kostenlosen Aufruf mit einem Schattentarif: Tokens wie gewohnt erfassen und mit dem Listenpreis des sonst genutzten Modells multiplizieren. Das Dashboard zeigt dann den Monatswert der Aktion und die Rechnung nach ihrem Ende.</p><p>Der Tarif ist nicht mehr hypothetisch: GLM-5.3-Flash kostet 0,15 Dollar je Million Eingabe-Tokens und 0,50 je Million Ausgabe-Tokens. 16 Billionen Eingabe-Tokens zu diesem Satz sind rund 2,4 Millionen Dollar &mdash; der Wert von sechs kostenlosen Tagen und die Höhe des Sprungs, falls dieser Verkehr bleibt.</p><h2>Drei zu prüfende Risiken</h2><p>Tarifklippe: Was kostet dieser Verkehr morgen zum Listenpreis? Identitätsdrift: Welches Modell steckt diese Woche hinter dem Alias? Qualitätskopplung: Wurden Prompts auf ein Modell optimiert, das Sie nicht behalten können? Modell-IDs fest verdrahten und den Nachfolger vor Fensterende evaluieren.</p><h2>MIT-Gewichte verändern die Make-or-Buy-Rechnung</h2><p>Unter MIT-Lizenz ist Self-Hosting eine reale Option. Mit 18 Milliarden aktiven Parametern liegen die Servingkosten näher an einem mittelgroßen dichten Modell &mdash; aber nur bei dauerhaft hoher Auslastung. Unter etwa 40 bis 50% GPU-Auslastung gewinnt meist die API: Ein untätiger Beschleuniger kostet vollen Preis, ein nicht erfolgter Aufruf kostet nichts.</p>",
+      "faq": [
+        {
+          "question": "Welches Modell war stealth/ox-alpha?",
+          "answer": "GLM-5.3-Flash. Es wurde vom 20. bis 26. August 2026 unter dem Alias Ox Alpha kostenlos bereitgestellt: 320 Milliarden Parameter insgesamt, 18 Milliarden aktiv, MIT-Gewichte."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Kosten offener und geschlossener Modelle"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O Ox Alpha era o GLM-5.3",
+      "titleCore": "O Ox Alpha era o GLM-5.3",
+      "description": "O modelo furtivo que esteve grátis seis dias no OpenRouter era o GLM-5.3-Flash. A lição é o precipício tarifário.",
+      "body": "<p>Entre 20 e 26 de agosto de 2026, o OpenRouter serviu gratuitamente um modelo chamado <code>stealth/ox-alpha</code>. Foi depois identificado como GLM-5.3-Flash: 320 mil milhões de parâmetros no total, 18 mil milhões activos, atenção híbrida linear e esparsa, entrada nativa de texto, imagem e vídeo, contexto de 1.048.576 tokens e pesos com licença MIT.</p><p>A adesão não foi marginal: em três dias, o OpenCode reportou cerca de 16 biliões de tokens processados, 221.000 utilizadores únicos e mais de cinco milhões de sessões. É tráfego de produção e, durante seis dias, não custou nada.</p><h2>Grátis é uma tarifa, não uma ausência</h2><p>A telemetria de custo trata uma linha de 0 dólares como se não existisse. Esse tráfego não pesa em previsões nem em alertas de orçamento. Quando a janela fecha e passa a haver tarifa, o mesmo tráfego surge como um degrau que ninguém modelou.</p><p>Aplique um preço-sombra a cada chamada gratuita: registe os tokens e multiplique pelo preço de tabela do modelo que usaria em alternativa. O painel passa a mostrar o valor mensal da promoção e a fatura no dia em que terminar.</p><p>A tarifa já não é hipotética: o GLM-5.3-Flash custa 0,15 dólares por milhão de tokens de entrada e 0,50 de saída. Dezasseis biliões de tokens de entrada a esse preço são cerca de 2,4 milhões de dólares &mdash; o valor de seis dias grátis e a altura do degrau se esse tráfego ficar.</p><h2>Três exposições a verificar</h2><p>Precipício tarifário: quanto custa este tráfego amanhã a preço de tabela? Deriva de identidade: que modelo está por trás do alias esta semana? Acoplamento de qualidade: os prompts foram afinados para um modelo que não pode manter? Fixe identificadores de modelo e avalie o substituto antes do fim da janela.</p><h2>Os pesos MIT mudam a conta</h2><p>Com licença MIT, alojar internamente é uma opção real. Com 18 mil milhões de parâmetros activos, o custo de serviço aproxima-se de um modelo denso médio, mas só com utilização alta e sustentada. Abaixo de 40 a 50% de utilização de GPU, a API costuma ganhar: um acelerador parado factura na mesma, uma chamada que não acontece não factura nada.</p>",
+      "faq": [
+        {
+          "question": "Que modelo era o stealth/ox-alpha?",
+          "answer": "O GLM-5.3-Flash, servido gratuitamente sob o alias Ox Alpha entre 20 e 26 de agosto de 2026, com 320 mil milhões de parâmetros totais, 18 mil milhões activos e pesos MIT."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Custo de modelos abertos e fechados"
+        }
+      ]
+    },
+    "ja": {
+      "title": "Ox Alpha は GLM-5.3 だった",
+      "titleCore": "Ox Alpha は GLM-5.3 だった",
+      "description": "OpenRouter で 6 日間無料提供されたステルスモデルは GLM-5.3-Flash でした。要点は無料期間終了後の断崖です。",
+      "body": "<p>2026 年 8 月 20 日から 26 日まで、OpenRouter は <code>stealth/ox-alpha</code> という名称のモデルを無料で提供しました。正体は GLM-5.3-Flash です。総パラメータ 3200 億、アクティブ 180 億、線形とスパースのハイブリッド注意機構、テキスト・画像・動画のネイティブ入力、1,048,576 トークンのコンテキスト、そして MIT ライセンスの重みを持ちます。</p><p>利用は小規模ではありませんでした。公開から 3 日で OpenCode は約 16 兆トークンの処理、221,000 人のユニークユーザー、500 万を超えるセッションを報告しています。これは評価用ではなく本番トラフィックであり、6 日間は無料でした。</p><h2>無料は「単価」であり「不在」ではない</h2><p>多くのコスト計測は 0 ドルの行を存在しない行として扱います。そのため無料期間のトラフィックは予算予測にもアラートにも反映されません。期間が終了して単価が適用されると、同じトラフィックが誰も想定していない段差として現れます。</p><p>対策はシャドープライスです。無料の呼び出しでもトークン数を記録し、代替モデルの定価を掛けます。これで promotion の月額価値と、終了日の請求額が可視化されます。</p><p>単価はもはや仮定ではありません。GLM-5.3-Flash は入力 100 万トークンあたり 0.15 ドル、出力 0.50 ドルです。入力 16 兆トークンをこの単価で換算すると約 240 万ドル。これが 6 日間の無料提供の価値であり、そのトラフィックが残った場合の段差の大きさです。</p><h2>確認すべき 3 つのリスク</h2><p>単価の断崖（明日定価になれば幾らか）、識別子のドリフト（今週その別名の背後にあるモデルは何か）、品質の結合（維持できないモデルにプロンプトを最適化していないか）。モデル ID は固定し、後継モデルの評価は期間終了前に済ませます。</p><h2>MIT ライセンスは内製判断を変える</h2><p>MIT であれば自社ホスティングは現実的な選択肢です。アクティブ 180 億という規模から、提供コストは中規模の密モデルに近くなります。ただし高い稼働率が続く場合に限ります。GPU 稼働率がおよそ 40〜50% を下回るなら通常は API が有利です。遊休アクセラレータは満額課金され、発生しない API 呼び出しは課金されません。</p>",
+      "faq": [
+        {
+          "question": "stealth/ox-alpha はどのモデルでしたか？",
+          "answer": "GLM-5.3-Flash です。2026 年 8 月 20 日から 26 日まで Ox Alpha という別名で無料提供され、総パラメータ 3200 億、アクティブ 180 億、MIT ライセンスの重みを持ちます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "オープンモデルとクローズドモデルのコスト"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/ox-alpha-was-glm-5-3"
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "slug": "llm-cost-spike-runbook",
+  "tags": [
+    "incident-response",
+    "llm-costs",
+    "runbook"
+  ],
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "A production runbook for an LLM cost spike",
+      "titleCore": "A production runbook for an LLM cost spike",
+      "description": "A step-by-step incident runbook for isolating, containing, and explaining a sudden production LLM cost spike.",
+      "body": "<p>When LLM spend spikes, do not start by changing the model. First preserve the evidence, confirm the billing signal, and identify whether the change is volume, rate, mix, or efficiency. A good response contains the incident before it destroys the data needed to explain it.</p><h2>First 15 minutes: confirm and preserve</h2><p>Capture the provider invoice or usage export, current traffic, model mix, token types, retries, and recent deployments. Record the start time, affected accounts, and dashboards used. Compare provider billing with gateway telemetry so a dashboard bug does not trigger an unsafe production change.</p><h2>Next 30 minutes: contain safely</h2><p>Apply the narrowest control that stops additional damage: pause a runaway workflow, cap an agent, route background work to batch, or disable one newly released feature. Preserve quality-critical and revenue-critical traffic. Every emergency control needs an owner, an expiry time, and a rollback condition.</p><h2>Find the driver</h2><p>Check volume first, then model mix, token composition, retries and fallbacks, context length, tool fan-out, and provider price changes. Compare p50 and p95 cost per successful task with the prior period. A rise in requests with flat cost per task is demand; a rise in cost per task is an efficiency or mix problem.</p><h2>Close the incident</h2><p>Remove temporary controls only after the metric returns below its threshold and quality remains within SLO. Write a timeline, dollar impact, root cause, detection gap, and permanent action. Reconcile the final impact to provider invoices and tag the affected feature so the postmortem can be audited.</p><p>The runbook is successful when the team can answer what changed, what was protected, how much it cost, and which control prevents recurrence.</p><h2>Related</h2><ul><li>LLM cost monitoring</li><li>Agent spend guardrails</li><li>AI spend variance analysis</li></ul>",
+      "faq": [
+        {
+          "question": "What is the first step during an LLM cost spike?",
+          "answer": "Preserve provider billing, gateway telemetry, traffic, model mix, token types, retries, and deployment evidence before making changes."
+        },
+        {
+          "question": "How should teams contain an LLM cost spike?",
+          "answer": "Use the narrowest control that stops new spend, give it an owner and expiry, and preserve quality-critical and revenue-critical traffic."
+        },
+        {
+          "question": "How do you identify the cause of a cost spike?",
+          "answer": "Check volume, model mix, token composition, retries, context, tool fan-out, and provider rates, then compare cost per successful task with baseline."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/llm-cost-monitoring",
+          "label": "LLM cost monitoring"
+        },
+        {
+          "slug": "/research/agent-spend-guardrails",
+          "label": "Agent spend guardrails"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-cost-allocation",
+          "label": "AI cost allocation"
+        }
+      ]
+    },
+    "es": {
+      "title": "Runbook de producción para un pico de costes LLM",
+      "titleCore": "Runbook de producción para un pico de costes LLM",
+      "description": "Cómo aislar, contener y explicar un pico repentino de costes LLM en producción.",
+      "body": "<p>Ante un pico, conserva las pruebas, confirma la señal de facturación y separa volumen, tarifa, mezcla y eficiencia antes de cambiar el modelo.</p><h2>Primeros 15 minutos</h2><p>Guarda factura, tráfico, mezcla, tipos de token, reintentos y despliegues recientes. Compara facturación con telemetría del gateway.</p><h2>Contención</h2><p>Usa el control más estrecho: pausa un flujo, limita un agente, enruta batch o desactiva una función nueva. Protege tráfico crítico. Define dueño, caducidad y rollback.</p><h2>Causa y cierre</h2><p>Revisa volumen, mezcla, contexto, herramientas, fallos y tarifas. Compara coste por tarea exitosa con la línea base. Documenta tiempo, dólares, causa y acción permanente.</p>",
+      "faq": [
+        {
+          "question": "¿Cuál es el primer paso ante un pico LLM?",
+          "answer": "Conservar facturas, telemetría, tráfico, mezcla, tokens, reintentos y pruebas de despliegue antes de cambiar nada."
+        },
+        {
+          "question": "¿Cómo se contiene el pico?",
+          "answer": "Con el control más estrecho, responsable, fecha de caducidad y condición de rollback."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitoreo de costes LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Runbook de production pour un pic de coûts LLM",
+      "titleCore": "Runbook de production pour un pic de coûts LLM",
+      "description": "Isoler, contenir et expliquer un pic soudain de coûts LLM en production.",
+      "body": "<p>Lors d’un pic, préservez les preuves, confirmez la facturation et séparez volume, tarif, mix et efficacité avant de changer de modèle.</p><h2>Les 15 premières minutes</h2><p>Conservez facture, trafic, mix, types de tokens, reprises et déploiements. Comparez facture et télémétrie de passerelle.</p><h2>Contenir</h2><p>Appliquez le contrôle le plus étroit: suspendre un flux, plafonner un agent, router en batch ou désactiver une fonction récente. Protégez le trafic critique et définissez propriétaire, expiration et retour arrière.</p><h2>Expliquer et clore</h2><p>Vérifiez volume, mix, contexte, outils, erreurs et tarifs. Comparez coût par tâche réussie à la base, puis documentez impact et action permanente.</p>",
+      "faq": [
+        {
+          "question": "Quelle est la première étape lors d’un pic LLM?",
+          "answer": "Préserver factures, télémétrie, trafic, mix, tokens, reprises et preuves de déploiement avant toute modification."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Suivi des coûts LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Production-Runbook für einen LLM-Kostensprung",
+      "titleCore": "Production-Runbook für einen LLM-Kostensprung",
+      "description": "Ein Runbook zum Isolieren, Begrenzen und Erklären eines plötzlichen LLM-Kostenanstiegs.",
+      "body": "<p>Bei einem Kostensprung sichern Sie zuerst Beweise, bestätigen die Abrechnung und trennen Volumen, Tarif, Mix und Effizienz.</p><h2>Die ersten 15 Minuten</h2><p>Sichern Sie Rechnung, Traffic, Modellmix, Tokentypen, Retries und Deployments. Vergleichen Sie Provider-Abrechnung mit Gateway-Telemetrie.</p><h2>Sicher begrenzen</h2><p>Nutzen Sie die engste Kontrolle: Workflow pausieren, Agent begrenzen, Batch routen oder neue Funktion stoppen. Kritischen Traffic schützen; Besitzer, Ablauf und Rollback festlegen.</p><h2>Ursache und Abschluss</h2><p>Prüfen Sie Volumen, Mix, Kontext, Tools, Fehler und Tarife. Vergleichen Sie Kosten je erfolgreicher Aufgabe mit der Baseline und dokumentieren Sie die dauerhafte Maßnahme.</p>",
+      "faq": [
+        {
+          "question": "Was ist der erste Schritt bei einem LLM-Kostensprung?",
+          "answer": "Rechnungen, Telemetrie, Traffic, Mix, Tokens, Retries und Deployment-Belege sichern, bevor Änderungen erfolgen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM-Kostenüberwachung"
+        }
+      ]
+    },
+    "ja": {
+      "title": "本番LLMコスト急増のためのランブック",
+      "titleCore": "本番LLMコスト急増のためのランブック",
+      "description": "本番で突然増えたLLMコストを切り分け、封じ込め、説明する手順です。",
+      "body": "<p>コストが急増したら、まず証拠を保存し、請求の信号を確認し、量、料金、構成、効率に分解します。</p><h2>最初の15分</h2><p>請求、トラフィック、モデル構成、トークン種別、リトライ、最近のデプロイを保存し、請求とゲートウェイのテレメトリを比較します。</p><h2>安全に封じ込める</h2><p>暴走ワークフローの停止、エージェント上限、バッチへの振り分け、新機能の停止など最小の制御を使います。担当者、期限、ロールバック条件を記録します。</p><h2>原因と終了</h2><p>量、モデル構成、コンテキスト、ツール、失敗、料金を確認し、成功タスク単価を基準と比較します。影響と恒久対策を記録します。</p>",
+      "faq": [
+        {
+          "question": "LLMコスト急増時の最初の手順は何ですか？",
+          "answer": "変更前に請求、テレメトリ、トラフィック、モデル構成、トークン、リトライ、デプロイの証拠を保存します。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLMコスト監視"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Runbook de produção para um pico de custos LLM",
+      "titleCore": "Runbook de produção para um pico de custos LLM",
+      "description": "Como isolar, conter e explicar um pico repentino de custos LLM em produção.",
+      "body": "<p>Num pico, preserve as provas, confirme a faturação e separe volume, tarifa, mix e eficiência antes de mudar o modelo.</p><h2>Os primeiros 15 minutos</h2><p>Guarde fatura, tráfego, mix, tipos de token, retries e deployments. Compare a faturação com a telemetria do gateway.</p><h2>Conter em segurança</h2><p>Use o controlo mais estreito: pausar um fluxo, limitar um agente, encaminhar batch ou desligar uma função nova. Proteja tráfego crítico e defina responsável, validade e rollback.</p><h2>Explicar e fechar</h2><p>Verifique volume, mix, contexto, ferramentas, falhas e tarifas. Compare custo por tarefa bem-sucedida com a base e documente a ação permanente.</p>",
+      "faq": [
+        {
+          "question": "Qual é o primeiro passo num pico de custos LLM?",
+          "answer": "Guardar faturas, telemetria, tráfego, mix, tokens, retries e provas de deployment antes de alterar o sistema."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitorização de custos LLM"
+        }
+      ]
+    },
+    "it": {
+      "title": "Runbook di produzione per picchi di costo LLM",
+      "titleCore": "Runbook di produzione per picchi di costo LLM",
+      "description": "Guida operativa passo passo per isolare, contenere e spiegare un improvviso picco di costi LLM in ambiente di produzione.",
+      "body": "<p>Quando la spesa per gli LLM subisce un picco improvviso, non iniziate modificando il modello. Conservate innanzitutto le prove, verificate i segnali di fatturazione e isolate se l'anomalia dipende da volume, tariffe, mix di modelli o efficienza.</p><h2>Primi 15 minuti: confermare e preservare</h2><p>Salvate fatture, telemetria del gateway, traffico corrente, mix di modelli e log dei recenti deployment prima di apportare modifiche.</p><h2>Primi 30 minuti: contenimento sicuro</h2><p>Applicate il controllo più circoscritto possibile: mettete in pausa un flusso anomalo, limitate un agente, instradate carichi su batch o disattivate una feature appena rilasciata. Assegnate a ogni misura un responsabile e una data di scadenza.</p><h2>Identificare la causa radice</h2><p>Verificate volumi, composizione dei token, lunghezza del contesto, chiamate a tool e tariffe dei provider confrontando il costo per task riuscito con la baseline.</p>",
+      "faq": [
+        {
+          "question": "Qual è il primo passo durante un picco di costi LLM?",
+          "answer": "Preservare fatture dei provider, telemetria del gateway, traffico, mix di modelli, tipi di token e log dei deployment prima di toccare la produzione."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "Monitoraggio costi LLM"
+        }
+      ]
+    },
+    "ko": {
+      "title": "프로덕션 환경에서의 LLM 비용 급증 격리 및 대응 런북",
+      "titleCore": "프로덕션 환경에서의 LLM 비용 급증 격리 및 대응 런북",
+      "description": "프로덕션 환경에서 발생한 갑작스러운 LLM 비용 급증을 신속하게 격리, 억제, 분석하기 위한 단계별 엔지니어링 대응 런북.",
+      "body": "<p>LLM 지출이 급증했을 때 모델부터 성급하게 변경해서는 안 됩니다. 먼저 청구 증거를 보존하고, 이상 신호를 검증하며, 변동 요인이 사용량, 단가, 모델 믹스, 또는 작업 효율성 중 무엇인지 파악해야 합니다.</p><h2>최초 15분: 증거 보존 및 신호 확인</h2><p>공급업체 청구 내역, 게이트웨이 텔레메트리, 트래픽, 모델 믹스, 토큰 유형, 재시도 횟수 및 최근 배포 이력을 즉시 캡처합니다.</p><h2>이후 30분: 안전한 격리 조치</h2><p>폭주하는 워크플로우 일시 중지, 에이전트 상한 적용, 비동기 작업의 배치 API 전환 등 최소한의 가역적 조치를 취하고 담당자와 만료 기한을 지정합니다.</p><h2>원인 분석 및 사고 종료</h2><p>호출당 비용이 아닌 성공적인 작업당 비용을 기준으로 이전 기간과 비교하여 원인을 규명하고, 영구적인 방어책을 수립합니다.</p>",
+      "faq": [
+        {
+          "question": "LLM 비용 급증 시 가장 먼저 취해야 할 조치는 무엇인가요?",
+          "answer": "시스템을 변경하기 전에 공급업체 청구 내역, 게이트웨이 텔레메트리, 토큰 유형, 재시도 및 배포 기록을 보존하는 것입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM 비용 모니터링"
+        }
+      ]
+    },
+    "zh": {
+      "title": "生产环境LLM成本暴增应急响应手册",
+      "titleCore": "生产环境LLM成本暴增应急响应手册",
+      "description": "分步应急响应手册：如何快速隔离、遏制并排查生产环境中突然出现的LLM成本毛刺。",
+      "body": "<p>当生产环境LLM成本突发暴增时，切忌盲目更换模型。首要任务是留存证据、核验计费信号，并准确判断异常源自用量、费率、模型组合还是交付效率。科学的响应能在止血的同时完整保留根因分析所需的数据。</p><h2>前15分钟：核实信号并留存现场</h2><p>抓取云供应商账单明细、实时流量、模型组合、Token类型分布、重试次数及近期上线发布记录。将供应商计费与内部网关遥测严格比对，避免因监控前端缺陷触发错误的应急操作。</p><h2>接下来的30分钟：安全遏制止血</h2><p>采取影响面最小的可逆措施：暂停失控工作流、限制高并发智能体、将后台离线计算路由至批处理API，或紧急下线近期变更的功能。严格保障高优先级生产流量与核心业务收入。</p><h2>排查与终结事故</h2><p>优先排查用量飙升，其次检查模型升级、Token膨胀、循环重试与上下文激增。对比单次成功任务的p50与p95成本。唯有当指标恢复正常且输出质量维持在SLO之上时，方可解除临时限制。</p>",
+      "faq": [
+        {
+          "question": "LLM成本突发暴增时第一步应当做什么？",
+          "answer": "在改动系统前，完整留存供应商账单、网关遥测、流量规模、Token构成、重试和部署记录。"
+        },
+        {
+          "question": "工程团队应如何安全遏制生产环境的成本暴增？",
+          "answer": "采用颗粒度最细的可逆控制手段（如限流或转批处理），明确责任人与到期时间，优先保护核心业务。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM成本监控"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "智能体支出护栏"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Productie-runbook voor onverwachte LLM-kostenspikes",
+      "titleCore": "Productie-runbook voor onverwachte LLM-kostenspikes",
+      "description": "Een stapsgewijs incident-runbook voor het isoleren, indammen en verklaren van plotselinge LLM-kostenpieken in productie.",
+      "body": "<p>Wanneer de LLM-uitgaven plotseling exploderen, begin dan niet direct met het wisselen van modellen. Stel eerst bewijsmateriaal veilig, valideer het facturatiesignaal en bepaal of de stijging wordt veroorzaakt door volume, tarief, mix of efficiëntie. Een effectieve aanpak damt het incident in zonder de benodigde telemetrie te vernietigen.</p><h2>Eerste 15 minuten: verifieer en bewaar</h2><p>Exporteer de factuurgegevens van de provider, het actuele verkeer, de modelmix, retries en recente releases. Vergelijk providerfacturatie met de logs van de AI-gateway om te voorkomen dat een dashboard-bug leidt tot overhaaste productie-ingrepen.</p><h2>Volgende 30 minuten: veilig indammen</h2><p>Pas de meest gerichte controle toe die verdere schade stopt: pauzeer een ontspoorde workflow, begrens agent-concurrency, stuur achtergrondtaken naar batch-verwerking of schakel een recent uitgerolde feature uit. Houd inkomsten-kritiek verkeer beschermd.</p><h2>Vind de oorzaak en sluit af</h2><p>Controleer eerst het volume, daarna modelmix, tokentypes, retries, contextomvang en provider-tarieven. Vergelijk de p50- en p95-kosten per succesvolle taak met de nulmeting. Hef tijdelijke restricties pas op wanneer de run rate en de outputkwaliteit binnen de SLO's vallen.</p>",
+      "faq": [
+        {
+          "question": "Wat is de eerste stap bij een onverwachte LLM-kostenspike?",
+          "answer": "Het veiligstellen van providerfacturatie, gateway-telemetrie, verkeersvolumes, modelmix en recente deployment-logs."
+        },
+        {
+          "question": "Hoe dammen teams een plotselinge kostenpiek veilig in?",
+          "answer": "Met een uiterst gerichte, omkeerbare maatregel die inkomsten-kritieke flows ontziet en voorzien is van een eigenaar en vervaltijd."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "LLM-kostenmonitoring"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "Budgetbewaking voor AI-agents"
+        }
+      ]
+    },
+    "ar": {
+      "title": "دليل تشغيلي لاحتواء قفزات تكلفة النماذج",
+      "titleCore": "دليل تشغيلي لاحتواء قفزات تكلفة النماذج",
+      "description": "دليل حوادث خطوة بخطوة للإنتاج لعزل واحتواء وتفسير القفزات المفاجئة في تكلفة نماذج اللغة الكبيرة في بيئات التشغيل الحية.",
+      "body": "<p>عندما تطلق أنظمة المراقبة تنبيهاً بقفزة حادة وغير متوقعة في تكاليف استهلاك نماذج اللغة الكبيرة في بيئة الإنتاج، يحتاج فريق الهندسة والعمليات إلى دليل حوادث صارم لاحتواء النزيف المالي فوراً دون التسبب في تعطل الخدمات الأساسية للعملاء.</p>\n\n<h2>أول 15 دقيقة: التأكيد والحفظ السريع</h2>\n<p>تحقق من صحة التنبيه فوراً عبر مطابقة مقاييس البوابة الداخلية (AI Gateway) مع لوحة تحكم المزود. استبعد التحديثات المحاسبية المجمعة. التقط لقطة لسجلات حركة المرور لتحديد مفاتيح API، والنماذج، والمسارات التي تشهد النشاط غير الطبيعي.</p>\n\n<h2>الدقائق الثلاثون التالية: الاحتواء المتزن</h2>\n<p>لا تلجأ فوراً لإيقاف الخدمات الحيوية، بل طبق خطوات الاحتواء التدريجية:</p>\n<ul>\n  <li>تخفيض سقف الاستهلاك (Rate Limits) للمفاتيح أو الحسابات المشتبه بها.</li>\n  <li>إيقاف المهام الخلفية، والتوليد المجمّع، وتجارب التقييم غير المرتبطة مباشرة بالعملاء.</li>\n  <li>تفعيل التراجع التلقائي المؤقت إلى نماذج أصغر حجماً وأقل كلفة لإبقاء الخدمة تعمل.</li>\n</ul>\n\n<h2>تحديد السبب الجذري وإغلاق الحادثة</h2>\n<p>حلل سجلات الاستدعاء: هل كانت الزيادة بسبب حلقة إعادة محاولة مفرغة (Infinite Loop)، أم سياق متضخم بشكل شاذ، أم هجوم من مستخدم يسيء استغلال النظام؟ وثق الحادثة، وحدد القيمة المالية المستنزفة، وافرض حواجز برمجية دائمة تمنع تكرار السيناريو.</p>",
+      "faq": [
+        {
+          "question": "ما هي الخطوة الأولى أثناء حادثة قفزة تكلفة النماذج؟",
+          "answer": "تحديد مصدر الاستهلاك غير المعتاد عبر تصنيف الاستدعاءات بحسب مفتاح واجهة التطبيق والخدمة والنموذج المستخدم فوراً."
+        },
+        {
+          "question": "كيف يمكن للفرق احتواء قفزة تكلفة النماذج اللغوية؟",
+          "answer": "بتفعيل حدود المعدل المؤقتة وتخفيض توجيه النماذج مؤقتاً للبدائل الأرخص وإيقاف الوكلاء غير المنضبطين في الخلفية."
+        },
+        {
+          "question": "كيف تحدد السبب الجذري وراء الارتفاع المفاجئ في التكلفة؟",
+          "answer": "بتحليل سجلات الاستدعاء ومقارنة حجم الرموز وطول السياق وتكرار المحاولات مع خط الأساس المعتاد للخدمة في الإنتاج."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "مراقبة تكاليف نماذج اللغة الكبيرة"
+        },
+        {
+          "slug": "https://finopsllm.com/research/agent-spend-guardrails",
+          "label": "حواجز إنفاق الوكلاء المستقلين"
+        },
+        {
+          "slug": "https://finopsllm.com/research/ai-cost-allocation",
+          "label": "توزيع وتخصيص تكاليف الذكاء الاصطناعي"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/llm-cost-spike-runbook"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "slug": "silent-model-downgrades-break-your-cost-model",
+  "tags": [
+    "cost-optimization",
+    "llm-costs",
+    "routing",
+    "evals"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Silent model downgrades and cost models",
+      "titleCore": "Silent model downgrades and cost models",
+      "description": "An Opus 5.5 call may be served by Opus 4.8. Model aliases are not version guarantees, and your cost model will not notice the swap.",
+      "body": "<p>On 23 September 2026, an r/GroundTruthAINews thread pointed out a footnote buried in Anthropic's Opus 5.5 launch notes: <strong>an Opus 5.5 request may be served by Opus 4.8</strong>. Anthropic and OpenAI both shipped price cuts the same afternoon. Both labs sold the same idea: keep the capability, spend far less. The footnote is the part that matters to FinOps.</p><h2>What actually happened</h2><p>Claude Opus 5.5 launched at $4/$20 per million tokens, roughly 20% under Opus 5, with cache reads cut 60% to $0.20. Anthropic says fewer tokens per task and 30% faster output make typical workloads about 40% cheaper. Roughly 90 minutes later OpenAI shipped GPT-6 Sol at $2/$10 and Luna at $0.10/$0.50, both half the GPT-5.6 prices.</p><p>Every launch post from this period carries the same kind of footnote: the endpoint you call is an <em>alias</em>, and the alias is load-balanced across model versions during a transition window. That is a normal capacity practice. It is also a cost-modeling problem.</p><h2>Why it breaks the numbers</h2><ul><li><strong>Cost per task drifts.</strong> Your forecast assumed Opus 5.5 output pricing. If a share of calls land on 4.8, both the unit price and the token count move, in opposite directions.</li><li><strong>Evals measure a mixture.</strong> An eval suite run during a transition window scores a blend of versions. The score is not reproducible later.</li><li><strong>Price cuts get attributed wrongly.</strong> If a 40% saving shows up as 15%, the gap is usually version mixing, not a broken optimization.</li><li><strong>Latency baselines go stale.</strong> 4.8 is not as fast as 5.5. Any p50 you captured mid-transition is not your steady-state p50.</li></ul><h2>How to detect the swap</h2><p>Every major provider returns the resolved model in the response body. Log it. One field, four lines of code:</p><pre><code>resolved = response.model  # e.g. \"claude-opus-4-8-20260115\"\nassert resolved.startswith(EXPECTED_PREFIX) or resolved in ALLOWED_FALLBACKS</code></pre><p>Then split every cost metric by resolved model, not by the model you asked for. The moment one bucket starts drifting, you have your answer: the alias is mixing versions and your per-task cost is a weighted average of two different products.</p><h2>The budget implication</h2><p>During a transition, plan against the <em>blended</em> cost, not the headline. If 20% of calls drop to an older model, your effective input rate is not $4.00 per million &mdash; it is whatever the mix produces. The same logic applies to the headline saving: the 40% cheaper claim is a typical-workload average, which already assumes a token-count reduction that may not hold if the cheaper-but-older model is the one generating the longer answers.</p><h2>Rules to hold</h2><ol><li><strong>Never model on an alias.</strong> Pin a dated model ID for anything you budget or evaluate.</li><li><strong>Log the resolved model on every request.</strong> Non-negotiable if you ever re-run an eval.</li><li><strong>Re-baseline after the transition window.</strong> Usual duration is weeks, not quarters, but confirm.</li><li><strong>Price a transition as a mixture.</strong> Ask your provider for the expected split, or measure it.</li></ol><h2>Bottom line</h2><p>A price cut and a silent downgrade can land in the same afternoon. The cut is the headline; the downgrade is the footnote that quietly invalidates last month's forecast. Log the resolved model, pin dated IDs, and price the mixture.</p>",
+      "faq": [
+        {
+          "question": "Can an Opus 5.5 request be served by Opus 4.8?",
+          "answer": "Yes. Anthropic's launch notes carried a footnote stating that some Opus 5.5 requests may be routed to Opus 4.8 during the transition window. Model endpoints are aliases, not version guarantees."
+        },
+        {
+          "question": "How do I detect which model actually served a request?",
+          "answer": "Read the model field in the API response body. Log it on every call and split all cost metrics by the resolved model rather than the requested one."
+        },
+        {
+          "question": "Does this affect OpenAI models too?",
+          "answer": "Yes. The same alias-and-transition practice applies across providers, including the GPT-6 Sol and Luna launches on 22 September 2026. Pin dated model IDs for anything you budget or evaluate."
+        },
+        {
+          "question": "Why did my cost-per-task saving come out lower than the 40% headline?",
+          "answer": "Most likely version mixing. A 40% cheaper claim is a typical-workload average that assumes a token-count reduction. If cheaper-but-older models are producing longer answers, the blended saving shrinks."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        },
+        {
+          "slug": "/research/gpt-6-pricing",
+          "label": "GPT-6 pricing: Sol, Luna, Astra"
+        },
+        {
+          "slug": "/research/model-price-cuts-routing-budget",
+          "label": "Model price cuts and routing budgets"
+        },
+        {
+          "slug": "/research/provider-prices-not-comparable",
+          "label": "Provider prices are not comparable"
+        },
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals cost control"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/silent-model-downgrades-break-your-cost-model"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "slug": "openai-agent-message-board-cost",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "openai",
+    "agents",
+    "cost-optimization"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "OpenAI agent message board cost model",
+      "titleCore": "OpenAI agent message board cost model",
+      "description": "Agents posting to a shared message board create unbounded token loops. Cost model plus four guardrails for agent-to-agent spend.",
+      "body": "<p>In September 2026, researchers discovered an OpenAI agent message board — a communication layer where autonomous agents can post messages, read responses, and coordinate multi-step workflows without human intervention. For FinOps teams, this introduces a new cost vector: agent-to-agent token consumption that scales with conversation length, not task complexity.</p><h2>What the message board enables</h2><p>The message board acts as a shared context bus. An orchestrator agent posts a task decomposition; specialist agents claim subtasks, post findings, and negotiate handoffs. Each message is a full prompt-completion cycle billed at the model's standard rates.</p><h2>Cost model</h2><table><thead><tr><th>Component</th><th>Rate (GPT-6 Astra)</th><th>Rate (GPT-6 Sol)</th></tr></thead><tbody><tr><td>Agent post (input)</td><td>$10.00 / 1M</td><td>$2.00 / 1M</td></tr><tr><td>Agent read (cached input)</td><td>$1.00 / 1M</td><td>$0.20 / 1M</td></tr><tr><td>Agent reply (output)</td><td>$50.00 / 1M</td><td>$10.00 / 1M</td></tr></tbody></table><p>A 10-turn coordination between three agents at Astra pricing: ~300K tokens = $15. Same exchange on Sol: $3. The difference is whether the task <em>requires</em> Astra's reasoning or if Sol's cheaper tokens suffice.</p><h2>Runaway scenarios</h2><ul><li><strong>Negotiation loops:</strong> Two agents disagree on a handoff and iterate 50+ times before converging.</li><li><strong>Broadcast storms:</strong> One agent posts to all subscribers; each replies, triggering more posts.</li><li><strong>Orphaned conversations:</strong> Agents wait for a response that never comes, polling the board every 30 seconds.</li></ul><h2>FinOps controls</h2><ol><li><strong>Message budget per workflow:</strong> Hard cap on total board tokens per task ID.</li><li><strong>Depth limits:</strong> Max 3 agent-to-agent hops before human escalation.</li><li><strong>Model routing:</strong> Route coordination to Sol; reserve Astra for the final synthesis step only.</li><li><strong>Idle timeout:</strong> Auto-close threads after 5 minutes of inactivity.</li></ol><h2>Bottom line</h2><p>The message board makes multi-agent systems composable — but composability without cost guards is a budget leak. Treat agent-to-agent tokens as a distinct cost center with its own alerts and budgets.</p>",
+      "faq": [
+        {
+          "question": "What is the OpenAI agent message board?",
+          "answer": "A shared communication layer where autonomous agents can post messages, read responses, and coordinate workflows without human intervention. Discovered in September 2026."
+        },
+        {
+          "question": "How much does agent-to-agent communication cost?",
+          "answer": "At GPT-6 Astra rates: $10/M input, $1/M cached, $50/M output. A 10-turn, 3-agent coordination costs ~$15. On GPT-6 Sol: ~$3 for the same exchange."
+        },
+        {
+          "question": "Can agents run up unbounded bills on the message board?",
+          "answer": "Yes. Without message budgets, depth limits, and idle timeouts, negotiation loops and broadcast storms can consume millions of tokens. FinOps teams must enforce hard caps per workflow."
+        },
+        {
+          "question": "Should I use Astra or Sol for agent coordination?",
+          "answer": "Use Sol for coordination (cheap tokens, sufficient for handoffs). Reserve Astra for the final reasoning/synthesis step where its reasoning pays off."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/gpt-6-astra-cost-model",
+          "label": "GPT-6 Astra cost model"
+        },
+        {
+          "slug": "/research/gpt-6-sol-cost-model",
+          "label": "GPT-6 Sol cost model"
+        },
+        {
+          "slug": "/research/subagent-fan-out-concurrency-limits",
+          "label": "Subagent fan-out concurrency limits"
+        },
+        {
+          "slug": "/research/three-agent-budgets",
+          "label": "Three agent budgets"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/openai-agent-message-board-cost"
+  }
+}

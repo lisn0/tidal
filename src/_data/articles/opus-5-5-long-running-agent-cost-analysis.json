@@ -1,0 +1,61 @@
+{
+  "slug": "opus-5-5-long-running-agent-cost-analysis",
+  "tags": [
+    "pricing",
+    "llm-costs",
+    "cost-optimization",
+    "agent-economics",
+    "anthropic"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Opus 5.5 long-running agent cost analysis",
+      "titleCore": "Opus 5.5 long-running agent cost analysis",
+      "description": "Cost breakdown of a 25-hour Opus 5.5 agent run producing 100K lines: token math, cache savings, and the cheap-model alternative.",
+      "body": "<p>A demo revealed Opus 5.5 working autonomously for ~25 hours to build a complete Minecraft clone: ~100K lines of game code, 26K lines of tests, 1,000 automated tests, 775 files, 783 generated images, 184 generated sounds, and an in-game guide. This is the first public glimpse of a <strong>long-horizon coding agent</strong> at scale. Let's model the cost.</p><h2>Estimating token volume</h2><p>No official token counts published. We'll model from output artifacts:</p><table><thead><tr><th>Artifact</th><th>Est. tokens</th><th>Notes</th></tr></thead><tbody><tr><td>100K lines game code</td><td>~3M output</td><td>~30 tokens/line avg</td></tr><tr><td>26K lines tests</td><td>~0.8M output</td><td>~30 tokens/line</td></tr><tr><td>775 files (structure, config)</td><td>~0.5M output</td><td>Boilerplate + imports</td></tr><tr><td>783 images (prompts + metadata)</td><td>~1.5M input</td><td>~2K tokens/image prompt</td></tr><tr><td>184 sounds (prompts + metadata)</td><td>~0.4M input</td><td>~2K tokens/sound prompt</td></tr><tr><td>In-game guide / docs</td><td>~0.3M output</td><td>Markdown + code snippets</td></tr><tr><td>Context / reasoning (25 hrs)</td><td>~10M input</td><td>Tool calls, observations, planning</td></tr><tr><td><strong>Total estimate</strong></td><td><strong>~12.4M input / ~4.6M output</strong></td><td></td></tr></tbody></table><h2>Cost at Opus 5.5 pricing</h2><table><thead><tr><th>Token type</th><th>Volume</th><th>Rate</th><th>Cost</th></tr></thead><tbody><tr><td>Input (uncached, est. 30%)</td><td>3.7M</td><td>$4.00/MTok</td><td>$14.80</td></tr><tr><td>Input (cached, est. 70%)</td><td>8.7M</td><td>$0.20/MTok</td><td>$1.74</td></tr><tr><td>Output</td><td>4.6M</td><td>$20.00/MTok</td><td>$92.00</td></tr><tr><td><strong>Total</strong></td><td></td><td></td><td><strong>~$108.54</strong></td></tr></tbody></table><p><strong>~$109 for a 25-hour autonomous agent run producing a shippable game.</strong> That's ~$4.36/hour of agent compute.</p><h2>Sensitivity: cache hit rate matters most</h2><table><thead><tr><th>Cache hit rate</th><th>Input cost</th><th>Total cost</th><th>Cost/hour</th></tr></thead><tbody><tr><td>50%</td><td>$24.80</td><td>$131.60</td><td>$5.26</td></tr><tr><td>70% (baseline)</td><td>$16.54</td><td>$108.54</td><td>$4.34</td></tr><tr><td>90%</td><td>$8.88</td><td>$92.88</td><td>$3.72</td></tr></tbody></table><p>At 90% cache hit (achievable with good context management), the run drops to <strong>$93 total / $3.72/hr</strong>.</p><h2>Comparison: human developer</h2><p>A senior dev building this solo: 3-6 weeks (~120-240 hours) at $100-200/hr = $12K-$48K. The agent run at $109 is <strong>100-400x cheaper</strong> — but only if the output quality passes your release gate.</p><h2>What this means for your agent budget</h2><ol><li><strong>Long-horizon agents are affordable.</strong> Sub-$150 for a 25-hour complex build changes the ROI calculus for agent-first workflows.</li><li><strong>Cache is the lever.</strong> Invest in prompt caching infrastructure — every 10% cache hit improvement saves ~$1.60 on a run like this.</li><li><strong>Output tokens dominate.</strong> At $20/MTok, output is 85% of the bill. Models that are more concise (Anthropic claims 40% less verbose) directly cut cost.</li><li><strong>Monitor per-run, not per-month.</strong> Agent workloads are bursty. Track cost per task completion, not aggregate monthly spend.</li></ol><h2>Related reading</h2><p>See <a href=\"/research/claude-opus-5-5-cost-model\">Claude Opus 5.5 cost model</a>, <a href=\"/research/agent-economics\">agent economics</a>, <a href=\"https://finopsllm.com/research/prompt-caching-economics\">prompt caching economics</a>, and <a href=\"/research/cost-per-successful-task\">cost per successful task</a>.</p>",
+      "faq": [
+        {
+          "question": "Is the $109 figure exact?",
+          "answer": "No — it's a model based on output artifacts and Opus 5.5 list pricing. Actual token counts depend on the specific prompts, tool use, and context window management. Treat as order-of-magnitude."
+        },
+        {
+          "question": "Does this include image/sound generation API costs?",
+          "answer": "No. The 783 images and 184 sounds were generated \"through code\" — likely via diffusion/TTS APIs called by the agent. Those are separate costs (typically $0.01-0.05/image, $0.01-0.10/second audio)."
+        },
+        {
+          "question": "How does this compare to GPT-5 Soul for the same task?",
+          "answer": "At GPT-5 Soul pricing ($5/$15), same token volumes: ~$69 input + $69 output = ~$138 (assuming similar cache rate). Opus 5.5 wins on cache read ($0.20 vs ~$0.50) and output ($20 vs $15 is higher but Anthropic claims 40% less verbose output)."
+        },
+        {
+          "question": "Can I run this today?",
+          "answer": "Opus 5.5 is available on Claude API. The 25-hour autonomous run requires a custom agent loop (not a single API call). See <a href=\"/research/agent-economics\">agent economics</a> for architecture patterns."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/claude-opus-5-5-cost-model",
+          "label": "Claude Opus 5.5 cost model"
+        },
+        {
+          "slug": "/research/agent-economics",
+          "label": "Agent economics"
+        },
+        {
+          "slug": "https://finopsllm.com/research/prompt-caching-economics",
+          "label": "Prompt caching economics"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/opus-5-5-long-running-agent-cost-analysis"
+  }
+}

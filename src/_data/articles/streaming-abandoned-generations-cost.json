@@ -1,0 +1,285 @@
+{
+  "slug": "streaming-abandoned-generations-cost",
+  "tags": [
+    "finops",
+    "cost-control",
+    "streaming",
+    "llm-usage"
+  ],
+  "datePublished": "2026-09-09",
+  "dateModified": "2026-09-09",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Streaming responses and abandoned generations",
+      "titleCore": "Streaming responses and abandoned generations",
+      "description": "A user can abandon a streaming response while the model keeps generating. Measure abandoned output, cancel upstream work, and report cost per completed response.",
+      "body": "<p>Streaming makes an AI product feel fast, but it also makes an unfinished response easy to mistake for a cancelled request. A user closes the tab, loses the connection, or presses stop; the provider may continue generating until the request is cancelled or the output reaches its limit. The visible response is shorter, but the bill is not necessarily shorter.</p><h2>The abandoned tail is a real cost</h2><p>Track three events separately: time to first token, tokens delivered to the client, and tokens generated upstream. The gap between delivered and generated output is the abandoned tail. It represents work the user never received, and it can be large in long-form answers, coding agents, and tool-using workflows.</p><p>Do not measure this only as a percentage of requests. A small number of abandoned, high-token generations can dominate the waste. Report abandoned output tokens and their cost by feature, model, device, connection type, and cancellation reason.</p><h2>Cancellation has to travel upstream</h2><p>Stopping the browser renderer is not the same as stopping the model request. Propagate the client disconnect or an explicit stop action through your gateway to the provider request. Set a short grace period for reconnects, then cancel. For agent workflows, cancel the active generation and any queued tool work that no longer has a live parent task.</p><p>Keep an idempotent request identifier so a cancellation race cannot produce duplicate accounting. Record whether the provider confirmed cancellation; otherwise classify the remaining tokens as uncertain spend instead of silently calling them savings.</p><h2>Use a better KPI</h2><p>Cost per request is misleading when many responses are abandoned. Use cost per delivered response and cost per successful task, then show the abandonment rate beside both. A product change that increases time to first token may increase abandonment even when total tokens per request stay flat.</p><h2>Practical controls</h2><ul><li>Emit a cancellation event with request, feature, model, and token counters.</li><li>Cancel upstream work on disconnect and explicit stop.</li><li>Cap maximum output for interactive workloads.</li><li>Compare generated, delivered, and billed tokens during invoice reconciliation.</li><li>Alert when abandoned-token cost rises faster than successful-task volume.</li></ul><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"/research/agent-spend-guardrails\">Agent spend guardrails</a></li><li><a href=\"/research/retry-loop-hidden-spend\">Retry loop hidden spend</a></li></ul>",
+      "faq": [
+        {
+          "question": "Does stopping a streaming response stop model billing?",
+          "answer": "Not necessarily. Closing a tab or stopping the renderer does not guarantee that the upstream model request was cancelled. Propagate disconnects and explicit stop actions through the gateway, then reconcile generated, delivered, and billed tokens."
+        },
+        {
+          "question": "How should abandoned streaming output be measured?",
+          "answer": "Track tokens generated upstream minus tokens delivered to the client, then report the difference by feature, model, device, and cancellation reason. Also measure its dollar cost because a few long generations can dominate the waste."
+        },
+        {
+          "question": "What is a better KPI than cost per request for streaming AI?",
+          "answer": "Use cost per delivered response and cost per successful task, with abandonment rate beside them. Cost per request hides whether the user received the output and whether the work produced business value."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "/research/agent-spend-guardrails",
+          "label": "Agent spend guardrails"
+        },
+        {
+          "slug": "/research/retry-loop-hidden-spend",
+          "label": "Retry loop hidden spend"
+        }
+      ]
+    },
+    "ar": {
+      "title": "تكلفة الردود المتدفقة المهجورة على الميزانية",
+      "titleCore": "تكلفة الردود المتدفقة المهجورة على الميزانية",
+      "description": "قد يغادر المستخدم أثناء استمرار النموذج في التوليد المتدفق. قياس المخرجات المهجورة وإلغاء الاستدعاء وحساب التكلفة لكل رد مكتمل.",
+      "body": "<p>يعد التدفق السريع للردود (Streaming Responses) المعيار الذهبي لتجربة المستخدم في تطبيقات الذكاء الاصطناعي، حيث يرى العميل الكلمات تتوالى فور توليدها. ولكن ماذا يحدث عندما يقرأ المستخدم أول سطرين، ويحصل على مبتغاه، ثم يغلق علامة تبويب المتصفح أو يطرح سؤالاً جديداً فوراً؟ في كثير من الأحيان، يستمر الخادم في توليد مئات الرموز ودفع ثمنها للمزود في الخلفية دون أن يراها أحد.</p>\n\n<h2>ظاهرة الاستجابات المهجورة (Abandoned Generations)</h2>\n<p>عندما ينقطع العميل، لا يعلم المزود السحابي بذلك تلقائياً إلا إذا تم إرسال إشارة إلغاء صريحة عبر بروتوكول HTTP. إذا استمر النموذج في كتابة فقرة من 800 رمز أهملها المستخدم بعد أول 50 رمزاً، فإن 93% من تكلفة رموز الإخراج لتلك العملية ذهبت هدراً كاملاً.</p>\n\n<h2>الحلول الهندسية لإيقاف الهدر</h2>\n<p>للقضاء على تكلفة الردود المهجورة:</p>\n<ul>\n  <li><strong>ربط إشارات الإلغاء (AbortController Propagation):</strong> تمرير إشارة انقطاع اتصال العميل فوراً إلى استدعاء واجهة برمجة التطبيقات للمزود عبر السلسلة البرمجية بأكملها.</li>\n  <li><strong>رصد ومراقبة معدل الهجر:</strong> قياس نسبة الرموز المولدة التي لم تصل للعميل، واستخدامها كمؤشر هندسي لجودة التفاعل وسرعة الاستجابة.</li>\n  <li><strong>إيقاف التوليد التلقائي عند بدء طلب جديد:</strong> إلغاء أي مهام سابقة في الجلسة ذاتها فور قيام المستخدم بإرسال رسالة جديدة.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "لماذا تكلف الاستجابات المتدفقة المهجورة أموالاً؟",
+          "answer": "لأن المزود يستمر في توليد الرموز واحتساب تكلفتها في الخلفية إذا لم يتم إرسال إشارة إلغاء صريحة عند إغلاق العميل."
+        },
+        {
+          "question": "كيف يمكن للأنظمة إيقاف التوليد فور مغادرة العميل؟",
+          "answer": "باستخدام إشارات الإلغاء القياسية مثل AbortController لقطع الاتصال بالمزود فور إغلاق نافذة المتصفح أو انقطاع العميل."
+        },
+        {
+          "question": "ما المقياس المالي الذي يكشف هدر الاستجابات المهجورة؟",
+          "answer": "مقارنة الرموز المولدة بالرموز المستلمة فعلياً وحساب التكلفة لكل استجابة مكتملة ومقروءة بدلاً من إجمالي المخرجات."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-monitoring",
+          "label": "مراقبة تكاليف نماذج اللغة الكبيرة"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "تكلفة الطلب الواحد كمؤشر أداء"
+        },
+        {
+          "slug": "https://finopsllm.com/research/rate-limits-are-cost-control",
+          "label": "حدود المعدل كأداة للتحكم في التكاليف"
+        }
+      ]
+    },
+    "de": {
+      "title": "Streaming-Antworten und abgebrochene Token",
+      "titleCore": "Streaming-Antworten und abgebrochene Token",
+      "description": "Nutzer brechen Streaming-Antworten vorzeitig ab, während das Modell weiter generiert. Messen Sie verwaiste Token und brechen Sie Upstream ab.",
+      "body": "<p>Streaming suggeriert Schnelligkeit, doch wenn der Nutzer den Tab schließt oder auf Stop klickt, rechnet der Modellprovider oft bis zum Tokenlimit weiter ab. Die sichtbare Ausgabe ist kurz, die Rechnung aber hoch.</p>\n<h2>Abbrüche nach Upstream propagieren</h2>\n<p>Reichen Sie Client-Disconnections per AbortController direkt an die API des Providers durch, um verwaiste Token zu vermeiden.</p>",
+      "faq": [
+        {
+          "question": "Warum kosten abgebrochene Streaming-Antworten Geld?",
+          "answer": "Weil der Cloud-Provider im Backend solange Tokens generiert und verrechnet, bis ein explizites HTTP-Abbruchsignal eintrifft."
+        },
+        {
+          "question": "Wie verhindert man Kosten durch verwaiste Generierungen?",
+          "answer": "Indem man Verbindungsabbrüche des Browsers per AbortController unmittelbar an den Upstream-Modellprovider weiterleitet."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/retry-loop-hidden-spend",
+          "label": "Versteckte Kosten in Retry-Loops"
+        }
+      ]
+    },
+    "es": {
+      "title": "Respuestas en streaming y generaciones abandonadas",
+      "titleCore": "Respuestas en streaming y generaciones abandonadas",
+      "description": "El usuario puede abandonar una respuesta mientras el modelo sigue generando. Cancele el trabajo upstream y mida el costo real.",
+      "body": "<p>Cerrar la pestaña del navegador no detiene automáticamente la generación en el proveedor. Propague la señal de cancelación upstream para evitar el desperdicio.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué el streaming abandonado genera costos?",
+          "answer": "Porque el modelo continúa generando tokens facturables hasta que la solicitud se cancela formalmente en el servidor del proveedor."
+        },
+        {
+          "question": "¿Cómo evitar pagar por tokens no entregados?",
+          "answer": "Transmitiendo la desconexión del cliente mediante AbortController directamente al endpoint de la API del modelo sin demora."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/retry-loop-hidden-spend",
+          "label": "Coste oculto en bucles de reintento"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Streaming et coût des générations abandonnées",
+      "titleCore": "Streaming et coût des générations abandonnées",
+      "description": "L'utilisateur peut quitter la page pendant que le modèle continue de générer. Annulez les requêtes en amont pour stopper les coûts.",
+      "body": "<p>Une déconnexion côté navigateur n'interrompt pas toujours la facturation chez le fournisseur d'API. Propagez le signal d'annulation au proxy LLM.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi une réponse arrêtée est-elle facturée?",
+          "answer": "Parce que le fournisseur calcule les tokens générés côté serveur tant qu'aucun signal d'interruption HTTP ne lui parvient."
+        },
+        {
+          "question": "Comment éliminer le gaspillage du streaming abandonné?",
+          "answer": "En propageant instantanément la rupture du client via un AbortController jusqu'à la requête API du fournisseur de modèle."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/retry-loop-hidden-spend",
+          "label": "Coût caché des boucles de retry"
+        }
+      ]
+    },
+    "ja": {
+      "title": "ストリーミング応答と放棄された生成コスト",
+      "titleCore": "ストリーミング応答と放棄された生成コスト",
+      "description": "ユーザーが閲覧を中断してもモデルは生成を続けます。未配信トークンを測定し、上流リクエストを即時キャンセルすべきです。",
+      "body": "<p>ブラウザのタブを閉じても、プロバイダ側では指定のトークン上限までテキスト生成が継続することがあります。AbortControllerによる即時中断が必須です。</p>",
+      "faq": [
+        {
+          "question": "なぜ途中で止めたストリーミングが課金されるのですか？",
+          "answer": "クライアントの切断がAPIサーバーに正しく通知されない限り、モデルはバックグラウンドで出力生成を完走するためです。"
+        },
+        {
+          "question": "無駄なトークン課金を防ぐ具体的な技術対策は？",
+          "answer": "フロントエンドの離脱イベントをAbortControllerを介してゲートウェイ経由でプロバイダAPIへ即時伝播させることです。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/retry-loop-hidden-spend",
+          "label": "リトライループに潜む隠れコスト"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Streaming e o custo de gerações abandonadas",
+      "titleCore": "Streaming e o custo de gerações abandonadas",
+      "description": "O usuário fecha a aba enquanto o modelo continua gerando tokens. Cancele o trabalho upstream e meça o custo por resposta entregue.",
+      "body": "<p>A interrupção visual no cliente não cancela a geração na nuvem sem uma propagação explícita de encerramento HTTP. Evite desperdício invisível de saída.</p>",
+      "faq": [
+        {
+          "question": "Por que respostas abandonadas continuam sendo cobradas?",
+          "answer": "Porque a infraestrutura do provedor segue gerando tokens até o limite configurado se não receber um comando de cancelamento."
+        },
+        {
+          "question": "Como conter gastos com streaming não visualizado?",
+          "answer": "Propagando desconexões de clientes com AbortController através do gateway até a chamada original do provedor do modelo."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/retry-loop-hidden-spend",
+          "label": "Gastos ocultos em loops de retentativa"
+        }
+      ]
+    },
+    "it": {
+      "title": "Streaming e costi delle generazioni abbandonate",
+      "titleCore": "Streaming e costi delle generazioni abbandonate",
+      "description": "L'utente chiude la finestra ma il modello continua a generare token. Propaga la cancellazione all'upstream per fermare la spesa.",
+      "body": "<p>Chiudere il browser non ferma il modello senza un segnale esplicito. Propaga l'interruzione all'endpoint del provider per evitare token fantasma.</p>",
+      "faq": [
+        {
+          "question": "Perché le generazioni abbandonate vengono addebitate?",
+          "answer": "Perché il fornitore continua a computare i token in uscita finché non riceve un'interruzione di connessione sulla chiamata HTTP."
+        },
+        {
+          "question": "Come eliminare i token fantasma nello streaming?",
+          "answer": "Propagando l'evento di chiusura del client via AbortController direttamente alla chiamata verso il provider di inferenza."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/it/research/retry-loop-hidden-spend",
+          "label": "Costi nascosti nei loop di retry"
+        }
+      ]
+    },
+    "ko": {
+      "title": "스트리밍 응답과 중단된 생성 비용",
+      "titleCore": "스트리밍 응답과 중단된 생성 비용",
+      "description": "사용자가 창을 닫아도 모델은 백그라운드 생성을 이어갑니다. 미수신 토큰을 측정하고 업스트림 요청을 즉시 취소해야 합니다.",
+      "body": "<p>화면 렌더링이 멈춰도 백엔드 연결이 유지되면 공급자는 토큰을 계속 과금합니다. AbortController를 통한 업스트림 취소 전파가 필수적입니다.</p>",
+      "faq": [
+        {
+          "question": "사용자가 중단한 스트리밍이 과금되는 이유는?",
+          "answer": "클라이언트 연결 끊김이 공급자 API 서버에 취소 신호로 전달되지 않으면 설정된 한도까지 토큰 생성이 완료되기 때문입니다."
+        },
+        {
+          "question": "버려지는 스트리밍 토큰 낭비를 막는 방법은?",
+          "answer": "클라이언트 이탈 이벤트를 게이트웨이를 거쳐 모델 호출 엔드포인트의 AbortController로 즉시 전파하는 것입니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ko/research/retry-loop-hidden-spend",
+          "label": "재시도 루프의 숨은 지출"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Streaming en kosten van verlaten generaties",
+      "titleCore": "Streaming en kosten van verlaten generaties",
+      "description": "Gebruikers verlaten antwoorden terwijl het model doorgaat. Breek upstream-taken af en rapporteer kosten per voltooide reactie.",
+      "body": "<p>Het sluiten van een tabblad stopt de modelaanroep niet zonder expliciet signaal. Voorkom onzichtbaar tokenverlies via AbortController.</p>",
+      "faq": [
+        {
+          "question": "Waarom worden afgebroken streams toch gefactureerd?",
+          "answer": "Omdat de AI-provider op de achtergrond tokens blijft genereren totdat de HTTP-verbinding daadwerkelijk wordt verbroken."
+        },
+        {
+          "question": "Hoe stop je onnodige kosten bij verlaten streams?",
+          "answer": "Door client-disconnects via een AbortController direct door te zetten naar het API-verzoek van de upstream modelprovider."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/nl/research/retry-loop-hidden-spend",
+          "label": "Verborgen kosten bij retry-loops"
+        }
+      ]
+    },
+    "zh": {
+      "title": "流式输出与未竟生成的成本控制",
+      "titleCore": "流式输出与未竟生成的成本控制",
+      "description": "用户关闭标签页时大模型往往仍在后台持续生成。必须向上游传递中断信号，核算未交付 Token 浪费并按交付结果计费。",
+      "body": "<p>流式输出（Streaming）大幅改善了用户交互体验，但也制造了“前端已关闭，后端仍在疯狂计费”的成本黑洞。当用户浏览前两行已解决问题并关闭网页时，若未配置即时中断机制，大模型服务商仍会生成完剩余的数百个 Token 并全额扣款。工程师必须通过 AbortController 链路将中断信号秒级传递至模型网关。</p>",
+      "faq": [
+        {
+          "question": "为什么客户端关闭后流式响应仍会产生计费？",
+          "answer": "因为前端关闭并不等于云端请求已撤回，若无显式中止信号，大模型供应商会继续生成至预设上限并收取全部费用。"
+        },
+        {
+          "question": "如何彻底杜绝流式响应被弃用后的资金浪费？",
+          "answer": "利用 AbortController 将浏览器断连或主动取消信号瞬间穿透网关传递给模型 API，并建立未交付 Token 的核算报表。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/zh/research/retry-loop-hidden-spend",
+          "label": "重试循环中的隐性成本"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/streaming-abandoned-generations-cost"
+  }
+}

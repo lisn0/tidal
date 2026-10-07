@@ -1,0 +1,54 @@
+{
+  "slug": "jev-ai-finops-decision-economics",
+  "tags": [
+    "finops",
+    "agents",
+    "model-routing",
+    "jev",
+    "ai-economics"
+  ],
+  "datePublished": "2026-09-21",
+  "dateModified": "2026-09-21",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Why Jev is catching on with agent builders",
+      "titleCore": "Why Jev is catching on with agent builders",
+      "description": "Jev gives agent software a bounded decision with a probability, rather than prose to parse. That fits routing, guardrails, triage, and high-volume workflow control.",
+      "body": "<p>Jev is catching on because it gives software something chat models were never designed to provide: a fast, typed decision that code can use immediately. Rather than generating text, Jev receives state plus a declared set of questions and returns Choices, Scores, or Boolean probabilities. Vercel says it reached nearly 13% of paid AI Gateway teams in its first 24 hours—more than twice the adoption of any prior model launch.</p><p>The attraction is not that it replaces every LLM. It is that most agent loops contain decisions that do not need a paragraph: which tool to call, whether an action needs review, whether enough evidence has been gathered, or where a ticket should go. A general model can make those decisions, but it usually emits text or JSON first. Jev is built for the decision itself.</p><h2>What people are using it for</h2><p>The same four use cases recur across early implementations: routing work to the right model or agent; guarding tool calls; triaging queues; and deciding what information should survive into the next step of a long-running workflow. These are frequent, bounded forks in a system. They are also exactly where a bad output format or a slow model becomes operationally expensive.</p><p>Vercel's <a href=\"https://vercel.com/i/jev-agent-control\">agent-control guide</a> puts the split clearly: the model evaluates the state, while ordinary application code owns permissions, validation, retries, and tool execution. Jev makes the first part cheaper and easier to compose. It does not turn a model decision into an access-control rule.</p><h2>The FinOps change is a new decision tier</h2><p>TypeSafe lists Jev at $0.042 per million input tokens with free output. That pricing matters because decision steps often appear many times inside an agent workflow. An independent live-API project measured eight representative calls at roughly $0.000015–$0.000025 each, with a median 352 ms response time in its head-to-head tests. The data and method are published in <a href=\"https://github.com/WallerChen/jev-measured\">jev-measured</a>.</p><p>That does not mean “Jev is 400 times cheaper than an LLM” in every deployment. The same project found that a fast, cheap structured-output model was only 1.4–1.7 times more expensive on its small fixtures; the much larger gap appeared against GPT-5 Nano, which spent output tokens reasoning. The honest conclusion is better: Jev creates a low-cost decision tier for cases where an agent needs judgment without generation.</p><h2>Trust is the product feature</h2><p>The most interesting part of Jev is its confidence signal. The model returns a probability with the answer, allowing a workflow to auto-route clear cases and send uncertain ones to a slower model or a person. That is how “trust” becomes useful in software: not by pretending every answer is certain, but by making uncertainty available to the code that has to act.</p><p>For FinOps teams, the measurement is simple. Track which expensive calls the decision layer avoids, the share of cases it escalates, and cost per completed workflow. Jev earns its place when it lets the system make more small decisions cheaply, quickly, and with a clear path for the uncertain ones.</p>",
+      "faq": [
+        {
+          "question": "What is Jev?",
+          "answer": "Jev is TypeSafe AI's System One model. It returns typed Choices, Scores, or Boolean probabilities from supplied state instead of generating prose."
+        },
+        {
+          "question": "Why are agent builders interested in Jev?",
+          "answer": "It is designed for frequent, bounded decisions such as routing, guardrails, triage, and workflow control, where code needs a decision rather than a chat response."
+        },
+        {
+          "question": "Does Jev replace LLMs?",
+          "answer": "No. Jev handles the decision layer; generative models still handle open-ended reasoning and writing. Code retains permissions and tool execution."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/model-price-cuts-routing-budget",
+          "label": "Model price cuts and the routing budget"
+        },
+        {
+          "slug": "/research/agent-total-cost-of-ownership",
+          "label": "Agent total cost of ownership"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/jev-ai-finops-decision-economics"
+  }
+}

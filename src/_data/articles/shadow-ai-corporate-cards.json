@@ -1,0 +1,143 @@
+{
+  "slug": "shadow-ai-corporate-cards",
+  "tags": [
+    "finops",
+    "cost-attribution",
+    "security",
+    "budgets"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Finding the AI spend outside your API bill",
+      "titleCore": "Finding the AI spend outside your API bill",
+      "description": "Your API dashboard shows what engineering spends. The bigger number is individual AI subscriptions expensed across the company, visible only to finance.",
+      "body": "<p>Most organisations measure AI cost by opening the provider console. That number is real, it is well instrumented, and in a lot of companies it is the smaller half of the total. The other half is on expense reports: individual subscriptions bought by people who needed a tool and had a card.</p><h2>Why it is invisible to platform teams</h2><p>It never touches your API keys, your gateway or your telemetry. It arrives as a per-seat charge on a corporate card, coded to software or occasionally to office expenses, in amounts small enough to clear approval automatically. Two hundred people at twenty to thirty dollars a month is a six-figure annual line that no engineering dashboard will ever display.</p><p>And this is not a story about rule-breaking. It is what functioning employees do when a tool is useful and procurement takes six weeks.</p><h2>What it actually costs you</h2><p>The direct overspend is the least interesting part. Individual plans are priced well above negotiated enterprise rates for the same product, and paying twice for the same vendor &mdash; once through a team agreement, once through scattered personal seats &mdash; is common. Multiple tools that do the same job proliferate because nobody is comparing them.</p><p>The harder costs are elsewhere. Consumer tiers carry different data-retention and training terms than the enterprise agreement your legal team actually reviewed, so business data ends up under terms nobody signed off. There is no SSO, so access does not end when employment does. And you cannot forecast, negotiate volume, or make a build-versus-buy decision about spend you cannot see.</p><h2>How to find it</h2><p>Ask finance, not engineering. Search card and expense data for the known vendor names, then for the pattern itself: recurring charges between roughly ten and fifty dollars, monthly, to software-adjacent merchants. Cross-reference SSO and IdP logs for applications nobody formally onboarded.</p><p>Then respond by making the sanctioned path easier than the card, not by banning the card. Enforcement without a fast alternative produces the same spend with worse visibility. A team plan that people can join today, with the enterprise terms and SSO attached, converts shadow spend into negotiated spend and usually pays for itself on the seat consolidation alone.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"https://finopsllm.com/research/invoice-reconciliation\">Invoice reconciliation</a></li><li><a href=\"/research/llm-purchasing-guide\">LLM purchasing guide</a></li></ul>",
+      "faq": [
+        {
+          "question": "What is shadow AI spend?",
+          "answer": "Individual AI subscriptions bought on corporate cards and expensed, outside any API key, gateway or procurement process. It is invisible to engineering dashboards because it never touches your infrastructure."
+        },
+        {
+          "question": "How do you find shadow AI on expenses?",
+          "answer": "Ask finance to search card data for known AI vendor names, then for the pattern: recurring monthly charges of roughly ten to fifty dollars to software merchants. Cross-reference IdP logs for apps nobody onboarded."
+        },
+        {
+          "question": "Should you ban personal AI subscriptions?",
+          "answer": "Banning without a fast sanctioned alternative produces the same spend with worse visibility. Offer a team plan people can join today, with enterprise terms and SSO, and the consolidation usually pays for itself."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "https://finopsllm.com/research/invoice-reconciliation",
+          "label": "Invoice reconciliation"
+        },
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing guide"
+        }
+      ]
+    },
+    "es": {
+      "title": "El gasto en IA fuera de tu factura de API",
+      "titleCore": "El gasto en IA fuera de tu factura de API",
+      "description": "Tu panel de API muestra lo que gasta ingeniería. La cifra mayor son suscripciones individuales pasadas a gastos, y solo finanzas puede verla.",
+      "body": "<p>Casi todas las organizaciones miden el coste de IA abriendo la consola del proveedor. Ese número es real y está bien instrumentado, y en muchas empresas es la mitad pequeña del total. La otra mitad está en notas de gasto: suscripciones individuales de gente que necesitaba una herramienta y tenía tarjeta.</p><h2>Por qué es invisible</h2><p>Nunca toca tus claves de API, tu gateway ni tu telemetría. Llega como cargo por asiento, con importes lo bastante pequeños para aprobarse solos. Doscientas personas a veinte o treinta al mes son seis cifras anuales que ningún panel de ingeniería mostrará.</p><h2>Qué te cuesta de verdad</h2><p>El sobrecoste directo es lo de menos. Los planes individuales están muy por encima de las tarifas negociadas, y es común pagar dos veces al mismo proveedor. Peor: los planes de consumo tienen términos de retención y entrenamiento distintos de los que revisó tu equipo legal, no hay SSO, y el acceso no termina cuando termina el empleo.</p><h2>Cómo encontrarlo</h2><p>Pregunta a finanzas, no a ingeniería. Busca en gastos los nombres de proveedores y luego el patrón: cargos recurrentes mensuales de diez a cincuenta dólares. Y responde haciendo que el camino oficial sea más fácil que la tarjeta, no prohibiendo la tarjeta.</p>",
+      "faq": [
+        {
+          "question": "¿Qué es el gasto en IA en la sombra?",
+          "answer": "Suscripciones individuales de IA compradas con tarjeta corporativa y pasadas a gastos, fuera de cualquier clave de API, gateway o proceso de compras. Es invisible para los paneles de ingeniería porque nunca toca tu infraestructura."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribución de costes de LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "La dépense IA hors de votre facture d’API",
+      "titleCore": "La dépense IA hors de votre facture d’API",
+      "description": "Votre tableau de bord API montre la dépense de l’ingénierie. Le plus gros chiffre, ce sont les abonnements individuels en notes de frais.",
+      "body": "<p>La plupart des organisations mesurent le coût de l’IA en ouvrant la console du fournisseur. Ce chiffre est réel et bien instrumenté &mdash; et dans beaucoup d’entreprises, c’est la petite moitié du total. L’autre moitié est en notes de frais : des abonnements individuels pris par des gens qui avaient besoin d’un outil et d’une carte.</p><h2>Pourquoi c’est invisible</h2><p>Cela ne touche jamais vos clés d’API, votre gateway ni votre télémétrie. Cela arrive comme une charge par siège, à des montants assez faibles pour passer l’approbation automatiquement. Deux cents personnes à vingt ou trente dollars par mois, c’est une ligne annuelle à six chiffres qu’aucun tableau de bord technique n’affichera.</p><h2>Ce que cela coûte vraiment</h2><p>Le surcoût direct est le moins intéressant. Les plans individuels sont bien au-dessus des tarifs négociés, et payer deux fois le même fournisseur est courant. Plus grave : les offres grand public ont d’autres conditions de rétention et d’entraînement que celles revues par votre juridique, il n’y a pas de SSO, et l’accès ne cesse pas avec le contrat de travail.</p><h2>Comment la trouver</h2><p>Demandez à la finance, pas à l’ingénierie. Cherchez les noms de fournisseurs puis le motif : charges mensuelles récurrentes de dix à cinquante dollars. Puis rendez la voie officielle plus simple que la carte, plutôt que d’interdire la carte.</p>",
+      "faq": [
+        {
+          "question": "Qu’est-ce que la dépense IA fantôme?",
+          "answer": "Des abonnements IA individuels pris sur carte professionnelle et passés en notes de frais, hors de toute clé d’API, gateway ou processus d’achat. Invisible pour l’ingénierie, puisque cela ne touche jamais votre infrastructure."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Attribution des coûts LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "KI-Ausgaben außerhalb Ihrer API-Rechnung",
+      "titleCore": "KI-Ausgaben außerhalb Ihrer API-Rechnung",
+      "description": "Ihr API-Dashboard zeigt, was Engineering ausgibt. Die größere Zahl sind einzelne Abos auf Spesenabrechnungen, und nur die Finanzabteilung sieht sie.",
+      "body": "<p>Die meisten Organisationen messen KI-Kosten, indem sie die Anbieterkonsole öffnen. Diese Zahl ist echt und gut instrumentiert &mdash; und in vielen Firmen die kleinere Hälfte. Die andere Hälfte steckt in Spesenabrechnungen: Einzelabos von Leuten, die ein Werkzeug brauchten und eine Karte hatten.</p><h2>Warum es unsichtbar bleibt</h2><p>Es berührt nie Ihre API-Schlüssel, Ihr Gateway oder Ihre Telemetrie. Es kommt als Gebühr je Platz, in Beträgen, die automatisch durch die Freigabe rutschen. Zweihundert Personen zu zwanzig oder dreißig Dollar im Monat sind eine sechsstellige Jahresposition, die kein Engineering-Dashboard je zeigt.</p><h2>Was es wirklich kostet</h2><p>Die direkte Mehrausgabe ist das Uninteressanteste. Einzelpläne liegen deutlich über verhandelten Konditionen, und doppelt beim selben Anbieter zu zahlen ist üblich. Schwerer wiegt: Consumer-Tarife haben andere Aufbewahrungs- und Trainingsbedingungen als der von der Rechtsabteilung geprüfte Vertrag, es gibt kein SSO, und der Zugang endet nicht mit dem Arbeitsverhältnis.</p><h2>Wie man es findet</h2><p>Fragen Sie die Finanzabteilung, nicht Engineering. Suchen Sie nach Anbieternamen und dann nach dem Muster: wiederkehrende Monatsbeträge von zehn bis fünfzig Dollar. Und machen Sie den offiziellen Weg leichter als die Karte, statt die Karte zu verbieten.</p>",
+      "faq": [
+        {
+          "question": "Was sind Schatten-KI-Ausgaben?",
+          "answer": "Einzelne KI-Abos, die per Firmenkarte gekauft und als Spesen abgerechnet werden, außerhalb jedes API-Schlüssels, Gateways oder Beschaffungsprozesses. Für Engineering-Dashboards unsichtbar, weil sie Ihre Infrastruktur nie berühren."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM-Kostenzuordnung"
+        }
+      ]
+    },
+    "pt": {
+      "title": "A despesa de IA fora da sua fatura de API",
+      "titleCore": "A despesa de IA fora da sua fatura de API",
+      "description": "O painel de API mostra o que engenharia gasta. O número maior são subscrições individuais lançadas em despesas, e só finanças as consegue ver.",
+      "body": "<p>Quase todas as organizações medem o custo de IA abrindo a consola do fornecedor. Esse número é real e bem instrumentado &mdash; e em muitas empresas é a metade pequena do total. A outra metade está em notas de despesa: subscrições individuais de quem precisava de uma ferramenta e tinha cartão.</p><h2>Porque é invisível</h2><p>Nunca toca nas suas chaves de API, no gateway ou na telemetria. Chega como encargo por lugar, em valores pequenos que passam a aprovação sozinhos. Duzentas pessoas a vinte ou trinta por mês são uma rubrica anual de seis dígitos que nenhum painel de engenharia mostra.</p><h2>O que lhe custa mesmo</h2><p>O excesso direto é o menos interessante. Os planos individuais estão muito acima das tarifas negociadas, e pagar duas vezes ao mesmo fornecedor é comum. Pior: os planos de consumo têm termos de retenção e treino diferentes dos que o jurídico reviu, não há SSO, e o acesso não termina quando o vínculo termina.</p><h2>Como encontrar</h2><p>Pergunte a finanças, não a engenharia. Procure nomes de fornecedores e depois o padrão: encargos mensais recorrentes de dez a cinquenta dólares. E responda tornando o caminho oficial mais fácil do que o cartão, em vez de proibir o cartão.</p>",
+      "faq": [
+        {
+          "question": "O que é a despesa de IA sombra?",
+          "answer": "Subscrições individuais de IA compradas em cartão da empresa e lançadas em despesas, fora de qualquer chave de API, gateway ou processo de compras. É invisível para os painéis de engenharia porque nunca toca na sua infraestrutura."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribuição de custos de LLM"
+        }
+      ]
+    },
+    "ja": {
+      "title": "API 請求書の外にある AI 支出を見つける",
+      "titleCore": "API 請求書の外にある AI 支出を見つける",
+      "description": "API のダッシュボードに出るのはエンジニアリングの支出です。より大きい数字は各自が経費精算している個人向け AI サブスクで、見えるのは経理だけです。",
+      "body": "<p>多くの組織は、プロバイダのコンソールを開いて AI コストを測ります。その数字は本物で、計測もよくできています &mdash; そして多くの会社では、それが合計の「小さいほうの半分」です。もう半分は経費精算の中にあります。ツールが必要で、カードを持っていた人が買った個人サブスクです。</p><h2>なぜプラットフォームチームから見えないのか</h2><p>それはあなたの API キーにもゲートウェイにもテレメトリにも触れません。法人カードの席単位課金として届き、ソフトウェア費や時には事務費に仕訳され、金額は自動承認を通る程度に小さい。200 人 × 月 20〜30 ドルは年間 6 桁の費目ですが、どんなエンジニアリングのダッシュボードにも決して表示されません。</p><p>そしてこれは規則違反の話ではありません。ツールが役に立ち、購買に 6 週間かかるとき、まともに働く社員がやることです。</p><h2>実際の損失</h2><p>直接の払い過ぎは最も退屈な部分です。個人プランは同じ製品の交渉済み法人料金よりかなり高く、同じベンダーに二重払い &mdash; チーム契約と、散在する個人席 &mdash; はよくあります。誰も比較していないので、同じ仕事をする複数のツールが増えます。</p><p>厄介なコストは別にあります。コンシューマ版は、法務が実際にレビューした企業契約とはデータ保持や学習利用の条件が異なるため、誰も承認していない条件下に業務データが置かれます。SSO がないので、退職してもアクセスが終わりません。そして見えない支出は、予測も、ボリューム交渉も、内製か購入かの判断もできません。</p><h2>見つけ方</h2><p>エンジニアリングではなく経理に聞いてください。カードと経費のデータを、既知のベンダー名で検索し、次にパターンそのもの &mdash; ソフトウェア系加盟店への、おおむね 10〜50 ドルの毎月の継続課金 &mdash; で検索します。正式にオンボードされていないアプリについては SSO と IdP のログを突き合わせます。</p><p>対応は、カードを禁じることではなく、公式の経路をカードより簡単にすることです。速い代替のない取り締まりは、同じ支出をより見えない形で生むだけです。企業条件と SSO を備え、今日から参加できるチームプランは、シャドー支出を交渉済み支出に変え、たいていは席の統合だけで元が取れます。</p>",
+      "faq": [
+        {
+          "question": "シャドー AI 支出とは何ですか？",
+          "answer": "法人カードで買われ経費精算されている個人向け AI サブスクのことで、API キーもゲートウェイも購買プロセスも通りません。自社インフラに一切触れないため、エンジニアリングのダッシュボードからは見えません。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM コストの帰属"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/shadow-ai-corporate-cards"
+  }
+}

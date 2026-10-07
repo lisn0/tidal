@@ -1,0 +1,345 @@
+{
+  "slug": "azure-openai-vs-direct-cost",
+  "tags": [
+    "azure",
+    "openai",
+    "cost-comparison",
+    "pricing",
+    "ptu"
+  ],
+  "datePublished": "2026-07-12",
+  "dateModified": "2026-09-19",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "Azure OpenAI vs. Direkt OpenAI: Kosten, PTU & Einsparungen",
+      "titleCore": "Azure OpenAI vs. Direkt OpenAI: Kosten, PTU & Einsparungen",
+      "description": "Azure OpenAI im Vergleich zur direkten OpenAI API. PTU-Reservierungen (bis zu 82 % Rabatt), regionale Aufschläge, Break-even-Berechnung und Gesamtbetriebskosten.",
+      "body": "<p>Auf Standard-Pay-as-you-go-Basis kosten Azure OpenAI und die direkte OpenAI API bei globalen Bereitstellungen identisch: beispielsweise $2,50 pro Million Input-Token und $15 pro Million Output-Token für Spitzenmodelle. Der wirtschaftliche Unterschied liegt nicht im Listenpreis für Standardaufrufe, sondern in drei strukturellen Hebeln: <strong>Provisioned Throughput Units (PTU)</strong>, <strong>regionalen Datenzonenaufschlägen</strong> und <strong>Unternehmensrabatten über das Microsoft Enterprise Agreement (EA)</strong>.</p><h2>1. Provisioned Throughput (PTU) vs. Token-Abrechnung</h2><p>Azure bietet dedizierte Modellkapazität über PTUs. Auf Abruf kostet eine PTU $2 pro Stunde. Mit einer 1-monatigen Reservierung sinkt dieser Betrag auf etwa $260 pro PTU und Monat — ein Rabatt von <strong>bis zu 82 %</strong> gegenüber dem Stundensatz (bei 1-Jahres-Verpflichtungen bis zu 85 %).</p><p>Die Break-even-Schwelle für eine PTU-Reservierung liegt typischerweise bei einer <strong>durchschnittlichen Auslastung von über 65–75 %</strong>. Liegt Ihr Workload darunter oder ist er stark schwankend, ist die tokenbasierte Abrechnung günstiger.</p><h2>2. Regionale Preisaufschläge</h2><p>Globale Azure-Bereitstellungen spiegeln die US-Preise von OpenAI wider. Regionale Bereitstellungen (z. B. ausschließlich in Westeuropa oder geschützten Souveränitätszonen) erheben jedoch einen Aufschlag von <strong>10 % bis 20 %</strong>. Unternehmen, die Datenresidenz in der EU verlangen, müssen diesen Aufpreis in ihren FinOps-Modellen berücksichtigen.</p><h2>3. Versteckte Infrastrukturkosten</h2><p>Bei Azure OpenAI fallen zusätzliche Komponenten an: Private Endpoints, Azure Monitor-Protokollierung, Virtual Network Egress und API Management Gateway-Gebühren. Diese können die effektiven Kosten pro Million Token um 4 % bis 8 % erhöhen, bieten jedoch enterprise-taugliche Sicherheit und RBAC-Zugriffssteuerung.</p>",
+      "faq": [
+        {
+          "question": "Ist Azure OpenAI günstiger als direktes OpenAI?",
+          "answer": "Bei Pay-as-you-go sind die Listenpreise für globale Endpunkte identisch. Azure wird durch PTU-Reservierungen bei hoher Auslastung und EA-Rabatte günstiger, regional aber oft 10–20 % teurer."
+        },
+        {
+          "question": "Was ist eine Provisioned Throughput Unit (PTU)?",
+          "answer": "Eine PTU ist reservierte Modellkapazität bei Azure. Monatliche Reservierungen kosten rund $260/PTU-Monat und bieten bis zu 82 % Ersparnis gegenüber dem On-Demand-Stundensatz."
+        },
+        {
+          "question": "Wann lohnt sich der Wechsel zu Azure OpenAI?",
+          "answer": "Wenn Sie Microsoft EA-Commitments verrechnen müssen, garantierte Latenz durch PTU bei über 70 % Auslastung erzielen wollen oder strenge Compliance-Vorgaben erfüllen müssen."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/committed-spend-discounts",
+          "label": "Rabatte für zugesagte Ausgaben"
+        },
+        {
+          "slug": "/de/research/provider-prices-not-comparable",
+          "label": "Warum Providerpreise schwer vergleichbar sind"
+        }
+      ]
+    },
+    "ja": {
+      "title": "Azure OpenAI対直接OpenAI費用比較：PTU予約と損益分岐点",
+      "titleCore": "Azure OpenAI対直接OpenAI費用比較：PTU予約と損益分岐点",
+      "description": "Azure OpenAIとOpenAI直接APIの料金比較。PTU予約割引（最大82%引）、リージョン別追加料金、損益分岐点の計算、エンタープライズTCOを解説。",
+      "body": "<p>グローバル展開の従量課金（Pay-as-you-go）では、Azure OpenAI と直接の OpenAI API は同額です。例えば最新モデルの定価は入力100万トークンあたり2.50ドル、出力15ドルで一致します。両者の真の費用差は基本単価ではなく、<strong>PTU（Provisioned Throughput Units）予約</strong>、<strong>リージョン別データ主権プレミアム</strong>、そして<strong>マイクロソフトEA（Enterprise Agreement）割引</strong>にあります。</p><h2>1. PTU予約による大幅な割引</h2><p>Azure独自のPTU（プロビジョンドスループット）は専用モデル容量を提供します。オンデマンドでは1 PTUあたり1時間2ドルですが、1か月予約を結ぶと月額約260ドルに下がり、<strong>最大82%の割引</strong>（1年予約では最大85%）となります。</p><p>PTUの損益分岐点は、持続的なキャパシティ利用率が<strong>約65〜75%以上</strong>のワークロードです。利用率が低く夜間や休日にアクセスが途切れる場合は、直接の従量課金トークンの方が安価に収まります。</p><h2>2. リージョン別追加コスト</h2><p>グローバルエンドポイントは米国直接価格と一致しますが、日本国内リージョン（東日本）やEUデータゾーンに限定してトラフィックを処理する場合、<strong>10%〜20%の地域プレミアム</strong>が加算されます。データガバナンス要件とコスト増のトレードオフを計算する必要があります。</p><h2>3. インフラ付随費用（TCO）</h2><p>Azure環境ではPrivate Endpoint通信費、Log Analytics、VNetデータ転送料金が加わります。これらは推論費用に4%〜8%上乗せされますが、強固な閉域網セキュリティとActive Directory/RBAC認証が保証されます。</p>",
+      "faq": [
+        {
+          "question": "Azure OpenAIは直接のOpenAIより安価ですか？",
+          "answer": "従量課金の定価は同一です。継続利用率70%超でPTU予約を適用するかEA一括割引を活用すればAzureが安くなりますが、国内固定指定では割高になる場合があります。"
+        },
+        {
+          "question": "PTU（プロビジョンドスループット）とは何ですか？",
+          "answer": "Azureが提供する推論容量の予約モデルです。月次予約で時間単価比最大82%割引となり、急なクォータ枯渇のない予測可能な応答速度を確保できます。"
+        },
+        {
+          "question": "直接OpenAIとAzureのどちらを選ぶべきですか？",
+          "answer": "Azure残高の消化、日本国内閉域網でのセキュリティ要件、一定以上の高い定常トラフィックがある場合はAzureが推奨されます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/committed-spend-discounts",
+          "label": "年間コミットメント割引の活用法"
+        },
+        {
+          "slug": "/ja/research/provider-prices-not-comparable",
+          "label": "プロバイダー価格の比較検証"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Azure OpenAI vs OpenAI Direct : comparatif de coûts et PTU",
+      "titleCore": "Azure OpenAI vs OpenAI Direct : comparatif de coûts et PTU",
+      "description": "Comparatif des prix Azure OpenAI et API OpenAI directe. Réservations PTU (jusqu'à 82 % de remise), variations régionales, seuil de rentabilité et TCO.",
+      "body": "<p>En tarification standard à l'usage sur les déploiements globaux, Azure OpenAI et l'API directe d'OpenAI affichent des prix catalogues identiques (ex. 2,50 $ par million de jetons en entrée et 15 $ en sortie pour les modèles de pointe). La véritable divergence économique se joue sur trois piliers : <strong>les unités de débit provisionné (PTU)</strong>, <strong>les surcoûts de résidence des données régionale</strong> et <strong>les remises de volume Enterprise Agreement (EA)</strong>.</p><h2>1. Unités de débit provisionné (PTU) vs consommation au jeton</h2><p>Azure propose une réservation de capacité dédiée avec les PTU. À la demande, une PTU coûte 2 $ de l'heure. Avec un engagement mensuel réservé, ce tarif passe à environ 260 $ par mois et par PTU — soit une réduction pouvant atteindre <strong>82 %</strong> par rapport au taux horaire (et jusqu'à 85 % sur un an).</p><p>Le seuil de rentabilité se situe généralement à un <strong>taux d'utilisation continue supérieur à 65–75 %</strong>. En dessous, ou pour les trafics imprévisibles, le paiement direct au jeton reste plus avantageux.</p><h2>2. Surcoûts géographiques et souveraineté</h2><p>Tandis que les déploiements mondiaux s'alignent sur les prix américains, restreindre vos déploiements aux régions européennes ou souveraines engendre une majoration de <strong>10 % à 20 %</strong>. La conformité RGPD stricte et la localité des données ont un impact direct sur la facture FinOps.</p><h2>3. TCO et coûts cachés de réseau</h2><p>Déployer sur Azure implique des coûts d'infrastructure annexes : Private Endpoints, stockage des journaux Azure Monitor et sorties réseau VNet. Ces coûts ajoutent 4 % à 8 % au coût effectif par million de jetons, mais procurent une isolation réseau d'entreprise et une gouvernance RBAC intégrée.</p>",
+      "faq": [
+        {
+          "question": "Azure OpenAI est-il moins cher qu'OpenAI en direct ?",
+          "answer": "À l'usage standard mondial, les prix sont identiques. Azure devient nettement moins cher grâce aux réservations PTU au-delà de 70 % d'utilisation, mais les régions UE ajoutent 10 à 20 %."
+        },
+        {
+          "question": "Qu'est-ce qu'une unité PTU chez Azure ?",
+          "answer": "C'est une réservation de capacité d'inférence dédiée garantissant la latence. L'engagement mensuel réduit le coût horaire jusqu'à 82 %."
+        },
+        {
+          "question": "Quand faut-il privilégier Azure OpenAI ?",
+          "answer": "Privilégiez Azure en cas d'engagements Microsoft Azure consommables, de trafic prévisible justifiant un PTU, ou d'exigences réseau strictes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/committed-spend-discounts",
+          "label": "Remises sur dépenses engagées"
+        },
+        {
+          "slug": "/fr/research/provider-prices-not-comparable",
+          "label": "Pourquoi comparer les prix est complexe"
+        }
+      ]
+    },
+    "es": {
+      "title": "Azure OpenAI vs OpenAI Directo: comparativa de costes y PTU",
+      "titleCore": "Azure OpenAI vs OpenAI Directo: comparativa de costes y PTU",
+      "description": "Comparativa de precios entre Azure OpenAI y la API de OpenAI. Reservas PTU (hasta 82% de descuento), recargos regionales, punto de equilibrio y costes totales.",
+      "body": "<p>En la modalidad de pago por uso para despliegues globales, Azure OpenAI y la API directa de OpenAI comparten las mismas tarifas de lista (por ejemplo, 2,50 $ por millón de tokens de entrada y 15 $ de salida). La verdadera diferencia en la factura mensual depende de tres factores: <strong>las unidades de rendimiento aprovisionado (PTU)</strong>, <strong>los recargos por residencia regional de datos</strong> y <strong>los acuerdos empresariales de Microsoft (EA)</strong>.</p><h2>1. Rendimiento aprovisionado (PTU) frente a tokens bajo demanda</h2><p>Las PTU de Azure permiten reservar capacidad dedicada de modelo. Bajo demanda, una PTU cuesta 2 $ por hora. Con una reserva mensual, el coste baja a aproximadamente 260 $ por PTU al mes, lo que representa un ahorro de <strong>hasta el 82%</strong> frente al precio por hora (y hasta un 85% a un año).</p><p>El punto de equilibrio para que una reserva PTU resulte más rentable que pagar por token se alcanza con una <strong>utilización sostenida superior al 65–75%</strong>. Con tráfico esporádico, el pago por token sigue siendo más barato.</p><h2>2. Recargos por soberanía regional</h2><p>Los despliegues globales de Azure replican las tarifas estándar de EE. UU. Sin embargo, configurar zonas de datos restringidas a Europa o regiones locales suma un sobrecoste de entre el <strong>10% y el 20%</strong> en las llamadas.</p><h2>3. Costes ocultos de infraestructura (TCO)</h2><p>Azure OpenAI conlleva gastos auxiliares de red y observabilidad: Private Endpoints, Azure Monitor Log Analytics y transferencia de salida en VNet. Estos añaden entre un 4% y un 8% al coste efectivo de los tokens, pero aportan seguridad perimetral y gobierno corporativo.</p>",
+      "faq": [
+        {
+          "question": "¿Es Azure OpenAI más barato que OpenAI directo?",
+          "answer": "Los precios base por token son iguales. Azure resulta más barato con reservas PTU y uso intensivo (>70%), pero las regiones de datos locales pueden encarecer el servicio un 10-20%."
+        },
+        {
+          "question": "¿Qué es una PTU (Provisioned Throughput Unit)?",
+          "answer": "Es capacidad de cómputo reservada en Azure para modelos de IA. Una reserva mensual ahorra hasta un 82% y garantiza latencia estable sin límites de cuota variables."
+        },
+        {
+          "question": "¿Cuándo conviene elegir Azure OpenAI?",
+          "answer": "Cuando su empresa disponga de compromisos de gasto con Microsoft, requiera aislamiento en red privada o tenga un volumen predecible para aprovechar PTU."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/committed-spend-discounts",
+          "label": "Descuentos por consumo comprometido"
+        },
+        {
+          "slug": "/es/research/provider-prices-not-comparable",
+          "label": "Por qué las tarifas no son comparables"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Azure OpenAI vs OpenAI Direto: comparação de custos e PTU",
+      "titleCore": "Azure OpenAI vs OpenAI Direto: comparação de custos e PTU",
+      "description": "Comparação de preços entre Azure OpenAI e API OpenAI direta. Reservas PTU (até 82% de desconto), sobretaxas regionais, ponto de equilíbrio e TCO empresarial.",
+      "body": "<p>Em consumo sob demanda com roteamento global, Azure OpenAI e OpenAI direta têm preços de tabela rigorosamente iguais (como $2,50 por milhão de tokens de entrada e $15 de saída). A verdadeira diferença econômica está em três alavancas: <strong>Provisioned Throughput Units (PTU)</strong>, <strong>sobretaxas de residência de dados regional</strong> e <strong>descontos corporativos no contrato Microsoft EA</strong>.</p><h2>1. PTU dedicada vs. pagamento por token</h2><p>A Azure oferece reserva de capacidade via PTUs. Sob demanda, uma PTU custa $2 por hora. Ao fechar uma reserva mensal, o valor cai para cerca de $260 por PTU ao mês — um desconto de <strong>até 82%</strong> em relação ao custo horário (e até 85% no plano anual).</p><p>O ponto de equilíbrio econômico para justificar uma PTU ocorre quando a utilização média sustentada fica <strong>acima de 65–75%</strong>. Se o tráfego for variável ou sazonal, o pagamento tradicional por token consumido é mais econômico.</p><h2>2. Variações regionais de preço</h2><p>Implantações globais seguem a tabela americana da OpenAI. No entanto, restringir chamadas a zonas da União Europeia ou regiões específicas locais adiciona uma sobretaxa de <strong>10% a 20%</strong> na fatura de inferência.</p><h2>3. Custos indiretos de infraestrutura</h2><p>O ambiente Azure inclui custos de Private Endpoints, exportação para Log Analytics e tráfego de saída VNet. Embora adicionem de 4% a 8% ao custo efetivo, viabilizam controles de acesso corporativo RBAC e isolamento de segurança bancário.</p>",
+      "faq": [
+        {
+          "question": "A Azure OpenAI é mais barata que a OpenAI direta?",
+          "answer": "Na tabela básica por token, os valores são idênticos. A Azure torna-se mais econômica com reservas PTU acima de 70% de uso, mas regiões locais podem adicionar 10% a 20% de sobretaxa."
+        },
+        {
+          "question": "O que é uma PTU (Provisioned Throughput Unit)?",
+          "answer": "É a unidade de capacidade dedicada de inferência na Azure. Oferece latência previsível e economia de até 82% em compromissos mensais ou anuais."
+        },
+        {
+          "question": "Quando migrar para Azure OpenAI?",
+          "answer": "Quando houver créditos ou metas contratuais de nuvem Microsoft, necessidade de rede privada ou volume contínuo suficiente para amortizar PTU."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/committed-spend-discounts",
+          "label": "Descontos por compromisso de gasto"
+        },
+        {
+          "slug": "/pt/research/provider-prices-not-comparable",
+          "label": "Por que preços de fornecedores não são comparáveis"
+        }
+      ]
+    },
+    "it": {
+      "title": "Azure OpenAI vs OpenAI Diretto: confronto costi e unità PTU",
+      "titleCore": "Azure OpenAI vs OpenAI Diretto: confronto costi e unità PTU",
+      "description": "Confronto costi tra Azure OpenAI e API OpenAI diretta. Sconti per prenotazioni PTU (fino all'82%), maggiorazioni regionali, punto di pareggio e TCO aziendale.",
+      "body": "<p>Nelle distribuzioni globali con tariffazione a consumo (pay-as-you-go), Azure OpenAI e l'API diretta di OpenAI applicano gli stessi identici prezzi di listino (ad esempio $2,50 per milione di token in ingresso e $15 in uscita sui modelli di punta). Le divergenze finanziarie effettive derivano da tre fattori: <strong>le Provisioned Throughput Units (PTU)</strong>, <strong>le maggiorazioni regionali per la sovranità dei dati</strong> e <strong>gli accordi quadro Enterprise Agreement (EA)</strong> di Microsoft.</p><h2>1. Throughput riservato (PTU) vs. consumo a token</h2><p>Le PTU permettono di acquistare capacità di calcolo dedicata. Su base oraria on-demand, una PTU costa $2 all'ora. Con una prenotazione mensile, il costo scende a circa $260 al mese per PTU — garantendo un risparmio <strong>fino all'82%</strong> rispetto alla tariffa oraria (e fino all'85% su base annuale).</p><p>Il punto di pareggio (break-even) di una prenotazione PTU si colloca tipicamente a un <strong>tasso di utilizzo costante superiore al 65–75%</strong>. Al di sotto di tale soglia, o in presenza di flussi discontinui, la tariffazione classica a token risulta più vantaggiosa.</p><h2>2. Sovrapprezzi regionali e requisiti europei</h2><p>I deployment globali replicano i listini statunitensi. Tuttavia, se l'azienda richiede la residenza dei dati esclusivamente all'interno dell'Unione Europea o in zone protette, Azure applica una maggiorazione compresa tra il <strong>10% e il 20%</strong>.</p><h2>3. Costi infrastrutturali accessori</h2><p>In ambiente Azure occorre conteggiare anche i Private Endpoint, l'ingestione log in Azure Monitor e il traffico di rete in uscita. Tali elementi incrementano il costo effettivo dei token del 4–8%, compensati però da conformità enterprise e autenticazione IAM granulare.</p>",
+      "faq": [
+        {
+          "question": "Azure OpenAI costa meno rispetto a OpenAI diretto?",
+          "answer": "A consumo globale le tariffe sono identiche. Azure diventa sensibilmente più economica con le riserve PTU sopra il 70% di utilizzo, mentre le zone dati UE costano il 10-20% in più."
+        },
+        {
+          "question": "Che cosa sono le PTU in Azure OpenAI?",
+          "answer": "Sono unità di throughput riservato che garantiscono capacità e latenza stabili, con sconti fino all'82% rispetto alla tariffa oraria se prenotate su base mensile."
+        },
+        {
+          "question": "Quando conviene adottare Azure OpenAI?",
+          "answer": "Quando si devono consumare impegni contrattuali Microsoft EA, quando serve isolamento su rete privata o quando i volumi giustificano una riserva PTU."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/committed-spend-discounts",
+          "label": "Sconti per spesa impegnata"
+        },
+        {
+          "slug": "/it/research/provider-prices-not-comparable",
+          "label": "Perché i prezzi dei provider non sono direttamente comparabili"
+        }
+      ]
+    },
+    "ko": {
+      "title": "Azure OpenAI 대 직접 OpenAI 비용 비교: PTU 예약 및 손익분기점",
+      "titleCore": "Azure OpenAI 대 직접 OpenAI 비용 비교: PTU 예약 및 손익분기점",
+      "description": "Azure OpenAI와 OpenAI 직접 API의 비용 비교 가이드. 최대 82% PTU 예약 할인, 리전별 가격 할증, 손익분기점 계산 및 엔터프라이즈 TCO 분석.",
+      "body": "<p>글로벌 종량제(Pay-as-you-go) 기준에서 Azure OpenAI와 OpenAI 직접 API의 공시 단가는 정확히 일치합니다(예: GPT 플래그십 모델 기준 입력 100만 토큰당 2.50달러, 출력 15달러). 기업 청구서에서 발생하는 실질적인 비용 차이는 기본 토큰 가격이 아니라 <strong>PTU(프로비전된 처리량 단위) 예약</strong>, <strong>데이터 주권 리전 할증</strong>, 그리고 <strong>Microsoft EA(Enterprise Agreement) 약정 할인</strong>이라는 세 가지 구조적 요인에서 비롯됩니다.</p><h2>1. PTU 전용 용량 예약과 종량제 토큰 비교</h2><p>Azure의 핵심 차별화 요소는 전용 모델 용량을 대여하는 PTU 모델입니다. 온디맨드로 호출 시 PTU당 시간당 2달러이지만, 1개월 약정 예약 시 월 약 260달러 수준으로 인하되어 온디맨드 대비 <strong>최대 82%의 비용 절감</strong>(1년 약정 시 최대 85%)을 제공합니다.</p><p>PTU 예약의 경제적 손익분기점은 24시간 평균 용량 가동률이 <strong>약 65~75% 이상</strong> 꾸준히 유지될 때 달성됩니다. 야간이나 주말에 트래픽이 급감하는 가변적 워크플로라면 기존 종량제 토큰 결제가 더 경제적입니다.</p><h2>2. 데이터 주권 및 리전별 할증 요금</h2><p>글로벌 배포는 미국 OpenAI 본사 가격과 동일하지만, 유럽연합(EU) 내 데이터 보관이나 아시아 태평양 특정 리전을 고정 지정하여 배포할 경우 <strong>10%에서 20%의 리전 프리미엄 할증</strong>이 청구됩니다. 데이터 규제 준수 요건과 인프라 비용 간의 균형을 검토해야 합니다.</p><h2>3. 엔터프라이즈 부가 인프라 비용(TCO)</h2><p>Azure 환경에서는 Private Endpoint 연결 비용, Log Analytics 진단 로깅, VNet 아웃바운드 데이터 전송료가 추가 발생합니다. 이는 실효 토큰 비용을 약 4~8% 증가시키지만, 가상 사설망 격리와 Azure Active Directory 기반 RBAC 보안 통제를 완벽히 충족시킵니다.</p>",
+      "faq": [
+        {
+          "question": "Azure OpenAI가 직접 OpenAI API보다 저렴한가요?",
+          "answer": "글로벌 종량제 가격은 동일합니다. 가동률 70% 이상의 고부하 워크로드에서 PTU 예약을 체결하거나 EA 약정 할인을 적용할 경우 Azure가 훨씬 저렴해집니다."
+        },
+        {
+          "question": "PTU(Provisioned Throughput Unit)란 무엇인가요?",
+          "answer": "Azure가 제공하는 전용 추론 처리량 단위로, 할당량 초과 없이 일정한 응답 속도를 보장하며 월별 예약 시 최대 82% 할인됩니다."
+        },
+        {
+          "question": "언제 Azure OpenAI를 선택해야 하나요?",
+          "answer": "기존 Microsoft 엔터프라이즈 약정(MACC)을 소진해야 하거나, 폐쇄망 보안 환경이 필수적이거나, PTU 손익분기점을 넘는 대규모 트래픽이 있을 때 적합합니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/committed-spend-discounts",
+          "label": "약정 지출 할인 가이드"
+        },
+        {
+          "slug": "/ko/research/provider-prices-not-comparable",
+          "label": "공급업체 가격 직접 비교의 함정"
+        }
+      ]
+    },
+    "zh": {
+      "title": "Azure OpenAI对比直接OpenAI：成本、PTU与企业TCO",
+      "titleCore": "Azure OpenAI对比直接OpenAI：成本、PTU与企业TCO",
+      "description": "Azure OpenAI与OpenAI直接API的全面成本对比。深入解析PTU预留（最高82%折扣）、区域数据主权溢价、盈亏平衡测算与总体拥有成本。",
+      "body": "<p>在标准的全球按量付费（Pay-as-you-go）模式下，Azure OpenAI 与直接调用 OpenAI API 的刊例价完全一致（例如旗舰模型输入每百万Token收费2.50美元，输出15美元）。企业账单上的核心经济差异并不在于标准调用单价，而在于三大结构性杠杆：<strong>PTU预置吞吐量单元（Provisioned Throughput Units）</strong>、<strong>区域数据主权溢价</strong>以及<strong>微软企业协议（EA/MACC）抵扣折扣</strong>。</p><h2>1. PTU专享容量预留对比按量Token</h2><p>Azure的核心优势在于通过PTU提供独占的模型推理吞吐量。按需调用时单个PTU为每小时2美元；若按月签订预留合约，折合每月约260美元——相较按需单价享受<strong>高达82%的折扣</strong>（若签订1年期合约折扣高达85%）。</p><p>PTU预留的经济盈亏平衡点通常位于<strong>全天候平均产能利用率持续高于65%–75%</strong>。如果业务负载起伏巨大或夜间无调用，按量计费反而更加划算。</p><h2>2. 区域数据合规溢价</h2><p>全局端点价格与美国标准价格对齐，但如果企业要求将数据严格保留在西欧或特定合规主权区域，微软会收取<strong>10%至20%的区域溢价</strong>。合规成本必须纳入FinOps测算。</p><h2>3. 隐藏的企业网络与基础设施成本</h2><p>在Azure中调用模型通常伴随着Private Endpoint私网连接、Log Analytics安全日志和虚拟网络出网流量费。这些外围开销使有效Token成本上浮约4%至8%，但换来了企业级RBAC权限与网络隔离合规。</p>",
+      "faq": [
+        {
+          "question": "Azure OpenAI是否比直接调用OpenAI更便宜？",
+          "answer": "按量计费全球端点价格一致。在业务利用率超过70%并签约PTU预留或通过微软企业协议（EA）抵扣时，Azure成本明显更低。"
+        },
+        {
+          "question": "什么是PTU预置吞吐量单元？",
+          "answer": "PTU是Azure的独占推理容量单位，提供有保证的延迟和速率，按月签约预留可比按需费用节省高达82%。"
+        },
+        {
+          "question": "企业应该在什么时候选用Azure OpenAI？",
+          "answer": "当需要消耗微软MACC云承诺、需要内网隔离合规要求、或具备稳定高并发请求以摊薄PTU成本时。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/committed-spend-discounts",
+          "label": "承诺支出折扣指南"
+        },
+        {
+          "slug": "/zh/research/provider-prices-not-comparable",
+          "label": "为什么供应商价格无法直接对比"
+        }
+      ]
+    },
+    "nl": {
+      "title": "Azure OpenAI vs direct OpenAI: kosten, PTU & break-even",
+      "titleCore": "Azure OpenAI vs direct OpenAI: kosten, PTU & break-even",
+      "description": "Vergelijk Azure OpenAI met de directe OpenAI API. Analyse van PTU-reserveringen (tot 82% korting), regionale toeslagen, break-even berekeningen en enterprise TCO.",
+      "body": "<p>Op basis van standaard pay-as-you-go zijn Azure OpenAI en de directe OpenAI API voor wereldwijde endpoints identiek geprijsd: bijvoorbeeld $2,50 per miljoen inputtokens en $15 per miljoen outputtokens voor topmodellen. Het financiële verschil zit niet in de standaardeenheidsprijs, maar in drie hefbomen: <strong>Provisioned Throughput Units (PTU)</strong>, <strong>regionale datasoevereiniteitstoeslagen</strong> en <strong>Microsoft Enterprise Agreement (EA) kortingen</strong>.</p><h2>1. PTU-reserveringen versus pay-as-you-go</h2><p>Azure biedt gereserveerde modelcapaciteit via PTU's. On-demand kost een PTU $2 per uur. Met een maandelijkse reservering daalt dit naar circa $260 per PTU per maand — een korting van <strong>tot 82%</strong> ten opzichte van het uurtarief (tot 85% bij jaarcontracten).</p><p>Het economische break-evenpunt voor een PTU-reservering ligt bij een <strong>gemiddelde benutting van 65–75% of hoger</strong>. Bij wisselende of lage werkdruk is token-afrekening goedkoper.</p><h2>2. Regionale opslagen voor datasoevereiniteit</h2><p>Wereldwijde Azure-implementaties volgen de Amerikaanse OpenAI-tarieven. Wie strikte dataresidentie binnen West-Europa vereist, betaalt echter een opslag van <strong>10% tot 20%</strong>.</p><h2>3. Verborgen infrastructuurkosten</h2><p>Bij Azure OpenAI komen kosten kijken voor Private Endpoints, Azure Monitor logging en netwerk-egress. Dit verhoogt de effectieve kosten met 4% tot 8%, maar levert enterprise netwerkbeveiliging en RBAC-toegangsbeheer op.</p>",
+      "faq": [
+        {
+          "question": "Is Azure OpenAI goedkoper dan direct OpenAI?",
+          "answer": "Voor pay-as-you-go zijn de lijstprijzen gelijk. Azure is aanzienlijk voordeliger bij een continue benutting boven 70% dankzij PTU-kortingen en Microsoft EA-afspraken."
+        },
+        {
+          "question": "Wat is een Provisioned Throughput Unit (PTU)?",
+          "answer": "Een PTU is gereserveerde capaciteit op Azure die gegarandeerde latency biedt en tot 82% korting geeft bij maandelijkse afname."
+        },
+        {
+          "question": "Wanneer kies je voor Azure OpenAI?",
+          "answer": "Wanneer u bestaande Microsoft enterprise commitments (MACC) wilt verzilveren, strikte compliancy-eisen hebt of voldoende volume draait voor PTU."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/committed-spend-discounts",
+          "label": "Kortingen op toegezegde uitgaven"
+        },
+        {
+          "slug": "/nl/research/provider-prices-not-comparable",
+          "label": "Waarom AI-lijstprijzen niet vergelijkbaar zijn"
+        }
+      ]
+    },
+    "ar": {
+      "title": "مقارنة تكلفة Azure OpenAI مع OpenAI المباشر",
+      "titleCore": "مقارنة تكلفة Azure OpenAI مع OpenAI المباشر",
+      "description": "مقارنة تكاليف Azure OpenAI مع واجهة OpenAI المباشرة: حجوزات PTU بخصم يصل إلى 82%، والرسوم الإقليمية، ونقطة التعادل، والتكلفة الإجمالية للملكية.",
+      "body": "<p>على أساس الدفع حسب الاستخدام القياسي، تتطابق أسعار Azure OpenAI مع واجهة OpenAI API المباشرة في عمليات النشر العالمية: على سبيل المثال 2.50 دولار لكل مليون رمز إدخال و15 دولاراً لكل مليون رمز إخراج للنماذج المتقدمة. لا يكمن الفارق الاقتصادي في السعر الأساسي للطلبات، بل في ثلاثة محاور هيكلية: <strong>وحدات الإنتاجية المخصصة (PTU)</strong>، و<strong>رسوم مناطق البيانات الإقليمية</strong>، و<strong>خصومات المؤسسات عبر اتفاقية مايكروسوفت (EA)</strong>.</p>\n\n<h2>1. الإنتاجية المخصصة (PTU) مقابل المحاسبة بالرمز</h2>\n<p>توفر Azure سعة مخصصة للنماذج عبر وحدات PTU. حسب الطلب تبلغ تكلفة الوحدة دولارين في الساعة. ومع حجز لمدة شهر واحد، تنخفض التكلفة إلى حوالي 260 دولاراً لكل وحدة شهرياً — وهو خصم يصل إلى <strong>82%</strong> مقارنة بالسعر بالساعة (ويصل إلى 85% للالتزامات السنوية).</p>\n<p>نقطة التعادل لحجز PTU تتطلب عادةً <strong>معدل استخدام مستمر يتجاوز 65% إلى 75%</strong>. إذا كان حجم العمل أقل من ذلك أو متقطعاً، فإن الفوترة القائمة على الرموز تكون أكثر توفيراً.</p>\n\n<h2>2. الرسوم الإقليمية لسيادة البيانات</h2>\n<p>تعكس نقاط النهاية العالمية لـ Azure أسعار الولايات المتحدة المباشرة. ومع ذلك، تفرض عمليات النشر المحصورة إقليمياً (مثل مراكز بيانات أوروبا أو الخليج) رسوماً إضافية تتراوح بين <strong>10% إلى 20%</strong> لضمان إقامة البيانات وسيادتها.</p>\n\n<h2>3. تكاليف البنية التحتية الإضافية</h2>\n<p>تتطلب بيئة Azure مكونات مرافقة: نقاط النهاية الخاصة (Private Endpoints)، وتسجيل Azure Monitor، ونقل البيانات عبر الشبكة الافتراضية، ورسوم بوابة API Management. تضيف هذه المكونات ما بين 4% إلى 8% على التكلفة الفعلية، مقابل توفير أمان متقدم وتحكم في الوصول RBAC.</p>",
+      "faq": [
+        {
+          "question": "هل Azure OpenAI أرخص من OpenAI المباشر؟",
+          "answer": "في نظام الدفع حسب الاستخدام تتطابق الأسعار. تصبح Azure أرخص عند استخدام حجوزات PTU مع استخدام يتجاوز 70% أو عبر خصومات اتفاقية المؤسسات EA."
+        },
+        {
+          "question": "ما هي وحدة الإنتاجية المخصصة (PTU)؟",
+          "answer": "هي سعة استنتاج مخصصة ومحجوزة توفرها Azure. الحجز الشهري يوفر حتى 82% مقارنة بالحساب بالساعة، وتضمن زمن استجابة مستقر دون قيود الحصص المفاجئة."
+        },
+        {
+          "question": "متى تفضل المؤسسات Azure OpenAI؟",
+          "answer": "عند الحاجة لاستيفاء التزامات اتفاقيات مايكروسوفت EA، وتأمين متطلبات سيادة البيانات في مراكز بيانات محلية، وتحقيق وفورات PTU عند كثافة الاستخدام."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/committed-spend-discounts",
+          "label": "خصومات الإنفاق الملتزم به"
+        },
+        {
+          "slug": "/ar/research/provider-prices-not-comparable",
+          "label": "لماذا يصعب مقارنة أسعار المزودين"
+        }
+      ]
+    },
+    "en": {
+      "title": "Azure OpenAI vs Direct OpenAI Cost",
+      "titleCore": "Azure OpenAI vs Direct OpenAI Cost",
+      "description": "Compare Azure OpenAI vs direct OpenAI API pricing. Real 2026 PTU reservation discounts (up to 82%), regional markups, break-even math, and total cost of ownership.",
+      "body": "<p>Compare Azure OpenAI Services (via Azure's managed API) against direct OpenAI API access. Analyze per-token pricing, provisioned throughput discounts, compliance costs, and total cost of ownership to choose the best path for your workload.</p>\n\n<ul class=\"badge-row\">\n  <li>Azure Global deployments match direct OpenAI list prices (GPT-5.4: $2.50/$15 on both)</li>\n  <li>Regional and data-zone Azure deployments add roughly 10–20%</li>\n  <li>PTU monthly reservations cost up to 82% less per unit than hourly PTUs</li>\n  <li>Azure adds value for enterprise compliance, regional isolation, and billing consolidation</li>\n  <li>Switching between providers has minimal cost penalty</li>\n</ul>\n\n<h2>Per-Token Pricing Comparison</h2>\n\n<p>Azure and OpenAI serve the same underlying models, and — contrary to a common assumption — Azure's <strong>Global</strong> deployment type prices GPT-5.4 identically to OpenAI direct. The premium only appears when you pin traffic to a specific region or data zone, or use extended-context and Pro tiers.</p>\n\n<table>\n<thead>\n<tr>\n  <th>Model / tier</th>\n  <th>OpenAI Direct Input</th>\n  <th>OpenAI Direct Output</th>\n  <th>Azure Input (Global)</th>\n  <th>Azure Output (Global)</th>\n  <th>Difference</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n  <td><strong>GPT-5.4 (standard context)</strong></td>\n  <td class=\"number\">$2.50</td>\n  <td class=\"number\">$15.00</td>\n  <td class=\"number\">$2.50</td>\n  <td class=\"number\">$15.00</td>\n  <td class=\"number\">parity</td>\n</tr>\n<tr>\n  <td><strong>GPT-5.4 (&gt;272K context)</strong></td>\n  <td class=\"number\">—</td>\n  <td class=\"number\">—</td>\n  <td class=\"number\">$5.00</td>\n  <td class=\"number\">$22.50</td>\n  <td class=\"number\">Azure long-context tier</td>\n</tr>\n<tr>\n  <td><strong>GPT-5.4 Pro</strong></td>\n  <td class=\"number\">—</td>\n  <td class=\"number\">—</td>\n  <td class=\"number\">$30.00</td>\n  <td class=\"number\">$180.00</td>\n  <td class=\"number\">premium tier</td>\n</tr>\n<tr>\n  <td><strong>GPT-5.5 / GPT-5.6 family</strong></td>\n  <td class=\"number\">$5.00</td>\n  <td class=\"number\">$30.00</td>\n  <td class=\"number\" colspan=\"2\">not publicly listed (quote via Azure)</td>\n  <td class=\"number\">—</td>\n</tr>\n</tbody>\n</table>\n\n<p><strong>Regional variation:</strong> Azure pricing varies by deployment type, and this is where the real markup lives. Against the Global baseline, Microsoft's published examples include roughly +12% for Regional Australia East and +20% for Regional Sweden Central, with Data Zone deployments around +10%. Exact rates differ per model and region — check the Azure AI Foundry pricing page for yours. If your workload requires a pinned distant region, expect a 10–20% premium over direct OpenAI.</p>\n\n<h2>Provisioned Throughput: Where Azure Wins</h2>\n\n<p>Azure sells reserved model capacity in <strong>PTUs (provisioned throughput units)</strong>. You pay for capacity, not tokens — so the economics hinge entirely on how fully you use what you reserve. The published rates:</p>\n\n<table>\n<thead>\n<tr>\n  <th>Billing Model</th>\n  <th>Published Rate</th>\n  <th>Vs. hourly PTU</th>\n  <th>Best For</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n  <td><strong>Pay-per-token (either provider)</strong></td>\n  <td class=\"number\">$0 commitment; per-token list prices above</td>\n  <td class=\"number\">—</td>\n  <td class=\"number\">Variable or low volume</td>\n</tr>\n<tr>\n  <td><strong>PTU, hourly</strong></td>\n  <td class=\"number\">$2 per PTU per hour (≈$1,460/PTU/month if run 24/7)</td>\n  <td class=\"number\">baseline</td>\n  <td class=\"number\">Short bursts, testing PTU sizing</td>\n</tr>\n<tr class=\"highlight\">\n  <td><strong>PTU, monthly reservation</strong></td>\n  <td class=\"number\">~$260 per PTU per month (published GPT-4o Global example)</td>\n  <td class=\"number\">up to −82%</td>\n  <td class=\"number\">Stable, high volume</td>\n</tr>\n<tr class=\"highlight\">\n  <td><strong>PTU, yearly reservation</strong></td>\n  <td class=\"number\">quote-based</td>\n  <td class=\"number\">up to −85%</td>\n  <td class=\"number\">Very large, forecastable workloads</td>\n</tr>\n</tbody>\n</table>\n\n<p><strong>How many PTUs do you need?</strong> Throughput per PTU is model-specific — Microsoft publishes a capacity calculator in Azure AI Foundry rather than a universal tokens-per-PTU number, and deployments start as small as 1 PTU. That means there is no honest one-line \"PTU = X tokens/month\" conversion; size it with the calculator against your real traffic.</p>\n\n<p><strong>Modeled example</strong> (illustrative arithmetic, not a quote): suppose the calculator says your steady workload needs 50 PTUs. A monthly reservation costs 50 × $260 = <strong>$13,000/month fixed</strong>, versus 50 × $1,460 ≈ $73,000/month if you ran the same capacity on hourly PTUs. Whether $13,000 beats pay-per-token depends on the token volume those 50 PTUs actually carry — reservations only win at sustained, high utilization.</p>\n\n<h2>Cost Comparison: Three Scenarios</h2>\n\n<div class=\"scenario-card\">\n  <h3>Scenario 1: Small Team (100M tokens/month, GPT-5.4)</h3>\n  <p><strong>Volume:</strong> 60M input + 40M output = 100M/month total</p>\n  <p><strong>Direct OpenAI:</strong> (60M × $2.50/M) + (40M × $15/M) = $150 + $600 = $750/month</p>\n  <p><strong>Azure pay-per-token (Global):</strong> same list rates → $750/month. A pinned regional deployment at +12–20% would run ~$840–$900.</p>\n  <p><strong>Azure provisioned:</strong> not worth sizing at this volume; even a small reservation is idle most of the time.</p>\n  <p><strong>Winner:</strong> price tie at Global rates — decide on ecosystem, compliance, and quota needs, not price.</p>\n</div>\n\n<div class=\"scenario-card\">\n  <h3>Scenario 2: Mid-Size (1B tokens/month, GPT-5.4)</h3>\n  <p><strong>Volume:</strong> 600M input + 400M output = 1B/month total</p>\n  <p><strong>Direct OpenAI:</strong> (600M × $2.50/M) + (400M × $15/M) = $1,500 + $6,000 = $7,500/month</p>\n  <p><strong>Azure pay-per-token (Global):</strong> $7,500/month at parity; ~$8,400–$9,000 if you must pin a premium region. (GPT-5.5's Azure rate isn't publicly listed — direct GPT-5.5 for the same volume would be (600M × $5) + (400M × $30) = $15,000.)</p>\n  <p><strong>Azure provisioned:</strong> worth a sizing exercise — if the capacity calculator puts your steady load at ≤25 PTUs, a monthly reservation is 25 × $260 = $6,500, undercutting pay-per-token.</p>\n  <p><strong>Winner:</strong> pay-per-token on either, unless a PTU sizing quote comes in under $7,500 for your throughput.</p>\n</div>\n\n<div class=\"scenario-card\">\n  <h3>Scenario 3: Large, Predictable (5B tokens/month, GPT-5.4)</h3>\n  <p><strong>Volume:</strong> 3B input + 2B output = 5B/month total</p>\n  <p><strong>Pay-per-token (either provider, Global parity):</strong> (3B × $2.50/M) + (2B × $15/M) = $7,500 + $30,000 = $37,500/month</p>\n  <p><strong>Azure provisioned (modeled):</strong> if this workload sizes to ~50 PTUs, a monthly reservation is 50 × $260 = $13,000/month — a ~$24,500/month saving. If it sizes to ~150 PTUs, the reservation is $39,000 and pay-per-token wins. The PTU count from Azure's capacity calculator IS the decision.</p>\n  <p><strong>Winner:</strong> Azure provisioned when usage is stable and the sized PTU cost lands well below $37,500. Risk: if volume halves, the reservation cost doesn't.</p>\n</div>\n\n<h2>Non-Price Factors: When Azure Wins</h2>\n\n<table>\n<thead>\n<tr>\n  <th>Factor</th>\n  <th>OpenAI Direct</th>\n  <th>Azure OpenAI</th>\n  <th>Impact on Cost</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n  <td><strong>Compliance (FedRAMP, HIPAA, SOC 2)</strong></td>\n  <td>No official certification</td>\n  <td>FedRAMP High, HIPAA, SOC 2 available</td>\n  <td>Compliance add-on not needed; built-in</td>\n</tr>\n<tr>\n  <td><strong>Data residency</strong></td>\n  <td>US-based</td>\n  <td>Multiple regions including EU, UK, Asia</td>\n  <td>Can avoid GDPR penalties if storing in EU</td>\n</tr>\n<tr>\n  <td><strong>Unified billing</strong></td>\n  <td>Separate invoice</td>\n  <td>Consolidated Azure bill</td>\n  <td>Simplifies chargeback to teams (small savings)</td>\n</tr>\n<tr>\n  <td><strong>Role-based access control</strong></td>\n  <td>API key only</td>\n  <td>Azure RBAC (granular per-team or per-resource)</td>\n  <td>Reduces shadow spend / untracked usage</td>\n</tr>\n<tr>\n  <td><strong>Quota management</strong></td>\n  <td>Hard rate limits; 429 errors</td>\n  <td>Provisioned throughput reserves capacity</td>\n  <td>Avoids request rejections at peak load</td>\n</tr>\n</tbody>\n</table>\n\n<p><strong>Cost of switching:</strong> Minimal. Both use the same OpenAI API shape (models, parameters, endpoints). Migration is mostly DNS/config change. No ETL, no retooling. You can test Azure in parallel before committing.</p>\n\n<h2>Decision Matrix</h2>\n\n<div class=\"guide-section\">\n  <h3>Use Direct OpenAI if:</h3>\n  <ul>\n    <li>Your volume is <1B tokens/month</li>\n    <li>Your workload is variable (unpredictable spikes)</li>\n    <li>You don't have compliance requirements beyond standard SOC 2</li>\n    <li>You need models whose Azure rates aren't publicly listed (GPT-5.5/5.6 family)</li>\n    <li>You're not on Azure or don't need consolidated billing</li>\n  </ul>\n</div>\n\n<div class=\"guide-section\">\n  <h3>Use Azure OpenAI (pay-per-token) if:</h3>\n  <ul>\n    <li>You're already paying for Azure services and want one bill</li>\n    <li>You need FedRAMP/HIPAA/compliance features</li>\n    <li>You want RBAC and quota management over API keys</li>\n    <li>You operate in EU and need data residency (regional deployments cost ~10–20% more)</li>\n    <li>Global deployment works for you — it matches direct OpenAI list prices</li>\n  </ul>\n</div>\n\n<div class=\"guide-section\">\n  <h3>Use Azure OpenAI (provisioned) if:</h3>\n  <ul>\n    <li>Your volume is high, stable, and forecastable 3–6 months ahead</li>\n    <li>You need guaranteed quota (no rate-limit rejections)</li>\n    <li>Azure's capacity calculator sizes your workload to a PTU count whose reservation cost (~$260/PTU/month) lands clearly below your pay-per-token bill</li>\n    <li>You can justify the reservation commitment if volume dips</li>\n  </ul>\n</div>\n\n<h2>Cost Optimization Tips</h2>\n\n<div class=\"note\">\n  <strong>Monitor quarterly:</strong> Review your actual token volume vs. forecast. If actual volume is <80% of forecast for 2 consecutive months, consider downgrading your provisioned tier or switching to pay-per-token.\n</div>\n\n<p><strong>Use Azure Advisor:</strong> Automatically recommends right-sizing for provisioned throughput. Frees up reserved capacity you're not using.</p>\n\n<p><strong>Batch off-peak requests:</strong> If using provisioned throughput, batch non-urgent requests during off-peak hours to smooth volume spikes and keep TPM steady.</p>\n\n<p><strong>Layer by model cost:</strong> Route classification and extraction tasks to a budget tier (e.g., GPT-5.6 Luna at $1/M input, $6/M output direct) and reserve GPT-5.5 for reasoning. Reduces effective cost-per-token.</p>\n\n<p><strong>Split between providers:</strong> High-volume stable workloads on Azure provisioned; variable/bursty on Direct OpenAI. Costs might be lower than picking one provider for everything.</p>\n\n<h2>Switching Strategy</h2>\n\n<p><strong>Test in parallel (2 weeks):</strong> Deploy your app with Azure OpenAI alongside Direct OpenAI. Route 10% of traffic to Azure, 90% to Direct. Monitor latency, error rates, and cost difference.</p>\n\n<p><strong>Gradual migration (4 weeks):</strong> Once confident, shift 50% traffic to your chosen provider over 2 weeks, then 100%.</p>\n\n<p><strong>Keep fallback (ongoing):</strong> Maintain keys for both providers. If one has an outage or quota issue, gracefully failover to the other (will see a small cost impact but better than downtime).</p>",
+      "faq": [
+        {
+          "question": "Is Azure OpenAI cheaper than direct OpenAI?",
+          "answer": "At standard rates, neither: Azure Global deployments price GPT-5.4 at the same $2.50/M input and $15/M output as OpenAI direct. Regional and data-zone Azure deployments add roughly 10–20%. Azure's advantage is compliance, RBAC, quota management, and consolidated billing — not per-token price."
+        },
+        {
+          "question": "What is provisioned throughput?",
+          "answer": "Azure's reserved model capacity, billed per PTU (provisioned throughput unit): $2 per PTU per hour on demand, or about $260 per PTU per month with a monthly reservation — up to 82% less than the hourly rate (yearly reservations reach up to 85%). Throughput per PTU is model-specific; size it with Azure's capacity calculator."
+        },
+        {
+          "question": "When should I use Azure OpenAI?",
+          "answer": "Use Azure if: (1) you're already on Azure and want consolidated billing, (2) you need compliance/FedRAMP/sovereign-cloud guarantees, (3) your throughput is high and steady enough that a PTU reservation beats pay-per-token for your workload."
+        },
+        {
+          "question": "Can I optimize cost by switching between Azure and direct?",
+          "answer": "Yes, if your usage is variable. Use pay-per-token for low or unpredictable volume; consider PTU reservations only for sustained, forecastable throughput. Monitor quarterly and switch if the cost difference exceeds 10%."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/azure-openai-vs-direct-cost"
+  }
+}

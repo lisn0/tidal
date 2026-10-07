@@ -1,0 +1,143 @@
+{
+  "slug": "stealth-model-free-tokens-playbook",
+  "tags": [
+    "finops",
+    "pricing",
+    "provider-arbitrage",
+    "unit-economics"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "The stealth-model free-token playbook",
+      "titleCore": "The stealth-model free-token playbook",
+      "description": "Ox Alpha turned out to be GLM-5.3. Six days of free anonymous tokens is not generosity — it is benchmark data and a distribution wedge. Price it that way.",
+      "body": "<p>Ox Alpha appeared on the routing aggregators as an unbranded endpoint, free, no rate card, no lab attached. Then it was confirmed as GLM-5.3 and the free window closed. GLM-5.3-Flash now lists at $0.15 per million input tokens and $0.50 per million output.</p><p>Treat this as a repeatable play, because it is one. It has run before under other names, and it will run again. What matters for your bill is what you did during the free window and what happens the moment it ends.</p><h2>What the lab buys with free tokens</h2><p>Three things, all of them cheaper than the alternatives. <strong>Blind evaluation:</strong> an unbranded endpoint gets judged on output rather than on the logo, which is the only honest read a lab can get on a frontier model. <strong>Distribution:</strong> the aggregators route real traffic to it immediately, no partnerships required. <strong>An anchor:</strong> by the time the name is revealed, developers have already decided the model is good, and the published price lands against that impression rather than against a spec sheet.</p><p>None of that is dishonest. It is just not free for you, and the invoice arrives later than the tokens do.</p><h2>The number that matters when the window closes</h2><p>Sixteen trillion input tokens flowed through the free endpoint. At the now-published $0.15 per million, that is roughly $2.4 million of inference &mdash; which is both what the lab spent on the campaign and, more usefully, the size of the step if that same traffic simply stayed where it was.</p><p>Run that arithmetic on your own share. Take the volume you sent through the anonymous endpoint during the window, multiply by the published rate, and you have your monthly step change. Teams that ran an entire evaluation cycle on free tokens are the ones most likely to be surprised, because the workload that proved the model was also the workload that cost nothing.</p><h2>Three rules for the next one</h2><p><strong>Never depend on an endpoint whose owner you do not know.</strong> Anonymous means no rate card, no deprecation policy, no support path, no data-handling commitment you can point at. It is fine for evaluation. It is not fine for a production path with no fallback.</p><p><strong>Price every free evaluation at a hypothetical rate.</strong> Pick a plausible per-million figure before you start &mdash; the closest comparable model is fine &mdash; and carry the shadow cost in your own telemetry. Then a reveal is a repricing, not a discovery.</p><p><strong>Assume the free window is the shortest part of the relationship.</strong> Six days here. What you should be measuring during it is not just quality but switching cost: how much routing, prompt tuning and evaluation work you would throw away if the published price came in high.</p><h2>Where it leaves the price</h2><p>$0.15 / $0.50 is aggressive against the closed frontier tier and roughly in line with the open-weight hosted market. That is the point of the whole exercise: the reveal is the pricing announcement, and it is designed to land while the model is already in your router. Whether it wins your traffic should be decided by your own cost-per-request numbers on your own workload, measured after the free window closed &mdash; not by how good it felt when the tokens were free.</p><h2>Related</h2><ul><li><a href=\"/research/provider-arbitrage\">Provider arbitrage</a></li><li><a href=\"https://finopsllm.com/research/open-source-vs-closed-cost\">Open source vs closed cost</a></li><li><a href=\"https://finopsllm.com/research/cost-per-request-kpi\">Cost per request as a KPI</a></li></ul>",
+      "faq": [
+        {
+          "question": "What was Ox Alpha?",
+          "answer": "An unbranded, free endpoint that appeared on routing aggregators and was later confirmed as GLM-5.3. The free window ran about six days and carried roughly sixteen trillion input tokens before the model was named and priced."
+        },
+        {
+          "question": "Why do labs release models anonymously?",
+          "answer": "It buys blind evaluation on output rather than brand, immediate distribution through the aggregators without partnerships, and a price anchor — by the time the name is revealed, developers have already formed a quality impression that the published rate lands against."
+        },
+        {
+          "question": "How should we budget for a free evaluation endpoint?",
+          "answer": "Assign a hypothetical per-million rate before you start, based on the closest comparable model, and carry that shadow cost in your telemetry. When the real price is published it becomes a repricing you already modelled rather than an unbudgeted step change."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/provider-arbitrage",
+          "label": "Provider arbitrage"
+        },
+        {
+          "slug": "https://finopsllm.com/research/open-source-vs-closed-cost",
+          "label": "Open source vs closed cost"
+        },
+        {
+          "slug": "https://finopsllm.com/research/cost-per-request-kpi",
+          "label": "Cost per request as a KPI"
+        }
+      ]
+    },
+    "es": {
+      "title": "El manual del modelo sigiloso",
+      "titleCore": "El manual del modelo sigiloso",
+      "description": "Ox Alpha resultó ser GLM-5.3. Seis días de tokens anónimos gratis no son generosidad: son datos de evaluación y una cuña de distribución.",
+      "body": "<p>Ox Alpha apareció en los agregadores de enrutamiento como un endpoint sin marca, gratuito, sin tarifa y sin laboratorio detrás. Después se confirmó que era GLM-5.3 y la ventana gratuita se cerró. GLM-5.3-Flash cotiza ahora a 0,15 $ por millón de tokens de entrada y 0,50 $ de salida.</p><p>Trátalo como una jugada repetible, porque lo es. Ya se ha usado con otros nombres y volverá a usarse.</p><h2>Qué compra el laboratorio con tokens gratis</h2><p>Tres cosas, todas más baratas que las alternativas. <strong>Evaluación ciega:</strong> a un endpoint sin marca se le juzga por la salida, no por el logotipo. <strong>Distribución:</strong> los agregadores le envían tráfico real de inmediato, sin acuerdos. <strong>Un ancla de precio:</strong> cuando se revela el nombre, los desarrolladores ya han decidido que el modelo es bueno.</p><h2>El número que importa al cerrarse la ventana</h2><p>Dieciséis billones de tokens de entrada pasaron por el endpoint gratuito. A 0,15 $ por millón son unos 2,4 millones de dólares de inferencia: eso es el tamaño del escalón si ese mismo tráfico simplemente se queda donde está.</p><p>Haz esa cuenta con tu propia parte: el volumen que enviaste durante la ventana por la tarifa publicada es tu cambio mensual.</p><h2>Tres reglas para la próxima vez</h2><p><strong>Nunca dependas de un endpoint cuyo dueño desconoces.</strong> Anónimo significa sin tarifa, sin política de obsolescencia y sin compromiso de tratamiento de datos. Sirve para evaluar, no para producción sin alternativa.</p><p><strong>Pon precio hipotético a toda evaluación gratuita</strong> y arrastra ese coste en la sombra en tu telemetría. Así la revelación es una revisión de precio, no un descubrimiento.</p><p><strong>Da por hecho que la ventana gratuita es la parte más corta de la relación.</strong> Mide también el coste de cambiar, no solo la calidad.</p>",
+      "faq": [
+        {
+          "question": "¿Qué era Ox Alpha?",
+          "answer": "Un endpoint gratuito y sin marca que apareció en los agregadores de enrutamiento y que después se confirmó como GLM-5.3. La ventana gratuita duró unos seis días y movió unos dieciséis billones de tokens de entrada."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitraje entre proveedores"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Le manuel du modèle furtif",
+      "titleCore": "Le manuel du modèle furtif",
+      "description": "Ox Alpha était GLM-5.3. Six jours de tokens anonymes gratuits ne sont pas de la générosité : ce sont des données d’évaluation et un levier de distribution.",
+      "body": "<p>Ox Alpha est apparu sur les agrégateurs de routage : un endpoint sans marque, gratuit, sans grille tarifaire ni laboratoire identifié. Puis il a été confirmé comme étant GLM-5.3 et la fenêtre gratuite s’est refermée. GLM-5.3-Flash est désormais affiché à 0,15 $ le million de tokens en entrée et 0,50 $ en sortie.</p><p>Considérez-le comme une manœuvre reproductible, car c’en est une. Elle a déjà servi sous d’autres noms et resservira.</p><h2>Ce que le laboratoire achète avec des tokens gratuits</h2><p>Trois choses, toutes moins chères que les alternatives. <strong>Une évaluation à l’aveugle :</strong> un endpoint sans marque est jugé sur la sortie, pas sur le logo. <strong>De la distribution :</strong> les agrégateurs y envoient du trafic réel immédiatement, sans partenariat. <strong>Un point d’ancrage tarifaire :</strong> au moment de la révélation, les développeurs ont déjà jugé le modèle bon.</p><h2>Le chiffre qui compte à la fermeture</h2><p>Seize mille milliards de tokens en entrée sont passés par l’endpoint gratuit. À 0,15 $ le million, cela représente environ 2,4 millions de dollars d’inférence &mdash; c’est-à-dire la hauteur de la marche si ce trafic reste simplement où il est.</p><p>Faites le calcul sur votre propre part : le volume envoyé pendant la fenêtre, multiplié par le tarif publié, donne votre variation mensuelle.</p><h2>Trois règles pour la prochaine fois</h2><p><strong>Ne dépendez jamais d’un endpoint dont vous ignorez le propriétaire.</strong> Anonyme veut dire aucune grille tarifaire, aucune politique de dépréciation, aucun engagement sur les données. C’est bon pour évaluer, pas pour la production sans repli.</p><p><strong>Valorisez toute évaluation gratuite à un tarif hypothétique</strong> et portez ce coût fictif dans votre télémétrie.</p><p><strong>Supposez que la fenêtre gratuite est la partie la plus courte de la relation</strong> et mesurez aussi le coût de sortie, pas seulement la qualité.</p>",
+      "faq": [
+        {
+          "question": "Qu’était Ox Alpha?",
+          "answer": "Un endpoint gratuit et sans marque apparu sur les agrégateurs de routage, confirmé ensuite comme étant GLM-5.3. La fenêtre gratuite a duré environ six jours et a acheminé quelque seize mille milliards de tokens en entrée."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitrage entre fournisseurs"
+        }
+      ]
+    },
+    "de": {
+      "title": "Das Playbook des getarnten Modells",
+      "titleCore": "Das Playbook des getarnten Modells",
+      "description": "Ox Alpha war GLM-5.3. Sechs Tage kostenlose anonyme Tokens sind keine Großzügigkeit, sondern Evaluationsdaten und ein Vertriebskeil.",
+      "body": "<p>Ox Alpha tauchte auf den Routing-Aggregatoren als markenloser Endpunkt auf: kostenlos, ohne Preisliste, ohne erkennbares Labor. Dann wurde er als GLM-5.3 bestätigt und das Gratisfenster geschlossen. GLM-5.3-Flash steht nun bei 0,15 $ je Million Eingabe-Tokens und 0,50 $ je Million Ausgabe.</p><p>Betrachten Sie das als wiederholbaren Spielzug &mdash; denn genau das ist es. Er lief bereits unter anderen Namen und wird wiederkommen.</p><h2>Was das Labor mit Gratis-Tokens kauft</h2><p>Drei Dinge, alle billiger als die Alternativen. <strong>Blinde Bewertung:</strong> ein markenloser Endpunkt wird an der Ausgabe gemessen, nicht am Logo. <strong>Verbreitung:</strong> die Aggregatoren leiten sofort echten Traffic dorthin, ohne Partnerschaften. <strong>Ein Preisanker:</strong> bis der Name fällt, haben Entwickler das Modell längst für gut befunden.</p><h2>Die Zahl beim Schließen des Fensters</h2><p>Sechzehn Billionen Eingabe-Tokens liefen durch den kostenlosen Endpunkt. Zu 0,15 $ je Million sind das rund 2,4 Millionen Dollar Inferenz &mdash; und damit die Höhe der Stufe, falls derselbe Traffic einfach bleibt, wo er ist.</p><p>Rechnen Sie das für Ihren Anteil: Volumen im Fenster mal veröffentlichter Preis ergibt Ihre monatliche Sprungkosten.</p><h2>Drei Regeln für das nächste Mal</h2><p><strong>Hängen Sie nie an einem Endpunkt, dessen Betreiber Sie nicht kennen.</strong> Anonym heißt keine Preisliste, keine Abkündigungsfrist, keine Datenzusage. Für Evaluation in Ordnung, für Produktion ohne Rückfallpfad nicht.</p><p><strong>Bepreisen Sie jede kostenlose Evaluation hypothetisch</strong> und führen Sie diese Schattenkosten in Ihrer Telemetrie mit.</p><p><strong>Nehmen Sie an, das Gratisfenster ist der kürzeste Teil der Beziehung</strong> &mdash; messen Sie auch die Wechselkosten, nicht nur die Qualität.</p>",
+      "faq": [
+        {
+          "question": "Was war Ox Alpha?",
+          "answer": "Ein kostenloser, markenloser Endpunkt auf den Routing-Aggregatoren, der später als GLM-5.3 bestätigt wurde. Das Gratisfenster dauerte etwa sechs Tage und trug rund sechzehn Billionen Eingabe-Tokens."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Anbieter-Arbitrage"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O manual do modelo furtivo",
+      "titleCore": "O manual do modelo furtivo",
+      "description": "O Ox Alpha era o GLM-5.3. Seis dias de tokens anónimos grátis não são generosidade: são dados de avaliação e uma cunha de distribuição.",
+      "body": "<p>O Ox Alpha apareceu nos agregadores de encaminhamento como um endpoint sem marca, gratuito, sem tabela de preços e sem laboratório associado. Depois foi confirmado como GLM-5.3 e a janela gratuita fechou. O GLM-5.3-Flash está agora a 0,15 $ por milhão de tokens de entrada e 0,50 $ de saída.</p><p>Trate isto como uma jogada repetível, porque é. Já correu com outros nomes e voltará a correr.</p><h2>O que o laboratório compra com tokens grátis</h2><p>Três coisas, todas mais baratas do que as alternativas. <strong>Avaliação cega:</strong> um endpoint sem marca é julgado pela saída e não pelo logótipo. <strong>Distribuição:</strong> os agregadores encaminham tráfego real de imediato, sem parcerias. <strong>Uma âncora de preço:</strong> quando o nome é revelado, quem programa já decidiu que o modelo é bom.</p><h2>O número que interessa ao fechar a janela</h2><p>Dezasseis biliões de tokens de entrada passaram pelo endpoint gratuito. A 0,15 $ por milhão, são cerca de 2,4 milhões de dólares de inferência &mdash; ou seja, o tamanho do degrau se esse tráfego ficar simplesmente onde está.</p><p>Faça essa conta com a sua parte: o volume enviado durante a janela vezes o preço publicado é a sua variação mensal.</p><h2>Três regras para a próxima</h2><p><strong>Nunca dependa de um endpoint cujo dono desconhece.</strong> Anónimo significa sem tabela de preços, sem política de descontinuação e sem compromisso de tratamento de dados. Serve para avaliar, não para produção sem alternativa.</p><p><strong>Atribua um preço hipotético a toda a avaliação gratuita</strong> e carregue esse custo-sombra na sua telemetria.</p><p><strong>Parta do princípio de que a janela gratuita é a parte mais curta da relação</strong> e meça também o custo de mudar.</p>",
+      "faq": [
+        {
+          "question": "O que era o Ox Alpha?",
+          "answer": "Um endpoint gratuito e sem marca que apareceu nos agregadores de encaminhamento e foi depois confirmado como GLM-5.3. A janela gratuita durou cerca de seis dias e transportou perto de dezasseis biliões de tokens de entrada."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "Arbitragem entre fornecedores"
+        }
+      ]
+    },
+    "ja": {
+      "title": "ステルスモデルの手口",
+      "titleCore": "ステルスモデルの手口",
+      "description": "Ox Alpha の正体は GLM-5.3 でした。6 日間の無料匿名トークンは善意ではなく、評価データと流通のくさびです。",
+      "body": "<p>Ox Alpha はルーティング集約サービスに、ブランド名も価格表も提供元も伴わない無料エンドポイントとして現れました。その後 GLM-5.3 だと確認され、無料期間は終了しました。GLM-5.3-Flash の価格は入力 100 万トークンあたり 0.15 ドル、出力 0.50 ドルです。</p><p>これは繰り返される手口だと考えてください。別の名前で何度も行われてきましたし、また行われます。</p><h2>無料トークンで研究所が買うもの</h2><p>3 つあり、いずれも代替手段より安上がりです。<strong>ブラインド評価</strong>: 無名のエンドポイントはロゴではなく出力で判断されます。<strong>流通</strong>: 集約サービスが提携なしで即座に実トラフィックを流します。<strong>価格のアンカー</strong>: 名前が明かされる頃には、開発者はすでにこのモデルは良いと判断し終えています。</p><h2>期間終了時に効いてくる数字</h2><p>無料エンドポイントを通過した入力トークンは 16 兆。100 万あたり 0.15 ドルなら約 240 万ドル分の推論です。そのトラフィックがそのまま残った場合の増加幅がこれにあたります。</p><p>自社分でも同じ計算をしてください。無料期間中に送った量に公表価格を掛ければ、月額の段差が出ます。</p><h2>次回のための 3 つの原則</h2><p><strong>提供元が分からないエンドポイントに依存しないこと。</strong>匿名とは、価格表も廃止方針もデータ取扱いの約束も無いという意味です。評価には十分ですが、代替経路のない本番には向きません。</p><p><strong>無料の評価にも仮の単価を付け</strong>、その影のコストを自社のテレメトリーに載せておきます。そうすれば正体判明は再価格付けであって、発見ではなくなります。</p><p><strong>無料期間は関係のうち最も短い部分だと前提すること。</strong>品質だけでなく乗り換えコストも測ってください。</p>",
+      "faq": [
+        {
+          "question": "Ox Alpha とは何だったのですか？",
+          "answer": "ルーティング集約サービスに現れた無料かつ無名のエンドポイントで、後に GLM-5.3 だと確認されました。無料期間は約 6 日間で、およそ 16 兆の入力トークンを処理しました。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/provider-arbitrage",
+          "label": "プロバイダー間のアービトラージ"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/stealth-model-free-tokens-playbook"
+  }
+}

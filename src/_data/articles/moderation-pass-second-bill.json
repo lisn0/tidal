@@ -1,0 +1,143 @@
+{
+  "slug": "moderation-pass-second-bill",
+  "tags": [
+    "finops",
+    "guardrails",
+    "unit-economics",
+    "architecture"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "What guardrail and moderation passes cost",
+      "titleCore": "What guardrail and moderation passes cost",
+      "description": "Every guardrail pass is another model call on the same content. Most teams budget for the main model and never price the ones checking it.",
+      "body": "<p>A production LLM feature rarely makes one model call. It makes the call you designed, and then one or more calls you added later for safety: an input classifier, an output check, a policy judge, sometimes a second model grading the first. Each of those is inference, and inference is billed.</p><h2>The multiplier is bigger than it looks</h2><p>Count the passes honestly. Input moderation reads the full user input. Output moderation reads the full generated response. A policy or groundedness judge usually reads <em>both</em>, plus the retrieved context, plus a rubric &mdash; which makes the judge call larger than the call it is judging. Add a jailbreak classifier and a PII scan and a single user request has become five inference calls.</p><p>The costs are not equal. Dedicated moderation endpoints are cheap or free on some providers. A general-purpose model used as a judge is not: it is priced like any other call, and judging a long answer against a long rubric is a long call.</p><h2>Where the spend actually accumulates</h2><p>Three patterns dominate. <strong>Judging with a frontier model</strong> because it was easiest to reuse the same client &mdash; classification is the one task where a small model is genuinely sufficient, and this is often the single largest saving available. <strong>Checking on every turn</strong> of a long conversation, re-scanning history that was already cleared. And <strong>guardrails on internal traffic</strong>, where an evaluation harness or an internal tool inherits the full consumer-facing safety stack it does not need.</p><h2>Budget it as a line, not a rounding error</h2><p>The point is not to remove the checks. It is that a safety stack can be 30&ndash;50% of a feature's inference cost while appearing nowhere in the plan, because everyone counted the model that answers and nobody counted the models that check.</p><p>Tag guardrail calls separately in telemetry so the ratio is visible. Then use the cheapest model that holds the required accuracy, run checks on new content rather than whole histories, and decide per surface which checks a given traffic class actually requires.</p><h2>Related</h2><ul><li><a href=\"https://finopsllm.com/research/llm-cost-attribution\">LLM cost attribution</a></li><li><a href=\"/research/evals-cost-control\">Evals as cost control</a></li><li><a href=\"/research/model-routing\">Model routing</a></li></ul>",
+      "faq": [
+        {
+          "question": "How much do guardrails add to LLM cost?",
+          "answer": "It varies with the stack, but a feature with input moderation, output moderation and a frontier-model judge can spend 30 to 50 percent of its inference budget on checking rather than answering."
+        },
+        {
+          "question": "What is the cheapest guardrail mistake to fix?",
+          "answer": "Using a frontier model as the judge. Classification and policy checks are the one workload where a small, cheap model is usually sufficient, so switching the judge is often the single largest saving."
+        },
+        {
+          "question": "Should internal traffic get the same guardrails as production?",
+          "answer": "Usually not. Evaluation harnesses and internal tools often inherit the full consumer-facing safety stack by default, paying for checks that the traffic class does not require."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM cost attribution"
+        },
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals as cost control"
+        },
+        {
+          "slug": "/research/model-routing",
+          "label": "Model routing"
+        }
+      ]
+    },
+    "es": {
+      "title": "Lo que cuestan los guardrails y la moderación",
+      "titleCore": "Lo que cuestan los guardrails y la moderación",
+      "description": "Cada pasada de guardrail es otra llamada al modelo sobre el mismo contenido. Casi todos presupuestan el modelo principal y nunca los que lo revisan.",
+      "body": "<p>Una función LLM en producción casi nunca hace una sola llamada. Hace la que diseñaste y luego las que añadiste por seguridad: clasificador de entrada, revisión de salida, juez de política, a veces un segundo modelo calificando al primero. Todo eso es inferencia, y la inferencia se factura.</p><h2>El multiplicador es mayor de lo que parece</h2><p>La moderación de entrada lee toda la entrada. La de salida lee toda la respuesta. Un juez lee <em>ambas</em> más el contexto recuperado y una rúbrica &mdash; con lo que la llamada del juez es mayor que la que juzga.</p><h2>Dónde se acumula el gasto</h2><p>Tres patrones: <strong>juzgar con un modelo frontera</strong> por comodidad (la clasificación es justo donde un modelo pequeño basta, y suele ser el mayor ahorro disponible); <strong>revisar en cada turno</strong> reescaneando historial ya aprobado; y <strong>guardrails en tráfico interno</strong> que hereda toda la pila de seguridad de cara al público sin necesitarla.</p><h2>Presupuéstalo como una línea</h2><p>No se trata de quitar los controles, sino de que pueden ser el 30&ndash;50% del coste de inferencia sin aparecer en ningún plan. Etiqueta las llamadas de guardrail por separado para ver la proporción.</p>",
+      "faq": [
+        {
+          "question": "¿Cuánto añaden los guardrails al coste de LLM?",
+          "answer": "Depende de la pila, pero una función con moderación de entrada, de salida y un juez con modelo frontera puede gastar entre el 30 y el 50 por ciento de su presupuesto en revisar en vez de responder."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribución de costes de LLM"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ce que coûtent les garde-fous et la modération",
+      "titleCore": "Ce que coûtent les garde-fous et la modération",
+      "description": "Chaque passe de garde-fou est un appel modèle de plus sur le même contenu. La plupart des équipes budgètent le modèle principal, jamais ceux qui le contrôlent.",
+      "body": "<p>Une fonctionnalité LLM en production fait rarement un seul appel. Elle fait celui que vous avez conçu, puis ceux ajoutés ensuite pour la sûreté : classifieur d’entrée, vérification de sortie, juge de politique, parfois un second modèle qui note le premier. Tout cela est de l’inférence, et l’inférence est facturée.</p><h2>Le multiplicateur est plus grand qu’il n’y paraît</h2><p>La modération d’entrée lit toute l’entrée, celle de sortie toute la réponse. Un juge lit <em>les deux</em>, plus le contexte récupéré et une grille &mdash; son appel est donc plus gros que celui qu’il juge.</p><h2>Où la dépense s’accumule</h2><p>Trois schémas : <strong>juger avec un modèle de pointe</strong> par facilité (la classification est justement la tâche où un petit modèle suffit, et c’est souvent la plus grosse économie disponible) ; <strong>vérifier à chaque tour</strong> en rescannant un historique déjà validé ; et <strong>des garde-fous sur le trafic interne</strong>, qui hérite d’une pile de sûreté grand public dont il n’a pas besoin.</p><h2>Budgétez-le comme une ligne</h2><p>Il ne s’agit pas de supprimer les contrôles, mais de voir qu’ils peuvent représenter 30 à 50% du coût d’inférence sans figurer dans le plan. Marquez les appels de garde-fou séparément en télémétrie.</p>",
+      "faq": [
+        {
+          "question": "Combien les garde-fous ajoutent-ils au coût?",
+          "answer": "Cela dépend de la pile, mais une fonctionnalité avec modération d’entrée, de sortie et un juge sur modèle de pointe peut consacrer 30 à 50% de son budget d’inférence à vérifier plutôt qu’à répondre."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Attribution des coûts LLM"
+        }
+      ]
+    },
+    "de": {
+      "title": "Was Guardrails und Moderation kosten",
+      "titleCore": "Was Guardrails und Moderation kosten",
+      "description": "Jeder Guardrail-Durchlauf ist ein weiterer Modellaufruf auf denselben Inhalt. Die meisten Teams budgetieren das Hauptmodell und nie die prüfenden.",
+      "body": "<p>Ein produktives LLM-Feature macht selten nur einen Aufruf. Es macht den geplanten und danach die nachträglich ergänzten Sicherheitsaufrufe: Eingabeklassifikator, Ausgabeprüfung, Policy-Judge, manchmal ein zweites Modell, das das erste bewertet. Alles davon ist Inferenz, und Inferenz wird abgerechnet.</p><h2>Der Multiplikator ist größer als er wirkt</h2><p>Eingabemoderation liest die gesamte Eingabe, Ausgabemoderation die gesamte Antwort. Ein Judge liest <em>beides</em> plus abgerufenen Kontext und ein Bewertungsraster &mdash; sein Aufruf ist damit größer als der bewertete.</p><h2>Wo die Ausgaben auflaufen</h2><p>Drei Muster: <strong>Bewerten mit einem Spitzenmodell</strong> aus Bequemlichkeit (Klassifikation ist genau die Aufgabe, für die ein kleines Modell reicht &mdash; oft die größte verfügbare Ersparnis); <strong>Prüfen in jedem Turn</strong> mit erneutem Scan bereits freigegebener Historie; und <strong>Guardrails auf internem Verkehr</strong>, der den vollen Endkunden-Sicherheitsstack erbt, ohne ihn zu brauchen.</p><h2>Als eigene Position budgetieren</h2><p>Es geht nicht darum, die Prüfungen zu streichen, sondern darum, dass sie 30&ndash;50% der Inferenzkosten ausmachen können, ohne im Plan aufzutauchen. Guardrail-Aufrufe in der Telemetrie separat taggen.</p>",
+      "faq": [
+        {
+          "question": "Wie viel kosten Guardrails zusätzlich?",
+          "answer": "Je nach Stack unterschiedlich, aber ein Feature mit Eingabemoderation, Ausgabemoderation und einem Judge auf Spitzenmodell kann 30 bis 50 Prozent seines Inferenzbudgets fürs Prüfen statt fürs Antworten ausgeben."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM-Kostenzuordnung"
+        }
+      ]
+    },
+    "pt": {
+      "title": "O que custam guardrails e moderação",
+      "titleCore": "O que custam guardrails e moderação",
+      "description": "Cada passagem de guardrail é mais uma chamada ao modelo sobre o mesmo conteúdo. Quase todos orçamentam o modelo principal e nunca os que o verificam.",
+      "body": "<p>Uma funcionalidade LLM em produção raramente faz uma só chamada. Faz a que desenhou e depois as que acrescentou por segurança: classificador de entrada, verificação de saída, juiz de política, às vezes um segundo modelo a avaliar o primeiro. Tudo isso é inferência, e inferência é faturada.</p><h2>O multiplicador é maior do que parece</h2><p>A moderação de entrada lê toda a entrada, a de saída lê toda a resposta. Um juiz lê <em>as duas</em>, mais o contexto recuperado e uma grelha &mdash; a chamada do juiz fica maior do que a chamada julgada.</p><h2>Onde a despesa se acumula</h2><p>Três padrões: <strong>julgar com um modelo de fronteira</strong> por comodidade (a classificação é precisamente onde um modelo pequeno chega, e costuma ser a maior poupança disponível); <strong>verificar em cada turno</strong>, revarrendo histórico já aprovado; e <strong>guardrails em tráfego interno</strong>, que herda a pilha de segurança pública sem precisar dela.</p><h2>Orçamente como uma linha</h2><p>Não se trata de retirar os controlos, mas de ver que podem ser 30&ndash;50% do custo de inferência sem constar do plano. Marque as chamadas de guardrail em separado na telemetria.</p>",
+      "faq": [
+        {
+          "question": "Quanto acrescentam os guardrails ao custo?",
+          "answer": "Depende da pilha, mas uma funcionalidade com moderação de entrada, de saída e um juiz num modelo de fronteira pode gastar 30 a 50 por cento do orçamento de inferência a verificar em vez de responder."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "Atribuição de custos de LLM"
+        }
+      ]
+    },
+    "ja": {
+      "title": "ガードレールとモデレーションの費用",
+      "titleCore": "ガードレールとモデレーションの費用",
+      "description": "ガードレールの各パスは、同じ内容に対するもう一度のモデル呼び出しです。多くのチームは本体モデルだけを見積もり、検査側を勘定に入れていません。",
+      "body": "<p>本番の LLM 機能が呼び出しを 1 回だけ行うことはまれです。設計した呼び出しに加えて、後から安全のために足した呼び出しがあります &mdash; 入力分類器、出力チェック、ポリシー判定、ときには 1 本目を採点する 2 本目のモデル。どれも推論であり、推論は課金されます。</p><h2>倍率は見た目より大きい</h2><p>入力モデレーションは入力全体を読み、出力モデレーションは生成された応答全体を読みます。判定モデルは<em>その両方</em>に加えて検索コンテキストと評価基準まで読むため、判定される呼び出しより判定する呼び出しのほうが大きくなります。</p><h2>支出が積み上がる場所</h2><p>典型は 3 つ。<strong>フロンティアモデルで判定する</strong>（分類こそ小型モデルで十分な唯一の用途で、たいていここが最大の削減余地）。<strong>毎ターン検査する</strong>（承認済みの履歴を再走査）。そして<strong>社内トラフィックへのガードレール</strong>（評価ハーネスや社内ツールが、必要のない対外向け安全スタックをそのまま継承）。</p><h2>丸め誤差ではなく費目として</h2><p>チェックをやめる話ではありません。安全スタックが機能の推論コストの 30&ndash;50% を占めていながら、計画のどこにも出てこないことがある、という話です。答えるモデルは数えても、検査するモデルは誰も数えていないからです。</p><p>ガードレール呼び出しはテレメトリで別タグにして比率を可視化し、必要な精度を満たす最小のモデルを使い、履歴全体ではなく新規部分だけを検査し、どのトラフィックにどのチェックが本当に要るかを面ごとに決めてください。</p>",
+      "faq": [
+        {
+          "question": "ガードレールは LLM コストをどれくらい増やしますか？",
+          "answer": "構成によりますが、入力モデレーション・出力モデレーション・フロンティアモデルによる判定を備えた機能では、推論予算の 30〜50% が「答える」ではなく「検査する」に使われることがあります。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/llm-cost-attribution",
+          "label": "LLM コストの帰属"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/moderation-pass-second-bill"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "slug": "jev-agent-controls-and-budgets",
+  "tags": [
+    "finops",
+    "agents",
+    "governance",
+    "jev",
+    "cost-control"
+  ],
+  "datePublished": "2026-09-21",
+  "dateModified": "2026-09-21",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Where Jev belongs in an agent workflow",
+      "titleCore": "Where Jev belongs in an agent workflow",
+      "description": "Jev is most useful at the decision points in an agent: route, score, gate, and stop. Put authority and tool execution in code.",
+      "body": "<p>The cleanest way to use Jev is to give it the choices a workflow has already defined. An agent can use it to select a tool, classify an incoming request, score a proposed action against a policy, or decide whether it has enough evidence to continue. These are decisions with a known answer space. They are not requests for a model to invent a plan or write a customer-facing explanation.</p><p>This division of labour appears repeatedly in early Jev work: an LLM writes or reasons; Jev decides; application code acts. It is a practical architecture, not a slogan. Each component has a job that matches its interface.</p><h2>Four places where the model fits</h2><ul><li><strong>Routing:</strong> choose the right model, specialist, queue, or workflow from declared options.</li><li><strong>Guardrails:</strong> decide whether a proposed agent action is routine, needs confirmation, or should stop.</li><li><strong>Triage:</strong> score urgency and ownership from incident, support, or operations state.</li><li><strong>Compaction:</strong> select the facts or unresolved questions the next model step needs.</li></ul><p>Vercel's <a href=\"https://vercel.com/i/jev-agent-control\">agent-loop example</a> adds an important detail: the decision layer does not own permission checks, argument validation, retry policy, or the tool call. Those remain ordinary code. That gives teams a stable policy boundary while letting Jev handle the fuzzy judgment inside it.</p><h2>Confidence is the handoff</h2><p>Jev's confidence value creates a useful three-way split. High-confidence, low-risk decisions can continue immediately. Medium-confidence cases can collect one more fact or use a stronger model. Low-confidence or high-impact cases can stop for review. This is where Jev's calibration matters: the workflow receives a probability it can turn into a policy, instead of guessing how much faith to put in model prose.</p><p>That policy needs to be versioned and measured. Record the state, question version, answer, probability, selected path, and final outcome. Then measure which threshold gives the best combination of automation, accuracy, and cost. A fixed 0.9 rule is less useful than a threshold backed by your own error tolerance and real outcomes.</p><h2>Budget the workflow once</h2><p>Jev can make individual decisions cheap enough to use repeatedly. That is a benefit, but it means the economic unit must be the finished task. A task budget should cover the Jev calls, model generations, retrieval, tool fees, retries, and review work. Count decisions per completed task alongside cost per completed task. If a new decision layer produces more useful completions at a lower total cost, it is working. If it just adds branches, adjust the stop rule.</p><p>Jev is not a replacement for the rest of an agent stack. It is a specialist for the part that agents do constantly: make a bounded judgment and move on.</p>",
+      "faq": [
+        {
+          "question": "What should Jev do in an agent workflow?",
+          "answer": "Use Jev for bounded decisions such as routing, scoring, tool-call guardrails, triage, and selecting what context should continue to the next step."
+        },
+        {
+          "question": "What should remain in application code?",
+          "answer": "Permissions, argument validation, retry policy, budgets, and actual tool execution should remain in code rather than in a model decision."
+        },
+        {
+          "question": "How should an agent use Jev confidence?",
+          "answer": "Use confidence bands to choose among automatic action, extra evidence or a stronger model, and human review. Tune thresholds against real outcomes."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/three-agent-budgets",
+          "label": "Three budgets every agent needs"
+        },
+        {
+          "slug": "/research/background-agents-cost-clock",
+          "label": "Background agents run on a cost clock"
+        },
+        {
+          "slug": "/research/agent-web-search-cost-center",
+          "label": "Web search is becoming an agent cost center"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/jev-agent-controls-and-budgets"
+  }
+}

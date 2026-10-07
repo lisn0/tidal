@@ -1,0 +1,64 @@
+{
+  "slug": "real-swe-benchmark-cost-per-issue",
+  "tags": [
+    "benchmarks",
+    "llm-costs",
+    "cost-optimization",
+    "agents"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "image": "https://finopsllm.com/og.png",
+  "languages": {
+    "en": {
+      "title": "Real-SWE cost per resolved issue",
+      "titleCore": "Real-SWE cost per resolved issue",
+      "description": "Real-SWE benchmarks models on private enterprise codebases. The useful number is not the pass rate &mdash; it is the blended cost per resolved issue.",
+      "body": "<p>Real-SWE landed on 12 September 2026 and picked up 275 points and 158 comments on Hacker News. The premise is the part most cost models get wrong: benchmark suites are public, memorised, and unrepresentative of the code your agents actually touch. Real-SWE runs models against private, real-world enterprise repositories.</p><h2>Why the cost number matters more than the score</h2><p>A public benchmark gives you a pass rate. It does not give you a cost. Cost per resolved issue needs three things at once:</p><ul><li><strong>Pass rate</strong> on the hard, private tasks.</li><li><strong>Tokens consumed per attempt</strong>, including the failures.</li><li><strong>Attempt count</strong> &mdash; did the model need a retry, a plan revision, a diff-and-rethink loop?</li></ul><p>Multiply those and you get the only figure that maps to a line item. A model that scores 4 points below the leader but resolves issues in one attempt at a third of the tokens is cheaper per resolved issue, and on a real backlog that difference compounds faster than the score gap suggests.</p><h2>Why public benchmarks overstate quality</h2><p>Enterprise codebases have the properties that break public benchmark assumptions: long internal conventions, undocumented invariants, tests that encode historical accidents, and build systems nobody fully understands. A model that pattern-matches a public repo cannot pattern-match a 400-file monorepo with three years of accreted decisions. That is why a widely discussed result this month was a 27B open-weights creative-writing model performing at Fable 5 level at a reported 40x cheaper price &mdash; open weights start from a local-repository prior that API models lack.</p><h2>Running the calculation</h2><p>Take a real backend repo where 40 issues are in scope. Say the cheaper model resolves 22 in one attempt at 60K input / 8K output, and the premium model resolves 26 with a 1.4x retry multiplier at 90K input / 14K output. At Opus 5.5 rates ($4/$20, cache reads $0.20):</p><table><thead><tr><th>Model</th><th>Resolved</th><th>Cost per issue</th><th>Total</th></tr></thead><tbody><tr><td>Cheap tier</td><td>22</td><td>$0.32</td><td>$7.04</td></tr><td>Premium tier</td><td>26</td><td>$0.61</td><td>$15.86</td></tr></tbody></table><p>Premium costs 2.3x the total for 18% more resolved issues. On a 40-issue backlog that is $9 more. The same trade at 4,000 issues/month is $880 &mdash; and still only buys 18% more throughput. The cheaper tier is not obviously wrong; you are trading resolution rate for volume, and the right answer depends on whether a missed issue costs more than a dollar.</p><h2>What to instrument</h2><ol><li><strong>Cost per resolved issue</strong>, not per attempt. The denominator is merged PRs, not requests.</li><li><strong>Retry multiplier</strong> per model. A model at 1.4x is a third of its list price before you count anything else.</li><li><strong>Tokens per accepted diff</strong>, including plan and self-review tokens the diff never shows.</li><li><strong>Human review minutes</strong>. A 12% cheaper model that takes 20% longer to review is more expensive.</li></ol><h2>Bottom line</h2><p>Public benchmarks rank capability on tasks that do not resemble your backlog. Real-SWE is an early attempt at the honest version. Until you run it on your own repos, treat every model comparison as a cost-per-resolved-issue hypothesis and price the hypothesis with your own token counts.</p>",
+      "faq": [
+        {
+          "question": "What is Real-SWE?",
+          "answer": "A benchmark released 12 September 2026 that evaluates models on private, real-world enterprise codebases rather than public repositories. It drew 275 points and 158 comments on Hacker News."
+        },
+        {
+          "question": "Why is cost per resolved issue better than pass rate?",
+          "answer": "Pass rate ignores token consumption and attempt count. Two models a few points apart can differ 3x in cost per resolved issue once retries, plan revisions, and rejected diffs are counted."
+        },
+        {
+          "question": "How do I calculate cost per resolved issue internally?",
+          "answer": "Total spend attributable to the agentic work, divided by merged PRs the agent materially contributed to. Track the retry multiplier and human review minutes separately, since both are real costs."
+        },
+        {
+          "question": "Do open-weight models have an advantage on private codebases?",
+          "answer": "They start from a local-repository prior that hosted API models lack. This month a 27B open-weights model was reported at Fable 5 level at roughly 40x cheaper pricing, which is the pattern to watch."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/real-cost-per-task-frontier-models",
+          "label": "Real cost per task: frontier models"
+        },
+        {
+          "slug": "/research/cost-per-successful-task",
+          "label": "Cost per successful task"
+        },
+        {
+          "slug": "/research/heavy-agentic-coding-cost-claude-vs-qwen",
+          "label": "Heavy agentic coding cost: Claude vs Qwen"
+        },
+        {
+          "slug": "/research/evals-cost-control",
+          "label": "Evals cost control"
+        },
+        {
+          "slug": "/research/pricing-an-open-weight-model",
+          "label": "Pricing an open-weight model"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/real-swe-benchmark-cost-per-issue"
+  }
+}

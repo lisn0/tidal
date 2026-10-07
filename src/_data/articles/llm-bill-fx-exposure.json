@@ -1,0 +1,143 @@
+{
+  "slug": "llm-bill-fx-exposure",
+  "tags": [
+    "finops",
+    "forecasting",
+    "variance-analysis",
+    "budgets"
+  ],
+  "datePublished": "2026-09-01",
+  "dateModified": "2026-09-01",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "en": {
+      "title": "Currency exposure in LLM spend",
+      "titleCore": "Currency exposure in LLM spend",
+      "description": "Providers bill in dollars. If you budget in euros, pounds or yen, a currency move is a cost increase that nobody attributes to AI.",
+      "body": "<p>Almost every frontier model is priced in US dollars. If your budget is not in dollars, part of your LLM cost line is a currency position you never chose to take.</p><p>A 6% move in EUR/USD is a 6% increase in what your model spend costs you, with no change in token volume, no change in model, and nothing in any usage dashboard to explain it. Finance sees the variance. Engineering, looking at a dashboard denominated in tokens, sees a flat month and cannot help.</p><h2>Why it hides so well</h2><p>Three layers of translation sit between the API call and the ledger. The provider prices per million tokens in USD. The card or invoice converts at some rate, on some date, with some spread. Your accounting system books it at yet another rate. By the time the number reaches a variance report, the FX component and the usage component are the same figure.</p><p>Cloud marketplaces make it worse, not better. Buying through a reseller or a cloud marketplace in local currency looks like it removes the exposure. It usually just moves the conversion upstream and adds a margin to it &mdash; you are still exposed, you have simply stopped being able to see the rate.</p><h2>Separate the two variances</h2><p>The fix is small and entirely a reporting change. Record every request's cost in <strong>USD at the provider's list rate</strong>, as the primary figure, in telemetry. Convert to your reporting currency once, at a stated rate, at the reporting boundary. Then a monthly variance splits cleanly into a usage variance, which engineering owns and can act on, and an FX variance, which treasury owns and engineering cannot fix.</p><p>Two teams arguing about one number is the actual cost here. It is more expensive than the currency move, because it wastes the review that was supposed to find the real growth.</p><h2>When it is worth hedging</h2><p>Rarely, and only at scale. For most companies the correct response is visibility, not a hedge: know the size of the exposure, state the rate you forecast at, and stop letting a treasury effect masquerade as an engineering one. Hedging becomes a real conversation when model spend is large enough to matter next to the company's other dollar costs &mdash; at which point it belongs with those, not in a FinOps review.</p><p>One practical note: if you renegotiate to a local-currency contract, price the conversion. A committed rate in your own currency is worth paying a little for, and worth nothing if the spread hidden inside it is larger than the volatility it removes.</p><h2>Related</h2><ul><li><a href=\"/research/ai-spend-variance-bridge\">AI spend variance bridge</a></li><li><a href=\"https://finopsllm.com/research/how-to-budget-for-ai-spend\">How to budget for AI spend</a></li><li><a href=\"/research/llm-purchasing-guide\">LLM purchasing guide</a></li></ul>",
+      "faq": [
+        {
+          "question": "Why does currency show up in an LLM cost review?",
+          "answer": "Frontier models are priced in US dollars. If you report in another currency, every exchange-rate move changes your cost with no change in usage, and the two effects arrive as a single unexplained variance."
+        },
+        {
+          "question": "How do you separate FX variance from usage variance?",
+          "answer": "Record cost in USD at the provider's list rate as the primary figure in telemetry, and convert once at a stated rate at the reporting boundary. The monthly variance then splits into a usage part engineering owns and an FX part treasury owns."
+        },
+        {
+          "question": "Does buying through a cloud marketplace remove the exposure?",
+          "answer": "Usually not. Paying in local currency moves the conversion upstream and adds a margin to it. You keep the exposure and lose visibility of the rate you are being charged."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/ai-spend-variance-bridge",
+          "label": "AI spend variance bridge"
+        },
+        {
+          "slug": "https://finopsllm.com/research/how-to-budget-for-ai-spend",
+          "label": "How to budget for AI spend"
+        },
+        {
+          "slug": "/research/llm-purchasing-guide",
+          "label": "LLM purchasing guide"
+        }
+      ]
+    },
+    "es": {
+      "title": "Exposición a divisa en el gasto de LLM",
+      "titleCore": "Exposición a divisa en el gasto de LLM",
+      "description": "Los proveedores facturan en dólares. Si presupuestas en euros, un movimiento de tipo de cambio es una subida de coste que nadie atribuye a la IA.",
+      "body": "<p>Casi todos los modelos frontera se tarifan en dólares. Si tu presupuesto no está en dólares, parte de tu coste de LLM es una posición de divisa que nunca decidiste tomar.</p><p>Un movimiento del 6% en EUR/USD es un 6% más de coste sin que cambie el volumen de tokens ni el modelo, y sin nada en el panel de uso que lo explique. Finanzas ve la desviación; ingeniería, que mira tokens, ve un mes plano y no puede ayudar.</p><h2>Por qué se esconde tan bien</h2><p>Hay tres capas de conversión entre la llamada y el libro mayor: el precio del proveedor en USD, la conversión de la tarjeta o factura con su spread, y el tipo al que lo contabiliza tu ERP. Al llegar al informe, la parte de divisa y la de uso son la misma cifra.</p><p>Comprar por un marketplace en moneda local no elimina la exposición: mueve la conversión aguas arriba y le añade margen.</p><h2>Separa las dos desviaciones</h2><p>Registra el coste de cada petición en <strong>USD a tarifa de lista</strong> como cifra primaria en telemetría, y convierte una sola vez, a un tipo declarado, en el informe. Así la desviación mensual se parte limpiamente: una parte de uso, que ingeniería puede corregir, y una de divisa, que es de tesorería.</p><h2>Cuándo cubrirse</h2><p>Pocas veces, y solo a escala. Para la mayoría la respuesta correcta es visibilidad, no cobertura.</p>",
+      "faq": [
+        {
+          "question": "¿Por qué aparece la divisa en una revisión de costes de LLM?",
+          "answer": "Los modelos frontera se tarifan en dólares. Si informas en otra moneda, cada movimiento del tipo de cambio altera tu coste sin cambiar el uso, y ambos efectos llegan como una única desviación sin explicar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/es/research/ai-spend-variance-bridge",
+          "label": "Puente de desviación del gasto en IA"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Exposition au change dans la dépense LLM",
+      "titleCore": "Exposition au change dans la dépense LLM",
+      "description": "Les fournisseurs facturent en dollars. Si vous budgétez en euros, un mouvement de change est une hausse de coût que personne n’attribue à l’IA.",
+      "body": "<p>Presque tous les modèles de pointe sont tarifés en dollars. Si votre budget n’est pas en dollars, une partie de votre coût LLM est une position de change que vous n’avez jamais choisi de prendre.</p><p>Un mouvement de 6 % sur EUR/USD, c’est 6 % de coût en plus sans variation de volume de tokens ni de modèle, et sans rien dans le tableau de bord d’usage pour l’expliquer. La finance voit l’écart ; l’ingénierie, qui regarde des tokens, voit un mois plat et ne peut pas aider.</p><h2>Pourquoi cela se cache si bien</h2><p>Trois couches de conversion séparent l’appel d’API du grand livre : le prix du fournisseur en USD, la conversion de la carte ou de la facture avec son spread, et le taux de comptabilisation de votre ERP. Arrivée au rapport d’écart, la part change et la part usage ne font qu’un chiffre.</p><p>Acheter via une place de marché en devise locale ne supprime pas l’exposition : cela déplace la conversion en amont et y ajoute une marge.</p><h2>Séparez les deux écarts</h2><p>Enregistrez le coût de chaque requête en <strong>USD au tarif public</strong> comme chiffre primaire dans la télémétrie, puis convertissez une seule fois, à un taux annoncé, au moment du reporting. L’écart mensuel se scinde alors proprement.</p><h2>Faut-il se couvrir?</h2><p>Rarement, et seulement à l’échelle. Pour la plupart, la bonne réponse est la visibilité, pas la couverture.</p>",
+      "faq": [
+        {
+          "question": "Pourquoi le change apparaît-il dans une revue de coûts LLM?",
+          "answer": "Les modèles de pointe sont tarifés en dollars. Si vous reportez dans une autre devise, chaque mouvement de change modifie votre coût sans changer l’usage, et les deux effets arrivent comme un seul écart inexpliqué."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/fr/research/ai-spend-variance-bridge",
+          "label": "Pont d’écart de dépense IA"
+        }
+      ]
+    },
+    "de": {
+      "title": "Währungsrisiko bei LLM-Ausgaben",
+      "titleCore": "Währungsrisiko bei LLM-Ausgaben",
+      "description": "Anbieter fakturieren in Dollar. Wer in Euro budgetiert, erlebt bei jeder Kursbewegung eine Kostensteigerung, die niemand der KI zuordnet.",
+      "body": "<p>Nahezu alle Frontier-Modelle werden in US-Dollar bepreist. Wenn Ihr Budget nicht in Dollar läuft, ist ein Teil Ihrer LLM-Kosten eine Währungsposition, die Sie nie bewusst eingegangen sind.</p><p>6 % Bewegung in EUR/USD heißt 6 % höhere Kosten &mdash; ohne Änderung an Token-Volumen oder Modell und ohne irgendetwas im Nutzungs-Dashboard, das es erklärt. Finance sieht die Abweichung; Engineering sieht einen flachen Monat und kann nicht helfen.</p><h2>Warum es sich so gut versteckt</h2><p>Zwischen API-Aufruf und Hauptbuch liegen drei Umrechnungsschichten: der USD-Preis des Anbieters, die Umrechnung von Karte oder Rechnung samt Spread, und der Kurs, zu dem Ihr ERP bucht. Im Abweichungsbericht sind Währungs- und Nutzungsanteil dieselbe Zahl.</p><p>Der Kauf über einen Marktplatz in Landeswährung beseitigt das Risiko nicht &mdash; er verlagert die Umrechnung nach vorn und legt eine Marge darauf.</p><h2>Trennen Sie die Abweichungen</h2><p>Erfassen Sie die Kosten je Anfrage primär in <strong>USD zum Listenpreis</strong> in der Telemetrie und rechnen Sie erst im Reporting einmalig zu einem genannten Kurs um.</p><h2>Wann absichern?</h2><p>Selten, und nur bei Größe. Für die meisten ist Sichtbarkeit die richtige Antwort, nicht ein Hedge.</p>",
+      "faq": [
+        {
+          "question": "Warum taucht Währung in einer LLM-Kostenprüfung auf?",
+          "answer": "Frontier-Modelle werden in US-Dollar bepreist. Wer in anderer Währung berichtet, sieht bei jeder Kursbewegung veränderte Kosten ohne veränderte Nutzung &mdash; beide Effekte kommen als eine einzige unerklärte Abweichung an."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/de/research/ai-spend-variance-bridge",
+          "label": "Abweichungsbrücke KI-Ausgaben"
+        }
+      ]
+    },
+    "pt": {
+      "title": "Exposição cambial no gasto de LLM",
+      "titleCore": "Exposição cambial no gasto de LLM",
+      "description": "Os fornecedores faturam em dólares. Se orçamenta em euros, um movimento cambial é um aumento de custo que ninguém atribui à IA.",
+      "body": "<p>Quase todos os modelos de fronteira têm preço em dólares. Se o seu orçamento não é em dólares, parte do seu custo de LLM é uma posição cambial que nunca decidiu assumir.</p><p>Um movimento de 6% em EUR/USD é 6% mais custo sem alterar o volume de tokens nem o modelo, e sem nada no painel de uso que o explique. As finanças veem o desvio; a engenharia, que olha para tokens, vê um mês plano e não consegue ajudar.</p><h2>Porque se esconde tão bem</h2><p>Há três camadas de conversão entre a chamada e o razão: o preço do fornecedor em USD, a conversão do cartão ou fatura com o seu spread, e a taxa a que o ERP contabiliza. No relatório de desvio, a parte cambial e a de uso são o mesmo número.</p><p>Comprar num marketplace em moeda local não elimina a exposição: move a conversão para montante e acrescenta-lhe margem.</p><h2>Separe os dois desvios</h2><p>Registe o custo de cada pedido em <strong>USD à tabela</strong> como número primário na telemetria e converta uma só vez, a uma taxa declarada, no reporte.</p><h2>Vale a pena cobrir?</h2><p>Raramente, e só à escala. Para a maioria a resposta certa é visibilidade, não cobertura.</p>",
+      "faq": [
+        {
+          "question": "Porque aparece o câmbio numa revisão de custos de LLM?",
+          "answer": "Os modelos de fronteira têm preço em dólares. Se reporta noutra moeda, cada movimento cambial altera o custo sem alterar o uso, e ambos os efeitos chegam como um único desvio por explicar."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/pt/research/ai-spend-variance-bridge",
+          "label": "Ponte de desvio do gasto em IA"
+        }
+      ]
+    },
+    "ja": {
+      "title": "LLM 支出の為替エクスポージャー",
+      "titleCore": "LLM 支出の為替エクスポージャー",
+      "description": "プロバイダーの請求はドル建てです。円やユーロで予算を組んでいれば、為替の変動は誰も AI に帰属させないコスト増になります。",
+      "body": "<p>フロンティアモデルのほぼすべてが米ドル建てで値付けされています。予算がドル建てでないなら、LLM コストの一部は、自分で選んだ覚えのない為替ポジションです。</p><p>USD/JPY が 6% 動けば、トークン量もモデルも変えていないのにコストは 6% 増えます。しかも利用ダッシュボードにはそれを説明するものが何もありません。財務は差異を見ますが、トークンを見ているエンジニアリングは平坦な月しか見えず、手の打ちようがありません。</p><h2>なぜ見つけにくいのか</h2><p>API 呼び出しから総勘定元帳までに換算が三層あります。プロバイダーのドル価格、カードや請求書のレートとスプレッド、そして会計システムが計上するレート。差異レポートに届くころには、為替分と利用分は同じ一つの数字です。</p><p>現地通貨のマーケットプレイス経由で買ってもリスクは消えません。換算が上流に移り、そこにマージンが乗るだけです。</p><h2>2 つの差異を分ける</h2><p>テレメトリでは各リクエストのコストを<strong>定価のドル建て</strong>で主指標として記録し、レポート時に明示したレートで一度だけ換算します。これで月次差異は、エンジニアリングが動かせる利用差異と、財務部門が持つ為替差異にきれいに分かれます。</p><h2>ヘッジすべきか</h2><p>ほとんどの場合、必要なのはヘッジではなく可視性です。</p>",
+      "faq": [
+        {
+          "question": "なぜ LLM のコストレビューに為替が出てくるのですか？",
+          "answer": "フロンティアモデルはドル建てで値付けされているためです。別通貨で報告していると、利用量が変わらなくても為替が動くたびにコストが変わり、両方の効果が説明のつかない 1 つの差異として届きます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "/ja/research/ai-spend-variance-bridge",
+          "label": "AI 支出の差異ブリッジ"
+        }
+      ]
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/llm-bill-fx-exposure"
+  }
+}

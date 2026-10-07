@@ -1,0 +1,375 @@
+{
+  "slug": "deepseek-harness-getting-started",
+  "tags": [
+    "deepseek-harness",
+    "setup",
+    "profiles"
+  ],
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "image": "https://finopsllm.com/og.png",
+  "agentMode": true,
+  "languages": {
+    "de": {
+      "title": "DeepSeek Harness: Installation, Profile und erster Lauf",
+      "titleCore": "DeepSeek Harness: Installation, Profile und erster Lauf",
+      "description": "Praxisleitfaden für DeepSeek Harness: Installation per npx, die Web-Oberfläche, Profile und Bundles, die vierschichtige Konfigurationsreihenfolge und die Demos.",
+      "body": "<p>Dies ist die praktische Hälfte unserer Berichterstattung zu DeepSeek Harness: wie Sie <code>dsh</code> zum Laufen bringen, was das Kompositionsmodell von Ihnen erwartet und welche Demos zehn Minuten wert sind.</p>\n\n<h2>Der schnellste Weg</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Das startet die Web-Oberfläche unter <code>http://127.0.0.1:3080</code>. Von dort müssen zwei Dinge geschehen, bevor der Sitzungs-Composer nutzbar wird:</p>\n<ol>\n<li><strong>Einstellungen → Modelle</strong> und den DeepSeek-API-Schlüssel eintragen. Die Route wird sofort aktiv, ohne Neustart.</li>\n<li><strong>Arbeitsbereich wählen</strong>, um das Projektverzeichnis hinzuzufügen und zu aktivieren. Solange kein Arbeitsbereich aktiv ist, bleibt der Composer gesperrt.</li>\n</ol>\n<p>Sobald es läuft, kann der Agent Dateien lesen und bearbeiten, Befehle ausführen, Aufgaben an Unteragenten abgeben und planen. Er fragt gemäß der aktiven Berechtigungsrichtlinie nach Bestätigung.</p>\n\n<h2>Aus dem Quellcode</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Zu beachtende Untergrenzen: Node 22.19 oder neuer (die CI deckt 22.19, 24 und 26 ab), Git 2.26 oder neuer und Corepack mit pnpm auf <code>pnpm@11.7.0</code> festgelegt. Ein <code>DEEPSEEK_API_KEY</code> ist optional und wird aus der Umgebung oder einer gitignorierten <code>.env</code> im Wurzelverzeichnis gelesen; daneben kann <code>DEEPSEEK_BASE_URL</code> auf einen anderen Endpunkt zeigen. Die End-to-End-Suiten gegen die echte API überspringen sich selbst, wenn der Schlüssel fehlt, sodass ein Checkout ohne Schlüssel sauber baut und testet.</p>\n\n<h2>Profile und Bundles: das Kompositionsmodell</h2>\n<p>Da jeder Teil des Harness ein Plugin ist, muss irgendetwas festlegen, welche Plugins geladen werden. Das ist ein <strong>Profil</strong>: eine benannte Komposition, die eine geordnete Liste von Bundles plus eigene Patches speichert. Ein <strong>Bundle</strong> verteilt Cordis-Konfigurationszeilen und Code.</p>\n<p>Drei Vorlagenprofile werden mitgeliefert:</p>\n<table>\n<thead><tr><th>Profil</th><th>Was es komponiert</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>Modelladapter, Werkzeuge, Persistenz</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>Die Browser-Oberfläche</td></tr>\n<tr><td><code>dsh-headless</code></td><td>Einmal-Ausführung</td></tr>\n</tbody>\n</table>\n\n<h2>Die vierschichtige Überschreibungsreihenfolge</h2>\n<p>Die Konfiguration löst in fester Reihenfolge auf, spätere Schichten gewinnen:</p>\n<ol>\n<li>Profil-Bundles</li>\n<li>Profil-Patches</li>\n<li>Patches auf Home-Ebene</li>\n<li>Overlays von der Kommandozeile</li>\n</ol>\n<p class=\"agent-summary\">Lernen Sie diese Reihenfolge, bevor Sie mit der Fehlersuche beginnen. Fast jede Frage der Art „warum nimmt es dieses Modell“ in einem geschichteten Konfigurationssystem beantwortet sich damit, welche Schicht den Wert zuletzt angefasst hat — und ein CLI-Overlay schlägt alles darunter.</p>\n\n<h2>Die Subsysteme, denen Sie begegnen</h2>\n<p>Sechs Registrierungsschlüssel tragen den Großteil des Verhaltens: <code>ctx.sessions</code> (das reine Anhänge-Ereignisprotokoll), <code>ctx.systemPrompt</code>, <code>ctx.tools</code> (eine gescopte Registry mit bewachter Ausführung), <code>ctx.agents</code>, <code>ctx.agentLoop</code> und <code>ctx.llm</code>. Wer das Harness erweitert, sucht zuerst nach diesen Namen.</p>\n\n<h2>Drei Demos, die sich lohnen</h2>\n<ul>\n<li><strong>Headless-Einmallauf:</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>. Die Form, die Sie in CI oder einen Cron-Job verdrahten würden.</li>\n<li><strong>Cordis-Introspektion:</strong> <code>pnpm run demo:cordis</code>. Selbstbezüglich — sie inspiziert und verändert ihre eigene laufende Plugin-Laufzeit. Das ist der klarste Beleg, dass der Plugin-Anspruch strukturell und nicht werblich ist.</li>\n<li><strong>ACP-Automatisierung:</strong> <code>pnpm run demo:acp</code>. Ein Automatisierungsserver, der JSON-RPC über stdio spricht — die Integrationsfläche, um das Harness aus einem anderen System heraus zu steuern.</li>\n</ul>\n\n<h2>Wenn Sie beitragen wollen</h2>\n<p>Ein paar Konventionen sparen Zeit. TODO-Markierungen sind nach Dringlichkeit abgestuft: <code>FIXME</code> blockiert ein Release, <code>TODO</code> heißt bald, <code>XXX</code> heißt irgendwann. Lefthook führt <code>pre-commit</code> aus (Staged-Pairing-Einträge, <code>.oxlintrc.staged.json</code>, Neuerzeugung der Drittanbieterhinweise, Whitespace, Vendor-Manifest-Wächter), dazu <code>pre-merge-commit</code> und <code>pre-push</code> (<code>pnpm run typecheck</code>). Die Hooks lassen Tests und Builds bewusst aus — die CI besitzt die vollständige Abdeckung, und <code>pnpm run check:all</code> ist das freiwillige umfassende lokale Tor.</p>\n<p>Zwei Eigenheiten erklären sonst verwirrende Strukturen. Der Build teilt sich in Host- und Client-tsconfig-Aggregate, weil beide Seiten die Cordis-<code>Context</code>-Schnittstelle unter denselben Schlüsseln deklarationsverschmelzen und ein einzelnes TypeScript-Programm, das beide Verschmelzungen sieht, eine Kollision meldet. Und Codebeispiele in der Dokumentation werden durch <code>ts type-equiv</code>-Blöcke plus <code>pnpm run verify-type-equiv</code> ehrlich gehalten, damit eingefügte Deklarationen nicht stillschweigend vom Quellcode abdriften.</p>\n\n<h2>Erwartungen setzen</h2>\n<p>Die README sagt es deutlich: Dies ist ein Developer Preview, und es wird kompatibilitätsbrechende Änderungen geben. Die Plugin-Entdeckung läuft über das GitHub-Thema <code>dsh-plugin</code>, das Projekt ist MIT-lizenziert und Drittanbieter-Abhängigkeiten stehen in <code>THIRD_PARTY_NOTICES.md</code>. Evaluieren Sie jetzt, standardisieren Sie später.</p>",
+      "faq": [
+        {
+          "question": "Wie installiert und startet man DeepSeek Harness?",
+          "answer": "Der schnellste Weg ist npx @deepseek-ai/dsh web, das die Web-Oberfläche unter http://127.0.0.1:3080 startet. Aus dem Quellcode klonen Sie das Repository und führen pnpm install, pnpm run build und pnpm dsh web aus."
+        },
+        {
+          "question": "Was ist ein Profil in DeepSeek Harness?",
+          "answer": "Ein Profil ist eine benannte Komposition, die eine geordnete Liste von Bundles plus eigene Patches speichert. Bundles verteilen Cordis-Konfigurationszeilen und Code. Drei Vorlagenprofile werden mitgeliefert: dsh-base, dsh-web-app und dsh-headless."
+        },
+        {
+          "question": "In welcher Reihenfolge wendet DeepSeek Harness die Konfiguration an?",
+          "answer": "In vier Schichten, der Reihe nach: Profil-Bundles, dann Profil-Patches, dann Patches auf Home-Ebene, dann Overlays von der Kommandozeile. Spätere Schichten überschreiben frühere, ein CLI-Flag gewinnt also gegen alles andere."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Was ist DeepSeek Harness? Der Leitfaden"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-plugin-architecture",
+          "label": "Was „alles ist ein Plugin“ wirklich bringt (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-guardrails",
+          "label": "Wo Ausgaben-Leitplanken hingehören (EN)"
+        },
+        {
+          "slug": "/de/research/deepseek-harness-session-log",
+          "label": "Das Sitzungsprotokoll als Kostennachweis (EN)"
+        }
+      ]
+    },
+    "es": {
+      "title": "DeepSeek Harness: instalación, perfiles y primera ejecución",
+      "titleCore": "DeepSeek Harness: instalación, perfiles y primera ejecución",
+      "description": "Guía práctica de DeepSeek Harness: instalación con npx, la interfaz web, perfiles y bundles, el orden de configuración en cuatro capas y las demos que valen la pena.",
+      "body": "<p>Esta es la mitad práctica de nuestra cobertura de DeepSeek Harness: cómo poner <code>dsh</code> en marcha, qué espera de usted el modelo de composición y qué demos merecen diez minutos.</p>\n\n<h2>La vía más rápida</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Eso inicia la interfaz web en <code>http://127.0.0.1:3080</code>. A partir de ahí deben ocurrir dos cosas antes de que el compositor de sesión sea utilizable:</p>\n<ol>\n<li><strong>Ajustes → Modelos</strong>, e introducir su clave de API de DeepSeek. La ruta se habilita al momento, sin reiniciar.</li>\n<li><strong>Elegir espacio de trabajo</strong>, para añadir y activar el directorio del proyecto. Hasta que haya un espacio activo, el compositor permanece deshabilitado.</li>\n</ol>\n<p>Una vez en marcha, el agente puede leer y editar archivos, ejecutar comandos, delegar tareas en subagentes y planificar. Pide confirmación según la política de permisos activa.</p>\n\n<h2>Desde el código fuente</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Mínimos a tener en cuenta: Node 22.19 o superior (la CI cubre 22.19, 24 y 26), Git 2.26 o superior, y Corepack con pnpm fijado en <code>pnpm@11.7.0</code>. Una <code>DEEPSEEK_API_KEY</code> es opcional y se lee del entorno o de un <code>.env</code> ignorado por git en la raíz del repositorio; junto a ella, <code>DEEPSEEK_BASE_URL</code> puede apuntar a otro endpoint. Las suites de extremo a extremo contra la API real se autoexcluyen cuando falta la clave, así que un checkout sin clave compila y pasa pruebas sin problemas.</p>\n\n<h2>Perfiles y bundles: el modelo de composición</h2>\n<p>Como cada parte del harness es un plugin, algo tiene que decir qué plugins se cargan. Eso es un <strong>perfil</strong>: una composición con nombre que guarda una lista ordenada de bundles más los parches del usuario. Un <strong>bundle</strong> distribuye filas de configuración de Cordis y código.</p>\n<p>Se incluyen tres perfiles plantilla:</p>\n<table>\n<thead><tr><th>Perfil</th><th>Qué compone</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>Adaptadores de modelo, herramientas, persistencia</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>La interfaz de navegador</td></tr>\n<tr><td><code>dsh-headless</code></td><td>Ejecutor de una sola pasada</td></tr>\n</tbody>\n</table>\n\n<h2>El orden de sobreescritura en cuatro capas</h2>\n<p>La configuración se resuelve en un orden fijo, ganando las capas posteriores:</p>\n<ol>\n<li>Bundles del perfil</li>\n<li>Parches del perfil</li>\n<li>Parches a nivel de home</li>\n<li>Overlays de línea de comandos</li>\n</ol>\n<p class=\"agent-summary\">Aprenda este orden antes de empezar a depurar. Casi toda pregunta del tipo «por qué está usando ese modelo» en un sistema de configuración por capas se responde encontrando qué capa tocó el valor en último lugar, y un overlay de línea de comandos gana a todo lo que tiene debajo.</p>\n\n<h2>Los subsistemas que va a encontrar</h2>\n<p>Seis claves de registro cargan con la mayor parte del comportamiento: <code>ctx.sessions</code> (el registro de eventos solo-anexado), <code>ctx.systemPrompt</code>, <code>ctx.tools</code> (un registro con scope y ejecución vigilada), <code>ctx.agents</code>, <code>ctx.agentLoop</code> y <code>ctx.llm</code>. Si va a extender el harness, esos son los nombres que buscar primero.</p>\n\n<h2>Tres demos que vale la pena ejecutar</h2>\n<ul>\n<li><strong>Headless de una pasada:</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>. La forma que cablearía en CI o en un cron.</li>\n<li><strong>Introspección de Cordis:</strong> <code>pnpm run demo:cordis</code>. Autorreferencial: inspecciona y modifica su propio runtime de plugins en caliente. Es la demostración más clara de que la afirmación sobre plugins es estructural y no publicitaria.</li>\n<li><strong>Automatización ACP:</strong> <code>pnpm run demo:acp</code>. Un servidor de automatización que habla JSON-RPC sobre stdio, que es la superficie de integración para gobernar el harness desde otro sistema.</li>\n</ul>\n\n<h2>Si piensa contribuir</h2>\n<p>Unas cuantas convenciones ahorran tiempo. Las marcas TODO están graduadas por urgencia: <code>FIXME</code> bloquea la release, <code>TODO</code> es pronto, <code>XXX</code> es algún día. Lefthook ejecuta <code>pre-commit</code> (registros de pairing en staged, <code>.oxlintrc.staged.json</code>, regeneración de avisos de terceros, espacios en blanco, guardián del manifiesto de vendor), <code>pre-merge-commit</code> y <code>pre-push</code> (<code>pnpm run typecheck</code>). Los hooks se saltan tests y builds deliberadamente: la CI es dueña de la cobertura exhaustiva, y <code>pnpm run check:all</code> es la puerta local completa y opcional.</p>\n<p>Dos rarezas explican una estructura que si no resultaría confusa. El build se divide en agregados tsconfig de Host y Client porque ambos lados fusionan por declaración la interfaz <code>Context</code> de Cordis bajo las mismas claves, y un único programa de TypeScript que vea ambas fusiones reporta una colisión. Y los ejemplos de código de la documentación se mantienen honestos con bloques <code>ts type-equiv</code> más <code>pnpm run verify-type-equiv</code>, de modo que las declaraciones pegadas no puedan divergir en silencio del código fuente.</p>\n\n<h2>Fijar expectativas</h2>\n<p>El README lo dice sin rodeos: esto es un developer preview y habrá cambios que rompan compatibilidad. El descubrimiento de plugins pasa por el topic de GitHub <code>dsh-plugin</code>, el proyecto tiene licencia MIT y las dependencias de terceros están listadas en <code>THIRD_PARTY_NOTICES.md</code>. Evalúelo ahora; estandarice más tarde.</p>",
+      "faq": [
+        {
+          "question": "¿Cómo se instala y ejecuta DeepSeek Harness?",
+          "answer": "La vía más rápida es npx @deepseek-ai/dsh web, que inicia la interfaz web en http://127.0.0.1:3080. Desde el código fuente, clone el repositorio y ejecute pnpm install, pnpm run build y pnpm dsh web."
+        },
+        {
+          "question": "¿Qué es un perfil en DeepSeek Harness?",
+          "answer": "Un perfil es una composición con nombre que guarda una lista ordenada de bundles más los parches del usuario. Los bundles distribuyen filas de configuración de Cordis y código. Se incluyen tres perfiles plantilla: dsh-base, dsh-web-app y dsh-headless."
+        },
+        {
+          "question": "¿En qué orden aplica la configuración DeepSeek Harness?",
+          "answer": "En cuatro capas y en este orden: bundles del perfil, luego parches del perfil, luego parches a nivel de home, luego overlays de línea de comandos. Las capas posteriores sobreescriben a las anteriores, así que un flag de línea de comandos gana a todo lo demás."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "¿Qué es DeepSeek Harness? Guía completa"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-plugin-architecture",
+          "label": "Qué aporta de verdad «todo es un plugin» (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-guardrails",
+          "label": "Dónde poner los límites de gasto (EN)"
+        },
+        {
+          "slug": "/es/research/deepseek-harness-session-log",
+          "label": "El registro de sesión como registro de costes (EN)"
+        }
+      ]
+    },
+    "fr": {
+      "title": "DeepSeek Harness : installation, profils et premier…",
+      "titleCore": "DeepSeek Harness : installation, profils et premier…",
+      "description": "Guide pratique de DeepSeek Harness : installation via npx, interface web, profils et bundles, ordre de configuration en quatre couches et démos à lancer.",
+      "body": "<p>Voici la moitié pratique de notre couverture de DeepSeek Harness : comment faire tourner <code>dsh</code>, ce que le modèle de composition attend de vous, et quelles démos valent dix minutes.</p>\n\n<h2>La voie la plus rapide</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Cela démarre l'interface web sur <code>http://127.0.0.1:3080</code>. À partir de là, deux choses doivent se produire avant que le compositeur de session devienne utilisable :</p>\n<ol>\n<li><strong>Paramètres → Modèles</strong>, et saisir votre clé d'API DeepSeek. La route s'active immédiatement, sans redémarrage.</li>\n<li><strong>Choisir l'espace de travail</strong>, pour ajouter et activer le répertoire du projet. Tant qu'aucun espace n'est actif, le compositeur reste indisponible.</li>\n</ol>\n<p>Une fois lancé, l'agent peut lire et modifier des fichiers, exécuter des commandes, déléguer des tâches à des sous-agents et planifier. Il demande confirmation selon la politique de permissions active.</p>\n\n<h2>Depuis les sources</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Planchers à connaître : Node 22.19 ou plus récent (la CI couvre 22.19, 24 et 26), Git 2.26 ou plus récent, et Corepack avec pnpm épinglé à <code>pnpm@11.7.0</code>. Une <code>DEEPSEEK_API_KEY</code> est facultative, lue depuis l'environnement ou un <code>.env</code> ignoré par git à la racine du dépôt ; à côté, <code>DEEPSEEK_BASE_URL</code> peut pointer vers un autre endpoint. Les suites de bout en bout contre l'API réelle s'auto-ignorent quand la clé est absente, si bien qu'un checkout sans clé se construit et se teste proprement.</p>\n\n<h2>Profils et bundles : le modèle de composition</h2>\n<p>Puisque chaque partie du harness est un plugin, quelque chose doit dire quels plugins sont chargés. C'est le rôle du <strong>profil</strong> : une composition nommée stockant une liste ordonnée de bundles plus les correctifs de l'utilisateur. Un <strong>bundle</strong> distribue des lignes de configuration Cordis et du code.</p>\n<p>Trois profils modèles sont livrés :</p>\n<table>\n<thead><tr><th>Profil</th><th>Ce qu'il compose</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>Adaptateurs de modèle, outils, persistance</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>L'interface navigateur</td></tr>\n<tr><td><code>dsh-headless</code></td><td>Exécuteur en un coup</td></tr>\n</tbody>\n</table>\n\n<h2>L'ordre de surcharge en quatre couches</h2>\n<p>La configuration se résout dans un ordre fixe, les couches ultérieures l'emportant :</p>\n<ol>\n<li>Bundles du profil</li>\n<li>Correctifs du profil</li>\n<li>Correctifs au niveau home</li>\n<li>Surcharges en ligne de commande</li>\n</ol>\n<p class=\"agent-summary\">Apprenez cet ordre avant de commencer à déboguer. Presque toute question du genre « pourquoi utilise-t-il ce modèle » dans un système de configuration en couches se résout en trouvant quelle couche a touché la valeur en dernier, et une surcharge en ligne de commande bat tout ce qui se trouve en dessous.</p>\n\n<h2>Les sous-systèmes que vous rencontrerez</h2>\n<p>Six clés de registre portent l'essentiel du comportement : <code>ctx.sessions</code> (le journal d'événements en ajout seul), <code>ctx.systemPrompt</code>, <code>ctx.tools</code> (un registre à scopes avec exécution gardée), <code>ctx.agents</code>, <code>ctx.agentLoop</code> et <code>ctx.llm</code>. Si vous étendez le harness, ce sont les noms à chercher en premier.</p>\n\n<h2>Trois démos à lancer</h2>\n<ul>\n<li><strong>Headless en un coup :</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>. La forme que vous câbleriez dans la CI ou dans une tâche planifiée.</li>\n<li><strong>Introspection Cordis :</strong> <code>pnpm run demo:cordis</code>. Auto-référentielle : elle inspecte et modifie son propre runtime de plugins en cours d'exécution. C'est la démonstration la plus nette que l'argument des plugins est structurel et non marketing.</li>\n<li><strong>Automatisation ACP :</strong> <code>pnpm run demo:acp</code>. Un serveur d'automatisation parlant JSON-RPC sur stdio, qui est la surface d'intégration pour piloter le harness depuis un autre système.</li>\n</ul>\n\n<h2>Si vous comptez contribuer</h2>\n<p>Quelques conventions font gagner du temps. Les marqueurs TODO sont gradués par urgence : <code>FIXME</code> bloque une release, <code>TODO</code> veut dire bientôt, <code>XXX</code> veut dire un jour. Lefthook exécute <code>pre-commit</code> (enregistrements de pairing en staged, <code>.oxlintrc.staged.json</code>, régénération des avis tiers, espaces, gardien du manifeste vendor), <code>pre-merge-commit</code> et <code>pre-push</code> (<code>pnpm run typecheck</code>). Les hooks sautent délibérément les tests et les builds : la CI possède la couverture exhaustive, et <code>pnpm run check:all</code> est la porte locale complète et optionnelle.</p>\n<p>Deux bizarreries expliquent une structure autrement déroutante. Le build se scinde en agrégats tsconfig Host et Client parce que les deux côtés fusionnent par déclaration l'interface <code>Context</code> de Cordis sous les mêmes clés, et un seul programme TypeScript voyant les deux fusions signale une collision. Et les exemples de code de la documentation restent honnêtes grâce aux blocs <code>ts type-equiv</code> plus <code>pnpm run verify-type-equiv</code>, de sorte que des déclarations collées ne peuvent pas dériver silencieusement des sources.</p>\n\n<h2>Fixer les attentes</h2>\n<p>Le README le dit sans détour : ceci est une developer preview, et il y aura des changements cassant la compatibilité. La découverte des plugins passe par le topic GitHub <code>dsh-plugin</code>, le projet est sous licence MIT et les dépendances tierces sont listées dans <code>THIRD_PARTY_NOTICES.md</code>. Évaluez-le maintenant ; standardisez plus tard.</p>",
+      "faq": [
+        {
+          "question": "Comment installer et lancer DeepSeek Harness ?",
+          "answer": "La voie la plus rapide est npx @deepseek-ai/dsh web, qui démarre l'interface web sur http://127.0.0.1:3080. Depuis les sources, clonez le dépôt puis exécutez pnpm install, pnpm run build et pnpm dsh web."
+        },
+        {
+          "question": "Qu'est-ce qu'un profil dans DeepSeek Harness ?",
+          "answer": "Un profil est une composition nommée qui stocke une liste ordonnée de bundles plus les correctifs de l'utilisateur. Les bundles distribuent des lignes de configuration Cordis et du code. Trois profils modèles sont livrés : dsh-base, dsh-web-app et dsh-headless."
+        },
+        {
+          "question": "Dans quel ordre DeepSeek Harness applique-t-il la configuration ?",
+          "answer": "En quatre couches, dans cet ordre : bundles du profil, puis correctifs du profil, puis correctifs au niveau home, puis surcharges en ligne de commande. Les couches ultérieures écrasent les précédentes, donc un drapeau en ligne de commande l'emporte sur tout le reste."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness : le guide complet"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-plugin-architecture",
+          "label": "Ce que « tout est un plugin » apporte vraiment (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-guardrails",
+          "label": "Où placer les garde-fous de dépense (EN)"
+        },
+        {
+          "slug": "/fr/research/deepseek-harness-session-log",
+          "label": "Le journal de session comme registre de coûts (EN)"
+        }
+      ]
+    },
+    "ja": {
+      "title": "DeepSeek Harnessの導入：プロファイルと初回実行",
+      "titleCore": "DeepSeek Harnessの導入：プロファイルと初回実行",
+      "description": "DeepSeek Harnessの実践的な導入ガイド。npxでのインストール、Web UI、プロファイルとバンドル、四層の設定順序、そして試す価値のあるデモを解説します。",
+      "body": "<p>本稿は DeepSeek Harness 記事群の実践側です。<code>dsh</code> をどう動かすか、合成モデルが何を求めるか、そしてどのデモに十分な価値があるかを扱います。</p>\n\n<h2>最短経路</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p><code>http://127.0.0.1:3080</code> で Web UI が起動します。そこからセッションのコンポーザーが使えるようになるまでに、二つの手順が必要です。</p>\n<ol>\n<li><strong>Settings → Models</strong> で DeepSeek の API キーを入力します。再起動不要で即座に有効化されます。</li>\n<li><strong>ワークスペースの選択</strong>でプロジェクトのディレクトリを追加し有効化します。ワークスペースが有効になるまでコンポーザーは使えません。</li>\n</ol>\n<p>起動後、エージェントはファイルの読み書き、コマンドの実行、サブエージェントへのタスク委譲、そして計画立案を行えます。有効な権限ポリシーに従って確認を求めます。</p>\n\n<h2>ソースから</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>下限要件は Node 22.19 以降（CI は 22.19、24、26 を対象）、Git 2.26 以降、そして Corepack で <code>pnpm@11.7.0</code> に固定した pnpm です。<code>DEEPSEEK_API_KEY</code> は任意で、環境変数かリポジトリ直下の gitignore された <code>.env</code> から読まれます。併せて <code>DEEPSEEK_BASE_URL</code> で別のエンドポイントを指せます。実 API に対するエンドツーエンドのテスト群はキーがなければ自らスキップするため、キーなしのチェックアウトでもビルドとテストは通ります。</p>\n\n<h2>プロファイルとバンドル：合成モデル</h2>\n<p>ハーネスのあらゆる部分がプラグインである以上、どのプラグインを読み込むかを決める何かが必要です。それが<strong>プロファイル</strong>で、順序付きのバンドル一覧とユーザーのパッチを保持する名前付きの合成です。<strong>バンドル</strong>は Cordis の設定行とコードを配布します。</p>\n<p>テンプレートのプロファイルが三つ同梱されます。</p>\n<table>\n<thead><tr><th>プロファイル</th><th>合成する内容</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>モデルアダプタ、ツール、永続化</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>ブラウザ UI</td></tr>\n<tr><td><code>dsh-headless</code></td><td>単発実行のランナー</td></tr>\n</tbody>\n</table>\n\n<h2>四層の上書き順序</h2>\n<p>設定は固定の順序で解決され、後の層が勝ちます。</p>\n<ol>\n<li>プロファイルのバンドル</li>\n<li>プロファイルのパッチ</li>\n<li>home レベルのパッチ</li>\n<li>コマンドラインのオーバーレイ</li>\n</ol>\n<p class=\"agent-summary\">デバッグを始める前にこの順序を覚えてください。階層型の設定システムにおける「なぜそのモデルが使われているのか」という問いのほとんどは、その値に最後に触れた層を突き止めれば片づきます。そしてコマンドラインのオーバーレイはその下のすべてに勝ちます。</p>\n\n<h2>出会うことになるサブシステム</h2>\n<p>六つのレジストリキーが振る舞いの大半を担います。<code>ctx.sessions</code>（追記専用のイベントログ）、<code>ctx.systemPrompt</code>、<code>ctx.tools</code>（スコープ付きで実行がガードされたレジストリ）、<code>ctx.agents</code>、<code>ctx.agentLoop</code>、<code>ctx.llm</code> です。ハーネスを拡張するなら、まず検索すべき名前がこれらです。</p>\n\n<h2>試す価値のあるデモ三つ</h2>\n<ul>\n<li><strong>ヘッドレス単発実行：</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>。CI や cron ジョブに組み込むときの形です。</li>\n<li><strong>Cordis のイントロスペクション：</strong> <code>pnpm run demo:cordis</code>。自己言及的で、稼働中の自身のプラグインランタイムを検査し変更します。プラグインという主張が宣伝ではなく構造であることの最も明快な実証です。</li>\n<li><strong>ACP 自動化：</strong> <code>pnpm run demo:acp</code>。stdio 上で JSON-RPC を話す自動化サーバーで、別のシステムからハーネスを駆動するための統合面です。</li>\n</ul>\n\n<h2>コントリビュートを考えているなら</h2>\n<p>いくつかの慣習が時間を節約します。TODO 系のマーカーは緊急度で段階分けされ、<code>FIXME</code> はリリースブロッカー、<code>TODO</code> は近く、<code>XXX</code> はいつかを意味します。Lefthook は <code>pre-commit</code>（ステージ済みペアリング記録、<code>.oxlintrc.staged.json</code>、サードパーティ通知の再生成、空白、vendor マニフェストのガード）、<code>pre-merge-commit</code>、<code>pre-push</code>（<code>pnpm run typecheck</code>）を実行します。フックはテストとビルドを意図的に飛ばします。網羅的なカバレッジは CI の担当で、<code>pnpm run check:all</code> が任意の包括的なローカルゲートです。</p>\n<p>一見不可解な構造は二つの事情で説明がつきます。ビルドが Host と Client の tsconfig 集約に分かれているのは、双方が Cordis の <code>Context</code> インターフェースを同じキーで宣言マージしており、両方のマージを見る単一の TypeScript プログラムが衝突を報告するためです。またドキュメント中のコード例は <code>ts type-equiv</code> フェンスと <code>pnpm run verify-type-equiv</code> によって正しさが保たれ、貼り付けた宣言がソースから静かに乖離しないようになっています。</p>\n\n<h2>期待値の設定</h2>\n<p>README は率直です。これは developer preview であり、互換性を壊す変更があります。プラグインの発見は GitHub のトピック <code>dsh-plugin</code> 経由で行われ、プロジェクトは MIT ライセンス、サードパーティ依存は <code>THIRD_PARTY_NOTICES.md</code> に列挙されています。評価は今、標準化は後で。</p>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness はどう導入して実行しますか？",
+          "answer": "最短経路は npx @deepseek-ai/dsh web で、http://127.0.0.1:3080 に Web UI が立ち上がります。ソースからの場合はリポジトリをクローンし、pnpm install、pnpm run build、pnpm dsh web を実行してください。"
+        },
+        {
+          "question": "DeepSeek Harness のプロファイルとは何ですか？",
+          "answer": "プロファイルは、順序付きのバンドル一覧とユーザーのパッチを保持する名前付きの合成です。バンドルは Cordis の設定行とコードを配布します。テンプレートとして dsh-base、dsh-web-app、dsh-headless の三つが同梱されています。"
+        },
+        {
+          "question": "DeepSeek Harness は設定をどの順序で適用しますか？",
+          "answer": "四つの層を順に適用します。プロファイルのバンドル、プロファイルのパッチ、home レベルのパッチ、コマンドラインのオーバーレイの順です。後の層が前の層を上書きするため、コマンドラインのフラグが他のすべてに勝ちます。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harnessとは？完全ガイド"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-plugin-architecture",
+          "label": "「すべてがプラグイン」が実際にもたらすもの（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-guardrails",
+          "label": "支出ガードレールを置く場所（英語）"
+        },
+        {
+          "slug": "/ja/research/deepseek-harness-session-log",
+          "label": "コスト記録としてのセッションログ（英語）"
+        }
+      ]
+    },
+    "pt": {
+      "title": "DeepSeek Harness: instalação, perfis e primeira execução",
+      "titleCore": "DeepSeek Harness: instalação, perfis e primeira execução",
+      "description": "Guia prático do DeepSeek Harness: instalação por npx, a interface web, perfis e bundles, a ordem de configuração em quatro camadas e as demos que valem a pena.",
+      "body": "<p>Esta é a metade prática da nossa cobertura do DeepSeek Harness: como colocar o <code>dsh</code> para rodar, o que o modelo de composição espera de você, e quais demos valem dez minutos.</p>\n\n<h2>O caminho mais rápido</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Isso inicia a interface web em <code>http://127.0.0.1:3080</code>. Dali, duas coisas precisam acontecer antes que o compositor de sessão fique utilizável:</p>\n<ol>\n<li><strong>Configurações → Modelos</strong>, e inserir sua chave de API da DeepSeek. A rota é habilitada na hora, sem reiniciar.</li>\n<li><strong>Escolher espaço de trabalho</strong>, para adicionar e ativar o diretório do projeto. Enquanto não houver um espaço ativo, o compositor fica indisponível.</li>\n</ol>\n<p>Uma vez em execução, o agente pode ler e editar arquivos, rodar comandos, delegar tarefas a subagentes e planejar. Ele pede confirmação conforme a política de permissões ativa.</p>\n\n<h2>A partir do código</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Pisos a considerar: Node 22.19 ou mais recente (a CI cobre 22.19, 24 e 26), Git 2.26 ou mais recente, e Corepack com pnpm fixado em <code>pnpm@11.7.0</code>. Uma <code>DEEPSEEK_API_KEY</code> é opcional, lida do ambiente ou de um <code>.env</code> ignorado pelo git na raiz do repositório; ao lado dela, <code>DEEPSEEK_BASE_URL</code> pode apontar para outro endpoint. As suítes de ponta a ponta contra a API real se autoignoram quando a chave está ausente, então um checkout sem chave compila e testa sem problemas.</p>\n\n<h2>Perfis e bundles: o modelo de composição</h2>\n<p>Como cada parte do harness é um plugin, algo precisa dizer quais plugins são carregados. Isso é um <strong>perfil</strong>: uma composição nomeada que guarda uma lista ordenada de bundles mais os patches do usuário. Um <strong>bundle</strong> distribui linhas de configuração do Cordis e código.</p>\n<p>Três perfis modelo acompanham o projeto:</p>\n<table>\n<thead><tr><th>Perfil</th><th>O que compõe</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>Adaptadores de modelo, ferramentas, persistência</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>A interface de navegador</td></tr>\n<tr><td><code>dsh-headless</code></td><td>Executor de passada única</td></tr>\n</tbody>\n</table>\n\n<h2>A ordem de sobreposição em quatro camadas</h2>\n<p>A configuração resolve em ordem fixa, com as camadas posteriores vencendo:</p>\n<ol>\n<li>Bundles do perfil</li>\n<li>Patches do perfil</li>\n<li>Patches no nível home</li>\n<li>Overlays de linha de comando</li>\n</ol>\n<p class=\"agent-summary\">Aprenda essa ordem antes de começar a depurar. Quase toda pergunta do tipo «por que está usando esse modelo» num sistema de configuração em camadas se responde descobrindo qual camada tocou o valor por último, e um overlay de linha de comando vence tudo abaixo dele.</p>\n\n<h2>Os subsistemas que você vai encontrar</h2>\n<p>Seis chaves de registro carregam a maior parte do comportamento: <code>ctx.sessions</code> (o log de eventos somente-anexação), <code>ctx.systemPrompt</code>, <code>ctx.tools</code> (um registro com escopo e execução guardada), <code>ctx.agents</code>, <code>ctx.agentLoop</code> e <code>ctx.llm</code>. Se você for estender o harness, esses são os nomes a procurar primeiro.</p>\n\n<h2>Três demos que valem a execução</h2>\n<ul>\n<li><strong>Headless de passada única:</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>. O formato que você ligaria à CI ou a um cron.</li>\n<li><strong>Introspecção do Cordis:</strong> <code>pnpm run demo:cordis</code>. Autorreferente: inspeciona e modifica o próprio runtime de plugins em execução. É a demonstração mais clara de que a alegação sobre plugins é estrutural e não publicitária.</li>\n<li><strong>Automação ACP:</strong> <code>pnpm run demo:acp</code>. Um servidor de automação que fala JSON-RPC sobre stdio, que é a superfície de integração para dirigir o harness a partir de outro sistema.</li>\n</ul>\n\n<h2>Se pretende contribuir</h2>\n<p>Algumas convenções economizam tempo. Marcadores TODO são graduados por urgência: <code>FIXME</code> bloqueia a release, <code>TODO</code> é em breve, <code>XXX</code> é algum dia. O Lefthook executa <code>pre-commit</code> (registros de pairing em staged, <code>.oxlintrc.staged.json</code>, regeneração dos avisos de terceiros, espaços em branco, guardião do manifesto de vendor), <code>pre-merge-commit</code> e <code>pre-push</code> (<code>pnpm run typecheck</code>). Os hooks pulam testes e builds de propósito: a CI é dona da cobertura exaustiva, e <code>pnpm run check:all</code> é o portão local abrangente e opcional.</p>\n<p>Duas peculiaridades explicam uma estrutura que de outro modo confundiria. O build se divide em agregados tsconfig de Host e Client porque os dois lados fazem merge de declaração da interface <code>Context</code> do Cordis sob as mesmas chaves, e um único programa TypeScript que enxergue os dois merges reporta colisão. E os exemplos de código da documentação são mantidos honestos por blocos <code>ts type-equiv</code> mais <code>pnpm run verify-type-equiv</code>, de modo que declarações coladas não possam divergir em silêncio do código-fonte.</p>\n\n<h2>Calibrar expectativas</h2>\n<p>O README diz sem rodeios: isto é um developer preview, e haverá mudanças que quebram compatibilidade. A descoberta de plugins passa pelo topic do GitHub <code>dsh-plugin</code>, o projeto é licenciado sob MIT e as dependências de terceiros estão listadas em <code>THIRD_PARTY_NOTICES.md</code>. Avalie agora; padronize depois.</p>",
+      "faq": [
+        {
+          "question": "Como instalar e executar o DeepSeek Harness?",
+          "answer": "O caminho mais rápido é npx @deepseek-ai/dsh web, que inicia a interface web em http://127.0.0.1:3080. A partir do código, clone o repositório e rode pnpm install, pnpm run build e pnpm dsh web."
+        },
+        {
+          "question": "O que é um perfil no DeepSeek Harness?",
+          "answer": "Um perfil é uma composição nomeada que guarda uma lista ordenada de bundles mais os patches do usuário. Bundles distribuem linhas de configuração do Cordis e código. Três perfis modelo acompanham o projeto: dsh-base, dsh-web-app e dsh-headless."
+        },
+        {
+          "question": "Em que ordem o DeepSeek Harness aplica a configuração?",
+          "answer": "Em quatro camadas, nesta ordem: bundles do perfil, depois patches do perfil, depois patches no nível home, depois overlays de linha de comando. Camadas posteriores sobrepõem as anteriores, então uma flag de linha de comando vence todo o resto."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "O que é DeepSeek Harness? Guia completo"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-plugin-architecture",
+          "label": "O que «tudo é um plugin» realmente entrega (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-guardrails",
+          "label": "Onde colocar os limites de gasto (EN)"
+        },
+        {
+          "slug": "/pt/research/deepseek-harness-session-log",
+          "label": "O log de sessão como registro de custos (EN)"
+        }
+      ]
+    },
+    "ar": {
+      "title": "تثبيت DeepSeek Harness: الملفات والتشغيل الأول",
+      "titleCore": "تثبيت DeepSeek Harness: الملفات والتشغيل الأول",
+      "description": "دليل عملي لتثبيت DeepSeek Harness عبر npx والواجهة، والملفات التعريفية، وترتيب الإعدادات رباعي الطبقات، وأهم العروض التوضيحية.",
+      "body": "<p>يمثل هذا الدليل الجانب العملي لتشغيل <code>dsh</code> (حزمة DeepSeek Harness): كيفية بدء التشغيل، وما يتطلبه نموذج التركيب المعماري، وأبرز العروض التوضيحية التي تستحق التجربة.</p>\n\n<h2>أسرع طريقة للتشغيل</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>يطلق هذا الأمر واجهة المستخدم عبر المتصفح على العنوان <code>http://127.0.0.1:3080</code>. وهناك خطوتان إلزاميتان قبل أن تتمكن من استخدام منشئ الجلسات:</p>\n<ol>\n  <li><strong>الإعدادات ← النماذج:</strong> إدخال مفتاح API الخاص بـ DeepSeek. يتم تفعيل المسار فوراً دون الحاجة لإعادة تشغيل الخادم.</li>\n  <li><strong>اختيار مساحة العمل:</strong> إضافة مجلد المشروع وتفعيله. يظل منشئ الجلسات مقفلاً حتى يتم تنشيط مساحة عمل واحدة على الأقل.</li>\n</ol>\n<p>بمجرد التشغيل، يستطيع الوكيل قراءة الملفات وتعديلها، وتنفيذ أوامر الطرفية، وتفويض المهام لوكلاء فرعيين، وجدولة الأعمال، مع طلب التأكيد البشري وفق سياسة الصلاحيات النشطة.</p>\n\n<h2>التثبيت من الشفرة المصدرية</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>المتطلبات الأساسية: Node 22.19 أو أحدث، و Git 2.26 أو أحدث، وتثبيت حزمة pnpm الإصدار <code>pnpm@11.7.0</code> عبر Corepack. مفتاح API اختياري أثناء البناء لكنه ضروري للتشغيل، ويمكن تمريره عبر متغيرات البيئة أو ملف <code>.env</code> في جذر المشروع.</p>\n\n<h2>الملفات التعريفية والحزم (Profiles & Bundles)</h2>\n<p>نظراً لأن كل مكون في هذا النظام عبارة عن إضافة (Plugin)، فإن <strong>الملف التعريفي (Profile)</strong> يحدد قائمة الحزم النشطة والتعديلات الخاصة. تأتي المنصة مع ثلاثة ملفات جاهزة:</p>\n<ul>\n  <li><code>dsh-base</code>: مهايئات النماذج، ومجموعة الأدوات، والتخزين الدائم.</li>\n  <li><code>dsh-web-app</code>: واجهة المتصفح الرسومية.</li>\n  <li><code>dsh-headless</code>: وضع التشغيل المستقل لمرة واحدة دون واجهة.</li>\n</ul>\n\n<h2>ترتيب أسبقية الإعدادات رباعي الطبقات</h2>\n<p>يتم حل الإعدادات وفق تسلسل صارم، حيث تلغي الطبقات اللاحقة الطبقات السابقة:</p>\n<ol>\n  <li>حزم الملف التعريفي (Profile Bundles)</li>\n  <li>تعديلات الملف التعريفي (Profile Patches)</li>\n  <li>التعديلات العامة على مستوى المجلد الرئيسي (Home-level Patches)</li>\n  <li>معاملات سطر الأوامر (CLI Overlays) - وهي الأعلى أولوية دائماً</li>\n</ol>",
+      "faq": [
+        {
+          "question": "كيف يتم تثبيت وتشغيل DeepSeek Harness؟",
+          "answer": "أسرع طريقة هي تشغيل الأمر npx @deepseek-ai/dsh web لفتح الواجهة المحلية على المنفذ 3080، أو البناء من المصدر باستخدام pnpm."
+        },
+        {
+          "question": "ما هو الملف التعريفي Profile في DeepSeek Harness؟",
+          "answer": "هو تركيبة مسماة تحفظ قائمة مرتبة من حزم الإضافات وتعديلات التكوين، مثل وضع الواجهة الرسومية dsh-web-app أو الوضع المستقل dsh-headless."
+        },
+        {
+          "question": "ما هو ترتيب أسبقية الإعدادات في المنظومة؟",
+          "answer": "تسلسل من أربع طبقات: حزم الملف أولاً، ثم تعديلات الملف، ثم التعديلات العامة، وأخيراً معاملات سطر الأوامر التي تسود على الجميع."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "ما هو DeepSeek Harness؟"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-plugin-architecture",
+          "label": "معمارية الإضافات في DeepSeek Harness"
+        },
+        {
+          "slug": "/ar/research/deepseek-harness-guardrails",
+          "label": "حواجز الإنفاق في DeepSeek Harness"
+        }
+      ]
+    },
+    "zh": {
+      "title": "安装 DeepSeek Harness：配置与首跑指南",
+      "titleCore": "安装 DeepSeek Harness：配置与首跑指南",
+      "description": "DeepSeek Harness 快速上手指南：通过 npx 运行 Web 界面、配置文件与插件包、四层配置覆盖顺序与核心演示示例。",
+      "body": "<p>这是 DeepSeek Harness 的实用操作指南：如何启动 <code>dsh</code>、组合模式的工作原理，以及最值得体验的官方演示。</p>\n\n<h2>最快速的上手方式</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>在本地 <code>http://127.0.0.1:3080</code> 启动 Web 界面。开始前必须完成两项设置：</p>\n<ol>\n  <li><strong>设置 → 模型：</strong> 输入 DeepSeek API Key，无需重启即可生效。</li>\n  <li><strong>选择工作区：</strong> 添加并激活项目目录，否则会话编写器将保持禁用状态。</li>\n</ol>\n<p>启动后，智能体可以读写文件、执行终端命令、委托子智能体并进行规划，执行前会按权限策略请求确认。</p>\n\n<h2>源码安装与构建</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>环境要求：Node 22.19+、Git 2.26+，通过 Corepack 使用固定版本 <code>pnpm@11.7.0</code>。API Key 可配置于环境变量或根目录的 <code>.env</code> 文件中。</p>\n\n<h2>配置文件与插件包 (Profiles & Bundles)</h2>\n<p>在 Cordis 架构中，一切皆插件。<strong>Profile</strong> 是命名的插件组合，包含有序的 Bundle 列表及自定义补丁。官方内置三套模板：</p>\n<ul>\n  <li><code>dsh-base</code>: 模型适配器、基础工具与持久化。</li>\n  <li><code>dsh-web-app</code>: 浏览器交互界面。</li>\n  <li><code>dsh-headless</code>: 适合 CI/CD 和自动化的单次无头运行模式。</li>\n</ul>\n\n<h2>四层配置覆盖顺序</h2>\n<p>配置按固定顺序解析，后层覆盖前层：</p>\n<ol>\n  <li>Profile Bundles（预设插件包）</li>\n  <li>Profile Patches（配置补丁）</li>\n  <li>Home Patches（全局用户补丁）</li>\n  <li>CLI Overlays（命令行参数 —— 最高优先级）</li>\n</ol>",
+      "faq": [
+        {
+          "question": "如何快速安装和运行 DeepSeek Harness？",
+          "answer": "运行 npx @deepseek-ai/dsh web 即可在本地 3080 端口启动 Web 界面，或通过 git clone 源码编译运行。"
+        },
+        {
+          "question": "DeepSeek Harness 中的 Profile 是什么？",
+          "answer": "Profile 是命名的插件组合，定义了加载的插件包及补丁规则，如 dsh-base 和 dsh-headless。"
+        },
+        {
+          "question": "配置覆盖的四层解析顺序是什么？",
+          "answer": "顺序为：插件包、配置文件补丁、用户全局补丁、命令行参数。命令行参数具有最高优先级。"
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "什么是 DeepSeek Harness？"
+        },
+        {
+          "slug": "/zh/research/deepseek-harness-plugin-architecture",
+          "label": "插件化架构设计与优势"
+        },
+        {
+          "slug": "/zh/research/deepseek-harness-guardrails",
+          "label": "智能体预算与开销护栏"
+        }
+      ]
+    },
+    "it": {
+      "title": "Installare DeepSeek Harness: profili e primo avvio",
+      "titleCore": "Installare DeepSeek Harness: profili e primo avvio",
+      "description": "Guida pratica a DeepSeek Harness: installazione npx, interfaccia web, profili, ordine di configurazione a quattro livelli e demo essenziali.",
+      "body": "<p>Guida pratica per iniziare con <code>dsh</code> (DeepSeek Harness): configurazione, modello compositivo a plugin e workflow iniziale.</p>\n\n<h2>Avvio rapido</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Avvia l'interfaccia web locale su <code>http://127.0.0.1:3080</code>. Prima dell'uso occorrono due passaggi:</p>\n<ol>\n  <li><strong>Impostazioni → Modelli:</strong> inserisci la chiave API DeepSeek.</li>\n  <li><strong>Scegli area di lavoro:</strong> aggiungi e attiva la cartella di progetto.</li>\n</ol>\n\n<h2>Compilazione da sorgente</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Requisiti minimi: Node 22.19+, Git 2.26+, pnpm gestito via Corepack.</p>\n\n<h2>Profili e bundle</h2>\n<p>I componenti sono plugin Cordis raggruppati in profili (<code>dsh-base</code>, <code>dsh-web-app</code>, <code>dsh-headless</code>). L'ordine di override a 4 livelli garantisce che i flag da riga di comando abbiano sempre la precedenza assoluta.</p>",
+      "faq": [
+        {
+          "question": "Come si installa DeepSeek Harness?",
+          "answer": "Il metodo più rapido è npx @deepseek-ai/dsh web, oppure clonando il repository e compilando con pnpm."
+        },
+        {
+          "question": "Cos'è un profilo in DeepSeek Harness?",
+          "answer": "Una composizione con nome che definisce l'elenco ordinato di bundle di plugin e patch attive."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Cos'è DeepSeek Harness?"
+        },
+        {
+          "slug": "/it/research/deepseek-harness-guardrails",
+          "label": "Limiti di spesa in DeepSeek Harness"
+        }
+      ]
+    },
+    "ko": {
+      "title": "DeepSeek Harness 설치: 프로필과 첫 실행 가이드",
+      "titleCore": "DeepSeek Harness 설치: 프로필과 첫 실행 가이드",
+      "description": "DeepSeek Harness 실전 설치 가이드: npx 실행, 웹 인터페이스, 프로필 및 번들, 4단계 설정 우선순위와 핵심 데모 분석.",
+      "body": "<p>DeepSeek Harness(dsh)를 시작하기 위한 실전 가이드입니다. 환경 설정과 플러그인 아키텍처 및 첫 실행 방법을 안내합니다.</p>\n\n<h2>가장 빠른 실행 방법</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>로컬 <code>http://127.0.0.1:3080</code>에서 웹 인터페이스가 시작됩니다. 다음 두 단계 설정이 필요합니다:</p>\n<ol>\n  <li><strong>설정 → 모델:</strong> DeepSeek API 키 입력(재시작 없이 즉시 활성화).</li>\n  <li><strong>워크스페이스 선택:</strong> 프로젝트 디렉터리를 추가하고 활성화.</li>\n</ol>\n\n<h2>소스 코드 빌드</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>요구사항: Node 22.19 이상, Git 2.26 이상, Corepack을 통한 <code>pnpm@11.7.0</code> 고정 버전.</p>\n\n<h2>프로필과 4단계 설정 계층</h2>\n<p>Cordis 런타임 위에서 동작하며 모든 것이 플러그인입니다. 번들 패키지, 프로필 패치, 홈 패치, CLI 오버레이 순으로 적용되어 CLI 명령어가 항상 최종 우선순위를 가집니다.</p>",
+      "faq": [
+        {
+          "question": "DeepSeek Harness 설치 방법은 무엇인가요?",
+          "answer": "npx @deepseek-ai/dsh web 명령어로 즉시 로컬 웹 UI를 실행하거나 소스를 클론하여 pnpm으로 빌드할 수 있습니다."
+        },
+        {
+          "question": "설정 우선순위는 어떻게 결정되나요?",
+          "answer": "프로필 번들, 프로필 패치, 사용자 홈 패치, CLI 오버레이 순서로 적용되며 CLI 파라미터가 최우선 적용됩니다."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "DeepSeek Harness 가이드"
+        },
+        {
+          "slug": "/ko/research/deepseek-harness-plugin-architecture",
+          "label": "플러그인 아키텍처 분석"
+        }
+      ]
+    },
+    "nl": {
+      "title": "DeepSeek Harness installeren: profielen & eerste run",
+      "titleCore": "DeepSeek Harness installeren: profielen & eerste run",
+      "description": "Praktische gids voor DeepSeek Harness: npx-installatie, webinterface, profielen, vierlagige configuratievolgorde en demo's.",
+      "body": "<p>Praktische gids voor het starten van <code>dsh</code> (DeepSeek Harness): installatie, configuratielagen en workflows.</p>\n\n<h2>Snelle start</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>Start de lokale webinterface op <code>http://127.0.0.1:3080</code>. Voer twee stappen uit:</p>\n<ol>\n  <li><strong>Instellingen → Modellen:</strong> vul uw DeepSeek API-sleutel in.</li>\n  <li><strong>Kies werkruimte:</strong> activeer uw projectmap om de composer te ontgrendelen.</li>\n</ol>\n\n<h2>Bouwen vanuit broncode</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Vereisten: Node 22.19+, Git 2.26+, pnpm via Corepack. De vierledige configuratiestructuur zorgt dat CLI-argumenten altijd voorrang hebben op profielen en bundels.</p>",
+      "faq": [
+        {
+          "question": "Hoe installeer je DeepSeek Harness?",
+          "answer": "Start direct met npx @deepseek-ai/dsh web of bouw de broncode lokaal via pnpm install en pnpm build."
+        },
+        {
+          "question": "Wat is een profiel in DeepSeek Harness?",
+          "answer": "Een benoemde samenstelling van Cordis-pluginbundels en aangepaste patches voor specifieke taken."
+        }
+      ],
+      "related": [
+        {
+          "slug": "https://finopsllm.com/research/what-is-deepseek-harness",
+          "label": "Wat is DeepSeek Harness?"
+        },
+        {
+          "slug": "/nl/research/deepseek-harness-guardrails",
+          "label": "Budgetbewaking in DeepSeek Harness"
+        }
+      ]
+    },
+    "en": {
+      "title": "DeepSeek Harness: install, profiles, and first run",
+      "titleCore": "DeepSeek Harness: install, profiles, and first run",
+      "description": "A practical setup guide for DeepSeek Harness: npx install, the web UI, profiles and bundles, the four-layer config order, and the headless demos.",
+      "body": "<p>This is the practical half of our DeepSeek Harness coverage: how to get <code>dsh</code> running, what the composition model expects of you, and which demos are worth ten minutes.</p>\n\n<h2>Fastest path</h2>\n<pre><code>npx @deepseek-ai/dsh web</code></pre>\n<p>That starts the web UI at <code>http://127.0.0.1:3080</code>. From there, two things must happen before the session composer becomes usable:</p>\n<ol>\n<li><strong>Settings → Models</strong>, and enter your DeepSeek API key. The route enables immediately; no restart.</li>\n<li><strong>Choose workspace</strong>, to add and activate the project directory. Until a workspace is active, the composer stays unavailable.</li>\n</ol>\n<p>Once running, the agent can read and edit files, run commands, delegate tasks to subagents, and plan. It prompts for confirmation according to the active permission policy.</p>\n\n<h2>From source</h2>\n<pre><code>git clone https://github.com/deepseek-ai/deepseek-harness\npnpm install\npnpm run build\npnpm dsh web</code></pre>\n<p>Floors to be aware of: Node 22.19 or newer (CI covers 22.19, 24, and 26), Git 2.26 or newer, and Corepack with pnpm pinned to <code>pnpm@11.7.0</code>. A <code>DEEPSEEK_API_KEY</code> is optional, read from the environment or a gitignored repo-root <code>.env</code>; alongside it, <code>DEEPSEEK_BASE_URL</code> can point at a different endpoint. The real-API end-to-end suites self-skip when the key is absent, so a keyless checkout still builds and tests cleanly.</p>\n\n<h2>Profiles and bundles: the composition model</h2>\n<p>Because every part of the harness is a plugin, something has to say which plugins are loaded. That is a <strong>profile</strong>: a named composition storing an ordered list of bundles plus user patches. A <strong>bundle</strong> distributes Cordis config rows and code.</p>\n<p>Three template profiles ship:</p>\n<table>\n<thead><tr><th>Profile</th><th>What it composes</th></tr></thead>\n<tbody>\n<tr><td><code>dsh-base</code></td><td>Model adapters, tools, persistence</td></tr>\n<tr><td><code>dsh-web-app</code></td><td>The browser UI</td></tr>\n<tr><td><code>dsh-headless</code></td><td>One-shot runner</td></tr>\n</tbody>\n</table>\n\n<h2>The four-layer override order</h2>\n<p>Configuration resolves in a fixed order, later layers winning:</p>\n<ol>\n<li>Profile bundles</li>\n<li>Profile patches</li>\n<li>Home-level patches</li>\n<li>CLI overlays</li>\n</ol>\n<div class=\"callout\">Learn this order before you start debugging. Nearly every \"why is it using that model\" question in a layered config system is answered by finding which layer last touched the value, and a CLI overlay beats everything below it.</div>\n\n<h2>The subsystems you will meet</h2>\n<p>Six registry keys carry most of the behaviour: <code>ctx.sessions</code> (the append-only event log), <code>ctx.systemPrompt</code>, <code>ctx.tools</code> (a scoped registry with guarded execution), <code>ctx.agents</code>, <code>ctx.agentLoop</code>, and <code>ctx.llm</code>. If you are extending the harness, these are the names to search for first.</p>\n\n<h2>Three demos worth running</h2>\n<ul>\n<li><strong>Headless one-shot:</strong> <code>pnpm dsh --profile headless \"summarize this workspace\"</code>. The shape you would wire into CI or a cron job.</li>\n<li><strong>Cordis introspection:</strong> <code>pnpm run demo:cordis</code>. Self-referential — it inspects and modifies its own live plugin runtime. This is the clearest demonstration that the plugin claim is structural rather than marketing.</li>\n<li><strong>ACP automation:</strong> <code>pnpm run demo:acp</code>. An automation server speaking JSON-RPC over stdio, which is the integration surface for driving the harness from another system.</li>\n</ul>\n\n<h2>If you plan to contribute</h2>\n<p>A few conventions save time. TODO markers are graded by urgency: <code>FIXME</code> is a release blocker, <code>TODO</code> is soon, <code>XXX</code> is someday. Lefthook runs <code>pre-commit</code> (staged pairing records, <code>.oxlintrc.staged.json</code>, third-party notices regeneration, whitespace, vendor manifest guard), <code>pre-merge-commit</code>, and <code>pre-push</code> (<code>pnpm run typecheck</code>). The hooks deliberately skip tests and builds — CI owns exhaustive coverage, and <code>pnpm run check:all</code> is the opt-in comprehensive local gate.</p>\n<p>Two quirks explain otherwise-confusing structure. The build splits into Host and Client tsconfig aggregates because both sides declaration-merge the Cordis <code>Context</code> interface under the same keys, and one TypeScript program seeing both merges reports a collision. And documentation code samples are kept honest by <code>ts type-equiv</code> fences plus <code>pnpm run verify-type-equiv</code>, so pasted declarations cannot silently drift from source.</p>\n\n<h2>Set expectations</h2>\n<p>The README says it plainly: this is a developer preview, and there will be compatibility-breaking changes. Plugin discovery runs through the <code>dsh-plugin</code> GitHub topic, and the project is MIT-licensed with third-party dependencies listed in <code>THIRD_PARTY_NOTICES.md</code>. Evaluate it now; standardise on it later.</p>\n\n<h2>Related</h2>\n<ul>\n<li><a href=\"/research/deepseek-harness-plugin-architecture\">DeepSeek Harness: what \"everything is a plugin\" buys you</a> — the architecture.</li>\n<li><a href=\"/research/deepseek-harness-guardrails\">Where to put spend guardrails in DeepSeek Harness</a> — the control points.</li>\n<li><a href=\"/research/deepseek-harness-session-log\">The DeepSeek Harness session log as a cost record</a> — the accounting.</li>\n<li><a href=\"https://finopsllm.com/research/true-cost-coding-agents\">The true cost of coding agents</a> — budgeting for the result.</li>\n</ul>",
+      "faq": [
+        {
+          "question": "How do you install and run DeepSeek Harness?",
+          "answer": "The fastest path is npx @deepseek-ai/dsh web, which starts the web UI at http://127.0.0.1:3080. From source, clone the repo then run pnpm install, pnpm run build, and pnpm dsh web."
+        },
+        {
+          "question": "What is a profile in DeepSeek Harness?",
+          "answer": "A profile is a named composition that stores an ordered list of bundles plus user patches. Bundles distribute Cordis config rows and code. Three template profiles ship: dsh-base, dsh-web-app, and dsh-headless."
+        },
+        {
+          "question": "What order does DeepSeek Harness apply configuration in?",
+          "answer": "Four layers, in order: profile bundles, then profile patches, then home-level patches, then CLI overlays. Later layers override earlier ones, so a CLI flag wins over everything else."
+        }
+      ],
+      "related": []
+    }
+  },
+  "sourceAttribution": {
+    "site": "FinOps LLM",
+    "url": "https://finopsllm.com/research/deepseek-harness-getting-started"
+  }
+}
