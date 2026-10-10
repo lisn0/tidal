@@ -67,3 +67,12 @@ credential sharing, source push, or deletion authority.
 ## Frontier tickets and current handoff
 
 Use the shared [Frontier skill](../../../../youtube/.agents/skills/frontier/SKILL.md) for ticketed work. From the workspace root, use `./tools/frontier` to search the live tracker before opening a ticket; update a matching ticket or create a specific one with evidence, acceptance criteria, source owner, and next action when an issue is found. Read this project's `AGENTS.md` and, when present, `docs/CURRENT-HANDOFF.md`; verify status and acceptance against the live ticket. Fix routine authorized issues directly, keep blockers tracked with a next action, and close only with verified acceptance evidence. Do not create duplicates, restore a separate tracker in standalone/cloud clones, or automatically close a project. If the shared skill or canonical tracker is unavailable, report the access blocker rather than acting on stale local state.
+
+<!-- production-compute:inspect:START -->
+## Inspect the queue: never write a script for it
+With `C = python3 -B "$COMPUTE_REPO/client/agent_compute.py" --config ~/.config/production-compute/client.json`:
+`C queue` (running/queued, cpu and disk pressure, top IO jobs, per-job io/started/from/cwd), `C why N` (why it
+waits), `C status N` (cwd, argv, started, submitter, io), `C list --state/--label/--category/--limit`,
+`C logs N --tail 200`, `C watch N`, `C artifacts N path`, `C cancel|resubmit|edit N`. No ssh, no hand-run
+`pueue`, no ad-hoc parsers. Full table: [Inspect the queue](../../../../production-compute/COMPUTE.md#inspect-the-queue-use-these-never-write-your-own-script).
+<!-- production-compute:inspect:END -->
