@@ -8,7 +8,7 @@ The LLM CFO public API is designed for AI agents, search engines, and integratio
 
 No API key is required to read public pages or use the public contact endpoint. `POST /api/contact` accepts JSON or form data and is rate-limited. It sends a message to the team; it does not create an account.
 
-Tidal Telemetry uses a separate login at https://openlit.llmcfo.com/login. Existing account holders sign in there. General self-service registration is closed; new companies should request access from the team. Human passwords must never be sent through MCP.
+Tidal Telemetry uses a separate login at https://openlit.llmcfo.com/login. Existing account holders sign in there. New users sign up in the browser at https://openlit.llmcfo.com/register. Beta is free with up to three projects per account; no consulting engagement or card is required. Human passwords must never be sent through MCP.
 
 The hosted Tidal MCP endpoint is https://otlp.llmcfo.com/mcp. It requires a tenant token issued for the telemetry account. Its existing tools report setup and usage and can send a test trace. The marketing site's public contact API does not use Tidal credentials.
 
