@@ -245,39 +245,33 @@ export function detectAiCrawler(userAgent) {
 	return AI_CRAWLERS.find((c) => ua.includes(c.token)) || null;
 }
 
-// Answer surfaces that send a *human* to the site. This is the only half of
-// the journey that proves anything: a crawl is a cost, a referral is a
-// visitor. Until now the worker logged only the first.
+// Answer surfaces observed as the referrer. This records a request signal; it
+// does not prove that a page was cited or that a visit converted.
 //
 // Hostname is matched with a real URL parse and an exact-or-subdomain test,
 // never a substring test. `Referer: https://chatgpt.com.evil.net/` must not
-// be counted as a ChatGPT referral, and a substring match would count it —
-// anyone can set that header, so a naive test would let a third party
-// manufacture the one number this product sells.
+// be counted as a ChatGPT referral. This reduces accidental misclassification;
+// Referer and UTM values remain caller-controlled signals.
 const AI_REFERRERS = [
 	{ host: 'chatgpt.com', name: 'ChatGPT' },
 	{ host: 'chat.openai.com', name: 'ChatGPT' },
-	{ host: 'openai.com', name: 'OpenAI' },
 	{ host: 'perplexity.ai', name: 'Perplexity' },
 	{ host: 'claude.ai', name: 'Claude' },
-	{ host: 'anthropic.com', name: 'Claude' },
 	{ host: 'copilot.microsoft.com', name: 'Copilot' },
-	{ host: 'bing.com', name: 'Copilot' },
 	{ host: 'gemini.google.com', name: 'Gemini' },
-	{ host: 'mistral.ai', name: 'Mistral' },
 	{ host: 'poe.com', name: 'Poe' },
 	{ host: 'you.com', name: 'You.com' },
 	{ host: 'phind.com', name: 'Phind' },
-	{ host: 'deepseek.com', name: 'DeepSeek' },
+	{ host: 'chat.deepseek.com', name: 'DeepSeek' },
 	{ host: 'grok.com', name: 'Grok' },
 	{ host: 'meta.ai', name: 'Meta AI' },
 	{ host: 'bard.google.com', name: 'Gemini' }, // pre-Gemini legacy surface
 ];
 
-// Returns { name } for a human arriving from an AI answer, else null.
+// Returns { name } for a request with an observed answer-surface signal, else null.
 // Only the host is ever read, and only the surface name is stored — a
 // Referer can carry query strings with real user data in it, and none of
-// that is needed to answer "did this page get cited".
+// that is needed to record the referring surface.
 function matchAiHost(host) {
 	return (
 		AI_REFERRERS.find((r) => host === r.host || host.endsWith('.' + r.host)) || null
@@ -299,11 +293,9 @@ export function detectAiReferrer(referer, url) {
 		}
 	}
 
-	// The Referer header alone undercounts our largest surface. ChatGPT's
-	// free-tier citation links carry ?utm_source=chatgpt.com, and its paid-tier
-	// inline links are rel=noreferrer, so the query string is the only signal
-	// that survives. Both go through the same exact-or-subdomain host test, so
-	// a spoofed utm_source cannot out-count a spoofed Referer.
+	// The Referer header alone may undercount ChatGPT. Some free-tier links carry
+	// ?utm_source=chatgpt.com, and paid-tier inline links use rel=noreferrer, so
+	// the query string is the only source signal for those visits.
 	const utm = url && url.searchParams && url.searchParams.get('utm_source');
 	if (utm) {
 		const value = utm.trim().toLowerCase();
@@ -574,12 +566,10 @@ export default {
 
 		// 0. Record AI crawler hits before any redirect, so a bot that lands on
 		//    www is still counted against the URL it asked for. Never throws.
-		//    Referrals share the dataset: kind 'referral' is a human arriving
-		//    from an AI answer, which is the only signal that shows a crawl
-		//    turned into a reader.
+		//    Referrals share the dataset as observed request signals. Log them
+		//    after redirects so one landing is attributed to its final page.
 		if (isTrackedPath(url.pathname)) {
 			logAiCrawler(request, env, url);
-			logAiReferral(request, env, url);
 		}
 
 		// 1. www -> apex (301).
@@ -620,6 +610,16 @@ export default {
 			});
 		}
 
+		const contentType = assetResponse.headers.get('Content-Type') || '';
+		if (
+			request.method === 'GET' &&
+			assetResponse.status === 200 &&
+			contentType.includes('text/html') &&
+			isTrackedPath(url.pathname)
+		) {
+			logAiReferral(request, env, url);
+		}
+
 		// 5. Only transform GET requests that explicitly negotiate markdown.
 		const accept = request.headers.get('Accept') || '';
 		if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
@@ -627,7 +627,6 @@ export default {
 		}
 
 		// 6. Only transform real HTML pages.
-		const contentType = assetResponse.headers.get('Content-Type') || '';
 		if (assetResponse.status !== 200 || !contentType.includes('text/html')) {
 			return response;
 		}

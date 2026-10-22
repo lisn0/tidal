@@ -130,6 +130,8 @@ nav.main a{color:var(--ink-2);text-decoration:none;font-size:13.5px;font-weight:
 nav.main a:hover{color:var(--green)}
 nav.main a.btn-ink{color:var(--paper)}
 nav.main a.btn-ink:hover{color:var(--paper)}
+@media(max-width:1120px){nav.main{gap:8px}nav.main a{font-size:12px}}
+@media(min-width:901px) and (max-width:980px){.masthead-in{flex-wrap:wrap}.masthead-in nav.main{flex:1 0 100%;justify-content:space-between}}
 .btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:14px;padding:13px 26px;border:1.5px solid var(--ink);transition:all .18s ease;cursor:pointer;letter-spacing:.01em}
 .btn-ink{background:var(--ink);color:var(--paper)}
 .btn-ink:hover{background:var(--green);border-color:var(--green)}
@@ -141,6 +143,7 @@ nav.main a.btn-ink:hover{color:var(--paper)}
 /* ---------- hero ---------- */
 .hero{padding:88px 0 72px;border-bottom:1px solid var(--hair-2)}
 .hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;align-items:start}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px}}
 .kicker{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:7px 14px;border-radius:999px;margin-bottom:34px}
 .kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-2);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
@@ -168,10 +171,12 @@ h1.display .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:54
 .s-row .save{color:var(--green)}
 .s-row .fee{color:var(--muted)}
 .s-total{display:flex;justify-content:space-between;align-items:baseline;padding:18px 24px;background:var(--ink);color:var(--paper);margin:14px -24px 0}
+@media(max-width:720px){.s-total{margin-left:-22px;margin-right:-22px}}
 .s-total .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#CFC7B2}
 .s-total .amt{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#8FCFA8}
 .statement-foot{padding:12px 24px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
 .stamp{position:absolute;top:-24px;right:-18px;transform:rotate(8deg);z-index:3;border:2px solid var(--green);color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:8px 14px;background:var(--paper)}
+@media(max-width:720px){.stamp{right:0}}
 
 /* ---------- provider strip ---------- */
 .providers{border-bottom:1px solid var(--hair-2);padding:30px 0;overflow:hidden}
@@ -188,6 +193,19 @@ section{padding:84px 0;border-bottom:1px solid var(--hair-2)}
 h2.sec-title{font-family:'Fraunces',serif;font-weight:560;font-size:clamp(36px,4.4vw,58px);line-height:1.04;letter-spacing:-.02em;max-width:640px}
 h2.sec-title em{font-style:italic;color:var(--green);font-weight:480}
 .sec-note{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);max-width:300px;line-height:1.7;letter-spacing:.02em}
+
+/* ---------- Tidal Telemetry ---------- */
+.telemetry{background:var(--paper-2)}
+.telemetry-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:center}
+.telemetry .sec-title{margin:16px 0 20px}
+.telemetry-copy{max-width:590px;color:var(--ink-2);font-size:17px;line-height:1.7}
+.telemetry .hero-ctas{margin:28px 0 18px}
+.telemetry-note{font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.7;color:var(--muted);max-width:600px}
+.telemetry-list{list-style:none;border-top:1px solid var(--ink)}
+.telemetry-list li{display:grid;gap:4px;padding:18px 4px;border-bottom:1px solid var(--hair-2)}
+.telemetry-list strong{font-family:'Fraunces',serif;font-size:22px;font-weight:560}
+.telemetry-list span{font-size:13.5px;color:var(--ink-2)}
+@media(max-width:900px){.telemetry-grid{grid-template-columns:1fr;gap:38px}}
 
 /* ---------- stats ---------- */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink);background:#FFFDF7}
@@ -315,6 +333,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
       <a href="#products">Products</a>
       <a href="#process">How it works</a>
       <a href="#pricing">Pricing</a>
+      <a href="#telemetry">Telemetry</a>
       <a href="/research">Research</a>
       <a href="/contact">Contact</a>
       <a href="/tools/cache-savings-calculator">Cache calculator</a>
@@ -334,6 +353,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
       <div class="hero-ctas">
         <a class="btn btn-ink" href="#book">Book a free audit →</a>
         <a class="btn btn-ghost" href="#levers">See the six levers</a>
+        <a class="btn btn-ghost" href="#telemetry">Explore Tidal Telemetry</a>
       </div>
       <div class="hero-facts">
         <span>Targeting 40–60% reduction</span>
@@ -365,6 +385,29 @@ footer{padding:56px 0 44px;background:var(--paper)}
     </div>
   </div>
 </div>
+
+<!-- tidal telemetry -->
+<section id="telemetry" class="telemetry" aria-labelledby="telemetry-title">
+  <div class="wrap">
+    <div class="telemetry-grid">
+      <div>
+        <span class="sec-no">LLM CFO product · OpenLIT-backed</span>
+        <h2 class="sec-title" id="telemetry-title">Tidal Telemetry: see what your AI is <em>actually costing.</em></h2>
+        <p class="telemetry-copy">Tidal Telemetry gives engineering teams an observability view across model usage: token usage and estimated cost, latency, and traces in one place.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-ink" href="https://telemetry.llmcfo.com">Explore Tidal Telemetry →</a>
+          <a class="btn btn-ghost" href="https://telemetry.llmcfo.com/docs">Read the docs</a>
+        </div>
+        <p class="telemetry-note">Send OpenTelemetry data over OTLP; connect AI coding agents through the hosted MCP server.</p>
+      </div>
+      <ul class="telemetry-list" aria-label="Tidal Telemetry capabilities">
+        <li><strong>Cost and tokens</strong><span>See token usage and estimated cost by model and project.</span></li>
+        <li><strong>Latency and traces</strong><span>Follow requests through your LLM workflows.</span></li>
+        <li><strong>OTLP and agent access</strong><span>Ingest OpenTelemetry data and use MCP tools from coding agents.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
 <!-- targets -->
 <section id="targets">

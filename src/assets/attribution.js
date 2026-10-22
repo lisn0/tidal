@@ -2,7 +2,7 @@
  *
  * Captures the visit's first-touch traffic source (AI assistant / search /
  * social / direct) for the session and attaches it to the booking CTA, so we
- * can tell whether AI citations and search clicks actually produce a booking.
+ * can track observed AI/search referral sources through booking submissions.
  *
  * Privacy: first-party only, and it does nothing at all until the visitor has
  * granted analytics consent in consent.js (`window.analyticsConsent`) — the

@@ -5,7 +5,7 @@
 // no assistant has ever crawled. That is the one failure mode we cannot see.
 
 import assert from 'node:assert/strict';
-import { detectAiCrawler, detectAiReferrer, isTrackedPath } from '../src/worker.js';
+import worker, { detectAiCrawler, detectAiReferrer, isTrackedPath } from '../src/worker.js';
 
 // Real user-agent strings, with the classification each must receive.
 const CASES = [
@@ -81,9 +81,8 @@ for (const [referer, name] of REFERRER_CASES) {
 	assert.equal(ref.name, name, `wrong surface for: ${referer}`);
 }
 
-// The spoofing guard. Anyone can set Referer, so a substring match would let
-// any third party inflate the referral count — the single number the product
-// is sold on. Only a real hostname match may count.
+// The host guard prevents malformed and lookalike domains from matching. A
+// valid Referer remains caller-controlled and is only an observed signal.
 for (const spoof of [
 	'https://chatgpt.com.evil.net/',
 	'https://notchatgpt.com/',
@@ -100,6 +99,10 @@ for (const plain of [
 	null,
 	'not-a-url',
 	'https://www.google.com/search?q=llm',
+	'https://www.bing.com/search?q=llm',
+	'https://openai.com/news/',
+	'https://www.anthropic.com/',
+	'https://mistral.ai/',
 	'https://news.ycombinator.com/',
 	'https://llmcfo.com/research/',
 ]) {
@@ -109,10 +112,7 @@ for (const plain of [
 console.log(`✅ AI referral detection: ${REFERRER_CASES.length} surfaces matched, spoofing rejected`);
 
 // ---------------------------------------------------------------------------
-// utm_source — the only surviving signal for the largest surface.
-// ChatGPT's paid-tier inline links are rel=noreferrer (no Referer at all) and
-// its free-tier citations arrive as ?utm_source=chatgpt.com. If this regresses,
-// ChatGPT reads zero while actually being the top referrer.
+// Some ChatGPT links carry ?utm_source=chatgpt.com where a Referer is absent.
 // ---------------------------------------------------------------------------
 
 const url = (s) => new URL(s);
@@ -120,7 +120,7 @@ const url = (s) => new URL(s);
 for (const [target, name] of [
 	['https://llmcfo.com/?utm_source=chatgpt.com', 'ChatGPT'],
 	['https://llmcfo.com/?utm_source=grok.com&utm_medium=referral', 'Grok'],
-	['https://llmcfo.com/?utm_source=deepseek.com', 'DeepSeek'],
+	['https://llmcfo.com/?utm_source=chat.deepseek.com', 'DeepSeek'],
 	['https://llmcfo.com/?utm_source=meta.ai', 'Meta AI'],
 	['https://llmcfo.com/?utm_source=perplexity.ai', 'Perplexity'],
 	['https://llmcfo.com/?utm_source=chatgpt', 'ChatGPT'], // bare label, not a host
@@ -202,9 +202,8 @@ for (const asset of [
 	assert.equal(isTrackedPath(asset), false, `should NOT track asset: ${asset}`);
 }
 
-// robots.txt is the one that matters for correctness: OpenAI appends an
-// explicit `robots.txt` marker to the crawler UA when fetching it, so without
-// the .txt arm every robots.txt read would count as a citation.
+// OpenAI appends an explicit `robots.txt` marker to the crawler UA when
+// fetching it, so the .txt path guard must exclude the request.
 assert.equal(
 	detectAiCrawler('Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.4; robots.txt; +https://openai.com/searchbot').name,
 	'OAI-SearchBot',
@@ -217,4 +216,58 @@ assert.equal(
 );
 
 console.log('✅ Asset guard: pages tracked, assets + robots.txt dropped');
+
+// A visitor landing on www must produce one observed referral on the final
+// apex response, not one event for each redirect hop. Failed page responses do
+// not count as visits.
+const referralPoints = [];
+const referralEnv = {
+	AI_HITS: { writeDataPoint: (point) => referralPoints.push(point) },
+	ASSETS: {
+		fetch: async () => new Response('<html><main>Page</main></html>', {
+			status: 200,
+			headers: { 'Content-Type': 'text/html; charset=utf-8' },
+		}),
+	},
+};
+const wwwRequest = new Request('https://www.llmcfo.com/research/example', {
+	headers: { Referer: 'https://chatgpt.com/' },
+});
+const wwwResponse = await worker.fetch(wwwRequest, referralEnv);
+assert.equal(wwwResponse.status, 301, 'www landing redirects to apex');
+assert.equal(referralPoints.length, 0, 'redirect response is not counted as a visit');
+const finalRequest = new Request(wwwResponse.headers.get('Location'), {
+	headers: { Referer: 'https://chatgpt.com/' },
+});
+const finalResponse = await worker.fetch(finalRequest, referralEnv);
+assert.equal(finalResponse.status, 200, 'final page is served');
+assert.equal(referralPoints.length, 1, 'one final response yields one referral event');
+assert.deepEqual(referralPoints[0].blobs.slice(0, 2), ['ChatGPT', 'referral']);
+
+await worker.fetch(new Request('https://llmcfo.com/research/head', {
+	method: 'HEAD',
+	headers: { Referer: 'https://chatgpt.com/' },
+}), referralEnv);
+assert.equal(referralPoints.length, 1, 'HEAD requests are not counted as visits');
+
+const missingEnv = {
+	...referralEnv,
+	ASSETS: { fetch: async () => new Response('missing', { status: 404 }) },
+};
+await worker.fetch(new Request('https://llmcfo.com/research/missing', {
+	headers: { Referer: 'https://chatgpt.com/' },
+}), missingEnv);
+assert.equal(referralPoints.length, 1, '404 responses do not add a referral event');
+const nonHtmlEnv = {
+	...referralEnv,
+	ASSETS: { fetch: async () => new Response('{"status":"ok"}', {
+		status: 200,
+		headers: { 'Content-Type': 'application/json' },
+	}) },
+};
+await worker.fetch(new Request('https://llmcfo.com/research/json', {
+	headers: { Referer: 'https://chatgpt.com/' },
+}), nonHtmlEnv);
+assert.equal(referralPoints.length, 1, 'non-HTML responses are not counted as visits');
+console.log('✅ Referral logging: redirect chain counted once on final 200 only');
 

@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LLM CFO">
-  <rect width="64" height="64" rx="10" fill="#0E0F0C"/>
-  <text x="32" y="44" text-anchor="middle"
-        font-family="ui-monospace, 'Geist Mono', 'JetBrains Mono', monospace"
-        font-size="40" font-weight="700" fill="#FF5F2E">$</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="LLM CFO">
+  <defs>
+    <path id="coin" d="M0,34 A90,34 0 0 1 180,34 L180,52 A90,34 0 0 1 0,52 Z"/>
+  </defs>
+
+  <rect width="512" height="512" rx="104" fill="#0B1437"/>
+
+  <g transform="translate(142,106) scale(1.26)">
+    <use href="#coin" x="0" y="152" fill="#FFFFFF"/>
+    <use href="#coin" x="0" y="76"  fill="#FFFFFF"/>
+    <use href="#coin" x="0" y="0"   fill="#4ADE80"/>
+  </g>
 </svg>

@@ -121,8 +121,19 @@ as static assets with `src/worker.js` in front (`run_worker_first: true`).
 ## IndexNow
 
 Key file `src/9f7a91c496064b7e96137c3326d9b895.txt` is copied to the site root —
-that key must stay served for submissions to be accepted. Manual submission:
-`node scripts/indexnow-submit.mjs`.
+that public ownership key must stay served for submissions to be accepted. For
+an article or page release, prefer the workspace-wide publish/search runner:
+
+```bash
+node ~/projects/ai/portfolio/scripts/publish-search.mjs \
+  --site llmcfo --push https://llmcfo.com/research/example
+```
+
+It checks the exact repo remote and `main` branch, pushes committed changes,
+waits for the URL to appear in the live sitemap, submits `/sitemap.xml` to
+Google Search Console, inspects the URL, and sends it to IndexNow. Review the
+outgoing commits/files before using `--push`; omit that flag after an existing
+deploy.
 
 ## Indexing — weekly, plus on demand
 
@@ -130,6 +141,9 @@ that key must stay served for submissions to be accepted. Manual submission:
 re-submits it to Google Search Console. It runs on a weekly schedule
 (Mondays 06:00 UTC) and can be dispatched by hand from the Actions tab right
 after a deploy.
+
+Firebase IAM roles do not grant Search Console property access; a Search
+Console owner must add the service-account email to each property separately.
 
 It is deliberately *not* on `push`. Google's discovery path is the sitemap
 already declared in `robots.txt`, which needs no push to notice, and IndexNow
