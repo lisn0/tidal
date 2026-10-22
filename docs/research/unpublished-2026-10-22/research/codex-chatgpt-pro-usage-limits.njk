@@ -1,0 +1,242 @@
+---
+layout: "research.njk"
+permalink: "research/codex-chatgpt-pro-usage-limits.html"
+titleCore: "ChatGPT Pro & Codex: Usage Limits, Token Caps & API Equivalence"
+description: "OpenAI's ChatGPT Pro ($200/mo) and Codex subscription limits analyzed. Message caps, reasoning token costs, API equivalence math, and when Pro pays for itself vs API direct billing."
+slug: "codex-chatgpt-pro-usage-limits"
+breadcrumbName: "ChatGPT Pro & Codex Usage Limits"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What are the actual message limits for ChatGPT Pro ($200/mo)?","a":"OpenAI does not publish fixed message quotas. ChatGPT Pro provides \"unlimited\" GPT-4o and o1 access subject to dynamic rate limits. In practice, heavy users report 200–500 o1 messages/day before throttling. GPT-4o limits are higher (~1,000+/day). Limits reset on a rolling 3-hour window."}
+  - {"q":"Does ChatGPT Pro include Codex/Codex CLI access?","a":"Yes. ChatGPT Pro includes Codex (the coding agent in ChatGPT) and Codex CLI. However, Codex CLI API calls are billed separately at standard API rates — the subscription covers the ChatGPT UI only."}
+  - {"q":"How does ChatGPT Pro compare to API direct billing for coding?","a":"At $200/mo, Pro breaks even at ~1.3M o1 input tokens + ~200k output tokens/month (at $15/$60 per M). Heavy coders (50+ o1 sessions/day) save 60–80% vs API. Light users (<10 sessions/day) are cheaper on API direct."}
+  - {"q":"Can I use ChatGPT Pro for automated CI/CD or backend workloads?","a":"No. Pro covers interactive ChatGPT and Codex UI only. Automated API calls, batch processing, and backend services require standard API billing. Using Pro sessions for automation violates OpenAI terms."}
+section: "New and timely"
+blurb: "- CFO guide to OpenAI's $200 Pro tier: real limits, API equivalence, Codex inclusion, and seat planning for engineering teams."
+sectionTitle: "ChatGPT Pro & Codex Usage Limits"
+---
+  <div class="eye">RESEARCH · SUBSCRIPTION ECONOMICS</div>
+  <h1 class="page-title">ChatGPT Pro & Codex: Usage Limits, Token Economics & When $200/mo Pays Off</h1>
+  <p class="updated">Subscription Analysis · 21 October 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">OpenAI's ChatGPT Pro ($200/mo) promises "unlimited" access to o1, GPT-4o, and Codex. But "unlimited" has dynamic limits, Codex CLI is API-billed separately, and the $200 price tag demands justification. This guide translates Pro's opaque limits into API-equivalent dollars and seat-planning math for finance and engineering leaders.</p>
+
+  <h2>Quick Comparison: Pro vs API Direct</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Dimension</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">ChatGPT Pro ($200/mo)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">API Direct (o1)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">API Direct (GPT-4o)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Monthly cost</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$200 fixed</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$15/M in, $60/M out</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$2.50/M in, $10/M out</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Included models</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">o1, o1-pro, GPT-4o, GPT-4o-mini</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">o1, o1-pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">GPT-4o, 4o-mini</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Codex UI</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Included</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">N/A (API only)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">N/A</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Codex CLI</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"><strong>NOT included</strong> (API rates)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API rates</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API rates</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Rate limits</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Dynamic, rolling 3h window</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Tier-based (TPM/RPM)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Tier-based (TPM/RPM)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Break-even (o1 heavy)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~1.3M in + 200k out tokens/mo</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">—</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The \"Unlimited\" Reality: Dynamic Rate Limits</h2>
+  <p>OpenAI's documentation states ChatGPT Pro has \"no hard caps\" but enforces <strong>dynamic rate limits</strong> to prevent abuse. Community telemetry (Reddit, Discord, developer forums) suggests:</p>
+  <ul>
+    <li><strong>o1 / o1-pro:</strong> ~200–500 messages/day before throttle (rolling 3-hour window)</li>
+    <li><strong>GPT-4o:</strong> ~1,000+ messages/day (rarely hit)</li>
+    <li><strong>Codex in ChatGPT:</strong> Counts toward o1/GPT-4o limits depending on model selected</li>
+    <li><strong>Reset cadence:</strong> Rolling 3-hour window (not daily midnight reset)</li>
+  </ul>
+  <p><strong>Critical:</strong> These are community estimates. OpenAI publishes no SLA, no fixed quotas, and no per-seat guarantees. Limits adjust based on system load.</p>
+
+  <h2>Codex: What's Included vs What's Not</h2>
+  <h3>Included in ChatGPT Pro ($200)</h3>
+  <ul>
+    <li>Codex agent in ChatGPT web UI (uses o1/GPT-4o from Pro pool)</li>
+    <li>Codex in ChatGPT mobile/desktop apps</li>
+    <li>File upload, code execution, web search within Codex sessions</li>
+  </ul>
+
+  <h3>NOT Included — Billed at API Rates</h3>
+  <ul>
+    <li><strong>Codex CLI</strong> (terminal agent) — every call bills at o1/GPT-4o API rates</li>
+    <li><strong>Codex API</strong> (programmatic access) — standard API pricing</li>
+    <li><strong>Batch API, Assistants API, Realtime API</strong> — all separate billing</li>
+  </ul>
+  <p style="background:#101726;padding:12px;border-radius:6px;border-left:4px solid #FF6B6B;color:#E6EAF2;">
+    <strong>Common misconception:</strong> \"ChatGPT Pro includes Codex CLI.\" It does not. Codex CLI is an API product. Engineers using Codex CLI daily will incur significant API charges on top of the $200 Pro subscription.
+  </p>
+
+  <h2>API-Equivalent Valuation</h2>
+  <p>At o1 pricing ($15/M input, $60/M output), the $200 Pro subscription breaks even at:</p>
+  <p style="background:#101726;padding:12px;border-radius:6px;font-family:monospace;color:#7AAFFF;text-align:center;">
+    Break-even ≈ 1.33M input tokens + 200k output tokens / month (o1)
+  </p>
+  <p>Typical o1 coding session: ~8k input + 2k output tokens (including reasoning).</p>
+  <ul>
+    <li><strong>50 o1 sessions/day × 20 days = 1,000 sessions/mo</strong> → ~8M in + 2M out tokens → ~$240 API cost → <strong>Pro saves ~$40/mo</strong></li>
+    <li><strong>100 o1 sessions/day × 20 days = 2,000 sessions/mo</strong> → ~16M in + 4M out → ~$480 API cost → <strong>Pro saves ~$280/mo</strong></li>
+    <li><strong>10 o1 sessions/day</strong> → ~$48 API cost → <strong>API direct is cheaper</strong></li>
+  </ul>
+
+  <h2>Seat Planning for Engineering Teams</h2>
+  <h3>Per-Engineer Decision Framework</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Engineer Profile</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Recommended</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Rationale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Occasional AI assist (≤5 o1 sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API direct</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$25–50/mo API vs $200 Pro</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Daily interactive coding (10–30 o1 sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">ChatGPT Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$50–150/mo API equivalent; Pro includes GPT-4o unlimited</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Heavy o1 / Codex UI (50+ sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">ChatGPT Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$250+/mo API equivalent; 60%+ savings</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Codex CLI / automation primary</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API direct only</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Pro doesn't cover CLI; budget API separately</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Team of 5: Cost Scenarios</h3>
+  <ul>
+    <li><strong>All API direct:</strong> Variable. Estimate $150–400/mo per heavy engineer.</li>
+    <li><strong>3× Pro + 2× API:</strong> $600 + $300–800 = $900–1,400/mo — mixed team.</li>
+    <li><strong>5× Pro:</strong> $1,000/mo — only justified if all 5 are heavy o1/Codex UI users.</li>
+    <li><strong>Hybrid:</strong> Pro for ChatGPT/Codex UI users; API budget for CLI/automation.</li>
+  </ul>
+
+  <h2>Hidden Costs & Gotchas</h2>
+  <h3>1. Codex CLI ≠ Pro Subscription</h3>
+  <p>This is the #1 billing surprise. Engineers assume Pro covers everything \"Codex.\" It doesn't. Codex CLI usage at 50 sessions/day ≈ $150–300/mo in API charges <em>on top of</em> the $200 Pro fee.</p>
+
+  <h3>2. Reasoning Tokens Count at Output Rates</h3>
+  <p>o1's internal reasoning tokens are billed at <strong>output token rates ($60/M)</strong>. A single complex o1 task can generate 10k–50k reasoning tokens. At 50 tasks/day, that's 500k–2.5M reasoning tokens/day → $30–150/day in reasoning alone.</p>
+
+  <h3>3. No Prompt Caching Discount in Pro</h3>
+  <p>API users get 50% cache-read discount on o1 ($7.50/M vs $15/M). Pro users cannot control or measure cache hits — the dynamic pool manages it opaquely.</p>
+
+  <h3>4. No Off-Peak or Volume Discounts</h3>
+  <p>Unlike Alibaba Token Pro (0.2× off-peak) or Anthropic API (batch 50% discount), OpenAI offers no time-of-day or volume discounts on Pro or API.</p>
+
+  <h3>5. Shared Account Pool Risk</h3>
+  <p>Pro limits are per-account, not per-seat in a team workspace. One engineer's heavy o1-pro usage can throttle teammates on the same Pro account.</p>
+
+  <h2>Comparison: ChatGPT Pro vs Claude Max 20x vs Alibaba Token Pro</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Dimension</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">ChatGPT Pro</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Claude Max 20x</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Alibaba Token Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Monthly</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$200</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$200</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$70</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Models</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">o1, o1-pro, GPT-4o</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Opus 5, Sonnet 5, Fable 5, Haiku 4.5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Qwen 3.8-Max, Qwen 2.5-Coder</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Metering</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Rolling 3h dynamic</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Rolling 5h dynamic</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Explicit credits (12k/5h, 40k/7d)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Codex/CLI included</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">UI only, not CLI</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Code CLI included</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Interactive tools only</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Off-peak discount</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No</td>
+        <td style="padding:8px:border:1px solid #1E2A3F;">No</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0.2× (22:00–08:00 UTC+8)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Best for</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">o1 reasoning, Codex UI</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Interactive refactoring</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Scheduled swarms</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>FinOps Recommendation</h2>
+  <ol>
+    <li><strong>Audit actual usage first.</strong> Pull 30-day Codex CLI + ChatGPT API logs per engineer before buying Pro.</li>
+    <li><strong>Buy Pro only for heavy ChatGPT/Codex UI users</strong> (≥30 o1 sessions/day). Light users: API direct.</li>
+    <li><strong>Budget Codex CLI separately.</strong> It is not covered by Pro. Allocate API budget for CLI/automation.</li>
+    <li><strong>Track reasoning token spend.</strong> o1 reasoning at $60/M output is the hidden cost driver. Monitor per-engineer.</li>
+    <li><strong>No team pooling.</strong> Pro is per-account. Don't share one Pro seat across multiple engineers.</li>
+  </ol>
+
+  <h2>Bottom Line for CFOs</h2>
+  <ul>
+    <li><strong>ChatGPT Pro ($200) = o1/Codex UI subscription.</strong> Codex CLI, API, automation = separate API budget.</li>
+    <li><strong>Break-even: ~50 o1 sessions/day.</strong> Below that, API direct is cheaper. Above that, Pro saves 60%+.</li>
+    <li><strong>Reasoning tokens are expensive.</strong> o1 reasoning at $60/M output can dominate spend. Monitor it.</li>
+    <li><strong>No volume/off-peak discounts.</strong> $200/mo flat regardless of usage pattern.</li>
+    <li><strong>Seat = account.</strong> One Pro per engineer. No sharing, no pooling.</li>
+  </ul>

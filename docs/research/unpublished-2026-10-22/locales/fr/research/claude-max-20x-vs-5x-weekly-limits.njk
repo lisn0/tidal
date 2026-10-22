@@ -1,0 +1,17 @@
+---
+layout: "research.njk"
+permalink: "fr/research/claude-max-20x-vs-5x-weekly-limits.html"
+titleCore: "Claude Max 20x vs 5x : Limites Hebdomadaires, Capacité de Burst et Économie de Sièges"
+description: "Comparatif des plans Max 5x (100$) et Max 20x (200$) d'Anthropic. Limites hebdomadaires réelles, comportement de burst, patterns de throttling et quand la prime du 20x se justifie pour les équipes d'ingénierie."
+slug: "claude-max-20x-vs-5x-weekly-limits"
+breadcrumbName: "Claude Max 20x vs 5x Limites Hebdomadaires"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Quelles sont les vraies limites hebdomadaires de messages pour Claude Max 5x vs 20x ?","a":"Anthropic ne publie pas de limites hebdomadaires fixes. Max 5x fournit ~5× la capacité Pro (~225 messages/5h sur Opus). Max 20x fournit ~20× la capacité Pro (~900 messages/5h). Les deux tirent de pools de calcul dynamiques avec marge de burst et throttling soutenu."}
+  - {"q":"Quand Max 20x justifie-t-il son prix 2× sur Max 5x ?","a":"Quand les ingénieurs atteignent les limites Max 5x ≥3 fois/semaine pendant des refactors multi-fichiers complexes ou essaims agéntiques, et que l'usage API excédentaire dépasserait 500$/semaine. Le plan 20x à 200$/mois s'amortit en ~2 semaines d'usage API évité."}
+  - {"q":"Les limites hebdomadaires se réinitialisent-elles le lundi ?","a":"Non. Fenêtre glissante de 5 heures, pas semaine civile. Les bursts s'accommodent dans la fenêtre ; le throttling soutenu se déclenche après ~70-80% de la capacité sur périodes prolongées."}
+  - {"q":"Les sièges peuvent-ils partager le pool hebdomadaire ?","a":"Chaque siège a son pool indépendant. Pas de pool partagé d'équipe — l'usage du siège A n'affecte pas le siège B. Budgettez par siège, pas par équipe."}
+---

@@ -1,0 +1,17 @@
+---
+layout: "research.njk"
+permalink: "ja/research/claude-max-20x-vs-5x-weekly-limits.html"
+titleCore: "Claude Max 20x vs 5x：週次制限、バースト容量、シートエコノミクス"
+description: "AnthropicのMax 5x（$100）とMax 20x（$200）を比較。実際の週次制限、バースト動作、スロットルパターン、20xプレミアムがエンジニアリングチームで償却される条件。"
+slug: "claude-max-20x-vs-5x-weekly-limits"
+breadcrumbName: "Claude Max 20x vs 5x 週次制限"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Claude Max 5xと20xの実際の週次メッセージ制限は？","a":"Anthropicは固定週次制限を公開していない。Max 5xはPro容量の約5倍（Opusで約225メッセージ/5h）。Max 20xはPro容量の約20倍（約900メッセージ/5h）。両方ともバースト余裕と持続スロットリング付きの動的コンピュートプールから引き出し。"}
+  - {"q":"Max 20xがMax 5xの2倍価格を正当化するのはいつ？","a":"エンジニアが複雑なマルチファイルリファクタやエージェント群でMax 5x制限に週≥3回達し、API超過使用が週$500超になる時。$200/月の20xプランは約2週間の回避API使用で償却。"}
+  - {"q":"週次制限は月曜にリセットされる？","a":"いいえ。5時間のローリングウィンドウ、カレンダー週ではない。バーストはウィンドウ内で吸収、持続スロットリングは約70-80%容量で長期間後に発動。"}
+  - {"q":"シートで週次プールを共有できる？","a":"各シートは独立したプール。チーム共有プールなし — シートAの使用はシートBに影響せず。チームでなくシート単位で予算化。"}
+---

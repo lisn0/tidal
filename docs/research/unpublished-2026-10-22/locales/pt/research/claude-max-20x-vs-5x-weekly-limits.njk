@@ -1,0 +1,17 @@
+---
+layout: "research.njk"
+permalink: "pt/research/claude-max-20x-vs-5x-weekly-limits.html"
+titleCore: "Claude Max 20x vs 5x: Limites Semanais, Capacidade de Burst e Economia de Assentos"
+description: "Comparativo dos planos Max 5x ($100) e Max 20x ($200) da Anthropic. Limites semanais reais, comportamento de burst, padrões de throttling e quando o prêmio do 20x se justifica para equipes de engenharia."
+slug: "claude-max-20x-vs-5x-weekly-limits"
+breadcrumbName: "Claude Max 20x vs 5x Limites Semanais"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"Quais são os limites reais de mensagens semanais para Claude Max 5x vs 20x?","a":"A Anthropic não publica limites semanais fixos. Max 5x fornece ~5× a capacidade Pro (~225 mensagens/5h no Opus). Max 20x fornece ~20× a capacidade Pro (~900 mensagens/5h). Ambos extraem de pools de computação dinâmicos com margem de burst e throttling sustentado."}
+  - {"q":"Quando o Max 20x justifica seu preço 2× sobre o Max 5x?","a":"Quando engenheiros atingem limites do Max 5x ≥3 vezes/semana durante refatorações multi-arquivo complexas ou enxames agênticos, e o uso excessivo de API excederia $500/semana. O plano 20x a $200/mês se amortiza em ~2 semanas de uso API evitado."}
+  - {"q":"Os limites semanais resetam nas segundas-feiras?","a":"Não. Janela deslizante de 5 horas, não semana calendário. Bursts são acomodados na janela; throttling sustentado dispara após ~70-80% da capacidade por períodos prolongados."}
+  - {"q":"Os assentos podem compartilhar o pool semanal?","a":"Cada assento tem seu pool independente. Sem pool compartilhado de equipe — o uso do assento A não afeta o assento B. Orce por assento, não por equipe."}
+---

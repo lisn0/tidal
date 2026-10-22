@@ -1,0 +1,197 @@
+---
+layout: "research.njk"
+permalink: "research/claude-haiku-5-5-pricing-deep-dive.html"
+titleCore: "Claude Haiku 5.5 Pricing: The 5× Tier at 100k Tokens"
+description: "Haiku 5.5 introduces prompt-length pricing: $0.10/$0.50 per MTok ≤100k tokens, 5× higher above. Cache reads at $0.01/$0.05. 90% cheaper than Haiku 4.5 for short prompts. FinOps decision guide."
+slug: "claude-haiku-5-5-pricing-deep-dive"
+breadcrumbName: "Claude Haiku 5.5 Pricing"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What are the two pricing tiers for Claude Haiku 5.5?","a":"Prompts ≤100,000 tokens: $0.10 input / $0.50 output per MTok. Prompts >100,000 tokens: $0.50 input / $2.50 output per MTok (5× multiplier). Cache reads: $0.01 / $0.05. Cache writes: $0.125 / $0.625. Batch API: 50% off input and output."}
+  - {"q":"How much cheaper is Haiku 5.5 vs Haiku 4.5?","a":"~90% cheaper for prompts ≤100k tokens (which comprise ~90% of Haiku 4.5 requests). ~50% cheaper for prompts >100k tokens. The updated tokenizer uses slightly more tokens per task, so actual savings are slightly less than raw price ratios suggest."}
+  - {"q":"When does the long-prompt tier apply?","a":"A request whose prompt (input tokens + cache reads + cache writes) exceeds 100,000 tokens pays the higher tier on ALL of its tokens — not just the excess. Cache reads count toward the threshold. Each request is priced independently; earlier requests keep their tier."}
+  - {"q":"How does Haiku 5.5 pricing compare to GPT-6 Luna?","a":"Haiku 5.5 matches Luna at $0.10/$0.50 up to 100k tokens. Luna's price increase triggers at 272k tokens (to $0.20/$0.75), a gentler step than Haiku's 5× jump at 100k. Haiku's long-prompt output ($2.50) is 3.3× Luna's long-prompt output ($0.75)."}
+  - {"q":"What workloads benefit most from Haiku 5.5's pricing?","a":"High-volume, latency-sensitive tasks with short prompts: classification, extraction, routing, summaries, compactions, database queries, live customer support, browser-use agents. ~90% of prior Haiku requests fall in the ≤100k tier."}
+section: "New and timely"
+blurb: "- The first LLM with prompt-length-tiered pricing. 90% cost reduction for short prompts, but a 5× cliff at 100k tokens. Cache reads at 1¢/MTok change the economics of prompt caching for classification and routing workloads."
+sectionTitle: "Claude Haiku 5.5 Pricing Deep Dive"
+---
+  <div class="eye">RESEARCH · MODEL PRICING</div>
+  <h1 class="page-title">Claude Haiku 5.5 Pricing Deep Dive: The 5× Cliff at 100k Tokens</h1>
+  <p class="updated">Pricing Analysis · 21 October 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Anthropic released Claude Haiku 5.5 on October 7, 2026, introducing the industry's first prompt-length-tiered pricing model. Prompts ≤100,000 tokens cost $0.10 input / $0.50 output per million tokens — a 90% reduction from Haiku 4.5. Cross the 100k threshold and every token in that request pays 5× more. This deep dive translates the pricing into FinOps decision criteria.</p>
+
+  <h2>Pricing at a Glance</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Metric</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">≤100k Tokens</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">>100k Tokens</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">vs Haiku 4.5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Input</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.10 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">-90% / -50%</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Output</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$2.50 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">-90% / -50%</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Cache Read</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.01 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.05 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">-90% / -50%</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">5m Cache Write</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.125 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.625 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">-90% / -50%</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">1h Cache Write</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.20 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$1.00 / MTok</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">-90% / -50%</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Batch API</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">50% off</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">50% off</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Same discount</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The 100k Token Cliff: What Triggers the Higher Tier</h2>
+  <p>Unlike traditional per-token pricing where each token is billed independently, Haiku 5.5 prices <em>the entire request</em> at the tier determined by that request's prompt length. The prompt length includes:</p>
+  <ul>
+    <li>All input tokens (user message, system prompt, context)</li>
+    <li>Cache read tokens (retrieved from prompt cache)</li>
+    <li>Cache write tokens (new content written to cache)</li>
+  </ul>
+  <p>A single request with 100,001 prompt tokens pays the >100k rate on <em>all 100,001 tokens</em>. There is no marginal pricing — it's a step function, not a gradient.</p>
+
+  <h3>Practical Implications</h3>
+  <ul>
+    <li><strong>Cache reads count toward the threshold.</strong> A cached system prompt of 80k tokens + a 30k user message = 110k prompt tokens = long-prompt tier for the entire request.</li>
+    <li><strong>Each request is priced independently.</strong> Request 1 at 90k tokens pays short-prompt rates. Request 2 at 110k tokens pays long-prompt rates. Request 3 back at 90k returns to short-prompt rates.</li>
+    <li><strong>Batch API uses the same tier logic.</strong> Each batch item is evaluated separately for its prompt length.</li>
+    <li><strong>US-only inference adds 1.1× multiplier</strong> on top of the applicable tier (both input and output).</li>
+  </ul>
+
+  <h2>Cost Modeling: Classification Workload at Scale</h2>
+  <p>Consider a document classification pipeline processing 10M documents/month:</p>
+  <ul>
+    <li>Average prompt: 2,500 tokens (system prompt + document excerpt)</li>
+    <li>Average output: 100 tokens (classification label + confidence)</li>
+    <li>Prompt cache hit rate: 80% (system prompt cached)</li>
+  </ul>
+
+  <h3>Monthly Cost Breakdown</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Component</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Tokens (M)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Rate ($/MTok)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Input (uncached 20%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">5.0</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.10</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Cache reads (80%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">20.0</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.01</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.20</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Output</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">1.0</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50</td>
+      </tr>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <td style="padding:8px;border:1px solid #1E2A3F;"><strong>Total</strong></td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"></td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"></td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"><strong>$1.20</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Haiku 4.5 equivalent:</strong> ~$12/month. <strong>Savings: 90%.</strong></p>
+
+  <h2>Comparison: Haiku 5.5 vs Sonnet 5.5 vs GPT-6 Luna</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Model</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Short Prompt Input/Output</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Long Prompt Input/Output</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Cache Read</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Haiku 5.5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.10 / $0.50</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.50 / $2.50</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.01 / $0.05</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">High-volume classification, extraction, routing</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Sonnet 5.5</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$2.00 / $10.00</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$2.00 / $10.00</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.10</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Complex reasoning, coding, agentic workflows</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">GPT-6 Luna</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.10 / $0.50</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$0.20 / $0.75</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$0.01</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">General purpose, longer-context cost certainty</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>FinOps Recommendations</h2>
+  <ol>
+    <li><strong>Audit prompt lengths before migrating.</strong> If >10% of your Haiku 4.5 requests exceed 100k tokens, model the long-prompt tier impact. The 5× multiplier can erase savings for mixed workloads.</li>
+    <li><strong>Design for the short-prompt tier.</strong> Chunk documents, use retrieval instead of stuffing context, and leverage the 1M context window with cache reads ($0.01/MTok) rather than raw input ($0.10/MTok).</li>
+    <li><strong>Monitor tier distribution daily.</strong> Track % of requests in each tier. A drift toward >100k signals a prompt engineering issue or data change.</li>
+    <li><strong>Use Batch API for offline workloads.</strong> 50% discount applies to both tiers. For classification/extraction batches, this brings effective short-prompt input to $0.05/MTok.</li>
+    <li><strong>Evaluate Luna for long-context certainty.</strong> If your workloads regularly exceed 100k tokens, Luna's gentler 2× step at 272k may offer better cost predictability.</li>
+  </ol>
+
+  <h2>Tokenizer Change: The Hidden Cost Factor</h2>
+  <p>Haiku 5.5 uses the updated tokenizer introduced with Opus 4.7 (shared with Sonnet 5.5 and Opus 5.5). This tokenizer produces ~10–15% more tokens per unit of text compared to Haiku 4.5's tokenizer. The 90% price reduction is <em>partially offset</em> by this token inflation — real-world savings are closer to 80–85% for equivalent workloads.</p>
+
+  <h2>Bottom Line for CFOs</h2>
+  <ul>
+    <li><strong>Haiku 5.5 is a classification/extraction specialist.</strong> At $0.10 input + $0.01 cache read, it makes high-volume routing economically trivial.</li>
+    <li><strong>The 100k cliff is real and sharp.</strong> Architect prompts to stay under it. Use retrieval + cache reads, not context stuffing.</li>
+    <li><strong>Not a Sonnet replacement.</strong> For reasoning, coding, or agentic tasks, Sonnet 5.5 at $2/$10 with flat pricing is more predictable.</li>
+    <li><strong>Track tier mix as a KPI.</strong> % of requests in short-prompt tier should be >90% for classification workloads. Below 80% warrants investigation.</li>
+  </ul>

@@ -1,0 +1,198 @@
+---
+layout: "research.njk"
+permalink: "research/claude-pro-max-token-limits.html"
+titleCore: "Claude Pro vs Max: Token Limits, Pricing & CFO Decision Guide"
+description: "Compare Anthropic's Claude Pro ($20), Max 5x ($100), and Max 20x ($200) plans. Token allowances, burst capacity, API equivalence, and cost per engineering hour for finance leaders."
+slug: "claude-pro-max-token-limits"
+breadcrumbName: "Claude Pro vs Max Token Limits"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What are the actual token limits for Claude Pro, Max 5x, and Max 20x?","a":"Anthropic does not publish fixed token quotas. Pro provides ~45 messages/5h on Opus. Max 5x (~$100/mo) gives 5× Pro capacity. Max 20x (~$200/mo) gives 20× Pro capacity. All draw from an opaque dynamic compute pool rather than a contractual token wallet."}
+  - {"q":"How do I convert Claude subscription cost to API-equivalent dollars?","a":"Estimate: Pro ≈ $25–50/week API equivalent; Max 5x ≈ $125–250/week; Max 20x ≈ $500–1,100/week. The 20x plan at $200/mo delivers roughly $1,100/week in API value if fully utilized — a 12.6× multiple on subscription cost."}
+  - {"q":"Which plan makes sense for a team of 5 engineers?","a":"Five Max 5x seats = $500/mo for ~5× individual Pro capacity each. Five Max 20x seats = $1,000/mo for ~20× capacity each. For interactive coding, Max 5x is usually sufficient; Max 20x justifies itself only when engineers regularly hit Pro/5x limits during complex refactoring."}
+  - {"q":"Can I use Claude Max plans for API/automation workloads?","a":"No. Max plans are for interactive Claude Code CLI and web sessions only. Automated API calls, batch processing, and backend services require standard API billing (per-token). Using Max for automation violates Anthropic's terms."}
+section: "New and timely"
+blurb: "- CFO guide to Anthropic's three subscription tiers: token reality vs marketing, API equivalence math, and seat planning for engineering teams."
+sectionTitle: "Claude Pro vs Max Token Limits"
+---
+  <div class="eye">RESEARCH · SUBSCRIPTION ECONOMICS</div>
+  <h1 class="page-title">Claude Pro vs Max 5x vs Max 20x: Token Limits, Real Capacity & CFO Seat Planning</h1>
+  <p class="updated">Subscription Analysis · 21 October 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">Anthropic sells three subscription tiers — Pro ($20), Max 5x ($100), Max 20x ($200) — but publishes no fixed token quotas. This guide translates opaque "× capacity" marketing into API-equivalent dollars, burst behavior, and seat-planning math for finance and engineering leaders.</p>
+
+  <h2>Quick Comparison Table</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Plan</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Monthly Cost</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Stated Capacity</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Est. Weekly API Equivalent</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$20/mo</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">1× baseline</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$25–50/week</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Light interactive use, learning</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Max 5x</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$100/mo</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">5× Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$125–250/week</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Daily coding, moderate refactoring</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Max 20x</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$200/mo</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">20× Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~$500–1,100/week</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Heavy agentic coding, multi-agent swarms</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The "× Capacity" Problem</h2>
+  <p>Anthropic's multiplier (5×, 20×) applies to <em>session capacity</em> — an internal metric combining message count, context window usage, and compute allocation — not to a published token number. This means:</p>
+  <ul>
+    <li><strong>No contractual token floor:</strong> Unlike Alibaba's Token Pro (12k credits/5h, 40k/7d), Anthropic guarantees no minimum token allocation.</li>
+    <li><strong>Burst vs sustained:</strong> Max 20x excels at short, intense bursts (e.g., a 4-hour refactoring sprint). Sustained 24/7 load will hit dynamic throttling.</li>
+    <li><strong>Model mixing:</strong> Capacity is shared across Opus 5, Sonnet 5, Fable 5, Haiku 4.5. Heavy Opus usage consumes capacity faster than Sonnet.</li>
+  </ul>
+
+  <h2>API-Equivalent Valuation</h2>
+  <p>To compare subscription vs API spend, estimate the weekly API-equivalent value:</p>
+  <p style="background:#101726;padding:12px;border-radius:6px;font-family:monospace;color:#7AAFFF;text-align:center;">
+    Weekly API Equivalent ≈ (Monthly Subscription / 4.33) × Capacity Multiplier × Utilization Factor
+  </p>
+  <p>At 80% utilization:</p>
+  <ul>
+    <li>Pro: ($20/4.33) × 1 × 0.8 ≈ <strong>$3.70/week</strong> (but Opus access is limited — real value ~$25–50)</li>
+    <li>Max 5x: ($100/4.33) × 5 × 0.8 ≈ <strong>$92/week</strong> (real value ~$125–250 with Opus access)</li>
+    <li>Max 20x: ($200/4.33) × 20 × 0.8 ≈ <strong>$739/week</strong> (real value ~$500–1,100)</li>
+  </ul>
+  <p><strong>Key insight:</strong> Max 20x at $200/mo delivers ~12–27× its subscription cost in API-equivalent value <em>if fully utilized</em>. The risk is underutilization — an idle Max 20x seat costs $200/mo for $0 value.</p>
+
+  <h2>Seat Planning for Engineering Teams</h2>
+  <h3>Per-Engineer Decision Framework</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Engineer Profile</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Recommended Tier</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Rationale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Occasional AI assist (≤5 sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Pro ($20)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Rarely hits limits; API fallback for overflow</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Daily interactive coding (10–30 sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Max 5x ($100)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Comfortable headroom; 5× covers most days</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Heavy agentic / multi-file refactoring (50+ sessions/day)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Max 20x ($200)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Needs burst headroom for parallel sub-agents</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Team lead / architect (review + occasional coding)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Max 5x ($100)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Burst capacity for reviews; not full-time coding</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Team of 5: Cost Scenarios</h3>
+  <ul>
+    <li><strong>All Pro:</strong> $100/mo — will hit limits daily; expect API overflow spend</li>
+    <li><strong>3× Max 5x + 2× Pro:</strong> $340/mo — balanced for mixed team</li>
+    <li><strong>5× Max 5x:</strong> $500/mo — standard for full-time AI-assisted team</li>
+    <li><strong>2× Max 20x + 3× Max 5x:</strong> $700/mo — heavy refactoring squad + daily coders</li>
+    <li><strong>5× Max 20x:</strong> $1,000/mo — only justified for agentic swarm workloads</li>
+  </ul>
+
+  <h2>Hidden Costs & Gotchas</h2>
+  <h3>1. No API Access Included</h3>
+  <p>Max plans cover <em>only</em> interactive Claude Code and web chat. Any CI/CD pipeline, automated PR review bot, or backend service calling Anthropic API is billed separately at standard rates (Opus 5: $15/M in, $75/M out).</p>
+
+  <h3>2. Prompt Caching Not Exposed</h3>
+  <p>API users get 90% cache-read discount ($1.50/M vs $15/M). Max plan users cannot explicitly control or measure prompt cache hits — the dynamic pool manages it opaquely.</p>
+
+  <h3>3. No Off-Peak Discount</h3>
+  <p>Unlike Alibaba Token Pro (0.2× credits 22:00–08:00 UTC+8), Anthropic offers no time-of-day pricing. A Max 20x seat costs $200/mo whether used at 2 PM or 2 AM.</p>
+
+  <h3>4. Account-Level Pooling Risk</h3>
+  <p>Max 20x capacity is drawn from a <em>shared account pool</em>. One engineer's runaway agent swarm can throttle the entire team's Max 20x seats. No per-seat guarantees exist.</p>
+
+  <h2>FinOps Recommendation</h2>
+  <ol>
+    <li><strong>Start with Max 5x for all daily coders.</strong> $100/mo × 5 engineers = $500/mo. Monitor actual limit-hit frequency for 30 days.</li>
+    <li><strong>Upgrade individuals to Max 20x only when data shows:</strong> (a) hitting Max 5x limits >3×/week, (b) measurable productivity loss from throttling, (c) API overflow spend >$100/mo for that engineer.</li>
+    <li><strong>Track "subscription utilization" monthly:</strong> (sessions used / estimated capacity) × 100. Target >60% on Max 5x, >40% on Max 20x.</li>
+    <li><strong>Keep API budget separate.</strong> Subscriptions ≠ API. Budget API spend for automation, batch, and backend workloads independently.</li>
+  </ol>
+
+  <h2>Comparison: Anthropic vs Alibaba Token Metering</h2>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Dimension</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Claude Max 20x</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Alibaba Token Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Monthly Price</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$200</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">$70</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Metering Model</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Opaque dynamic burst</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Explicit credits (12k/5h, 40k/7d)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Off-Peak Discount</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">None</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0.2× (22:00–08:00 UTC+8)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">API Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No (separate billing)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No (interactive tools only)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Per-Seat Guarantee</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No (shared pool)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Yes (individual account)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Best For</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Interactive refactoring, quality-first</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Scheduled swarms, cost certainty</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Bottom Line for CFOs</h2>
+  <ul>
+    <li><strong>Max 5x ($100) is the default</strong> for engineers who code daily with AI. It pays for itself if it saves ≥2 hours/month at $50/hr.</li>
+    <li><strong>Max 20x ($200) is a specialization tool</strong> — buy it for the 10–20% of engineers doing heavy agentic work, not the whole team.</li>
+    <li><strong>Never assume subscription = API replacement.</strong> Automation, CI/CD, and backend services need separate API budget.</li>
+    <li><strong>Track utilization.</strong> An unused Max 20x seat is the most expensive idle software license in your stack.</li>
+  </ul>

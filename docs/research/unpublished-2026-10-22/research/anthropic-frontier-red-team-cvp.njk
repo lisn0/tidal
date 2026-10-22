@@ -1,0 +1,265 @@
+---
+layout: "research.njk"
+permalink: "research/anthropic-frontier-red-team-cvp.html"
+titleCore: "Anthropic Frontier Red Team & CVP: AI Security Testing Economics"
+description: "Frontier Red Team uses Opus 5.5 for attack surface reduction across 25 projects (493 issues found). New CVP tiers gate access: Defense blocks 92% of red-team tasks; Red Team blocks 0%. Budget implications for enterprise security teams."
+slug: "anthropic-frontier-red-team-cvp"
+breadcrumbName: "Frontier Red Team & CVP"
+datePublished: "2026-10-21"
+dateModified: "2026-10-21"
+copyrightSymbol: "©"
+footerSeparator: "·"
+faq:
+  - {"q":"What is the Cyber Verification Program (CVP)?","a":"CVP is Anthropic's program granting vetted security professionals access to advanced cyber capabilities on models like Opus 5.5, Sonnet 5.5, and Mythos 5.1. It has three tiers: Defense Access (default for orgs), Red Team Access (no blocks), and Specialized Access (deep government collaboration)."}
+  - {"q":"How do the CVP tiers differ in blocking behavior?","a":"On CyScenarioBench (10 challenges × 5 trials): Without CVP — 100% blocked on first prompt. Defense Access — 46/50 trials blocked at some point. Red Team Access — 0 blocks, 34/50 tasks completed (68% success rate = no-safeguards baseline). Specialized Access — equivalent to Red Team."}
+  - {"q":"What models are available under CVP?","a":"Claude Opus 5.5, Claude Sonnet 5.5, Claude Mythos 5.1, and new models moving forward. Mythos 5.1 requires additional provisioning (~5 business days after approval)."}
+  - {"q":"Can individuals apply for CVP?","a":"Yes, but only for Defense Access on a paid plan (Pro/Max/Team/Enterprise). Red Team and Specialized Access are organization-only."}
+  - {"q":"What are the security requirements for each tier?","a":"Defense: MFA required (phishing-resistant MFA by Dec 15, 2026; API keys expire every 7 days until then). Red Team: Defense requirements + additional attestations. Specialized: In-depth review with US government collaboration."}
+  - {"q":"How does CVP affect AI security testing budgets?","a":"Organizations doing vulnerability research, malware analysis, or exploit validation need CVP to avoid constant blocking. Red Team Access eliminates false positives but requires org-level verification. Budget for MFA migration, verification portal admin time, and potential Mythos access delays."}
+section: "New and timely"
+blurb: "- Anthropic's own red team uses Opus 5.5 to reduce attack surfaces in 25 open-source projects (5M+ LOC), finding 493 issues. The new CVP tiers gate access: Defense blocks 92% of red-team tasks; Red Team blocks 0%. Enterprise security teams need CVP budget planning now."
+sectionTitle: "Anthropic Frontier Red Team & CVP"
+---
+  <div class="eye">RESEARCH · AI SECURITY ECONOMICS</div>
+  <h1 class="page-title">Anthropic Frontier Red Team & Cyber Verification Program: The Economics of AI Security Testing</h1>
+  <p class="updated">Security Economics Analysis · 21 October 2026</p>
+  <p class="byline">By the LLM CFO team</p>
+
+  <p class="lede">On October 20, 2026, Anthropic published research showing its Frontier Red Team using Opus 5.5 to automatically reduce attack surfaces across 25 open-source projects (5M+ lines of code), discovering 493 security issues. Days earlier, on October 6, they launched the three-tier Cyber Verification Program (CVP) that gates access to these same capabilities. This analysis covers what security teams need to budget, plan, and provision.</p>
+
+  <h2>The Research: Attack Surface Reduction at Scale</h2>
+  <p>Anthropic's Frontier Red Team applied three automated techniques to 25 projects (C, C++, Java, PHP, Python):</p>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Method</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Description</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Key Finding</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Default Configuration</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Code reachable in shipped defaults but not used by default functionality</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">All 11 gated projects had unintentional pre-auth surfaces; 93 issues found</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Configuration Interaction</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Option pairs that disable security controls or leave behavior undefined</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">37 locations where combined configs silently weakened security</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Early Reachability</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Security-sensitive code running before auth, without victim interaction, or before protocol state transition</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">363 issues across all project categories</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Total: 493 issues discovered.</strong> The research demonstrates that AI-driven attack surface analysis is economically viable — Claude can map reachability across millions of lines of code at a fraction of manual review cost.</p>
+
+  <h3>Project Categories & Results</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Category</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Description</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Expected Pre-Auth Surface</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Claude Found</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Public (serves any user)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">DNS resolvers, proxies, public APIs</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">High (by design)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Config interaction issues dominate</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Gated (authenticated users)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Apps requiring password, key, certificate</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Low (should be post-auth)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"><strong>93 unintentional pre-auth surfaces</strong></td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Private (operator's own env)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Internal tools, operator-controlled</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Variable</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Early reachability issues dominate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>The Cyber Verification Program: Three Tiers, Three Blocking Regimes</h2>
+  <p>The CVP launched October 6, 2026, replacing the single-tier Project Glasswing. It gates access to Opus 5.5, Sonnet 5.5, Mythos 5.1, and future models based on verification level.</p>
+
+  <h3>Tier Comparison on CyScenarioBench</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Tier</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Blocks (50 trials)</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Tasks Completed</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Success Rate</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Availability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No CVP (GA models)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">50/50 (100%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">All users</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Defense Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">46/50 (92%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">4</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">8%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Orgs + individuals (paid)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Red Team Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0/50 (0%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">34</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">68%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Organizations only</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Specialized Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0/50 (0%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~34 (est.)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~68%</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">US gov collaboration</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Key insight:</strong> Red Team Access achieves the same 68% completion rate as running Opus 5.5 with <em>no safeguards at all</em>. The tier doesn't change model capability — it changes whether Anthropic's classifiers intervene.</p>
+
+  <h3>What Each Tier Permits</h3>
+  <ul>
+    <li><strong>Defense Access:</strong> Secure code review, threat modeling, patching known issues, finding vulns in your own source, triaging alerts. Malware analysis and exploit validation will be blocked.</li>
+    <li><strong>Red Team Access:</strong> All Defense activities + malware analysis, exploit validation, offensive scenario testing, red-team exercises. No classifier blocks on CyScenarioBench.</li>
+    <li><strong>Specialized Access:</strong> Red Team capabilities + access to Mythos 5.1 (limited availability) + deepest model versions. Requires US government collaboration.</li>
+  </ul>
+
+  <h2>Enterprise Budget & Provisioning Implications</h2>
+
+  <h3>1. Verification & Onboarding Costs</h3>
+  <ul>
+    <li><strong>Application review:</strong> ~7 business days for decision.</li>
+    <li><strong>MFA migration:</strong> Defense Access requires phishing-resistant MFA by December 15, 2026. API keys expire every 7 days until migrated. Budget for Workload Identity Federation rollout.</li>
+    <li><strong>Org admin overhead:</strong> Assigning programs to workspaces (Console), custom roles (Enterprise), or linked accounts (Bedrock/GCP/AWS/Azure).</li>
+    <li><strong>Mythos provisioning:</strong> ~5 business days after approval, trails main CVP grant.</li>
+  </ul>
+
+  <h3>2. Platform-Specific Provisioning</h3>
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Platform</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Action Required</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Contract Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Console / API</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Assign program to workspaces</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No contract change</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Enterprise</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Assign program to custom role</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No contract change</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Team / Max / Pro</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Auto-attached at org level</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">No action</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Amazon Bedrock</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;"><strong>Enterprise Frontier Safeguards required</strong></td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Marketplace private offer for contracted discount</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude Platform on AWS</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Link AWS account, auto-applies</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Marketplace private offer for contracted discount</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Claude on Google Cloud</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Link GCP project, auto-applies</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Marketplace private offer for contracted discount</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Microsoft Foundry</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Deploy model first, then link Azure</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Marketplace private offer for contracted discount</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3. Ongoing Operational Costs</h3>
+  <ul>
+    <li><strong>Grant maintenance:</strong> Annual re-verification; grants may be narrowed or withdrawn.</li>
+    <li><strong>Data retention:</strong> CVP requires data retention for misuse monitoring. Orgs with ZDR (zero data retention) exemptions for Fable/Mythos can use CVP with ZDR until Enterprise Frontier Safeguards launches.</li>
+    <li><strong>Third-party platform access:</strong> Requires platform support for CVP. Platform must provide Anthropic enrollment link. Not all coding tools support this yet.</li>
+    <li><strong>Client-facing product restriction:</strong> CVP grants cover internal security work only. Building client-facing products with CVP access requires separate productization application (coming soon to Verification Portal).</li>
+  </ul>
+
+  <h2>FinOps Cost Model: Red Team Access vs GA Blocking</h2>
+  <p>Consider a security team running 200 red-team assessments/year on Opus 5.5:</p>
+
+  <table style="width:100%;border-collapse:collapse;margin:20px 0;">
+    <thead>
+      <tr style="background:#101726;color:#E6EAF2;">
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Scenario</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Assessments Completed</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Engineering Hours Wasted on Blocks</th>
+        <th style="padding:8px;border:1px solid #1E2A3F;text-align:left;">Effective Cost per Completed Assessment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">GA models (no CVP)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">0</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~200 × 2h = 400h</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">∞ (cannot complete)</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Defense Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~16 (8%)</td>
+        <td style="padding:8px:border:1px solid #1E2A3F;">~184 × 2h = 368h</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~12.5× base cost</td>
+      </tr>
+      <tr>
+        <td style="padding:8px;border:1px solid #1E2A3F;">Red Team Access</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">136 (68%)</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~64 × 2h = 128h</td>
+        <td style="padding:8px;border:1px solid #1E2A3F;">~1.5× base cost</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Assumptions: 2h engineering time per blocked attempt, Opus 5.5 API at $4/$20 per MTok. Red Team Access reduces wasted engineering time by 65% vs Defense Access.</p>
+
+  <h2>Opt-In Vulnerability Finding Service (Launched Oct 8)</h2>
+  <p>Anthropic also launched a free, opt-in vulnerability scanner for open-source projects, powered by their strongest models. Projects receive periodic security scans at no cost. This is a direct productization of the Frontier Red Team's research methodology. Enterprise teams should evaluate whether their open-source dependencies participate — it reduces the attack surface of your supply chain at zero cost.</p>
+
+  <h2>Recommendations for Security & Finance Leaders</h2>
+  <ol>
+    <li><strong>Apply for CVP now if you do any offensive security testing.</strong> The 92% block rate on Defense Access makes it unusable for red-team workflows. Red Team Access is the only viable tier for malware analysis, exploit validation, and offensive scenario testing.</li>
+    <li><strong>Budget for MFA migration by Dec 15, 2026.</strong> Phishing-resistant MFA (hardware keys, WebAuthn, Workload Identity Federation) is mandatory for Defense Access. API keys expire weekly until migrated.</li>
+    <li><strong>Plan for Mythos 5.1 access lag.</strong> If you need Mythos, factor ~5 business days post-approval. Mythos follows Fable 5.1 usage rules on Pro/Max (usage credits required, shared 50% weekly allowance).</li>
+    <li><strong>Track CVP grant as a security asset.</strong> Include CVP tier, expiration, and Mythos access status in your AI security posture dashboard. A lapsed grant = immediate reversion to 92% block rate.</li>
+    <li><strong>Evaluate third-party tool CVP support.</strong> If your coding agents (Cursor, Copilot, etc.) don't support CVP enrollment links, your engineers lose Red Team capabilities in those tools.</li>
+  </ol>
+
+  <h2>Bottom Line for CFOs</h2>
+  <ul>
+    <li><strong>AI security testing without CVP Red Team Access is economically non-viable.</strong> 92% block rate = 12.5× cost inflation per completed assessment.</li>
+    <li><strong>CVP is a security budget line item, not an AI budget line item.</strong> It enables the security team to use AI tools they already pay for (Opus 5.5 API).</li>
+    <li><strong>MFA migration is the hidden CapEx.</strong> Phishing-resistant MFA rollout across the org is a prerequisite, not an option.</li>
+    <li><strong>Supply chain benefit is free.</strong> The opt-in vulnerability scanner for open-source dependencies reduces your attack surface at zero cost — ensure your key dependencies enroll.</li>
+  </ul>

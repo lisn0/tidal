@@ -1,0 +1,136 @@
+{
+  "slug": "model-deprecation-writeoff-risk",
+  "tags": [
+    "ai-spend-forecasting",
+    "model-concentration-risk",
+    "cfo",
+    "llm-costs"
+  ],
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "languages": {
+    "en": {
+      "title": "Model Deprecation Is an Accounting Event, Not an Engineering One",
+      "titleCore": "Model deprecation and write-off risk",
+      "description": "When a model is retired mid-quarter, the accrued liability on a pre-committed volume is real. Deprecation dates belong in the accrual review.",
+      "body": "<p>Model deprecation notices are filed as engineering changelogs and read as engineering notices. For a finance function they are an accounting event, because the decision to pre-commit spend against a model version creates an obligation that the vendor can withdraw from one side of the contract while the commitment remains on yours.</p><h2>The liability hiding in a volume commitment</h2><p>A pre-committed volume discount assumes you will still be running that version in the commitment period. If the model is deprecated, you face three outcomes, and only one of them was priced into the contract:</p><ul><li><strong>The successor is behaviourally close.</strong> The commitment is honoured. This is the case people plan for.</li><li><strong>The successor needs re-evaluation.</strong> The commitment is honoured but the rollout slips, and the value of the commitment falls without the spend falling.</li><li><strong>The commitment is volume, not version.</strong> The discount survives the changeover and nothing is lost. This is the term to negotiate.</li></ul><p>Only the third case is safe, and it is the case that has to be asked for in the contract rather than assumed at renewal.</p><h2>What the deprecation notice should trigger</h2><ol><li><strong>Update the accrual assumptions.</strong> If the model behind a committed volume is being retired, the discount you accrued against that volume needs re-review before the quarter closes.</li><li><strong>Re-baseline unit economics.</strong> The successor's rate card is a different product. Cost per resolved outcome computed on the old model does not carry forward.</li><li><strong>Check the re-evaluation cost, not just the migration.</strong> A behaviourally different successor means the eval programme is part of the migration cost, and eval spend is recurring.</li><li><strong>Log the date in the renewal calendar.</strong> Deprecation dates are a scheduling input. A version retired two weeks after your renewal negotiation is a bad week to be holding.</li></ol><h2>Writing it off honestly</h2><p>If a commitment was priced on the assumption of a version that no longer exists, the difference is a variance, and the useful thing is to recognise it early and label it as a deprecation effect rather than let it be absorbed into a general overspend line where it becomes invisible. A deprecation write-off that is explained in one sentence is a normal event. The same number buried in a run-rate overspend is a control failure.</p><h2>Bottom line</h2><p>Deprecation dates are an accrual input. Negotiate commitments against volume rather than version, re-baseline unit economics on the successor, and book the difference as a labelled deprecation variance instead of a generic overspend.</p>",
+      "faq": [
+        {
+          "question": "Why does model deprecation matter to finance rather than only to engineering?",
+          "answer": "Because a pre-committed volume discount assumes you will still be running that version. If the version is retired, the commitment can remain while the discount, the rollout plan and the unit economics it was priced on all change."
+        },
+        {
+          "question": "Which contract term makes committed spend safe across a model deprecation?",
+          "answer": "A commitment to volume rather than to a named model version. Volume commitments survive a changeover; version commitments do not, and the version form is the term to refuse."
+        },
+        {
+          "question": "How should a deprecation-driven cost difference be reported?",
+          "answer": "As a labelled deprecation variance in the period it occurs, not absorbed into a general overspend line. An explained write-off is a normal event; the same number hidden in a run-rate overspend is a control failure."
+        }
+      ],
+      "related": [
+        {
+          "slug": "/research/model-concentration-risk",
+          "label": "Model concentration risk"
+        },
+        {
+          "slug": "/research/ai-spend-forecasting",
+          "label": "AI spend forecasting for CFOs"
+        },
+        {
+          "slug": "/research/ai-spend-variance-analysis",
+          "label": "AI spend variance analysis"
+        },
+        {
+          "slug": "/research/scale-tier-decision",
+          "label": "Scale tier vs flex vs batch"
+        }
+      ]
+    },
+    "es": {
+      "title": "La retirada de un modelo es un evento contable",
+      "titleCore": "La retirada de un modelo es un evento contable",
+      "description": "Si un modelo se retira a mitad de trimestre, los compromisos de volumen pueden perder valor. Revise los devengos, los costes unitarios y las renovaciones.",
+      "body": "<p>Los avisos de retirada de modelos suelen publicarse como cambios técnicos. Para finanzas también son eventos contables: comprometer gasto por adelantado para una versión crea una obligación que puede mantenerse incluso cuando el proveedor retira esa versión.</p><h2>El riesgo oculto en un compromiso de volumen</h2><p>Un descuento por volumen comprometido presupone que podrá usar el modelo durante todo el periodo. Si se retira, hay tres posibles resultados:</p><ul><li><strong>El sucesor se comporta de forma parecida.</strong> Se cumple el compromiso. Es el escenario que suele preverse.</li><li><strong>El sucesor requiere una nueva evaluación.</strong> El compromiso sigue vigente, pero el despliegue se retrasa y su valor cae sin que disminuya el gasto.</li><li><strong>El compromiso se aplica al volumen, no a la versión.</strong> El descuento sobrevive a la transición. Esta es la cláusula que conviene negociar.</li></ul><p>La tercera opción debe figurar expresamente en el contrato; no se debe dar por supuesta al renovar.</p><h2>Qué hacer al recibir el aviso de retirada</h2><ol><li><strong>Actualizar las hipótesis de devengo.</strong> Revise antes del cierre trimestral el descuento previsto para el volumen comprometido.</li><li><strong>Recalcular la economía unitaria.</strong> El sucesor tiene otra tarifa; el coste por resultado resuelto del modelo anterior deja de ser válido.</li><li><strong>Incluir la reevaluación en el coste.</strong> Si cambia el comportamiento del modelo, las pruebas forman parte de la migración y su gasto puede repetirse.</li><li><strong>Registrar la fecha en el calendario de renovación.</strong> Una retirada poco después de negociar la renovación altera el valor del acuerdo.</li></ol><h2>Reconocer la pérdida con claridad</h2><p>Si el compromiso se valoró suponiendo una versión que ya no existe, registre la diferencia como una desviación causada por la retirada. Reconocerla pronto y explicarla evita que desaparezca dentro de una partida genérica de exceso de gasto. Una pérdida explicada es gestionable; ocultarla en la tasa de gasto recurrente señala una falla de control.</p><h2>Conclusión</h2><p>Trate las fechas de retirada como datos para el devengo. Negocie compromisos de volumen independientes de la versión, recalcule los costes unitarios del sucesor y registre la diferencia como una desviación específica.</p>",
+      "faq": [
+        { "question": "¿Por qué importa a finanzas la retirada de un modelo?", "answer": "Un descuento por volumen comprometido puede depender de seguir usando una versión concreta. Si esa versión desaparece, el compromiso puede permanecer mientras cambian el descuento, el calendario de despliegue y los costes unitarios." },
+        { "question": "¿Qué cláusula protege el gasto comprometido ante una retirada?", "answer": "Un compromiso ligado al volumen y no a una versión concreta del modelo. Así, el descuento puede mantenerse durante la transición al sucesor." },
+        { "question": "¿Cómo se debe informar una diferencia de coste causada por la retirada?", "answer": "Como una desviación identificada por retirada del modelo en el periodo en que se produce, sin absorberla en una partida general de exceso de gasto." }
+      ],
+      "related": [
+        { "slug": "/research/model-concentration-risk", "label": "Riesgo de concentración de modelos" },
+        { "slug": "/research/ai-spend-forecasting", "label": "Previsión del gasto en IA para directores financieros" },
+        { "slug": "/research/ai-spend-variance-analysis", "label": "Análisis de desviaciones del gasto en IA" },
+        { "slug": "/research/scale-tier-decision", "label": "Scale Tier frente a Flex y Batch" }
+      ]
+    },
+    "fr": {
+      "title": "Le retrait d'un modèle est un événement comptable",
+      "titleCore": "Le retrait d'un modèle est un événement comptable",
+      "description": "Le retrait d'un modèle en cours de trimestre peut dévaluer un volume préengagé. Réexaminez les provisions, les coûts unitaires et les renouvellements.",
+      "body": "<p>Les avis de retrait de modèles figurent souvent dans les journaux techniques. Pour la direction financière, ils constituent aussi des événements comptables : un engagement de dépenses sur une version crée une obligation qui peut subsister quand le fournisseur retire cette version.</p><h2>Le risque caché dans un engagement de volume</h2><p>Une remise sur un volume préengagé suppose que le modèle restera disponible pendant toute la période. Son retrait peut conduire à trois situations :</p><ul><li><strong>Le successeur se comporte presque de la même façon.</strong> L'engagement est honoré. C'est le scénario généralement prévu.</li><li><strong>Le successeur exige une nouvelle évaluation.</strong> L'engagement demeure, mais le déploiement prend du retard et sa valeur baisse sans réduction des dépenses.</li><li><strong>L'engagement porte sur le volume, pas sur la version.</strong> La remise reste valable après la transition. C'est la clause à négocier.</li></ul><p>Cette troisième issue doit être inscrite dans le contrat, sans être présumée au renouvellement.</p><h2>Que faire à la réception de l'avis de retrait</h2><ol><li><strong>Réviser les hypothèses de provisionnement.</strong> Réexaminez avant la clôture trimestrielle la remise prévue sur le volume engagé.</li><li><strong>Recalculer l'économie unitaire.</strong> Le tarif du successeur correspond à un autre produit ; l'ancien coût par résultat obtenu ne s'applique plus.</li><li><strong>Compter la réévaluation, pas seulement la migration.</strong> Si le comportement change, les évaluations font partie du coût de migration et peuvent se répéter.</li><li><strong>Inscrire la date au calendrier des renouvellements.</strong> Un retrait peu après la négociation modifie la valeur de l'accord.</li></ol><h2>Constater clairement l'écart</h2><p>Si l'engagement a été chiffré sur une version désormais indisponible, constatez la différence comme un écart lié au retrait. La reconnaître tôt évite de la noyer dans un dépassement global des dépenses. Une perte expliquée se gère ; la cacher dans les dépenses courantes révèle une défaillance du contrôle.</p><h2>En bref</h2><p>Intégrez les dates de retrait aux hypothèses de provisionnement. Négociez des engagements de volume indépendants des versions, recalculez les coûts unitaires du successeur et identifiez l'écart comme tel.</p>",
+      "faq": [
+        { "question": "Pourquoi le retrait d'un modèle concerne-t-il la finance ?", "answer": "Une remise sur un volume préengagé peut supposer l'usage continu d'une version. Si elle disparaît, l'engagement peut subsister alors que la remise, le calendrier de déploiement et les coûts unitaires changent." },
+        { "question": "Quelle clause protège les dépenses engagées lors d'un retrait ?", "answer": "Un engagement portant sur le volume plutôt que sur une version nommée. La remise peut ainsi survivre au passage au modèle successeur." },
+        { "question": "Comment présenter le surcoût causé par un retrait ?", "answer": "Comme un écart identifié et lié au retrait pendant la période concernée, plutôt que de le fondre dans un dépassement global des dépenses." }
+      ],
+      "related": [
+        { "slug": "/research/model-concentration-risk", "label": "Risque de concentration des modèles" },
+        { "slug": "/research/ai-spend-forecasting", "label": "Prévision des dépenses d'IA pour les DAF" },
+        { "slug": "/research/ai-spend-variance-analysis", "label": "Analyse des écarts de dépenses d'IA" },
+        { "slug": "/research/scale-tier-decision", "label": "Scale Tier, Flex ou Batch" }
+      ]
+    },
+    "de": {
+      "title": "Modellabschaltung ist ein Buchhaltungsereignis",
+      "titleCore": "Modellabschaltung ist ein Buchhaltungsereignis",
+      "description": "Wird ein Modell im Quartal abgeschaltet, kann gebundenes Volumen an Wert verlieren. Prüfen Sie Abgrenzungen, Stückkosten und Verlängerungstermine.",
+      "body": "<p>Hinweise zur Abschaltung eines Modells erscheinen meist in technischen Änderungsprotokollen. Für die Finanzabteilung sind sie auch ein Buchhaltungsereignis: Eine Vorabzusage für eine Modellversion schafft eine Verpflichtung, die bestehen bleiben kann, wenn der Anbieter diese Version abschaltet.</p><h2>Das Risiko in einer Volumenzusage</h2><p>Ein Rabatt für zugesagtes Volumen setzt voraus, dass das Modell während der gesamten Laufzeit nutzbar bleibt. Bei einer Abschaltung sind drei Ergebnisse möglich:</p><ul><li><strong>Das Nachfolgemodell verhält sich ähnlich.</strong> Die Zusage wird erfüllt. Das ist der übliche Planungsfall.</li><li><strong>Das Nachfolgemodell muss neu bewertet werden.</strong> Die Zusage bleibt, doch die Einführung verzögert sich; ihr Wert sinkt, die Ausgaben nicht.</li><li><strong>Die Zusage gilt für Volumen statt für eine Version.</strong> Der Rabatt bleibt beim Wechsel erhalten. Diese Vertragsbedingung sollte ausgehandelt werden.</li></ul><p>Der dritte Fall muss ausdrücklich im Vertrag stehen; er ist bei einer Verlängerung nicht selbstverständlich.</p><h2>Was die Abschaltungsmitteilung auslösen sollte</h2><ol><li><strong>Abgrenzungsannahmen aktualisieren.</strong> Prüfen Sie den erwarteten Rabatt auf zugesagtes Volumen vor dem Quartalsabschluss erneut.</li><li><strong>Stückkosten neu berechnen.</strong> Das Nachfolgemodell hat eine andere Preisliste; die bisherigen Kosten pro gelöstem Fall gelten nicht mehr.</li><li><strong>Neubewertungskosten einbeziehen.</strong> Ändert sich das Verhalten, gehören Evaluierungen zu den Migrationskosten und können wiederkehren.</li><li><strong>Den Termin im Verlängerungskalender erfassen.</strong> Eine Abschaltung kurz nach der Vertragsverhandlung verändert den Wert der Vereinbarung.</li></ol><h2>Die Differenz offen ausweisen</h2><p>Wurde eine Zusage für eine nicht mehr verfügbare Version kalkuliert, ist die Differenz eine abschaltungsbedingte Abweichung. Erfassen und benennen Sie sie frühzeitig, statt sie in allgemeinen Mehrausgaben verschwinden zu lassen. Eine erklärte Abschreibung ist handhabbar; eine versteckte Differenz in den laufenden Kosten weist auf mangelnde Kontrolle hin.</p><h2>Fazit</h2><p>Abschaltungsdaten gehören in die Abgrenzungsplanung. Vereinbaren Sie versionsunabhängige Volumenzusagen, berechnen Sie die Stückkosten des Nachfolgers neu und buchen Sie die Differenz als eigene Abweichung.</p>",
+      "faq": [
+        { "question": "Warum betrifft eine Modellabschaltung die Finanzabteilung?", "answer": "Ein Rabatt auf zugesagtes Volumen kann an die Nutzung einer bestimmten Version gebunden sein. Fällt diese weg, kann die Zusage bestehen bleiben, während sich Rabatt, Einführungsplan und Stückkosten ändern." },
+        { "question": "Welche Vertragsklausel schützt zugesagte Ausgaben?", "answer": "Eine Zusage für Volumen statt für eine namentlich genannte Modellversion. So kann der Rabatt auch beim Wechsel zum Nachfolger gelten." },
+        { "question": "Wie sollte die Kostendifferenz ausgewiesen werden?", "answer": "Als ausdrücklich gekennzeichnete abschaltungsbedingte Abweichung in der betroffenen Periode, nicht als Teil allgemeiner Mehrausgaben." }
+      ],
+      "related": [
+        { "slug": "/research/model-concentration-risk", "label": "Risiko durch Modellkonzentration" },
+        { "slug": "/research/ai-spend-forecasting", "label": "KI-Ausgabenplanung für CFOs" },
+        { "slug": "/research/ai-spend-variance-analysis", "label": "Abweichungsanalyse bei KI-Ausgaben" },
+        { "slug": "/research/scale-tier-decision", "label": "Scale Tier, Flex oder Batch" }
+      ]
+    },
+    "ja": {
+      "title": "モデルの提供終了は会計上の事象",
+      "titleCore": "モデルの提供終了は会計上の事象",
+      "description": "四半期中のモデル提供終了は、事前に確約した利用量の価値を変えます。費用計上の前提、単位費用、契約更新日を見直します。",
+      "body": "<p>モデルの提供終了は技術的な変更履歴として通知されがちです。しかし財務部門にとっても会計上の事象です。特定バージョンの利用を前提に支出を事前確約すると、そのバージョンを事業者が終了しても、支出義務だけが残る可能性があります。</p><h2>利用量の確約に潜むリスク</h2><p>確約利用量に対する割引は、契約期間中に同じモデルを使えることを前提とします。提供終了時には次の三つの結果が考えられます。</p><ul><li><strong>後継モデルの挙動が近い。</strong> 確約量を消化できます。通常想定されるケースです。</li><li><strong>後継モデルの再評価が必要。</strong> 確約は残りますが、導入は遅れ、支出が減らないまま契約の価値が下がります。</li><li><strong>確約対象がバージョンではなく利用量である。</strong> 切り替え後も割引が続きます。この条件を契約で交渉すべきです。</li></ul><p>三つ目の条件は更新時に当然適用されると考えず、契約書に明記します。</p><h2>提供終了通知を受けたときの対応</h2><ol><li><strong>費用計上の前提を更新する。</strong> 四半期末前に、確約量に適用される予定の割引を再確認します。</li><li><strong>単位費用を計算し直す。</strong> 後継モデルの料金は別の商品です。旧モデルの成果一件当たり費用は引き継げません。</li><li><strong>移行だけでなく再評価の費用を含める。</strong> 挙動が変わる場合、評価は移行費用に含まれ、その支出は継続する可能性があります。</li><li><strong>契約更新日程に終了日を記録する。</strong> 更新交渉の直後に提供が終われば、契約価値が変わります。</li></ol><h2>差額を明確に計上する</h2><p>利用できなくなったバージョンを前提に確約額を決めたなら、その差額は提供終了による差異です。早めに認識して理由を示し、一般的な予算超過に埋もれさせないでください。説明できる償却は管理可能ですが、経常費用に隠れる差額は統制上の問題です。</p><h2>要点</h2><p>提供終了日を費用計上の前提に反映します。バージョンに依存しない利用量の確約を交渉し、後継モデルの単位費用を再計算して、差額を独立した差異として記録します。</p>",
+      "faq": [
+        { "question": "モデルの提供終了が財務部門にも重要なのはなぜですか？", "answer": "確約利用量の割引が特定バージョンの継続利用を前提とする場合があるためです。終了後も支出義務が残る一方、割引、導入計画、単位費用は変わり得ます。" },
+        { "question": "提供終了後も確約支出を守る契約条件は何ですか？", "answer": "特定のモデルバージョンではなく、利用量に対する確約です。後継モデルへ切り替えても割引を維持できます。" },
+        { "question": "提供終了による費用差額はどう報告しますか？", "answer": "発生した期間に提供終了による差異として明示し、一般的な予算超過に含めないでください。" }
+      ],
+      "related": [
+        { "slug": "/research/model-concentration-risk", "label": "モデル集中リスク" },
+        { "slug": "/research/ai-spend-forecasting", "label": "CFOのためのAI支出予測" },
+        { "slug": "/research/ai-spend-variance-analysis", "label": "AI支出の差異分析" },
+        { "slug": "/research/scale-tier-decision", "label": "Scale Tier、Flex、Batchの比較" }
+      ]
+    },
+    "pt": {
+      "title": "A descontinuação de um modelo é um evento contabilístico",
+      "titleCore": "A descontinuação de um modelo é um evento contabilístico",
+      "description": "Se um modelo for retirado a meio do trimestre, o volume contratado pode perder valor. Reveja acréscimos, custos unitários e datas de renovação.",
+      "body": "<p>Os avisos de descontinuação de modelos surgem normalmente em registos de alterações técnicas. Para a área financeira, também são eventos contabilísticos: um compromisso antecipado de despesa com uma versão cria uma obrigação que pode manter-se quando o fornecedor retira essa versão.</p><h2>O risco escondido num compromisso de volume</h2><p>Um desconto por volume contratado pressupõe que o modelo estará disponível durante o período contratado. Se for descontinuado, há três resultados possíveis:</p><ul><li><strong>O sucessor tem comportamento semelhante.</strong> O compromisso é cumprido. É o cenário normalmente previsto.</li><li><strong>O sucessor exige nova avaliação.</strong> O compromisso continua, mas o lançamento atrasa-se e o seu valor cai sem redução da despesa.</li><li><strong>O compromisso incide no volume, não na versão.</strong> O desconto mantém-se após a transição. É esta a cláusula a negociar.</li></ul><p>A terceira condição deve constar expressamente do contrato, em vez de ser presumida na renovação.</p><h2>O que fazer ao receber o aviso</h2><ol><li><strong>Atualizar os pressupostos de acréscimo.</strong> Reveja antes do fecho trimestral o desconto previsto para o volume contratado.</li><li><strong>Recalcular os custos unitários.</strong> O sucessor tem outra tabela de preços; o custo por resultado resolvido do modelo anterior deixa de se aplicar.</li><li><strong>Incluir a reavaliação, além da migração.</strong> Se o comportamento mudar, os testes fazem parte do custo de migração e podem tornar-se recorrentes.</li><li><strong>Registar a data no calendário de renovações.</strong> Uma descontinuação pouco depois da negociação altera o valor do acordo.</li></ol><h2>Reconhecer a diferença com clareza</h2><p>Se um compromisso foi calculado para uma versão que já não existe, a diferença é um desvio causado pela descontinuação. Reconheça-o cedo e identifique a causa, sem o diluir numa rubrica geral de excesso de despesa. Uma perda explicada pode ser gerida; escondê-la na despesa corrente revela uma falha de controlo.</p><h2>Em resumo</h2><p>Inclua as datas de descontinuação nas estimativas de acréscimos. Negocie compromissos de volume independentes da versão, recalcule os custos unitários do sucessor e registe a diferença como desvio específico.</p>",
+      "faq": [
+        { "question": "Porque interessa à área financeira a descontinuação de um modelo?", "answer": "Um desconto por volume contratado pode depender da utilização continuada de uma versão. Se esta desaparecer, a obrigação pode manter-se enquanto mudam o desconto, o calendário de lançamento e os custos unitários." },
+        { "question": "Que cláusula protege a despesa contratada numa descontinuação?", "answer": "Um compromisso associado ao volume e não a uma versão específica do modelo. Assim, o desconto pode manter-se na passagem para o sucessor." },
+        { "question": "Como reportar uma diferença de custo causada pela descontinuação?", "answer": "Como um desvio identificado por descontinuação no período em que ocorre, sem o incluir numa rubrica geral de excesso de despesa." }
+      ],
+      "related": [
+        { "slug": "/research/model-concentration-risk", "label": "Risco de concentração de modelos" },
+        { "slug": "/research/ai-spend-forecasting", "label": "Previsão de despesas de IA para diretores financeiros" },
+        { "slug": "/research/ai-spend-variance-analysis", "label": "Análise dos desvios de despesas de IA" },
+        { "slug": "/research/scale-tier-decision", "label": "Scale Tier, Flex ou Batch" }
+      ]
+    }
+  }
+}
