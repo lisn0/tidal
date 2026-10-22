@@ -175,6 +175,24 @@ h1.display .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:54
 .s-total .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#CFC7B2}
 .s-total .amt{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#8FCFA8}
 .statement-foot{padding:12px 24px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+.scenario-controls[hidden],.scenario-actions[hidden]{display:none!important}
+.scenario-copy:disabled{opacity:.45;cursor:not-allowed}
+.scenario-controls{padding:18px 24px 8px;border-top:1px solid var(--hair);display:grid;gap:14px}
+.scenario-control{display:grid;gap:6px}
+.scenario-control label{font-size:12px;font-weight:600;color:var(--ink-2)}
+.scenario-control input[type=number]{width:100%;font:500 14px 'IBM Plex Mono',monospace;padding:9px 10px;border:1px solid var(--hair-2);background:var(--paper);color:var(--ink)}
+.scenario-control input[type=range]{width:100%;accent-color:var(--green)}
+.scenario-control .range-meta{display:flex;justify-content:space-between;font:10px 'IBM Plex Mono',monospace;color:var(--muted)}
+.scenario-caption{font-size:11px;color:var(--muted);line-height:1.55}
+.scenario-control input:focus-visible{outline:3px solid var(--green-2);outline-offset:2px}
+.scenario-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 24px 14px}
+.scenario-copy{font:600 12px 'IBM Plex Mono',monospace;color:var(--green);background:transparent;border:1px solid var(--green);padding:8px 11px;cursor:pointer}
+.scenario-copy:hover{background:var(--green);color:var(--paper)}
+.scenario-copy:disabled{opacity:.5;cursor:not-allowed}
+.scenario-copy:focus-visible,.scenario-actions a:focus-visible,.phase-link:focus-visible{outline:3px solid var(--green-2);outline-offset:3px}
+.scenario-copy-status{font-size:11px;color:var(--muted)}
+.scenario-actions a{font-size:11px;font-weight:600;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+.phase-link{margin-top:14px;display:inline-block;font-size:12px;font-weight:600;color:var(--green);text-underline-offset:3px}
 .stamp{position:absolute;top:-24px;right:-18px;transform:rotate(8deg);z-index:3;border:2px solid var(--green);color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:8px 14px;background:var(--paper)}
 @media(max-width:720px){.stamp{right:0}}
 
@@ -365,13 +383,32 @@ footer{padding:56px 0 44px;background:var(--paper)}
       <span class="stamp">Paid on results</span>
       <div class="statement-head"><span>Statement of Savings</span><span class="no">№ 0042 · Illustrative</span></div>
       <div class="statement-body">
-        <div class="s-row"><span class="lbl">Baseline AI spend</span><span class="amt old">$165,000 /mo</span></div>
-        <div class="s-row"><span class="lbl">After optimization (≈50%)</span><span class="amt new">$82,500 /mo</span></div>
-        <div class="s-row"><span class="lbl">Monthly savings</span><span class="amt save">$82,500</span></div>
-        <div class="s-row"><span class="lbl">LLM CFO fee (20%)</span><span class="amt fee">− $16,500</span></div>
+        <div class="s-row"><span class="lbl">Baseline AI spend</span><span class="amt old" id="scenario-baseline-output">$165,000 /mo</span></div>
+        <div class="s-row"><span class="lbl">After optimization (<span id="scenario-reduction-output">50</span>%)</span><span class="amt new" id="scenario-net-spend">$82,500 /mo</span></div>
+        <div class="s-row"><span class="lbl">Monthly savings</span><span class="amt save" id="scenario-gross-savings">$82,500</span></div>
+        <div class="s-row"><span class="lbl">LLM CFO fee (20%)</span><span class="amt fee" id="scenario-fee">− $16,500</span></div>
       </div>
-      <div class="s-total"><span class="lbl">You keep</span><span class="amt">$66,000 /mo</span></div>
-      <div class="statement-foot">Reconciled to raw provider invoices · mid-range example; your audit produces a real number.</div>
+      <div class="s-total"><span class="lbl">You keep</span><span class="amt" id="scenario-retained">$66,000 /mo</span></div>
+      <div class="scenario-controls" id="scenario-controls" aria-label="Illustrative savings scenario controls" hidden>
+        <div class="scenario-control">
+          <label for="scenario-spend">Assumed monthly AI spend (USD)</label>
+          <input id="scenario-spend" type="number" min="0" max="10000000" step="1000" value="165000" inputmode="decimal" aria-describedby="scenario-assumptions scenario-validation">
+        </div>
+        <div class="scenario-control">
+          <label for="scenario-reduction">Assumed reduction: <span id="scenario-reduction-label">50</span>%</label>
+          <input id="scenario-reduction" type="range" min="0" max="60" step="1" value="50" aria-describedby="scenario-assumptions">
+          <div class="range-meta" aria-hidden="true"><span>0%</span><span>60%</span></div>
+        </div>
+        <p class="scenario-caption" id="scenario-assumptions">Illustration only, not a customer result or savings forecast. Calculated as spend × assumed reduction; the example fee is 20% of modeled savings. Actual fees apply only to savings verified against the agreed baseline and provider invoices.</p>
+        <p class="scenario-caption" id="scenario-validation" role="alert" aria-live="polite"></p>
+      </div>
+      <noscript><p class="scenario-caption" style="padding:0 24px 14px">Interactive controls need JavaScript. The figures above are a static illustration using $165,000 monthly spend and an assumed 50% reduction.</p></noscript>
+      <div class="scenario-actions" id="scenario-actions" hidden>
+        <button class="scenario-copy" id="scenario-copy" type="button">Copy scenario</button>
+        <span class="scenario-copy-status" id="scenario-copy-status" role="status" aria-live="polite"></span>
+        <a href="#book">Discuss this estimate at a free audit →</a>
+      </div>
+      <div class="statement-foot" aria-live="polite" id="scenario-summary">At these assumptions, estimated monthly savings after the example fee are $66,000.</div>
     </aside>
   </div>
 </div>
@@ -549,24 +586,28 @@ footer{padding:56px 0 44px;background:var(--paper)}
         <div class="ph-no">Tidal Audit</div>
         <h3>See where the money goes.</h3>
         <p>A read-only audit of your invoices and usage logs: where the spend sits, what to cut, and the expected savings. Our team runs it.</p>
+        <a class="phase-link" href="#book">Request a free audit →</a>
       </div>
       <div class="phase">
         <span class="wk">Included</span>
         <div class="ph-no">Tidal Gateway</div>
         <h3>Cut it, and keep it cut.</h3>
         <p>A LiteLLM gateway we deploy and operate in your cloud: routing, fallbacks, caching, batching, per-team budgets and hard stops. Savings don't drift back as traffic and models change.</p>
+        <a class="phase-link" href="#process">See how implementation works →</a>
       </div>
       <div class="phase">
         <span class="wk">Included</span>
         <div class="ph-no">Tidal Telemetry</div>
         <h3>Prove it.</h3>
         <p>Live cost by provider, model, feature, team and workflow: the evidence behind your monthly savings statement. A live trial at telemetry.llmcfo.com.</p>
+        <a class="phase-link" href="https://telemetry.llmcfo.com">Explore Tidal Telemetry →</a>
       </div>
       <div class="phase">
         <span class="wk">20%</span>
         <div class="ph-no">The fee</div>
         <h3>Self-funding.</h3>
         <p>A flat 20% of verified savings, Telemetry and Gateway operations included. No down payment, no minimum. No savings, no fee.</p>
+        <a class="phase-link" href="/pricing">Read the pricing details →</a>
       </div>
     </div>
   </div>
@@ -778,6 +819,76 @@ footer{padding:56px 0 44px;background:var(--paper)}
 (function(){
   var t = document.getElementById('tick');
   t.innerHTML += t.innerHTML;
+})();
+
+// Recalculate the illustrative hero scenario from user-entered assumptions.
+(function(){
+  var spend = document.getElementById('scenario-spend');
+  var reduction = document.getElementById('scenario-reduction');
+  if (!spend || !reduction) return;
+  var currency = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  var scenario = {baseline:165000, rate:0.5, gross:82500, fee:16500, retained:66000};
+  var copyButton = document.getElementById('scenario-copy');
+  var copyStatus = document.getElementById('scenario-copy-status');
+  var validation = document.getElementById('scenario-validation');
+  document.getElementById('scenario-controls').hidden = false;
+  document.getElementById('scenario-actions').hidden = false;
+  function updateScenario(){
+    var rawSpend = spend.value.trim();
+    var baseline = Number(rawSpend);
+    if (rawSpend === '' || !Number.isFinite(baseline) || baseline < 0 || baseline > 10000000) {
+      spend.setAttribute('aria-invalid', 'true');
+      copyButton.disabled = true;
+      copyStatus.textContent = '';
+      validation.textContent = rawSpend === '' ? 'Enter monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.' : 'Enter a finite monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.';
+      return;
+    }
+    spend.removeAttribute('aria-invalid');
+    validation.textContent = '';
+    copyStatus.textContent = '';
+    copyButton.disabled = false;
+    var rate = Math.min(60, Math.max(0, Number(reduction.value) || 0)) / 100;
+    var gross = baseline * rate;
+    var fee = gross * 0.2;
+    var retained = gross - fee;
+    var shownRate = Math.round(rate * 100);
+    scenario = {baseline:baseline, rate:rate, gross:gross, fee:fee, retained:retained};
+    document.getElementById('scenario-baseline-output').textContent = currency.format(baseline) + ' /mo';
+    document.getElementById('scenario-net-spend').textContent = currency.format(baseline - gross) + ' /mo';
+    document.getElementById('scenario-reduction-output').textContent = shownRate;
+    document.getElementById('scenario-reduction-label').textContent = shownRate;
+    document.getElementById('scenario-gross-savings').textContent = currency.format(gross);
+    document.getElementById('scenario-fee').textContent = '− ' + currency.format(fee);
+    document.getElementById('scenario-retained').textContent = currency.format(retained) + ' /mo';
+    document.getElementById('scenario-summary').textContent = 'At these assumptions, estimated monthly savings after the example fee are ' + currency.format(retained) + '.';
+  }
+  spend.addEventListener('input', updateScenario);
+  reduction.addEventListener('input', updateScenario);
+  copyButton.addEventListener('click', function(){
+    if (copyButton.disabled) return;
+    var monthly = function(amount){ return currency.format(amount); };
+    var annual = function(amount){ return currency.format(amount * 12); };
+    var text = [
+      'Illustrative LLM CFO savings scenario — estimates, not a customer result or forecast',
+      'Assumed monthly AI spend: ' + monthly(scenario.baseline),
+      'Assumed reduction: ' + Math.round(scenario.rate * 100) + '%',
+      'Annual run-rate assumes these monthly inputs and results stay unchanged for 12 months.',
+      'Estimated gross savings: ' + monthly(scenario.gross) + ' / month (' + annual(scenario.gross) + ' / year)',
+      'Example fee at 20% of modeled savings: ' + monthly(scenario.fee) + ' / month (' + annual(scenario.fee) + ' / year)',
+      'Estimated retained savings after example fee: ' + monthly(scenario.retained) + ' / month (' + annual(scenario.retained) + ' / year)',
+      'Actual fees apply only to savings verified against the agreed baseline and provider invoices.'
+    ].join('\n');
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      copyStatus.textContent = 'Copy is unavailable here; select the displayed assumptions to copy them.';
+      return;
+    }
+    navigator.clipboard.writeText(text).then(function(){
+      copyStatus.textContent = 'Estimated scenario copied.';
+    }).catch(function(){
+      copyStatus.textContent = 'Could not copy. Select the displayed assumptions to copy them.';
+    });
+  });
+  updateScenario();
 })();
 </script>
 </body>
