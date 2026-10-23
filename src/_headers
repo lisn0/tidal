@@ -1,5 +1,5 @@
-# Cloudflare Pages headers
-# https://developers.cloudflare.com/pages/configuration/headers/
+# Cloudflare Workers static-assets headers
+# https://developers.cloudflare.com/workers/static-assets/headers/
 
 /*
   Link: </sitemap.xml>; rel="sitemap"; type="application/xml", </llms.txt>; rel="service-doc"; type="text/plain", </llms-full.txt>; rel="help"; type="text/plain", </.well-known/security.txt>; rel="security.txt"; type="text/plain", </.well-known/ai-catalog.json>; rel="service-desc"; type="application/json", </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json", </.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </openapi.json>; rel="service-doc"; type="application/vnd.oai.openapi+json;version=3.1", </auth.md>; rel="service-doc"; type="text/markdown", </health.json>; rel="status"; type="application/json"

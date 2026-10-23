@@ -1,5 +1,5 @@
-# Cloudflare Pages redirects
-# https://developers.cloudflare.com/pages/configuration/redirects/
+# Cloudflare Workers static-assets redirects
+# https://developers.cloudflare.com/workers/static-assets/redirects/
 
 # www → apex is handled in worker.js (Workers static-assets _redirects matches
 # path only and rejects absolute-URL/host-based sources, so it can't live here).

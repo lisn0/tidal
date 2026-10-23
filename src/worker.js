@@ -622,12 +622,21 @@ export default {
 
 		// 5. Only transform GET requests that explicitly negotiate markdown.
 		const accept = request.headers.get('Accept') || '';
+		const isHtml = request.method === 'GET' && assetResponse.status === 200 && contentType.includes('text/html');
+
+		// The HTML varies by Accept (markdown negotiation), so caches must be told.
+		const withVaryAccept = () => {
+			const headers = new Headers(response.headers);
+			headers.append('Vary', 'Accept');
+			return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+		};
+
 		if (request.method !== 'GET' || !/text\/markdown/i.test(accept)) {
-			return response;
+			return isHtml ? withVaryAccept() : response;
 		}
 
 		// 6. Only transform real HTML pages.
-		if (assetResponse.status !== 200 || !contentType.includes('text/html')) {
+		if (!isHtml) {
 			return response;
 		}
 

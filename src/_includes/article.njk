@@ -43,7 +43,7 @@
 <meta name="description" content="{{ locale.description }}" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 {%- if article.agentMode -%}
-<meta name="content-signal" content="search=yes, ai-input=yes, ai-train=yes" />
+<meta name="content-signal" content="search=yes, ai-input=yes, ai-train=no" />
 {%- endif -%}
 <link rel="canonical" href="{{ canonicalUrl }}" />
 <meta property="og:type" content="article" />
@@ -52,7 +52,7 @@
 <meta property="og:url" content="{{ canonicalUrl }}" />
 <meta property="og:title" content="{{ locale.titleCore or locale.title }}" />
 <meta property="og:description" content="{{ locale.description }}" />
-<meta property="og:image" content="{{ article.image or (siteUrl + '/og.png') }}" />
+<meta property="og:image" content="{{ siteUrl }}/og.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -60,12 +60,12 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ locale.titleCore or locale.title }}" />
 <meta name="twitter:description" content="{{ locale.description }}" />
-<meta name="twitter:image" content="{{ article.image or (siteUrl + '/og.png') }}" />
+<meta name="twitter:image" content="{{ siteUrl }}/og.png" />
 {%- for alt in hreflangs -%}
 <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}" />
 {%- endfor -%}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":{{ (locale.titleCore or locale.title) | dump | safe }},"description":"{{ locale.description | safe }}","url":"{{ canonicalUrl }}","datePublished":"{{ article.datePublished }}","dateModified":"{{ article.dateModified }}","image":"{{ article.image }}","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":{{ (locale.titleCore or locale.title) | dump | safe }},"description":"{{ locale.description | safe }}","url":"{{ canonicalUrl }}","datePublished":"{{ article.datePublished }}","dateModified":"{{ article.dateModified }}","image":"{{ siteUrl }}/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
 {%- if locale.faq.length > 0 -%}
 <script type="application/ld+json">
@@ -111,7 +111,7 @@ table.kv th:last-child, table.kv td:last-child { text-align: left; }
 # {{ locale.title }}
 > {{ locale.description }}
 - URL: {{ canonicalUrl }}
-- Content-Signal: search=yes, ai-input=yes, ai-train=yes
+- Content-Signal: search=yes, ai-input=yes, ai-train=no
 {%- for q in locale.faq %}
 Q: {{ q.question }}
 A: {{ q.answer }}
@@ -152,7 +152,8 @@ A: {{ q.answer }}
 </aside>
 {%- endif -%}
 
-{{ locale.body | safe }}
+{#- The EN body ends with a plain-text "Related" list; the linked one below replaces it. -#}
+{%- if locale.related.length > 0 -%}{{ locale.body | replace(r/<h2>Related<\/h2><ul>(?:(?!<\/ul>)[\s\S])*<\/ul>\s*$/, '') | safe }}{%- else -%}{{ locale.body | safe }}{%- endif -%}
 
 {%- if locale.related.length > 0 -%}
 <h2>{{ ui.related }}</h2>
