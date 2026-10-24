@@ -1,57 +1,47 @@
-/* LLM CFO — Google Consent Mode v2 + cookie banner. Vanilla JS, no deps. */
+/* LLM CFO — regional Zaraz loading + cookie banner. Vanilla JS, no deps. */
 (function () {
 	'use strict';
 
-	var GA4_ID = 'G-30NBV0P9QN';
-	var CLARITY_ID = 'x04m83yv0b';
 	var COOKIE_NAME = 'llmcfo_consent';
 	var COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 365 days
 
-	// 1. Initialize dataLayer + gtag shim before GA4 loads.
+	// 1. Queue consent for Zaraz's Google Consent Mode compatibility.
 	window.analyticsConsent = false;
 	window.dataLayer = window.dataLayer || [];
-	function gtag() { window.dataLayer.push(arguments); }
-	window.gtag = window.gtag || gtag;
+	var deniedGoogleConsent = {
+		ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
+	};
 
-	// 2. Default consent state — everything denied.
-	gtag('consent', 'default', {
-		ad_storage: 'denied',
-		analytics_storage: 'denied',
-		ad_user_data: 'denied',
-		ad_personalization: 'denied',
-		functionality_storage: 'denied',
-		personalization_storage: 'denied',
-		security_storage: 'granted',
-		wait_for_update: 500
-	});
-	gtag('set', 'ads_data_redaction', true);
-
-	// 3. Load GA4 after consent in Europe, or after the edge policy permits it.
-	var ga4Loaded = false;
-	function loadGa4(w, d, s, i) {
-		if (ga4Loaded) return;
-		ga4Loaded = true;
-		var f = d.getElementsByTagName(s)[0];
-		var j = d.createElement(s);
-		j.async = true;
-		j.src = 'https://www.googletagmanager.com/gtag/js?id=' + i;
-		f.parentNode.insertBefore(j, f);
-		gtag('js', new Date());
-		gtag('config', i);
+	// 2. Zaraz manages GA4 and Clarity. This is the only analytics script this
+	// site injects, and only after the regional policy allows analytics.
+	var zarazStarted = false;
+	function loadZaraz() {
+		if (zarazStarted) return;
+		zarazStarted = true;
+		// Zaraz evaluates its Pageview actions during script initialization; make
+		// the user's decision visible before i.js processes the initial event.
+		window.analyticsConsent = true;
+		window.dataLayer.push({ google_consent_default: deniedGoogleConsent });
+		window.dataLayer.push({ google_consent_update: {
+			ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted'
+		} });
+		var script = document.createElement('script');
+		script.src = '/cdn-cgi/zaraz/i.js';
+		script.referrerPolicy = 'origin';
+		script.onload = function () {
+			if (privacyRequested()) {
+				revoke();
+				location.reload();
+				return;
+			}
+			try { window.dispatchEvent(new Event('analyticsconsent')); } catch (e) {}
+		};
+		script.onerror = function () { window.analyticsConsent = false; };
+		var first = document.getElementsByTagName('script')[0];
+		first.parentNode.insertBefore(script, first);
 	}
 
-	// 3b. Load Microsoft Clarity (heatmaps + session replay) with Consent V2.
-	var clarityLoaded = false;
-	function loadClarity(c, l, a, r, i, t, y) {
-		if (clarityLoaded || !i) return;
-		clarityLoaded = true;
-		c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-		c[a]('consentv2', { analytics_Storage: 'granted', ad_Storage: 'denied' });
-		t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
-		y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-	}
-
-	// 4. Cookie helpers.
+	// 3. Cookie helpers.
 	function onReady(fn) {
 		if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
 		else fn();
@@ -65,36 +55,27 @@
 		document.cookie = name + '=' + encodeURIComponent(value) + '; Max-Age=' + COOKIE_MAX_AGE + '; Path=/; SameSite=Lax' + secure;
 	}
 
-	// 5. Consent updates.
+	// 4. Consent updates.
 	function privacyRequested() {
 		var nav = window.navigator || {};
 		return nav.globalPrivacyControl || nav.doNotTrack === '1' || window.doNotTrack === '1';
 	}
-	function grantAll() {
+	function grantAnalytics() {
 		if (privacyRequested()) return false;
-		gtag('consent', 'update', {
-			analytics_storage: 'granted',
-		});
-		loadGa4(window, document, 'script', GA4_ID);
-		loadClarity(window, document, 'clarity', 'script', CLARITY_ID);
-		// window.gtag is the always-present dataLayer shim, so other scripts
-		// cannot use it to tell granted from denied. Publish the decision.
-		window.analyticsConsent = true;
-		try { window.dispatchEvent(new Event('analyticsconsent')); } catch (e) {}
+		loadZaraz();
 		return true;
 	}
 
-	// 5b. Withdrawal (GDPR Art. 7(3)) must be as easy as consent. The banner only
-	//     stops future loads; GA4 and Clarity have already set their own cookies
-	//     by then, so revoking has to clear those and reload to unload the tags.
+	// 4b. Withdrawal (GDPR Art. 7(3)) must be as easy as consent. The banner only
+	//     stops future loads; Zaraz-managed tools already running on this page
+	//     need consent revoked and a reload to unload them.
 	function revoke() {
 		window.analyticsConsent = false;
-		gtag('consent', 'update', {
-			ad_storage: 'denied', analytics_storage: 'denied',
-			ad_user_data: 'denied', ad_personalization: 'denied',
-			functionality_storage: 'denied', personalization_storage: 'denied'
-		});
+		if (zarazStarted) window.dataLayer.push({ google_consent_update: deniedGoogleConsent });
 		if (window.clarity) window.clarity('consentv2', { analytics_Storage: 'denied', ad_Storage: 'denied' });
+		if (window.zaraz && window.zaraz.consent && typeof window.zaraz.consent.setAll === 'function') {
+			window.zaraz.consent.setAll(false);
+		}
 		var host = location.hostname;
 		var domains = ['', '; Domain=' + host, '; Domain=.' + host.replace(/^www\./, '')];
 		document.cookie.split(';').forEach(function (c) {
@@ -106,10 +87,10 @@
 		});
 	}
 
-	// 6. Read existing decision.
+	// 5. Read existing decision.
 	var stored = getCookie(COOKIE_NAME);
 
-	// 6a. A stored decision hid the banner for a year with no way back to it, so
+	// 5a. A stored decision hid the banner for a year with no way back to it, so
 	//     withdrawing consent (Art. 7(3)) was impossible without hand-editing
 	//     cookies. Inject a footer control instead of editing ~15 footer blocks
 	//     across both sites and every locale — and it needs JS to work anyway.
@@ -138,7 +119,7 @@
 	onReady(addSettingsLink);
 	if (privacyRequested()) return;
 	if (stored === 'accepted') {
-		grantAll();
+		grantAnalytics();
 		return;
 	}
 	if (stored === 'rejected') {
@@ -146,7 +127,7 @@
 		return;
 	}
 
-	// 7. No prior decision — show banner once DOM is ready.
+	// 6. No prior decision — show banner once DOM is ready.
 	function showBanner(reopened) {
 		if (document.getElementById('llmcfo-consent-banner')) return;
 		var banner = document.createElement('div');
@@ -202,10 +183,10 @@
 		}
 		function accept() {
 			if (privacyRequested()) return;
-			setCookie(COOKIE_NAME, 'accepted'); grantAll(); close();
+			setCookie(COOKIE_NAME, 'accepted'); grantAnalytics(); close();
 		}
 		function reject() {
-			var tagsRunning = ga4Loaded || clarityLoaded;
+			var tagsRunning = zarazStarted;
 			setCookie(COOKIE_NAME, 'rejected');
 			revoke();
 			close();
@@ -236,7 +217,7 @@
 		return response.json();
 	}).then(function (policy) {
 		if (getCookie(COOKIE_NAME) || privacyRequested()) return;
-		if (policy && policy.requireConsent === false) grantAll();
+		if (policy && policy.requireConsent === false) grantAnalytics();
 		else onReady(function () { showBanner(false); });
 	}).catch(function () {
 		if (!getCookie(COOKIE_NAME) && !privacyRequested()) onReady(function () { showBanner(false); });

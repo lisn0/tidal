@@ -32,6 +32,10 @@ test('client-supplied country header cannot override unknown edge location', asy
 function browser({ policy = { requireConsent: true }, stored, navigator = {}, responseOk = true, failure = false, pending } = {}) {
   const scripts = [];
   const elements = [];
+  const tracks = [];
+  const clarityCalls = [];
+  const consentStates = [];
+  let consentAtInjection = false;
   const cookies = new Map(stored ? [['llmcfo_consent', stored]] : []);
   let reloads = 0;
   let requests = 0;
@@ -49,7 +53,12 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
     readyState: 'complete', body: element('body'),
     createElement: element, querySelectorAll: () => [],
     getElementById: id => elements.find(el => el.id === id && el.parentNode) || null,
-    getElementsByTagName: () => [{ parentNode: { insertBefore(script) { scripts.push(script.src); } } }],
+    getElementsByTagName: () => [{ parentNode: { insertBefore(script) {
+      scripts.push(script.src);
+      consentAtInjection = window.analyticsConsent;
+      window.zaraz = { track: (...args) => tracks.push(args), consent: { setAll: value => consentStates.push(value) } };
+      if (script.onload) script.onload();
+    } } }],
     addEventListener() {}, removeEventListener() {},
   };
   Object.defineProperty(document, 'cookie', {
@@ -61,7 +70,7 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
       else cookies.set(key, val);
     },
   });
-  const window = { navigator, dispatchEvent() {} };
+  const window = { navigator, dispatchEvent() {}, clarity: (...args) => clarityCalls.push(args) };
   const context = {
     window, document, Event: class {},
     location: { protocol: 'https:', hostname: 'llmcfo.com', reload() { reloads++; } },
@@ -75,7 +84,7 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
     },
   };
   vm.runInNewContext(source, context);
-  return { window, scripts, cookies, get reloads() { return reloads; }, get requests() { return requests; },
+  return { window, scripts, tracks, clarityCalls, consentStates, cookies, get consentAtInjection() { return consentAtInjection; }, get reloads() { return reloads; }, get requests() { return requests; },
     banner: () => document.getElementById('llmcfo-consent-banner'),
     click(label) {
       const button = elements.find(el => el.textContent === label && el.parentNode?.parentNode?.parentNode);
@@ -86,38 +95,49 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
 }
 const settle = () => new Promise(resolve => setImmediate(resolve));
 
-test('European visit stays blocked until acceptance; then both tools load', async () => {
+test('European visit stays blocked until acceptance; then loads only Zaraz', async () => {
   const b = browser();
   await settle();
   assert.deepEqual(b.scripts, []);
   assert.ok(b.banner());
   b.click('Accept');
-  assert.equal(b.scripts.length, 2);
+  assert.equal(b.scripts.length, 1);
+  assert.equal(b.scripts[0], '/cdn-cgi/zaraz/i.js');
+  assert.equal(b.consentAtInjection, true, 'Zaraz must see consent before its initial Pageview');
   assert.equal(b.window.analyticsConsent, true);
   assert.equal(b.cookies.get('llmcfo_consent'), 'accepted');
-  assert.ok(b.window.clarity.q.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'granted' && args[1].ad_Storage === 'denied'));
+  const initial = b.window.dataLayer[0].google_consent_default;
+  const granted = b.window.dataLayer[1].google_consent_update;
+  assert.equal(initial.analytics_storage, 'denied');
+  assert.equal(initial.ad_storage, 'denied');
+  assert.equal(granted.analytics_storage, 'granted');
+  assert.equal(granted.ad_storage, 'denied');
+  assert.equal(granted.ad_user_data, 'denied');
+  assert.equal(granted.ad_personalization, 'denied');
 });
 
-test('known non-European visit loads both analytics tools without banner or stored acceptance', async () => {
+test('known non-European visit loads only Zaraz without banner or stored acceptance', async () => {
   const b = browser({ policy: { requireConsent: false } });
   assert.deepEqual(b.scripts, [], 'must wait for edge decision');
   await settle();
-	assert.equal(b.scripts.length, 2);
-	assert.match(b.scripts[0], /googletagmanager/);
-	assert.match(b.scripts[1], /clarity\.ms/);
+	assert.equal(b.scripts.length, 1);
+	assert.equal(b.scripts[0], '/cdn-cgi/zaraz/i.js');
   assert.equal(b.banner(), null);
   assert.equal(b.cookies.has('llmcfo_consent'), false);
   assert.equal(b.window.analyticsConsent, true);
-	assert.ok(b.window.clarity.q.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'granted' && args[1].ad_Storage === 'denied'));
-  const updates = b.window.dataLayer.filter(args => args[0] === 'consent' && args[1] === 'update');
-  assert.equal(updates.length, 1);
-  assert.deepEqual(Object.keys(updates[0][2]), ['analytics_storage']);
+	assert.equal(b.window.dataLayer[1].google_consent_update.analytics_storage, 'granted');
+	assert.equal(b.window.dataLayer[1].google_consent_update.ad_personalization, 'denied');
+	b.window.zaraz.track('test_event', { sample: 'value' });
+	assert.equal(b.tracks[0][0], 'test_event');
+	assert.equal(b.tracks[0][1].sample, 'value');
   b.window.cookieSettings();
   b.click('Reject');
   assert.equal(b.window.analyticsConsent, false);
   assert.equal(b.cookies.get('llmcfo_consent'), 'rejected');
 	assert.equal(b.reloads, 1, 'withdrawal must unload automatically started tags');
-	assert.ok(b.window.clarity.q.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'denied' && args[1].ad_Storage === 'denied'));
+	assert.ok(b.clarityCalls.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'denied' && args[1].ad_Storage === 'denied'));
+	assert.deepEqual(b.consentStates, [false]);
+	assert.equal(b.window.dataLayer.at(-1).google_consent_update.analytics_storage, 'denied');
 });
 
 for (const stored of ['accepted', 'rejected']) {
@@ -125,7 +145,7 @@ for (const stored of ['accepted', 'rejected']) {
     const b = browser({ stored, policy: { requireConsent: false } });
     await settle();
     assert.equal(b.requests, 0);
-    assert.equal(b.scripts.length, stored === 'accepted' ? 2 : 0);
+    assert.equal(b.scripts.length, stored === 'accepted' ? 1 : 0);
   });
 }
 

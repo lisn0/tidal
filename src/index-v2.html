@@ -609,15 +609,11 @@ footer{padding:56px 0 44px;background:var(--paper)}
   var variant = getCookie('ab_test') || 'control';
   window.ab_test_variant = variant;
   function send(){
-    if (typeof gtag === 'function') {
-      gtag('event', 'ab_test_variant', { variant: variant, page: 'homepage', test_name: 'july_2026_redesign' });
-    }
-    if (typeof clarity === 'function') {
-      clarity('set', 'ab_test_variant', variant);
-    }
+    if (!window.analyticsConsent || !window.zaraz || typeof window.zaraz.track !== 'function') return;
+    window.zaraz.track('ab_test_variant', { variant: variant, page: 'homepage', test_name: 'july_2026_redesign' });
   }
-  if (document.readyState === 'complete' || document.readyState === 'interactive') { setTimeout(send, 100); }
-  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(send, 100); }); }
+  window.addEventListener('analyticsconsent', send, { once: true });
+  if (window.analyticsConsent && window.zaraz && typeof window.zaraz.track === 'function') send();
 })();
 </script>
 </body>

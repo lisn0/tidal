@@ -10,7 +10,7 @@
  * the GA4 `book_click` event does. No third-party calls, no cross-site
  * identifiers, no persistent cookie. Cleared when the tab closes.
  *
- * Read it in GA4 → Reports/Explore on the `book_click` event. Register the
+ * Read it in GA4 → Reports/Explore on the `book_click` event through Zaraz. Register the
  * event params `book_source`, `book_medium`, `landing_page` as custom
  * (event-scoped) dimensions to break bookings down by source.
  */
@@ -93,14 +93,14 @@
       }
     }
 
-    // 2. Reliable signal: fire a GA4 event on book click. Sends only when
-    //    analytics consent has been granted (gtag present). Capture phase so it
+    // 2. Reliable signal: fire a Zaraz event on book click. Sends only when
+    //    analytics consent has been granted. Capture phase so it
     //    runs before the browser navigates away.
     document.addEventListener('click', function (ev) {
       var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
       if (!a || !isBookLink(a)) return;
-      if (window.analyticsConsent && typeof window.gtag === 'function') {
-        window.gtag('event', 'book_click', {
+      if (window.analyticsConsent && window.zaraz && typeof window.zaraz.track === 'function') {
+        window.zaraz.track('book_click', {
           book_source: ft.source,
           book_medium: ft.medium,
           landing_page: ft.landing
