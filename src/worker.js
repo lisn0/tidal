@@ -22,6 +22,24 @@ const CONTACT_FROM = 'noreply@llmcfo.com';
 const CONTACT_TOPICS = new Set(['audit', 'telemetry', 'partnership', 'other']);
 const CONTACT_MAX_BYTES = 8192;
 
+// Europe, including transcontinental countries and territories. The country
+// fallback covers EEA, UK and Swiss traffic when Cloudflare omits continent.
+const CONSENT_COUNTRIES = new Set('AD AL AM AT AX AZ BA BE BG BY CH CY CZ DE DK EE ES FI FO FR GB GE GG GI GR HR HU IE IM IS IT JE KZ LI LT LU LV MC MD ME MK MT NL NO PL PT RO RS RU SE SI SJ SK SM TR UA VA XK'.split(' '));
+
+function analyticsPolicy(request) {
+	const country = request.cf?.country;
+	const continent = request.cf?.continent;
+	const knownLocation = typeof country === 'string' && /^[A-Z]{2}$/.test(country) &&
+		!['XX', 'T1'].includes(country) && ['AF', 'AN', 'AS', 'EU', 'NA', 'OC', 'SA'].includes(continent);
+	return new Response(JSON.stringify({
+		requireConsent: !knownLocation || continent === 'EU' || CONSENT_COUNTRIES.has(country),
+	}), { headers: {
+		'Content-Type': 'application/json; charset=utf-8',
+		'Cache-Control': 'no-store',
+		'X-Content-Type-Options': 'nosniff',
+	} });
+}
+
 function contactJson(body, status = 200) {
 	return new Response(JSON.stringify(body), {
 		status,
@@ -544,6 +562,7 @@ export function buildReleases(data, now = Date.now()) {
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
+		if (url.pathname === '/api/analytics-policy') return analyticsPolicy(request);
 		if (url.pathname === '/api/contact') return contactApi(request, env);
 
 		// Release and retirement feed for the release tracker. Ahead of crawler

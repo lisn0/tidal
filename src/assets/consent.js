@@ -26,7 +26,7 @@
 	});
 	gtag('set', 'ads_data_redaction', true);
 
-	// 3. Load GA4 only after explicit analytics consent.
+	// 3. Load GA4 after consent in Europe, or after the edge policy permits it.
 	var ga4Loaded = false;
 	function loadGa4(w, d, s, i) {
 		if (ga4Loaded) return;
@@ -40,15 +40,15 @@
 		gtag('config', i);
 	}
 
-	// 3b. Load Microsoft Clarity (heatmaps + session replay) only after consent.
+	// 3b. Load Microsoft Clarity (heatmaps + session replay) with Consent V2.
 	var clarityLoaded = false;
 	function loadClarity(c, l, a, r, i, t, y) {
 		if (clarityLoaded || !i) return;
 		clarityLoaded = true;
 		c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+		c[a]('consentv2', { analytics_Storage: 'granted', ad_Storage: 'denied' });
 		t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
 		y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-		c[a]('consent');
 	}
 
 	// 4. Cookie helpers.
@@ -66,15 +66,14 @@
 	}
 
 	// 5. Consent updates.
+	function privacyRequested() {
+		var nav = window.navigator || {};
+		return nav.globalPrivacyControl || nav.doNotTrack === '1' || window.doNotTrack === '1';
+	}
 	function grantAll() {
+		if (privacyRequested()) return false;
 		gtag('consent', 'update', {
-			ad_storage: 'granted',
 			analytics_storage: 'granted',
-			ad_user_data: 'granted',
-			ad_personalization: 'granted',
-			functionality_storage: 'granted',
-			personalization_storage: 'granted',
-			security_storage: 'granted'
 		});
 		loadGa4(window, document, 'script', GA4_ID);
 		loadClarity(window, document, 'clarity', 'script', CLARITY_ID);
@@ -82,6 +81,7 @@
 		// cannot use it to tell granted from denied. Publish the decision.
 		window.analyticsConsent = true;
 		try { window.dispatchEvent(new Event('analyticsconsent')); } catch (e) {}
+		return true;
 	}
 
 	// 5b. Withdrawal (GDPR Art. 7(3)) must be as easy as consent. The banner only
@@ -94,6 +94,7 @@
 			ad_user_data: 'denied', ad_personalization: 'denied',
 			functionality_storage: 'denied', personalization_storage: 'denied'
 		});
+		if (window.clarity) window.clarity('consentv2', { analytics_Storage: 'denied', ad_Storage: 'denied' });
 		var host = location.hostname;
 		var domains = ['', '; Domain=' + host, '; Domain=.' + host.replace(/^www\./, '')];
 		document.cookie.split(';').forEach(function (c) {
@@ -135,6 +136,7 @@
 		privacy.parentNode.insertBefore(btn, privacy.nextSibling.nextSibling);
 	}
 	onReady(addSettingsLink);
+	if (privacyRequested()) return;
 	if (stored === 'accepted') {
 		grantAll();
 		return;
@@ -165,7 +167,7 @@
 
 		var msg = document.createElement('div');
 		msg.style.cssText = 'margin-bottom:12px; color:#0E0F0C;';
-		msg.innerHTML = 'We use cookies for anonymous analytics (GA4) and product usage insights, including heatmaps and session replay (Microsoft Clarity). See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#B83A13; text-underline-offset:3px;">Privacy Policy</a>.';
+		msg.innerHTML = 'We use Google Analytics and Microsoft Clarity for analytics. Outside Europe they may start automatically; in Europe they wait for your choice. Reject opts out of both. See our <a href="/privacy" style="color:#0E0F0C; text-decoration:underline; text-decoration-color:#B83A13; text-underline-offset:3px;">Privacy Policy</a>.';
 
 		var row = document.createElement('div');
 		row.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;';
@@ -189,19 +191,26 @@
 		var current = getCookie(COOKIE_NAME);
 		var rejectBtn = makeBtn(reopened && current === 'rejected' ? 'Keep rejected' : 'Reject', false);
 		var acceptBtn = makeBtn(reopened && current === 'accepted' ? 'Keep accepted' : 'Accept', true);
+		if (privacyRequested()) {
+			acceptBtn.disabled = true;
+			msg.textContent = 'Analytics is disabled by your browser privacy preference (Do Not Track or Global Privacy Control).';
+		}
 
 		function close() {
 			if (banner.parentNode) banner.parentNode.removeChild(banner);
 			document.removeEventListener('keydown', onKey);
 		}
-		function accept() { setCookie(COOKIE_NAME, 'accepted'); grantAll(); close(); }
+		function accept() {
+			if (privacyRequested()) return;
+			setCookie(COOKIE_NAME, 'accepted'); grantAll(); close();
+		}
 		function reject() {
-			var wasAccepted = getCookie(COOKIE_NAME) === 'accepted';
+			var tagsRunning = ga4Loaded || clarityLoaded;
 			setCookie(COOKIE_NAME, 'rejected');
 			revoke();
 			close();
 			// Tags already running in this page cannot be unloaded in place.
-			if (wasAccepted) location.reload();
+			if (tagsRunning) location.reload();
 		}
 		function onKey(e) { if (e.key !== 'Escape') return; if (reopened) close(); else reject(); }
 
@@ -220,5 +229,16 @@
 		try { banner.setAttribute('tabindex', '-1'); banner.focus(); } catch (e) {}
 	}
 
-	onReady(function () { showBanner(false); });
+	Promise.resolve().then(function () {
+		return fetch('/api/analytics-policy', { cache: 'no-store', credentials: 'same-origin' });
+	}).then(function (response) {
+		if (!response.ok) throw new Error('Analytics policy unavailable');
+		return response.json();
+	}).then(function (policy) {
+		if (getCookie(COOKIE_NAME) || privacyRequested()) return;
+		if (policy && policy.requireConsent === false) grantAll();
+		else onReady(function () { showBanner(false); });
+	}).catch(function () {
+		if (!getCookie(COOKIE_NAME) && !privacyRequested()) onReady(function () { showBanner(false); });
+	});
 })();

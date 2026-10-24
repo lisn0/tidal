@@ -7,7 +7,7 @@
     "postbuild": "node scripts/generate-llms-full.js && node scripts/check-links.js && node scripts/check-faq-schema.mjs",
     "prebuild": "node scripts/content-gap-analyzer.js",
     "serve": "eleventy --serve",
-    "test": "node scripts/worker-crawlers.test.mjs && node scripts/test-releases.mjs && node scripts/test-contact.mjs"
+    "test": "node --test scripts/analytics-consent.test.mjs && node scripts/worker-crawlers.test.mjs && node scripts/test-releases.mjs && node scripts/test-contact.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6"
