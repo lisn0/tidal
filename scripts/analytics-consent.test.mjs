@@ -29,13 +29,16 @@ test('client-supplied country header cannot override unknown edge location', asy
   assert.deepEqual(await response.json(), { requireConsent: true });
 });
 
-function browser({ policy = { requireConsent: true }, stored, navigator = {}, responseOk = true, failure = false, pending } = {}) {
+function browser({ policy = { requireConsent: true }, stored, navigator = {}, responseOk = true, failure = false, pending, storageFailure = false } = {}) {
   const scripts = [];
   const elements = [];
   const tracks = [];
   const clarityCalls = [];
   const consentStates = [];
+  const zarazSets = [];
+  const localValues = new Map();
   let consentAtInjection = false;
+  let storageAtInjection = null;
   const cookies = new Map(stored ? [['llmcfo_consent', stored]] : []);
   let reloads = 0;
   let requests = 0;
@@ -56,7 +59,12 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
     getElementsByTagName: () => [{ parentNode: { insertBefore(script) {
       scripts.push(script.src);
       consentAtInjection = window.analyticsConsent;
-      window.zaraz = { track: (...args) => tracks.push(args), consent: { setAll: value => consentStates.push(value) } };
+      storageAtInjection = new Map(localValues);
+      window.zaraz = {
+        track: (...args) => tracks.push(args),
+        set: (...args) => zarazSets.push(args),
+        consent: { setAll: value => consentStates.push(value) },
+      };
       if (script.onload) script.onload();
     } } }],
     addEventListener() {}, removeEventListener() {},
@@ -70,7 +78,11 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
       else cookies.set(key, val);
     },
   });
-  const window = { navigator, dispatchEvent() {}, clarity: (...args) => clarityCalls.push(args) };
+  const window = {
+    navigator,
+    localStorage: { setItem(key, value) { if (storageFailure) throw new Error('storage disabled'); localValues.set(key, value); } },
+    dispatchEvent() {}, clarity: (...args) => clarityCalls.push(args),
+  };
   const context = {
     window, document, Event: class {},
     location: { protocol: 'https:', hostname: 'llmcfo.com', reload() { reloads++; } },
@@ -84,7 +96,9 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
     },
   };
   vm.runInNewContext(source, context);
-  return { window, scripts, tracks, clarityCalls, consentStates, cookies, get consentAtInjection() { return consentAtInjection; }, get reloads() { return reloads; }, get requests() { return requests; },
+  return { window, scripts, tracks, clarityCalls, consentStates, zarazSets, localValues, cookies,
+    get storageAtInjection() { return storageAtInjection; }, get consentAtInjection() { return consentAtInjection; },
+    get reloads() { return reloads; }, get requests() { return requests; },
     banner: () => document.getElementById('llmcfo-consent-banner'),
     click(label) {
       const button = elements.find(el => el.textContent === label && el.parentNode?.parentNode?.parentNode);
@@ -100,14 +114,16 @@ test('European visit stays blocked until acceptance; then loads only Zaraz', asy
   await settle();
   assert.deepEqual(b.scripts, []);
   assert.ok(b.banner());
+  assert.equal(b.localValues.size, 0, 'do not persist consent state before a choice');
+  assert.equal(b.window.dataLayer, undefined, 'do not queue consent as ordinary dataLayer event properties');
   b.click('Accept');
   assert.equal(b.scripts.length, 1);
   assert.equal(b.scripts[0], '/cdn-cgi/zaraz/i.js');
   assert.equal(b.consentAtInjection, true, 'Zaraz must see consent before its initial Pageview');
   assert.equal(b.window.analyticsConsent, true);
   assert.equal(b.cookies.get('llmcfo_consent'), 'accepted');
-  const initial = b.window.dataLayer[0].google_consent_default;
-  const granted = b.window.dataLayer[1].google_consent_update;
+  const initial = JSON.parse(b.storageAtInjection.get('_zaraz_google_consent_default'));
+  const granted = JSON.parse(b.storageAtInjection.get('_zaraz_google_consent_update'));
   assert.equal(initial.analytics_storage, 'denied');
   assert.equal(initial.ad_storage, 'denied');
   assert.equal(granted.analytics_storage, 'granted');
@@ -125,8 +141,7 @@ test('known non-European visit loads only Zaraz without banner or stored accepta
   assert.equal(b.banner(), null);
   assert.equal(b.cookies.has('llmcfo_consent'), false);
   assert.equal(b.window.analyticsConsent, true);
-	assert.equal(b.window.dataLayer[1].google_consent_update.analytics_storage, 'granted');
-	assert.equal(b.window.dataLayer[1].google_consent_update.ad_personalization, 'denied');
+	assert.equal(JSON.parse(b.storageAtInjection.get('_zaraz_google_consent_update')).analytics_storage, 'granted');
 	b.window.zaraz.track('test_event', { sample: 'value' });
 	assert.equal(b.tracks[0][0], 'test_event');
 	assert.equal(b.tracks[0][1].sample, 'value');
@@ -137,7 +152,9 @@ test('known non-European visit loads only Zaraz without banner or stored accepta
 	assert.equal(b.reloads, 1, 'withdrawal must unload automatically started tags');
 	assert.ok(b.clarityCalls.some(args => args[0] === 'consentv2' && args[1].analytics_Storage === 'denied' && args[1].ad_Storage === 'denied'));
 	assert.deepEqual(b.consentStates, [false]);
-	assert.equal(b.window.dataLayer.at(-1).google_consent_update.analytics_storage, 'denied');
+	assert.equal(JSON.parse(b.localValues.get('_zaraz_google_consent_update')).analytics_storage, 'denied');
+	assert.equal(b.zarazSets[0][0], 'google_consent_update');
+	assert.equal(b.zarazSets[0][1].ad_storage, 'denied');
 });
 
 for (const stored of ['accepted', 'rejected']) {
@@ -146,6 +163,7 @@ for (const stored of ['accepted', 'rejected']) {
     await settle();
     assert.equal(b.requests, 0);
     assert.equal(b.scripts.length, stored === 'accepted' ? 1 : 0);
+    if (stored === 'rejected') assert.equal(b.localValues.size, 0);
   });
 }
 
@@ -168,9 +186,17 @@ for (const navigator of [{ globalPrivacyControl: true }, { doNotTrack: '1' }]) {
       b.window.cookieSettings();
       b.click(stored === 'accepted' ? 'Keep accepted' : 'Accept');
       assert.deepEqual(b.scripts, [], 'settings cannot override browser privacy preference');
+      assert.equal(b.localValues.size, 0, 'privacy signals suppress local consent writes');
     }
   });
 }
+
+test('storage exceptions do not block allowed Zaraz loading', async () => {
+  const b = browser({ policy: { requireConsent: false }, storageFailure: true });
+  await settle();
+  assert.equal(b.scripts.length, 1);
+  assert.equal(b.window.analyticsConsent, true);
+});
 
 test('rejecting while location is pending prevents later automatic loading', async () => {
   let release;

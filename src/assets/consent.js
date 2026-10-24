@@ -7,10 +7,15 @@
 
 	// 1. Queue consent for Zaraz's Google Consent Mode compatibility.
 	window.analyticsConsent = false;
-	window.dataLayer = window.dataLayer || [];
 	var deniedGoogleConsent = {
 		ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
 	};
+	var grantedAnalyticsConsent = {
+		ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted'
+	};
+	function persistConsentUpdate(state) {
+		try { window.localStorage.setItem('_zaraz_google_consent_update', JSON.stringify(state)); } catch (e) {}
+	}
 
 	// 2. Zaraz manages GA4 and Clarity. This is the only analytics script this
 	// site injects, and only after the regional policy allows analytics.
@@ -21,10 +26,8 @@
 		// Zaraz evaluates its Pageview actions during script initialization; make
 		// the user's decision visible before i.js processes the initial event.
 		window.analyticsConsent = true;
-		window.dataLayer.push({ google_consent_default: deniedGoogleConsent });
-		window.dataLayer.push({ google_consent_update: {
-			ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted'
-		} });
+		try { window.localStorage.setItem('_zaraz_google_consent_default', JSON.stringify(deniedGoogleConsent)); } catch (e) {}
+		persistConsentUpdate(grantedAnalyticsConsent);
 		var script = document.createElement('script');
 		script.src = '/cdn-cgi/zaraz/i.js';
 		script.referrerPolicy = 'origin';
@@ -71,7 +74,10 @@
 	//     need consent revoked and a reload to unload them.
 	function revoke() {
 		window.analyticsConsent = false;
-		if (zarazStarted) window.dataLayer.push({ google_consent_update: deniedGoogleConsent });
+		persistConsentUpdate(deniedGoogleConsent);
+		if (window.zaraz && typeof window.zaraz.set === 'function') {
+			try { window.zaraz.set('google_consent_update', deniedGoogleConsent); } catch (e) {}
+		}
 		if (window.clarity) window.clarity('consentv2', { analytics_Storage: 'denied', ad_Storage: 'denied' });
 		if (window.zaraz && window.zaraz.consent && typeof window.zaraz.consent.setAll === 'function') {
 			window.zaraz.consent.setAll(false);
