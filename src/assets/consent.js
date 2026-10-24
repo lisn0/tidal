@@ -14,20 +14,23 @@
 		ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted'
 	};
 	function persistConsentUpdate(state) {
-		try { window.localStorage.setItem('_zaraz_google_consent_update', JSON.stringify(state)); } catch (e) {}
+		try {
+			window.localStorage.setItem('_zaraz_google_consent_update', JSON.stringify(state));
+			return true;
+		} catch (e) { return false; }
 	}
 
 	// 2. Zaraz manages GA4 and Clarity. This is the only analytics script this
 	// site injects, and only after the regional policy allows analytics.
 	var zarazStarted = false;
 	function loadZaraz() {
-		if (zarazStarted) return;
+		if (zarazStarted) return true;
+		try { window.localStorage.setItem('_zaraz_google_consent_default', JSON.stringify(deniedGoogleConsent)); } catch (e) { return false; }
+		if (!persistConsentUpdate(grantedAnalyticsConsent)) return false;
 		zarazStarted = true;
 		// Zaraz evaluates its Pageview actions during script initialization; make
 		// the user's decision visible before i.js processes the initial event.
 		window.analyticsConsent = true;
-		try { window.localStorage.setItem('_zaraz_google_consent_default', JSON.stringify(deniedGoogleConsent)); } catch (e) {}
-		persistConsentUpdate(grantedAnalyticsConsent);
 		var script = document.createElement('script');
 		script.src = '/cdn-cgi/zaraz/i.js';
 		script.referrerPolicy = 'origin';
@@ -42,6 +45,7 @@
 		script.onerror = function () { window.analyticsConsent = false; };
 		var first = document.getElementsByTagName('script')[0];
 		first.parentNode.insertBefore(script, first);
+		return true;
 	}
 
 	// 3. Cookie helpers.

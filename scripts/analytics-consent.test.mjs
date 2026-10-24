@@ -80,7 +80,7 @@ function browser({ policy = { requireConsent: true }, stored, navigator = {}, re
   });
   const window = {
     navigator,
-    localStorage: { setItem(key, value) { if (storageFailure) throw new Error('storage disabled'); localValues.set(key, value); } },
+    localStorage: { setItem(key, value) { if (storageFailure === true || storageFailure === key) throw new Error('storage disabled'); localValues.set(key, value); } },
     dispatchEvent() {}, clarity: (...args) => clarityCalls.push(args),
   };
   const context = {
@@ -191,12 +191,14 @@ for (const navigator of [{ globalPrivacyControl: true }, { doNotTrack: '1' }]) {
   });
 }
 
-test('storage exceptions do not block allowed Zaraz loading', async () => {
-  const b = browser({ policy: { requireConsent: false }, storageFailure: true });
-  await settle();
-  assert.equal(b.scripts.length, 1);
-  assert.equal(b.window.analyticsConsent, true);
-});
+for (const storageFailure of ['_zaraz_google_consent_default', '_zaraz_google_consent_update']) {
+  test(`storage failure for ${storageFailure} keeps Zaraz disabled`, async () => {
+    const b = browser({ policy: { requireConsent: false }, storageFailure });
+    await settle();
+    assert.equal(b.scripts.length, 0);
+    assert.equal(b.window.analyticsConsent, false);
+  });
+}
 
 test('rejecting while location is pending prevents later automatic loading', async () => {
   let release;
