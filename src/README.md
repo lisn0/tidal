@@ -98,7 +98,7 @@ Gotchas the build catches for you:
   (`git log -1 --format=%cs -- <file>`). Sitemap `lastmod` and the injected
   WebPage schema read it. There is no mtime fallback, so a page without one
   has no `<lastmod>`.
-- A translated article page with fewer than `THIN_WORD_THRESHOLD` (300) reader-visible words (body + FAQ; ja/zh count CJK chars/2) is thin (`lib/thin-pages.js`): it ships `noindex, follow` and is left out of the sitemap, `llms-full.txt` and every hreflang cluster, but stays live and linked from the hubs and language switcher. Computed at build time, so a longer translation indexes itself.
+- A translated article page with fewer than `THIN_WORD_THRESHOLD` (300) reader-visible words in `<main>` (heading, body, FAQ, related, callout; ja/zh count CJK chars/2) is thin (`lib/thin-pages.js`): it ships `noindex, follow` and is left out of the sitemap, `llms-full.txt` and every hreflang cluster, but stays live and linked from the hubs and language switcher. Computed at build time, so a longer translation indexes itself.
 - Translated articles that link `/research/x` are rewritten to `/{lang}/research/x`
   at build time when that locale has an `x` twin.
 
