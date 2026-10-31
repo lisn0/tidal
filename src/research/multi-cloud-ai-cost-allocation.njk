@@ -30,19 +30,19 @@ blurb: "- normalizing token cost across providers, tagging strategy, and the rec
   <p>The friction is highest when:</p>
   <ul>
     <li><strong>Pricing changes mid-month.</strong> Bedrock dropped Claude prices 10% on July 1. Your old forecast is wrong. Did traffic shift to cheaper endpoints, or did pricing actually help?</li>
-    <li><strong>Data gravity pulls toward one provider but cost pulls toward another.</strong> BigQuery data is in Google Cloud ; Vertex uses Gemini. But Bedrock's Claude often outperforms on the task. Do you move data, stay on Bedrock, or replicate to both clouds?</li>
+    <li><strong>Data gravity pulls toward one provider but cost pulls toward another.</strong> BigQuery data is in Google Cloud — Vertex uses Gemini. But Bedrock's Claude often outperforms on the task. Do you move data, stay on Bedrock, or replicate to both clouds?</li>
     <li><strong>Batch jobs and on-demand routes have different economics.</strong> A 100-day job on Bedrock Batch costs half the on-demand rate. Azure OpenAI Flex costs 30% off-peak. But Flex has latency SLAs, so some traffic can't use it. Measuring the true cost for "did batch routing save us money" requires linking cost to execution mode, which your telemetry schema may not capture.</li>
-    <li><strong>List price is not final price.</strong> AWS committed spend discounts are common ; Azure has volume-based tiers (higher volume = better per-token rate) ; Vertex and Bedrock rarely offer hidden discounts. Your "true" per-token cost for GPT-4 on Azure may be 20% lower than list price, but you'd only know that by auditing your Azure bill.</li>
+    <li><strong>List price is not final price.</strong> AWS committed spend discounts are common — Azure has volume-based tiers (higher volume = better per-token rate) — Vertex and Bedrock rarely offer hidden discounts. Your "true" per-token cost for GPT-4 on Azure may be 20% lower than list price, but you'd only know that by auditing your Azure bill.</li>
   </ul>
 
   <h2>How to normalize costs across providers</h2>
   <table class="kv">
     <thead><tr><th scope="col">Provider</th><th scope="col">Cost unit</th><th scope="col">Normalization strategy</th></tr></thead>
     <tbody>
-      <tr><td>Bedrock</td><td>Tokens (input/output)</td><td>Direct ; use Bedrock's reported token counts.</td></tr>
+      <tr><td>Bedrock</td><td>Tokens (input/output)</td><td>Direct — use Bedrock's reported token counts.</td></tr>
       <tr><td>Azure OpenAI</td><td>API calls + token tiers</td><td>Pull from usage logs, apply per-token rates from billing portal.</td></tr>
-      <tr><td>Vertex</td><td>"1K predictions"</td><td>Convert to approximate token count via model card ; accept ~10% error.</td></tr>
-      <tr><td>Self-hosted GPU</td><td>GPU-hours (amortized)</td><td>Cost = (GPU $/hour) × hours ; allocate to requests by throughput.</td></tr>
+      <tr><td>Vertex</td><td>"1K predictions"</td><td>Convert to approximate token count via model card — accept ~10% error.</td></tr>
+      <tr><td>Self-hosted GPU</td><td>GPU-hours (amortized)</td><td>Cost = (GPU $/hour) × hours — allocate to requests by throughput.</td></tr>
     </tbody>
   </table>
   <p>The fastest path: ingest raw spend from each provider monthly, map each transaction to a model + token volume, compute effective $/1M input tokens and $/1M output tokens for each, store in a central fact table keyed by (provider, model, month). Then your routing logic can compare `Bedrock Claude Sonnet 5: $2.00 / 1M input` to `Azure GPT-5.4: $2.50 / 1M input` and pick the cheaper path for non-sensitive workloads.</p>
@@ -54,13 +54,13 @@ blurb: "- normalizing token cost across providers, tagging strategy, and the rec
     <li><strong>Which provider handled it.</strong> Tag: `ai_provider` = "bedrock" | "azure" | "vertex" | "self_hosted". Required for cost allocation.</li>
     <li><strong>Which model and model variant.</strong> Tag: `ai_model` = "claude-3.5-sonnet", `ai_model_size` = "large", `ai_instance` = "self_hosted" | "api". Used for cost trending and routing analysis.</li>
   </ul>
-  <p>Optional tags that unlock deeper analysis: `batch_mode` (on-demand vs batch vs flex), `latency_slo` (milliseconds), `fallback_attempts` (how many times did routing retry), `cost_bucket` (cheap vs premium). If you omit these, you can still do showback ; if you include them, you can measure whether batch routing actually saved money or just moved cost to a different line item.</p>
+  <p>Optional tags that unlock deeper analysis: `batch_mode` (on-demand vs batch vs flex), `latency_slo` (milliseconds), `fallback_attempts` (how many times did routing retry), `cost_bucket` (cheap vs premium). If you omit these, you can still do showback — if you include them, you can measure whether batch routing actually saved money or just moved cost to a different line item.</p>
 
   <h2>Reconciliation and variance analysis</h2>
   <p>Every month, your telemetry should predict an AI bill within 5–10%. If it's off, investigate before the bill arrives. Common culprits:</p>
   <ul>
     <li><strong>Gateway outages.</strong> Traffic spilled over to fallback endpoints (probably more expensive). Check logs for circuit-breaker activations.</li>
-    <li><strong>Model version drift.</strong> Azure or Bedrock rolled out a new model or variant, and older code paths still reference the old name. Your telemetry tags the old model ; the bill charges the new one.</li>
+    <li><strong>Model version drift.</strong> Azure or Bedrock rolled out a new model or variant, and older code paths still reference the old name. Your telemetry tags the old model — the bill charges the new one.</li>
     <li><strong>Batch job runs that didn't complete.</strong> A Bedrock Batch job crashed mid-way. AWS still charged 30% of the submitted tokens. Your event stream never saw the completion, so your forecast is low.</li>
     <li><strong>Egress and data transfer.</strong> Moving data across AWS / Azure / Google Cloud regions for replication or model serving costs money outside the per-token API charge. Most teams forget to include this until the bill lands.</li>
   </ul>

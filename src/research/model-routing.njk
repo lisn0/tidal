@@ -22,7 +22,7 @@ blurb: ""
   <p class="updated">25 April 2026</p>
   <p class="byline">By the LLM CFO team</p>
 
-  <p class="lede">Most production traffic doesn't need the frontier model. Routing easy queries to a smaller/cheaper model and hard queries to the frontier model is the single highest-leverage optimization in the playbook ; typically 30–50% reduction with no quality regression, when you do it right. Here's how we do it.</p>
+  <p class="lede">Most production traffic doesn't need the frontier model. Routing easy queries to a smaller/cheaper model and hard queries to the frontier model is the single highest-leverage optimization in the playbook — typically 30–50% reduction with no quality regression, when you do it right. Here's how we do it.</p>
 
   <h2>The two routing patterns that actually work</h2>
 
@@ -32,7 +32,7 @@ blurb: ""
 
   <h3>2. Cascade with confidence</h3>
   <p>Cheap model attempts the answer. If its self-reported confidence (or a verifier check) is below threshold, escalate to the frontier model. Pay the cheap-model token cost twice for ~10–20% of traffic; pay the frontier-model cost on a fraction of overall traffic.</p>
-  <p>Works well when the cheap model is right most of the time and confidence is well-calibrated. Don't trust raw `logprobs` as confidence on aligned chat models ; train or distill a verifier.</p>
+  <p>Works well when the cheap model is right most of the time and confidence is well-calibrated. Don't trust raw `logprobs` as confidence on aligned chat models — train or distill a verifier.</p>
 
   <h2>Patterns that don't work</h2>
   <ul>
@@ -45,7 +45,7 @@ blurb: ""
   <p>Every router ships with a 7-day A/B against the production baseline. Quality SLOs are agreed per endpoint:</p>
   <ul>
     <li><strong>LLM-as-judge</strong> on a held-out eval set, scored against the frontier-model output as reference.</li>
-    <li><strong>Production proxies</strong> ; thumbs-up rate, conversation length, escalation rate, downstream task completion.</li>
+    <li><strong>Production proxies</strong> — thumbs-up rate, conversation length, escalation rate, downstream task completion.</li>
     <li><strong>Human spot-checks</strong> on 50–200 sampled responses per week.</li>
   </ul>
   <p>If any SLO degrades meaningfully, the router auto-rolls back. There's no shipping a router without a rollback path.</p>

@@ -45,11 +45,11 @@ blurb: "- trimming and compressing context cuts input tokens 50–70% on long-ru
   <table class="kv">
     <thead><tr><th scope="col">Strategy</th><th scope="col">Cost savings</th><th scope="col">Risk</th></tr></thead>
     <tbody>
-      <tr><td>Drop turns older than N steps</td><td>20–40%</td><td>Loses history ; good for simple chats, bad for reasoning.</td></tr>
-      <tr><td>Summarize old turns into 1–2 sentences</td><td>40–60%</td><td>Lossy ; depends on summarization quality.</td></tr>
-      <tr><td>Extract facts into structured memory (JSON)</td><td>50–70%</td><td>Requires schema design ; hallucination risk if memory is incomplete.</td></tr>
-      <tr><td>Retrieval instead of full context</td><td>60–80%</td><td>High latency ; misses context if retrieval query is weak.</td></tr>
-      <tr><td>Prompt caching (OpenAI / Anthropic)</td><td>90% on cached tokens</td><td>Only helps if context repeats ; cache invalidation is a new cost.</td></tr>
+      <tr><td>Drop turns older than N steps</td><td>20–40%</td><td>Loses history — good for simple chats, bad for reasoning.</td></tr>
+      <tr><td>Summarize old turns into 1–2 sentences</td><td>40–60%</td><td>Lossy — depends on summarization quality.</td></tr>
+      <tr><td>Extract facts into structured memory (JSON)</td><td>50–70%</td><td>Requires schema design — hallucination risk if memory is incomplete.</td></tr>
+      <tr><td>Retrieval instead of full context</td><td>60–80%</td><td>High latency — misses context if retrieval query is weak.</td></tr>
+      <tr><td>Prompt caching (OpenAI / Anthropic)</td><td>90% on cached tokens</td><td>Only helps if context repeats — cache invalidation is a new cost.</td></tr>
     </tbody>
   </table>
 
