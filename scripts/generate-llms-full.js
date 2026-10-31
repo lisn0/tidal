@@ -42,7 +42,7 @@ for (const u of urls) {
   pages.push(`# ${title}\nURL: ${u}\n\n${textOf(html)}\n\n---\n\n`);
 }
 
-const out = `# LLM CFO — Complete Executive Guides & Financial Models (llms-full.txt)\n\nContent-Signal: ai-train=no, search=yes, ai-input=yes\n\n` +
+const out = `# LLM CFO — Complete Executive Guides & Financial Models (llms-full.txt)\n\n> Full text of every public llmcfo.com page: managed AI FinOps and LLM cost optimization, with vendor-neutral research on cutting production LLM spend.\n\nContent-Signal: ai-train=no, search=yes, ai-input=yes\n\n` +
   `This document contains the complete text of all ${pages.length} public pages on llmcfo.com.\n\n` +
   "=".repeat(80) + "\n\n" + pages.join("");
 

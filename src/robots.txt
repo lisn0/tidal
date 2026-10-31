@@ -4,6 +4,8 @@ Disallow: /cdn-cgi/
 # Content Signals (contentsignals.org): how our content may be used by AI.
 # Bing's robots.txt linter flags this as unknown; per RFC 9309 crawlers ignore
 # directives they do not recognize, so it is a linter warning, not a crawl error.
+# A crawler obeys only the one group that names it, so the signal is repeated in
+# every named group below; it is not inherited from the * group.
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Sitemap
@@ -12,53 +14,66 @@ Sitemap: https://llmcfo.com/sitemap.xml
 # AI crawlers — explicitly allowed (we want indexing)
 User-agent: GPTBot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 User-agent: ClaudeBot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 User-agent: PerplexityBot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Google Gemini / Vertex training + grounding ONLY. Google states this does NOT
 # affect Google Search, AI Overviews, or AI Mode — those come from Googlebot.
 # Do not read a block here as "removes us from Search answers".
 User-agent: Google-Extended
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 User-agent: OAI-SearchBot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # ADVISORY ONLY — OpenAI states robots.txt may not apply to ChatGPT-User because
 # the fetch is user-initiated (developers.openai.com/api/docs/bots). Blocking it
 # requires the published IPs at openai.com/chatgpt-user.json.
 User-agent: ChatGPT-User
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Anthropic — live retrieval & search (citations)
 User-agent: Claude-User
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 User-agent: Claude-SearchBot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # ADVISORY ONLY — Perplexity says Perplexity-User generally ignores robots.txt
 # for the same reason. The real control is perplexity.ai/perplexity-ips.json.
 User-agent: Perplexity-User
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Apple Intelligence / Siri answers
 User-agent: Applebot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Amazon (Alexa / Rufus answers)
 User-agent: Amazonbot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Meta AI
 User-agent: Meta-ExternalAgent
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 # Mistral (Le Chat retrieval)
 User-agent: MistralAI-User
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 
