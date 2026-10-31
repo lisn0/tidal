@@ -84,6 +84,20 @@ for (const [self, set] of alts) {
   }
 }
 
+// Thin translations (lib/thin-pages.js) ship noindex, so nothing may advertise
+// them: no hreflang cluster lists one and the sitemap omits it. Reciprocity above
+// already holds because a noindex page emits no alternates and none points at it;
+// this catches a regression where only one side of that rule slips.
+const noindexSelf = new Set();
+for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
+  const s = fs.readFileSync(f, "utf8");
+  if (/<meta name="robots" content="[^"]*noindex/i.test(s)) noindexSelf.add(canonicalOf(s) || "/" + path.relative(site, f));
+}
+for (const [self, set] of alts) {
+  if (noindexSelf.has(self)) errors.push(`noindex page ${self} declares hreflang alternates`);
+  for (const other of set) if (noindexSelf.has(other)) errors.push(`hreflang: ${self} -> ${other} (target is noindex)`);
+}
+
 // Descriptions over ~165 chars get truncated in results. Same reason as the
 // title check: hand-written per-page descriptions drift over one article at a
 // time, so fail the build instead of discovering it in Webmaster Tools.
@@ -176,6 +190,10 @@ for (const p of sitemapPaths) {
   if (p === "/") continue;
   if (linked.has(p) || linked.has(p + ".html") || linked.has(p.replace(/\.html$/, ""))) continue;
   errors.push(`orphan: ${p} is in the sitemap but no crawlable page links to it`);
+}
+
+for (const p of sitemapPaths) {
+  if ([...noindexSelf].some((c) => c.replace(/^https?:\/\/[^/]+/, "") === p)) errors.push(`sitemap lists noindex page ${p}`);
 }
 
 if (errors.length) {

@@ -1,6 +1,7 @@
 // Eleventy config for llmcfo.com.
 // Shared layouts rebuild HTML pages while Cloudflare edge/static files pass through verbatim.
 const fs = require("fs");
+const { isThin } = require("./lib/thin-pages.js");
 
 const SITE_URL = "https://llmcfo.com";
 // Pages that exist but must never be advertised. Anything else opts out with
@@ -78,7 +79,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("sitemap", (api) => {
     const seen = new Set();
     const fromData = articlePages
-      .filter((p) => !skipFromSitemap("/" + p.permalink))
+      .filter((p) => !skipFromSitemap("/" + p.permalink) && !p.thin)
       .map((p) => ({
         loc: SITE_URL + cleanUrl("/" + p.permalink),
         lastmod: articles[p.key].dateModified || articles[p.key].datePublished,
@@ -181,6 +182,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("localizeResearchLinks", (html, lang) =>
     (html || "").replace(/(href=)(["'])(\/research\/[^"']*)\2/g, (_m, attr, quote, href) => attr + quote + localizeHref(href, lang) + quote)
   );
+
+  // True when this locale of the article is a thin translation (lib/thin-pages.js).
+  eleventyConfig.addFilter("isThinPage", (article, lang) => isThin(article, lang));
 
   // Return the keys of an object as an array.
   eleventyConfig.addFilter("keys", (obj) => Object.keys(obj || {}));

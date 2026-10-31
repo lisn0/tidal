@@ -20,9 +20,14 @@
 {#- Each locale has its own research hub (src/research-locale.njk); English uses /research. -#}
 {%- set researchHref = ('/' + lang + '/research') if lang != 'en' else '/research' -%}
 
+{#- Thin translations (lib/thin-pages.js) are noindex and sit outside every hreflang
+    cluster: they list none, and no other page lists them. They stay live, linked
+    from the hubs and the language switcher, and self-canonical. -#}
+{%- set isThin = article | isThinPage(lang) -%}
 {%- set hreflangs = [] -%}
 {%- for code in article.languages | keys -%}
-  {%- if code == 'en' -%}
+  {%- if article | isThinPage(code) -%}
+  {%- elif code == 'en' -%}
     {%- set _ = hreflangs.push({ lang: code, href: siteUrl + '/research/' + enSlug }) -%}
   {%- else -%}
     {%- set _ = hreflangs.push({ lang: code, href: siteUrl + '/' + code + '/research/' + article.slug }) -%}
@@ -43,7 +48,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{{ locale.titleCore | safe }} &middot; LLM CFO</title>
 <meta name="description" content="{{ locale.description }}" />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="robots" content="{{ 'noindex, follow' if isThin else 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}" />
 {%- if article.agentMode -%}
 <meta name="content-signal" content="search=yes, ai-input=yes, ai-train=no" />
 {%- endif -%}
@@ -63,9 +68,11 @@
 <meta name="twitter:title" content="{{ locale.titleCore or locale.title }}" />
 <meta name="twitter:description" content="{{ locale.description }}" />
 <meta name="twitter:image" content="{{ siteUrl }}/og.png" />
+{%- if not isThin -%}
 {%- for alt in hreflangs -%}
 <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.href }}" />
 {%- endfor -%}
+{%- endif -%}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"TechArticle","headline":{{ (locale.titleCore or locale.title) | dump | safe }},"description":"{{ locale.description | safe }}","url":"{{ canonicalUrl }}","mainEntityOfPage":"{{ canonicalUrl }}","inLanguage":"{{ lang }}","datePublished":"{{ article.datePublished }}","dateModified":"{{ article.dateModified }}","image":"{{ siteUrl }}/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
