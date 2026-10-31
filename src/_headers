@@ -59,5 +59,16 @@
   Cache-Control: public, max-age=3600
   Content-Type: application/json; charset=utf-8
 
+# Unversioned assets (page.css, consent.js, ...) keep one day fresh and refresh in
+# the background for a week; before this they revalidated on every request.
+# Workers merges the headers of every matching rule, so the fonts rule below has
+# to come after this one and detach Cache-Control to keep only its immutable value.
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/og.png
+  Cache-Control: public, max-age=86400
+
 /assets/fonts/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
