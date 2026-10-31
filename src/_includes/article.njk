@@ -155,7 +155,8 @@ A: {{ q.answer }}
 {%- endif -%}
 
 {#- The EN body ends with a plain-text "Related" list; the linked one below replaces it. -#}
-{%- if locale.related.length > 0 -%}{{ locale.body | replace(r/<h2>Related<\/h2><ul>(?:(?!<\/ul>)[\s\S])*<\/ul>\s*$/, '') | safe }}{%- else -%}{{ locale.body | safe }}{%- endif -%}
+{#- Body links to /research/x are rewritten to /{lang}/research/x when that locale has a translated twin. -#}
+{%- if locale.related.length > 0 -%}{{ locale.body | replace(r/<h2>Related<\/h2><ul>(?:(?!<\/ul>)[\s\S])*<\/ul>\s*$/, '') | localizeResearchLinks(lang) | safe }}{%- else -%}{{ locale.body | localizeResearchLinks(lang) | safe }}{%- endif -%}
 
 {#- The FAQPage JSON-LD above is built from these same entries, so every question
     the schema advertises is also on the page (scripts/check-faq-schema.mjs). -#}
@@ -173,7 +174,7 @@ A: {{ q.answer }}
 <h2>{{ ui.related }}</h2>
 <ul>
 {%- for link in locale.related -%}
-  <li><a href="{{ link.slug }}">{{ link.label }}</a></li>
+  <li><a href="{{ link.slug | localizeHref(lang) }}">{{ link.label }}</a></li>
 {%- endfor -%}
 </ul>
 {%- endif -%}

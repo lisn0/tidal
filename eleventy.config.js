@@ -167,6 +167,21 @@ module.exports = function (eleventyConfig) {
     return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   });
 
+  // Localized articles link to /research/x, the English page. Point those at
+  // /{lang}/research/x when that locale has a translated twin (the data decides,
+  // so no JSON is edited and a link upgrades itself when a translation lands).
+  // Links to English-only pages such as src/research/*.njk are left alone.
+  const localesBySlug = new Map(Object.entries(articles).map(([key, a]) => [a.slug || key, new Set(Object.keys(a.languages || {}))]));
+  const localizeHref = (href, lang) => {
+    if (!lang || lang === "en" || typeof href !== "string") return href;
+    const m = /^\/research\/([a-z0-9-]+)(?=$|[#?])/.exec(href);
+    return m && localesBySlug.get(m[1])?.has(lang) ? "/" + lang + href : href;
+  };
+  eleventyConfig.addFilter("localizeHref", localizeHref);
+  eleventyConfig.addFilter("localizeResearchLinks", (html, lang) =>
+    (html || "").replace(/(href=)(["'])(\/research\/[^"']*)\2/g, (_m, attr, quote, href) => attr + quote + localizeHref(href, lang) + quote)
+  );
+
   // Return the keys of an object as an array.
   eleventyConfig.addFilter("keys", (obj) => Object.keys(obj || {}));
 
