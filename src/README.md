@@ -88,6 +88,19 @@ Gotchas the build catches for you:
   curated sections — those only group `src/research/*.njk` files that declare a
   `section:`.
 
+- Every locale that has a translated article gets `/{locale}/research` from
+  `src/research-locale.njk` (data in `src/_data/localeHubs.js`, strings in
+  `articleUi.js` `hubLabels`). `/{locale}` and `/{locale}/` 301 there from
+  `_redirects`. `src/research.njk` lists the hreflang cluster by hand: add the
+  new locale there too (check-links fails on a one-way cluster).
+- Utility pages (`src/*.njk`, `src/*.html` without article data) declare
+  `dateModified: "YYYY-MM-DD"` in frontmatter; set it to the last real edit
+  (`git log -1 --format=%cs -- <file>`). Sitemap `lastmod` and the injected
+  WebPage schema read it. There is no mtime fallback, so a page without one
+  has no `<lastmod>`.
+- Translated articles that link `/research/x` are rewritten to `/{lang}/research/x`
+  at build time when that locale has an `x` twin.
+
 `npm run build` fails on any broken internal link and prints title/description
 length warnings at the end. The pre-commit hook runs it too.
 
@@ -170,4 +183,5 @@ Two limits worth keeping in mind:
 
 - [x] `og.png` — 1200×630 social card (referenced by OG/Twitter meta)
 - [x] `favicon.ico` / `favicon.svg`
-- [ ] `logo.png` — referenced by `Organization` JSON-LD, still missing
+- [x] `apple-touch-icon.png` — 180×180, used as the `Organization` JSON-LD `logo`
+      (a dedicated `logo.png` does not exist)
