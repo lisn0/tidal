@@ -162,7 +162,11 @@ for (const p of sitemapPaths) {
     let u = m[1];
     if (/^https?:/i.test(u)) { if (!u.includes(DOMAIN)) continue; u = new URL(u).pathname; }
     else if (!u.startsWith("/")) continue;
-    linked.add(u.replace(/\/$/, "") || "/");
+    u = u.replace(/\/$/, "") || "/";
+    // A page's own language switcher and breadcrumb link to itself. That is not
+    // an inbound link: it is how a page nothing else links to passed this check.
+    if (u === p || u === p + ".html") continue;
+    linked.add(u);
   }
 }
 for (const p of sitemapPaths) {

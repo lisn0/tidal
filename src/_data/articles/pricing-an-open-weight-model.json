@@ -40,6 +40,10 @@
           "label": "Cost per request as a KPI"
         },
         {
+          "slug": "/research/mimo-v2-6-open-weights-price-ceiling",
+          "label": "MiMo v2.6 and the open-weights price ceiling"
+        },
+        {
           "slug": "/research/provider-arbitrage",
           "label": "Provider arbitrage"
         }

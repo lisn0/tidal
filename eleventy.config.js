@@ -9,7 +9,8 @@ const SITE_URL = "https://llmcfo.com";
 // belong in the sitemap. Listing them by hand missed /es/research/…-v2, which
 // then shipped as the only Spanish URL Google was told about.
 const SITEMAP_SKIP = new Set(["/404.html"]);
-const skipFromSitemap = (url) => SITEMAP_SKIP.has(url) || /-v2(\.html)?$/.test(url);
+const isV2Variant = (url) => /-v2(\.html)?$/.test(url);
+const skipFromSitemap = (url) => SITEMAP_SKIP.has(url) || isV2Variant(url);
 
 const cleanUrl = (url) => url.replace(/index\.html$/, "").replace(/\.html$/, "");
 
@@ -97,7 +98,9 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("research", (api) => {
     const list = api
       .getFilteredByGlob("src/research/*.njk")
-      .filter((item) => !item.url.includes("-v2"))
+      // End-anchored: a bare includes("-v2") also dropped
+      // mimo-v2-6-open-weights-price-ceiling, so it never reached this list.
+      .filter((item) => !isV2Variant(item.url))
       .map((item) => ({
         url: cleanUrl(item.url),
         title: item.data.titleCore || item.data.title,
@@ -105,7 +108,7 @@ module.exports = function (eleventyConfig) {
     // Data-driven articles (src/articles.njk) are paginated, so getAll() only
     // ever sees their first page — merge them in from the same data file.
     for (const p of articlePages) {
-      if (p.lang !== "en" || p.permalink.includes("-v2")) continue;
+      if (p.lang !== "en" || isV2Variant(p.permalink)) continue;
       const url = cleanUrl("/" + p.permalink);
       if (list.some((a) => a.url === url)) continue;
       list.push({ url, title: articles[p.key].languages.en.titleCore });
