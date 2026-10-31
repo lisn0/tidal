@@ -9,8 +9,8 @@
   "dateModified": "2026-08-27",
   "languages": {
     "en": {
-      "title": "The three budgets every autonomous agent needs",
-      "titleCore": "The three budgets every autonomous agent needs",
+      "title": "Three agent budgets: the finance and governance model",
+      "titleCore": "Three agent budgets: the finance and governance model",
       "description": "The finance and governance model for request, workflow, and daily budgets on autonomous AI agents.",
       "body": "<p>An autonomous agent should not have one monthly budget and unlimited freedom inside it. It needs three nested controls: a request budget, a workflow budget, and a daily budget. Together they define what one attempt, one business outcome, and one operating period are allowed to cost.</p><h2>Request budget</h2><p>This is the limit for one model attempt or tool action. It protects against oversized context, runaway output, and an unexpectedly expensive capability. Finance does not set every token ceiling, but it should require the control and its owner in the service design.</p><h2>Workflow budget</h2><p>This is the total amount an agent may spend completing one user or business task, including retries, fallbacks, tools, and delegated agents. It is the most important budget for unit economics because it follows the outcome rather than an individual API call.</p><h2>Daily budget</h2><p>This is the aggregate limit for a team, tenant, product, or service account. It controls blast radius and forces prioritization when demand exceeds plan. Near the limit, the system can defer background work or move eligible tasks to cheaper capacity.</p><h2>Put ownership in the operating model</h2><p>Engineering owns enforcement, product owns the value and quality threshold, and finance owns the policy and reporting cadence. A denial should be visible, explain which limit fired, and create a resumable or escalated state. Quietly dropping work produces a hidden service failure.</p><h2>Report the right exception</h2><p>At month-end, review budget reservations, actual spend, denials, successful outcomes, and quality impact. The question is not whether every agent stayed under budget; it is whether the budget was aligned with the value and risk of the work it permitted.</p><p>Three budgets turn autonomous spending from an open-ended technical possibility into a governed operating decision.</p><h2>Related</h2><ul><li>AI agent spending limits</li><li>Agent spend guardrails</li><li>AI governance framework</li></ul>",
       "faq": [
@@ -43,8 +43,8 @@
       ]
     },
     "es": {
-      "title": "Los tres presupuestos que necesita todo agente autónomo",
-      "titleCore": "Los tres presupuestos que necesita todo agente autónomo",
+      "title": "Tres presupuestos de agentes: modelo de finanzas y gobierno",
+      "titleCore": "Tres presupuestos de agentes: modelo de finanzas y gobierno",
       "description": "El modelo financiero y de gobierno para presupuestos de solicitud, flujo y día.",
       "body": "<p>Un agente autónomo necesita tres controles anidados: presupuesto de solicitud, de flujo y diario. Definen cuánto puede costar un intento, un resultado y un periodo.</p><h2>Solicitud</h2><p>Limita una llamada o herramienta y protege contra contexto, salida o capacidades caras.</p><h2>Flujo</h2><p>Limita una tarea completa con reintentos, herramientas, fallbacks y subagentes. Es la medida más útil para la economía de unidad.</p><h2>Diario</h2><p>Limita el gasto agregado de equipo, cliente, producto o cuenta y controla el radio de impacto.</p><h2>Responsabilidad</h2><p>Ingeniería aplica los límites, producto define valor y calidad, y finanzas define política y revisión. Una denegación debe ser explícita y recuperable.</p><p>Tres presupuestos convierten el gasto autónomo en una decisión operable.</p>",
       "faq": [
@@ -61,8 +61,8 @@
       ]
     },
     "fr": {
-      "title": "Les trois budgets dont tout agent autonome a besoin",
-      "titleCore": "Les trois budgets dont tout agent autonome a besoin",
+      "title": "Trois budgets d’agent : le modèle finance et gouvernance",
+      "titleCore": "Trois budgets d’agent : le modèle finance et gouvernance",
       "description": "Le modèle financier et de gouvernance des budgets de requête, de flux et journaliers.",
       "body": "<p>Un agent autonome a besoin de trois contrôles imbriqués: budget de requête, de flux et journalier. Ils bornent une tentative, un résultat et une période.</p><h2>Requête</h2><p>Il limite un appel modèle ou outil et protège contre un contexte ou une capacité coûteuse.</p><h2>Flux</h2><p>Il couvre toute la tâche avec reprises, outils et sous-agents. C’est la mesure utile pour l’économie unitaire.</p><h2>Journalier</h2><p>Il limite la dépense d’une équipe, d’un client ou d’un service et réduit le rayon d’impact.</p><h2>Responsabilité</h2><p>L’ingénierie applique, le produit définit valeur et qualité, et la finance définit politique et suivi. Un refus doit être explicite et récupérable.</p>",
       "faq": [
@@ -97,8 +97,8 @@
       ]
     },
     "ja": {
-      "title": "自律エージェントに必要な3つの予算",
-      "titleCore": "自律エージェントに必要な3つの予算",
+      "title": "エージェントの3つの予算：財務とガバナンスのモデル",
+      "titleCore": "エージェントの3つの予算：財務とガバナンスのモデル",
       "description": "リクエスト、ワークフロー、日次予算による自律AIの財務ガバナンスです。",
       "body": "<p>自律エージェントには3つの入れ子の制御が必要です。1回のリクエスト、タスク全体のワークフロー、期間全体の日次予算です。</p><h2>リクエスト</h2><p>1回のモデルまたはツール呼び出しを制限し、巨大なコンテキストや高価な能力を抑えます。</p><h2>ワークフロー</h2><p>再試行、ツール、サブエージェントを含むタスク全体を制限します。単位経済に最も重要です。</p><h2>日次</h2><p>チーム、テナント、製品、サービスの合計支出を制限し、影響範囲を抑えます。</p><h2>責任</h2><p>エンジニアリングが強制し、プロダクトが価値と品質を定め、財務が方針と報告を担います。拒否は明示的で再開可能にします。</p>",
       "faq": [
@@ -115,8 +115,8 @@
       ]
     },
     "pt": {
-      "title": "Os três orçamentos de que todo agente autónomo precisa",
-      "titleCore": "Os três orçamentos de que todo agente autónomo precisa",
+      "title": "Três orçamentos de agentes: finanças e governação",
+      "titleCore": "Três orçamentos de agentes: finanças e governação",
       "description": "O modelo financeiro e de governação para orçamentos de pedido, fluxo e diário.",
       "body": "<p>Um agente autónomo precisa de três controlos: orçamento de pedido, de fluxo e diário. Limitam uma tentativa, um resultado e um período.</p><h2>Pedido</h2><p>Limita uma chamada de modelo ou ferramenta e protege contra contexto ou capacidade cara.</p><h2>Fluxo</h2><p>Cobre a tarefa completa com retries, ferramentas e subagentes. É a medida mais útil para a economia unitária.</p><h2>Diário</h2><p>Limita a despesa agregada de equipa, cliente, produto ou serviço e reduz o raio de impacto.</p><h2>Responsabilidade</h2><p>Engenharia aplica, produto define valor e qualidade, e finanças define política e acompanhamento. Uma recusa deve ser explícita e recuperável.</p>",
       "faq": [
@@ -237,8 +237,8 @@
       ]
     },
     "ar": {
-      "title": "الميزانيات الثلاث التي يحتاجها كل وكيل مستقل",
-      "titleCore": "الميزانيات الثلاث التي يحتاجها كل وكيل مستقل",
+      "title": "ميزانيات الوكلاء الثلاث: نموذج المالية والحوكمة",
+      "titleCore": "ميزانيات الوكلاء الثلاث: نموذج المالية والحوكمة",
       "description": "النموذج المالي والحوكمي لتطبيق ميزانيات الطلب وسير العمل والميزانية اليومية على وكلاء الذكاء الاصطناعي المستقلين.",
       "body": "<p>لا ينبغي منح الوكيل المستقل ميزانية شهرية واحدة وحرية استهلاك غير مقيدة داخلها. يحتاج الوكيل إلى ثلاثة ضوابط متداخلة: ميزانية الطلب، وميزانية سير العمل، والميزانية اليومية. تحدد معاً التكلفة المسموح بها للمحاولة الواحدة، وللنتيجة التجارية، وللفترة التشغيلية الكاملة.</p>\n\n<h2>ميزانية الطلب (Request Budget)</h2>\n<p>تمثل الحد الأقصى للمحاولة الواحدة أو استخدام أداة، وتحمي من السياق المتضخم والمخرجات غير المنضبطة. لا تحدد المالية كل سقف تقني، لكنها تشترط وجود الضابط ومسؤوله في التصميم المعماري للخدمة.</p>\n\n<h2>ميزانية سير العمل (Workflow Budget)</h2>\n<p>هي المبلغ الإجمالي المسموح للوكيل بإنفاقه لإكمال مهمة عمل واحدة للمستخدم بما في ذلك إعادة المحاولة والأدوات والوكلاء الفرعيين. وهي الأهم لاقتصادات الوحدة لأنها تتبع النتيجة الفعلية للعمل.</p>\n\n<h2>الميزانية اليومية (Daily Budget)</h2>\n<p>تضع حداً إجمالياً للفريق أو العميل أو حساب الخدمة، وتتيح التحكم في نطاق المخاطر وتأجيل العمليات الخلفية أو تحويلها لقدرات حوسبية أرخص عند اقتراب الحد المالي.</p>\n\n<h2>توزيع المسؤوليات في النموذج التشغيلي</h2>\n<p>الهندسة تتولى التنفيذ والإنفاذ، والمنتج يحدد القيمة وعتبة الجودة المقبولة، والمالية تتولى السياسات ودورة إعداد التقارير والمساءلة عن الميزانية لضمان حوكمة سليمة للاستثمارات.</p>",
       "faq": [

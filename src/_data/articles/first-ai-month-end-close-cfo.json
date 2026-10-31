@@ -9,8 +9,8 @@
   "dateModified": "2026-08-27",
   "languages": {
     "en": {
-      "title": "The first month-end close for an AI-heavy product",
-      "titleCore": "The first month-end close for an AI-heavy product",
+      "title": "The first AI month-end close: what finance should require",
+      "titleCore": "The first AI month-end close: what finance should require",
       "description": "What finance should require in the first monthly close for a product whose economics depend on AI usage.",
       "body": "<p>The first AI month-end close should answer three questions: what did we pay, where did it go, and did the capability create enough value to justify it? Start with provider invoices and a locked period. Then reconcile usage, allocate cost to owners, and explain the variance against the approved plan.</p><h2>The close pack</h2><p>Require five artefacts: provider-reconciled spend, the frozen price and discount assumptions, allocation by product or cost centre, a variance bridge, and an exceptions log. The pack should separate shared platform cost from consumption and show p50 and p95 cost per successful task where the product has a measurable workflow.</p><h2>Who signs what</h2><p>Finance signs the amount and accounting treatment. Engineering signs the usage explanation and model mix. Product signs the business outcome and customer or revenue relationship. No single dashboard owner should be able to change all three views without leaving an audit trail.</p><h2>Explain the miss</h2><p>Bridge plan to actual through rate, volume, mix, and efficiency. Rate belongs to provider pricing and procurement. Volume belongs to demand and adoption. Mix belongs to capability choices. Efficiency belongs to the cost of producing a successful outcome, including retries, human repair, and agent loops.</p><h2>Turn close into a decision</h2><p>Classify each material variance as deliberate investment, temporary demand, forecast error, or avoidable leakage. Give each classification an owner and next-period action. The close should change the next forecast, contract decision, routing policy, or product price; otherwise it is reporting theatre.</p><p>A good AI close is not a hunt for the smallest invoice. It is a defensible connection between cash, usage, ownership, and value.</p><h2>Related</h2><ul><li>AI spend variance analysis</li><li>AI spend forecasting</li><li>Proving AI ROI</li></ul>",
       "faq": [
@@ -61,8 +61,8 @@
       ]
     },
     "fr": {
-      "title": "Première clôture mensuelle IA",
-      "titleCore": "Première clôture mensuelle IA",
+      "title": "Première clôture IA : ce que la finance doit exiger",
+      "titleCore": "Première clôture IA : ce que la finance doit exiger",
       "description": "Ce que la finance doit exiger lors de la première clôture d’un produit dépendant de l’usage IA.",
       "body": "<p>La première clôture IA doit répondre à trois questions: combien avons-nous payé, où est allé l’argent et quelle valeur a été créée? Commencez par les factures et une période verrouillée, puis rapprochez l’usage et expliquez l’écart au plan.</p><h2>Le dossier de clôture</h2><p>Il doit contenir dépense rapprochée, hypothèses tarifaires, allocation, pont d’écart et journal des exceptions. Séparez plateforme partagée et consommation.</p><h2>Les signatures</h2><p>La finance valide le montant, l’ingénierie l’usage et le mix, et le produit le résultat métier. Chaque vue doit avoir un responsable distinct.</p><h2>Décider</h2><p>Classez chaque écart: investissement voulu, demande temporaire, erreur de prévision ou fuite évitable. Ajoutez un responsable et une action pour le mois suivant.</p>",
       "faq": [
@@ -79,8 +79,8 @@
       ]
     },
     "de": {
-      "title": "Der erste Monatsabschluss für ein KI-lastiges Produkt",
-      "titleCore": "Der erste Monatsabschluss für ein KI-lastiges Produkt",
+      "title": "Der erste KI-Monatsabschluss: was Finance verlangen sollte",
+      "titleCore": "Der erste KI-Monatsabschluss: was Finance verlangen sollte",
       "description": "Was Finance beim ersten Monatsabschluss eines KI-abhängigen Produkts verlangen sollte.",
       "body": "<p>Der erste KI-Abschluss muss zeigen, was bezahlt wurde, wohin es ging und welchen Wert es erzeugte. Beginnen Sie mit Rechnungen und einem gesperrten Zeitraum, gleichen Sie dann die Nutzung ab und erklären Sie die Abweichung zum Plan.</p><h2>Das Abschluss-Paket</h2><p>Es enthält abgestimmte Ausgaben, Preisannahmen, Verteilung, Plan-Ist-Brücke und Ausnahmenlog. Gemeinsame Plattformkosten bleiben vom Verbrauch getrennt.</p><h2>Unabhängige Sign-offs</h2><p>Finance bestätigt den Betrag, Engineering Nutzung und Modellmix, Product das Geschäftsergebnis. Jede Sicht braucht einen eigenen Verantwortlichen.</p><h2>Entscheiden</h2><p>Klassifizieren Sie Abweichungen als Investition, temporäre Nachfrage, Prognosefehler oder vermeidbare Leckage. Jede Kategorie erhält Besitzer und Maßnahme.</p>",
       "faq": [
@@ -97,8 +97,8 @@
       ]
     },
     "ja": {
-      "title": "AI中心の製品で初めて行う月次締め",
-      "titleCore": "AI中心の製品で初めて行う月次締め",
+      "title": "AI初の月次締め：財務部門が求めるべきこと",
+      "titleCore": "AI初の月次締め：財務部門が求めるべきこと",
       "description": "AI利用に依存する製品の初回月次締めで、財務が求めるべき内容を説明します。",
       "body": "<p>初回のAI月次締めでは、いくら支払い、どこで使い、どの価値を生んだかを答えます。請求書と固定期間から始め、利用量を照合し、計画との差分を説明します。</p><h2>締めの資料</h2><p>照合済み支出、価格前提、配賦、計画対実績の差分、例外記録を揃えます。共通基盤と消費を分けます。</p><h2>責任者</h2><p>財務は金額、エンジニアリングは利用とモデル構成、プロダクトは事業成果に署名します。視点ごとに別の責任者を置きます。</p><h2>意思決定に変える</h2><p>差分を意図した投資、一時的需要、予測誤差、回避可能な漏れに分類し、次の期間の担当者と行動を決めます。</p>",
       "faq": [
@@ -115,8 +115,8 @@
       ]
     },
     "pt": {
-      "title": "O primeiro fecho mensal de um produto intensivo em IA",
-      "titleCore": "O primeiro fecho mensal de um produto intensivo em IA",
+      "title": "Primeiro fecho mensal de IA: o que as finanças exigem",
+      "titleCore": "Primeiro fecho mensal de IA: o que as finanças exigem",
       "description": "O que a área financeira deve exigir no primeiro fecho de um produto dependente de uso de IA.",
       "body": "<p>O primeiro fecho de IA deve responder quanto pagámos, onde foi gasto o dinheiro e que valor foi criado. Comece nas faturas e num período bloqueado; reconcilie o uso e explique a variação face ao plano.</p><h2>O pacote de fecho</h2><p>Inclua despesa reconciliada, pressupostos de preço, alocação, ponte plano-real e registo de exceções. Separe a plataforma partilhada do consumo.</p><h2>Responsabilidades</h2><p>Finanças assina o valor, engenharia o uso e o mix de modelos, e produto o resultado de negócio. Cada perspetiva deve ter um responsável.</p><h2>Transformar em decisão</h2><p>Classifique cada desvio como investimento, procura temporária, erro de previsão ou fuga evitável. Atribua uma ação para o período seguinte.</p>",
       "faq": [
@@ -237,8 +237,8 @@
       ]
     },
     "ar": {
-      "title": "أول إقفال شهري لمنتج يعتمد على الذكاء الاصطناعي",
-      "titleCore": "أول إقفال شهري لمنتج يعتمد على الذكاء الاصطناعي",
+      "title": "أول إقفال شهري للذكاء الاصطناعي: ما الذي تطلبه المالية",
+      "titleCore": "أول إقفال شهري للذكاء الاصطناعي: ما الذي تطلبه المالية",
       "description": "ما يجب أن تطلبه الإدارة المالية في أول إقفال شهري لمنتج يعتمد في اقتصاداته وهوامش ربحه على استهلاك نماذج الذكاء الاصطناعي.",
       "body": "<p>يجب أن يجيب أول إقفال مالي لمنتج كثيف الذكاء الاصطناعي عن ثلاثة أسئلة: كم دفعنا، وأين ذهب الإنفاق، وهل حققت الميزات قيمة اقتصادية كافية لتبرير التكلفة؟ ابدأ بفواتير المزودين وفترة مقفلة، ثم طابق الاستهلاك ووزع التكاليف وفسر التباين مقارنة بالخطة المعتمدة.</p>\n\n<h2>حزمة تقارير الإقفال المالي</h2>\n<p>اطلب خمس وثائق أساسية: الإنفاق المطابق مع المزودين، وافتراضات الأسعار والخصومات المجمدة، وتوزيع التكاليف حسب المنتج أو مركز التكلفة، وجسر التباين التفسيري، وسجل الاستثناءات المعتمد مع تواريخه ومسؤوليه.</p>\n\n<h2>من يوقع على ماذا</h2>\n<p>توقع المالية على المبالغ والتصنيف المحاسبي. وتوقع الهندسة على تفسير الاستهلاك ومزيج النماذج. ويوقع مديرو المنتجات على نتائج الأعمال والإيرادات المحققة. لا ينبغي لجهة واحدة تعديل المشاهد الثلاثة دون سجل تدقيق مستقل.</p>\n\n<h2>تصنيف الانحراف عن الميزانية</h2>\n<p>صنف كل انحراف جوهري إلى: استثمار مقصود، أو طلب مؤقت، أو خطأ في التقدير، أو هدر وتكرار يمكن تجنبه. وعين مسؤولاً وخطة عمل لكل بند في الفترة التالية لضمان اتخاذ قرارات تسعير وتوجيه مدروسة.</p>",
       "faq": [
