@@ -13,4 +13,28 @@
 # research article on the same three tools. Folded into that article instead.
 /compare/llm-gateways  /research/litellm-vs-helicone-vs-langfuse  301
 
+# Locale roots have no home page of their own; the locale research hub
+# (src/research-locale.njk) is the entry point. Do not point the worker's
+# language handling at "/{locale}/" without a home page to land on.
+/ar  /ar/research  301
+/ar/  /ar/research  301
+/de  /de/research  301
+/de/  /de/research  301
+/es  /es/research  301
+/es/  /es/research  301
+/fr  /fr/research  301
+/fr/  /fr/research  301
+/it  /it/research  301
+/it/  /it/research  301
+/ja  /ja/research  301
+/ja/  /ja/research  301
+/ko  /ko/research  301
+/ko/  /ko/research  301
+/nl  /nl/research  301
+/nl/  /nl/research  301
+/pt  /pt/research  301
+/pt/  /pt/research  301
+/zh  /zh/research  301
+/zh/  /zh/research  301
+
 # Trailing-slash normalization handled by Cloudflare

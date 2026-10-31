@@ -29,6 +29,27 @@ for (const [lang, labels] of Object.entries(articleNavigationLabels)) {
   Object.assign(module.exports[lang], labels);
 }
 
+// Locale research hubs (src/research-locale.njk). hubTitle is the <title> core,
+// so it has to stay within 60 characters (the build caps <title> at 70 with the
+// " · LLM CFO" suffix) and hubDescription within 165. `en` is only here so the
+// shared template has a fallback; the English hub is src/research.njk.
+const hubLabels = {
+  en: { hubTitle: 'AI FinOps research and LLM cost optimization', hubH1: 'AI FinOps research', hubIntro: 'Field notes on reducing LLM spend without hiding quality regressions.', hubDescription: 'Vendor-neutral research on cutting LLM spend: model routing, prompt and semantic caching, batch APIs, and provider arbitrage, with the tradeoffs of each.', faq: 'Frequently asked questions' },
+  es: { hubTitle: 'Investigación sobre FinOps de IA y costes de LLM', hubH1: 'Investigación sobre FinOps de IA', hubIntro: 'Notas de campo para reducir el gasto en LLM sin ocultar regresiones de calidad, con los artículos disponibles en español.', hubDescription: 'Investigación independiente para reducir el gasto en LLM: enrutamiento de modelos, caché de prompts, APIs por lotes y arbitraje de proveedores, con sus compromisos.', faq: 'Preguntas frecuentes' },
+  fr: { hubTitle: 'Recherche sur le FinOps IA et les coûts des LLM', hubH1: 'Recherche sur le FinOps IA', hubIntro: 'Notes de terrain pour réduire les dépenses LLM sans masquer les régressions de qualité, avec les articles disponibles en français.', hubDescription: 'Recherche indépendante pour réduire les dépenses LLM : routage de modèles, cache de prompts, API batch et arbitrage entre fournisseurs, avec leurs compromis.', faq: 'Questions fréquentes' },
+  de: { hubTitle: 'Forschung zu KI-FinOps und LLM-Kosten', hubH1: 'KI-FinOps-Forschung', hubIntro: 'Praxisnotizen zur Senkung der LLM-Ausgaben, ohne Qualitätsrückgänge zu verschleiern, mit allen auf Deutsch verfügbaren Artikeln.', hubDescription: 'Anbieterneutrale Forschung zur Senkung der LLM-Kosten: Modell-Routing, Prompt-Caching, Batch-APIs und Anbieter-Arbitrage samt ihrer Zielkonflikte.', faq: 'Häufige Fragen' },
+  ja: { hubTitle: 'AI FinOps と LLM コストの調査', hubH1: 'AI FinOps 調査', hubIntro: '品質低下を隠さずに LLM 支出を減らすための現場ノートです。日本語で読める記事を一覧にしています。', hubDescription: 'LLM 支出を削減するためのベンダー中立の調査。モデルルーティング、プロンプトキャッシュ、バッチ API、プロバイダー裁定を、そのトレードオフとともに解説します。', faq: 'よくある質問' },
+  pt: { hubTitle: 'Investigação sobre FinOps de IA e custos de LLM', hubH1: 'Investigação sobre FinOps de IA', hubIntro: 'Notas de terreno para reduzir a despesa com LLM sem esconder regressões de qualidade, com os artigos disponíveis em português.', hubDescription: 'Investigação independente para reduzir a despesa com LLM: encaminhamento de modelos, cache de prompts, APIs em lote e arbitragem de fornecedores.', faq: 'Perguntas frequentes' },
+  it: { hubTitle: 'Ricerca su FinOps IA e costi degli LLM', hubH1: 'Ricerca su FinOps IA', hubIntro: 'Note dal campo per ridurre la spesa per gli LLM senza nascondere regressioni di qualità, con gli articoli disponibili in italiano.', hubDescription: 'Ricerca indipendente per ridurre la spesa per gli LLM: routing dei modelli, caching dei prompt, API batch e arbitraggio tra provider, con i relativi compromessi.', faq: 'Domande frequenti' },
+  ko: { hubTitle: 'AI FinOps 및 LLM 비용 연구', hubH1: 'AI FinOps 연구', hubIntro: '품질 저하를 숨기지 않으면서 LLM 지출을 줄이는 현장 노트로, 한국어로 제공되는 글을 모았습니다.', hubDescription: 'LLM 지출을 줄이기 위한 벤더 중립 연구: 모델 라우팅, 프롬프트 캐싱, 배치 API, 공급자 차익 거래와 각각의 절충점을 다룹니다.', faq: '자주 묻는 질문' },
+  zh: { hubTitle: 'AI FinOps 与 LLM 成本研究', hubH1: 'AI FinOps 研究', hubIntro: '在不掩盖质量退化的前提下降低 LLM 支出的实战笔记，这里列出所有提供中文版的文章。', hubDescription: '关于降低 LLM 支出的厂商中立研究：模型路由、提示缓存、批量 API 与供应商套利，并说明各自的取舍。', faq: '常见问题' },
+  nl: { hubTitle: 'Onderzoek naar AI-FinOps en LLM-kosten', hubH1: 'Onderzoek naar AI-FinOps', hubIntro: 'Praktijknotities om LLM-uitgaven te verlagen zonder kwaliteitsverlies te verbergen, met alle artikelen die in het Nederlands beschikbaar zijn.', hubDescription: 'Leveranciersneutraal onderzoek naar lagere LLM-uitgaven: modelroutering, promptcaching, batch-API’s en leveranciersarbitrage, met de afwegingen van elk.', faq: 'Veelgestelde vragen' },
+  ar: { hubTitle: 'أبحاث FinOps للذكاء الاصطناعي وتكاليف LLM', hubH1: 'أبحاث FinOps للذكاء الاصطناعي', hubIntro: 'ملاحظات ميدانية لخفض الإنفاق على نماذج اللغة دون إخفاء تراجع الجودة، مع المقالات المتاحة بالعربية.', hubDescription: 'أبحاث محايدة للموردين حول خفض الإنفاق على نماذج اللغة: توجيه النماذج وتخزين المطالبات مؤقتًا وواجهات الدُفعات والمراجحة بين المزودين مع مفاضلات كل منها.', faq: 'الأسئلة الشائعة' }
+};
+for (const [lang, labels] of Object.entries(hubLabels)) {
+  Object.assign(module.exports[lang], labels);
+}
+
 // Keep English as the fallback for any label added before its translations land.
 const englishDefaults = module.exports.en;
 for (const [lang, labels] of Object.entries(module.exports)) {

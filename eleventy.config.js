@@ -19,6 +19,7 @@ const cleanUrl = (url) => url.replace(/index\.html$/, "").replace(/\.html$/, "")
 // them from the same data file the template paginates over.
 const articlePages = require("./src/_data/articlePages.js")();
 const articles = require("./src/_data/articles.js")();
+const localeHubs = require("./src/_data/localeHubs.js")();
 
 // Articles carry dateModified in frontmatter or in the article data; page.njk
 // pages may also have it inside their pageHead JSON-LD blob. There is no mtime
@@ -82,7 +83,15 @@ module.exports = function (eleventyConfig) {
         loc: SITE_URL + cleanUrl("/" + p.permalink),
         lastmod: articles[p.key].dateModified || articles[p.key].datePublished,
         priority: "0.9",
-      }));
+      }))
+      // Locale research hubs are paginated too (src/research-locale.njk).
+      .concat(
+        localeHubs.map((h) => ({
+          loc: `${SITE_URL}/${h.lang}/research`,
+          lastmod: h.dateModified || undefined,
+          priority: "0.7",
+        }))
+      );
     return api
       .getAll()
       .filter((item) => {
