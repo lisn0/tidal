@@ -264,7 +264,9 @@ if (warnings.length) {
 }
 if (errors.length) {
   console.error(`\n[check-seo] ${errors.length} SEO regression(s):`);
-  for (const e of [...new Set(errors)]) console.error("  " + e);
+  const unique = [...new Set(errors)];
+  for (const e of unique.slice(0, 60)) console.error("  " + e);
+  if (unique.length > 60) console.error(`  ... and ${unique.length - 60} more`);
   process.exit(1);
 }
 console.log(
