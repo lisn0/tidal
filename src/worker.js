@@ -176,6 +176,10 @@ async function contactApi(request, env) {
 
 const AB_COOKIE = 'ab_test';
 const AB_PATHS = new Set(['/', '/index.html']);
+// The v2 variant is only ever served by rewriting "/" to this asset. Asking for it
+// directly is a duplicate of "/" (canonical points there), so it redirects instead.
+const AB_V2_ASSET = '/index-v2';
+const AB_V2_DIRECT = new Set(['/index-v2', '/index-v2.html']);
 
 // UA strings we never experiment on: crawlers, AI agents, preview tools.
 const BOT_RE = /bot|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly|quora|pinterest|whatsapp|googlebot|bingbot|duckduckbot|yandex|baidu|applebot|amazonbot|gptbot|claudebot|claude-|oai-searchbot|chatgpt-user|perplexity|mistralai|meta-externalagent|google-extended|preview|lighthouse/i;
@@ -204,7 +208,11 @@ function pickVariant(request) {
 function abTargetUrl(url, variant) {
 	if (variant === 'v2') {
 		const u = new URL(url.toString());
-		u.pathname = '/index-v2.html';
+		// Extensionless on purpose: the static host can answer /index-v2.html with a
+		// redirect to /index-v2, which now 301s to "/" and would loop the visitor.
+		// The internal ASSETS.fetch does not pass back through this Worker, so it
+		// never meets the redirect in fetch().
+		u.pathname = AB_V2_ASSET;
 		return u;
 	}
 	return url;
@@ -594,6 +602,12 @@ export default {
 		// 1. www -> apex (301).
 		if (url.hostname === 'www.' + APEX) {
 			url.hostname = APEX;
+			return Response.redirect(url.toString(), 301);
+		}
+
+		// 1b. Direct hits on the A/B variant asset go to the control URL.
+		if (AB_V2_DIRECT.has(url.pathname)) {
+			url.pathname = '/';
 			return Response.redirect(url.toString(), 301);
 		}
 
