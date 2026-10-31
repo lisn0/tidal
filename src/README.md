@@ -102,6 +102,8 @@ Gotchas the build catches for you:
 - Translated articles that link `/research/x` are rewritten to `/{lang}/research/x`
   at build time when that locale has an `x` twin.
 
+`scripts/check-seo.js` (postbuild) also fails the build on a missing locale hub, a sitemap URL that is missing, undated or canonicalised elsewhere, duplicate titles per locale, invalid or non-self-referencing hreflang, a use of file mtime in `eleventy.config.js`, or `lib/thin-pages.js` disagreeing with the rendered page; short translations only warn (`--strict` fails them).
+
 `npm run build` fails on any broken internal link and prints title/description
 length warnings at the end. The pre-commit hook runs it too.
 

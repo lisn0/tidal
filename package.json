@@ -4,7 +4,7 @@
   "scripts": {
     "build": "eleventy",
     "fetch-releases": "node scripts/fetch-releases.mjs",
-    "postbuild": "node scripts/generate-llms-full.js && node scripts/check-links.js && node scripts/check-faq-schema.mjs",
+    "postbuild": "node scripts/generate-llms-full.js && node scripts/check-seo.js && node scripts/check-links.js && node scripts/check-faq-schema.mjs",
     "prebuild": "node scripts/content-gap-analyzer.js",
     "serve": "eleventy --serve",
     "test": "node --test scripts/analytics-consent.test.mjs && node scripts/worker-crawlers.test.mjs && node scripts/test-releases.mjs && node scripts/test-contact.mjs"
