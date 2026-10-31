@@ -121,7 +121,10 @@ for (const f of walk(site).filter((f) => f.endsWith(".html"))) {
       for (const q of node.mainEntity || []) {
         // Japanese ends questions with \uFF1F (？); Arabic ends with \u061F (؟).
         if (!/[?\u061F\uFF1F]$/.test((q.name || "").trim())) errors.push(`${rel}: FAQ entry is not a question — "${q.name}"`);
-        if (!decode(html).includes(q.name)) errors.push(`${rel}: FAQ question is not visible on the page — "${q.name}"`);
+        // Scripts stripped first: the JSON-LD itself contains every question, so
+        // searching the raw HTML could never fail. (check-faq-schema.mjs does the
+        // full question-and-answer visibility check.)
+        if (!decode(html.replace(/<script[\s\S]*?<\/script>/gi, "")).includes(q.name)) errors.push(`${rel}: FAQ question is not visible on the page — "${q.name}"`);
         if (((q.acceptedAnswer || {}).text || "").length < 40) errors.push(`${rel}: FAQ answer is too thin for "${q.name}"`);
       }
       continue;

@@ -133,6 +133,16 @@ pageHead: |-
 <p>Both tables come from one public model feed that lists every served model with the timestamp it first appeared and, where a switch-off has been announced, the date it ends. The filter keeps first-party models only: third-party routers, quantised mirrors and anonymous drops all carry timestamps but are not a lab shipping anything, and <code>:batch</code> or <code>:free</code> entries are the same weights behind a different endpoint, so they are dropped as duplicates of a row already here. Named tiers such as <code>-pro</code> are kept, because they are separate price points and choosing between them is the reason to be on this page.</p>
 <p>Two dates matter and they are not the same date. <strong>{{ releases.updated }}</strong> is when this page's table was generated. The live feed behind it is at most six hours old and is checked when you load this page; a new model found in the live check is added to the top of the table and marked. Prices come from the router's rate card for that model, which is what you would be billed, and a model whose lab has not published a price shows a dash rather than a number.</p>
 <p>What this page cannot tell you is what a lab said, or on what date they said it. For the announcement itself — the reasoning behind a price, the scope of a deprecation, the caveat on a benchmark — read the lab's own newsroom and social accounts. This is the operational layer underneath those posts: what is purchasable, what it costs, and what is about to stop working.</p>
+
+<section class="faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">FAQ</h2>
+<h3>How current is this model release tracker?</h3>
+<p>The table is rebuilt from the upstream model feed at most six hours old, and the page is regenerated from a dated snapshot. Both dates are shown on the page.</p>
+<h3>Is the date the model was announced by the lab?</h3>
+<p>No. The date shown is the day the model first became purchasable through a public model router, which usually follows the lab's announcement by days. For the announcement itself, read the lab's own newsroom and social accounts.</p>
+<h3>What happens when a model is retired?</h3>
+<p>Requests to a retired model start failing, so any routing rule, prompt tuned against it, or evaluation baseline built on it needs replacing before the switch-off date. The retirement table lists the announced date and the model's price so the replacement can be costed directly.</p>
+</section>
 </div>
 
 <style>

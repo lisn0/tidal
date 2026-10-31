@@ -79,8 +79,65 @@ for (const f of readdirSync(`${SITE}/research`).filter((f) => f.endsWith('.html'
   }
 }
 
+// 3. Every question and answer a FAQPage block advertises has to be visible text
+//    on the same page. Google treats schema for content users cannot see as a
+//    structured-data policy violation, and article.njk once shipped the JSON-LD
+//    for ~780 FAQs with no FAQ section at all. This covers every page, not just
+//    /research: the locale articles are where it was missing.
+const walk = (d) =>
+  readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(join(d, e.name)) : [join(d, e.name)]));
+const decodeEntities = (s) =>
+  s
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+// Visible text: drop script/style/template blocks (JSON-LD would otherwise make
+// every question "visible"), then tags, then collapse whitespace. Inline tags
+// are removed without a space so "<strong>x</strong>." stays "x."; block tags
+// become a space so neighbouring paragraphs do not fuse into one word.
+const visibleText = (html) =>
+  decodeEntities(
+    html
+      .replace(/<(script|style|template)\b[\s\S]*?<\/\1>/gi, ' ')
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<\/?(?:strong|em|b|i|a|code|span|u|mark|small|sub|sup)\b[^>]*>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+  ).replace(/\s+/g, ' ');
+const squash = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+
+let faqPages = 0;
+let faqQuestions = 0;
+for (const file of walk(SITE).filter((f) => f.endsWith('.html'))) {
+  const html = readFileSync(file, 'utf8');
+  let text = null;
+  for (const b of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let node;
+    try {
+      node = JSON.parse(b[1]);
+    } catch {
+      continue; // reported by check-links
+    }
+    if (node['@type'] !== 'FAQPage') continue;
+    text ??= visibleText(html);
+    faqPages++;
+    for (const q of node.mainEntity || []) {
+      faqQuestions++;
+      if (!text.includes(squash(q.name))) fail(`${file}: FAQ question is in the schema but not visible — "${q.name}"`);
+      const answer = squash(q.acceptedAnswer?.text);
+      if (answer && !text.includes(answer)) fail(`${file}: FAQ answer is in the schema but not visible for "${q.name}"`);
+    }
+  }
+}
+
 if (failures) {
   console.error(`\n❌ check-faq-schema: ${failures} problem(s) — FAQ data is not reaching the page.`);
   process.exit(1);
 }
-console.log(`[check-faq-schema] ok — ${checked} pages with FAQ data all emit valid FAQPage schema.`);
+console.log(
+  `[check-faq-schema] ok — ${checked} pages with FAQ data all emit valid FAQPage schema; ` +
+    `${faqQuestions} questions on ${faqPages} pages are all visible.`
+);

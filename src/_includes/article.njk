@@ -150,12 +150,24 @@ A: {{ q.answer }}
 <p class="byline">{{ ui.byline }}</p>
 {%- if article.agentMode -%}
 <aside class="callout agent-summary" aria-label="{{ ui.quick }}">
-  <strong>{{ ui.quick }}:</strong> {{ locale.body | striptags | truncate(200) }}
+  <strong>{{ ui.quick }}:</strong> {{ locale.description }}
 </aside>
 {%- endif -%}
 
 {#- The EN body ends with a plain-text "Related" list; the linked one below replaces it. -#}
 {%- if locale.related.length > 0 -%}{{ locale.body | replace(r/<h2>Related<\/h2><ul>(?:(?!<\/ul>)[\s\S])*<\/ul>\s*$/, '') | safe }}{%- else -%}{{ locale.body | safe }}{%- endif -%}
+
+{#- The FAQPage JSON-LD above is built from these same entries, so every question
+    the schema advertises is also on the page (scripts/check-faq-schema.mjs). -#}
+{%- if locale.faq.length > 0 -%}
+<section class="faq" aria-labelledby="faq-heading">
+<h2 id="faq-heading">{{ ui.faq }}</h2>
+{%- for q in locale.faq %}
+<h3>{{ q.question }}</h3>
+<p>{{ q.answer }}</p>
+{%- endfor %}
+</section>
+{%- endif -%}
 
 {%- if locale.related.length > 0 -%}
 <h2>{{ ui.related }}</h2>
