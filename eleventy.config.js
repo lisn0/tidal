@@ -21,22 +21,31 @@ const articlePages = require("./src/_data/articlePages.js")();
 const articles = require("./src/_data/articles.js")();
 
 // Articles carry dateModified in frontmatter or in the article data; page.njk
-// pages only have it inside their pageHead JSON-LD blob. Fall back to the source
-// file's mtime so a page can never land in the sitemap without a lastmod.
+// pages may also have it inside their pageHead JSON-LD blob. There is no mtime
+// fallback: a file's mtime is the checkout time, so every deploy re-stamped every
+// utility page as "modified today". A page with no real date gets no <lastmod>
+// (the sitemap allows that) rather than an invented one.
 const lastmodOf = (item) => {
   const direct = item.data.dateModified || item.data.article?.dateModified || item.data.datePublished;
   if (direct) return direct;
   const m = String(item.data.pageHead || "").match(/dateModified\W+(\d{4}-\d{2}-\d{2})/);
-  if (m) return m[1];
-  return fs.statSync(item.inputPath).mtime.toISOString().slice(0, 10);
+  return m ? m[1] : undefined;
+};
+
+// Same rule for the injected WebPage node, which only has the output page to go
+// on: read the date the source declares in its own frontmatter.
+const frontmatterDate = (inputPath) => {
+  const m = fs.readFileSync(inputPath, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  return (m && m[1].match(/^dateModified:\s*["']?(\d{4}-\d{2}-\d{2})/m) || [])[1];
 };
 
 module.exports = function (eleventyConfig) {
   // Utility pages (about, terms, tools…) ship no schema and no date, so an AI
   // answer engine has nothing to attribute and cites them without a link, if at
   // all. Inject a WebPage node wherever the page carries no dateModified —
-  // valid alongside any existing block, and the date is the source file mtime
-  // so freshness is real rather than a hardcoded build stamp.
+  // valid alongside any existing block. The date is the page's own frontmatter
+  // `dateModified` (set to its last git commit date); a page without one gets
+  // a node with no dateModified rather than a date that changes every deploy.
   eleventyConfig.addTransform("webPageSchema", function (content) {
     if (!this.page.outputPath?.endsWith(".html")) return content;
     if (/dateModified/.test(content)) return content;
@@ -51,10 +60,11 @@ module.exports = function (eleventyConfig) {
       url,
       name: (content.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.trim(),
       description: (content.match(/<meta name="description" content="([^"]*)"/i) || [])[1],
-      dateModified: require("fs").statSync(this.page.inputPath).mtime.toISOString().slice(0, 10),
+      dateModified: frontmatterDate(this.page.inputPath),
       isPartOf: { "@id": "https://llmcfo.com/#website" },
       publisher: { "@id": "https://llmcfo.com/#org" },
     };
+    if (!node.dateModified) delete node.dateModified;
     if (!node.name) delete node.name;
     if (!node.description) delete node.description;
     const tag = `<script type="application/ld+json">${JSON.stringify(node)}</script>`;
@@ -80,6 +90,10 @@ module.exports = function (eleventyConfig) {
         if (!url || !(url.endsWith(".html") || url.endsWith("/"))) return false;
         if (skipFromSitemap(url)) return false;
         if (item.data.sitemap === false) return false;
+        // Only the first page of a paginated template is visible here, with none
+        // of the article's own dates. Those pages are listed via fromData above;
+        // keeping this copy too would win the de-dupe and drop its lastmod.
+        if (item.data.pagination) return false;
         return true;
       })
       .map((item) => ({

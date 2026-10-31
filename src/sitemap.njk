@@ -5,6 +5,6 @@ eleventyExcludeFromCollections: true
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- for u in collections.sitemap %}
-  <url><loc>{{ u.loc }}</loc><lastmod>{{ u.lastmod }}</lastmod><changefreq>monthly</changefreq><priority>{{ u.priority }}</priority></url>
+  <url><loc>{{ u.loc }}</loc>{% if u.lastmod %}<lastmod>{{ u.lastmod }}</lastmod>{% endif %}<changefreq>monthly</changefreq><priority>{{ u.priority }}</priority></url>
 {%- endfor %}
 </urlset>
