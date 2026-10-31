@@ -72,3 +72,8 @@
 /assets/fonts/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+
+# Not fingerprinted, so a consent fix must reach returning visitors immediately.
+/assets/consent.js
+  ! Cache-Control
+  Cache-Control: public, max-age=0, must-revalidate

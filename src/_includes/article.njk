@@ -150,7 +150,7 @@ A: {{ q.answer }}
 <p class="byline">{{ ui.byline }}</p>
 {%- if article.agentMode -%}
 <aside class="callout agent-summary" aria-label="{{ ui.quick }}">
-  <strong>{{ ui.quick }}:</strong> {{ locale.description }}
+  <strong>{{ ui.quick }}:</strong> {{ locale.description | safe }}
 </aside>
 {%- endif -%}
 
@@ -164,8 +164,8 @@ A: {{ q.answer }}
 <section class="faq" aria-labelledby="faq-heading">
 <h2 id="faq-heading">{{ ui.faq }}</h2>
 {%- for q in locale.faq %}
-<h3>{{ q.question }}</h3>
-<p>{{ q.answer }}</p>
+<h3>{{ q.question | safe }}</h3>
+<p>{{ q.answer | safe }}</p>
 {%- endfor %}
 </section>
 {%- endif -%}

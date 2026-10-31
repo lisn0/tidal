@@ -127,7 +127,7 @@ for (const file of walk(SITE).filter((f) => f.endsWith('.html'))) {
     for (const q of node.mainEntity || []) {
       faqQuestions++;
       if (!text.includes(squash(q.name))) fail(`${file}: FAQ question is in the schema but not visible — "${q.name}"`);
-      const answer = squash(q.acceptedAnswer?.text);
+      const answer = squash(visibleText(q.acceptedAnswer?.text || ''));
       if (answer && !text.includes(answer)) fail(`${file}: FAQ answer is in the schema but not visible for "${q.name}"`);
     }
   }
