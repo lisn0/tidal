@@ -25,7 +25,7 @@
     same fields. It used to read separate schemaHeadline/schemaDescription copies,
     and 10 headlines plus 30 descriptions had drifted away from the page. -#}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":{{ titleCore | dump | safe }},"description":{{ description | dump | safe }},"url":"https://llmcfo.com/research/{{ slug }}","datePublished":"{{ datePublished }}","dateModified":"{{ dateModified }}","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":{{ titleCore | dump | safe }},"description":{{ description | dump | safe }},"url":"https://llmcfo.com/research/{{ slug }}","mainEntityOfPage":"https://llmcfo.com/research/{{ slug }}","inLanguage":"en","datePublished":"{{ datePublished }}","dateModified":"{{ dateModified }}","image":"https://llmcfo.com/og.png","author":{"@type":"Organization","name":"LLM CFO team"},"publisher":{"@type":"Organization","name":"LLM CFO","url":"https://llmcfo.com/"}}
 </script>
 {#- Built from the same `faq` entries the page renders below. It used to be a
     hand-written JSON-LD blob per page, which is 54 copies of a shape nothing
