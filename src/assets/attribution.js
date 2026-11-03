@@ -7,12 +7,16 @@
  * Privacy: first-party only, and it does nothing at all until the visitor has
  * granted analytics consent in consent.js (`window.analyticsConsent`) — the
  * sessionStorage write is terminal-equipment storage and needs consent just as
- * the GA4 `book_click` event does. No third-party calls, no cross-site
+ * the GA4 funnel events do. No third-party calls, no cross-site
  * identifiers, no persistent cookie. Cleared when the tab closes.
  *
- * Read it in GA4 → Reports/Explore on the `book_click` event through Zaraz. Register the
- * event params `book_source`, `book_medium`, `landing_page` as custom
- * (event-scoped) dimensions to break bookings down by source.
+ * GA4 funnel events through Zaraz, in order of intent:
+ *   book_page_open  clicked a link to the /book info page
+ *   calendar_open   clicked through to the booking calendar (the conversion)
+ *   email_click     clicked an email address
+ * None of them proves a booking: confirmed bookings exist only in cal.eu.
+ * Register the event params `book_source`, `book_medium`, `landing_page` as
+ * custom (event-scoped) dimensions to break them down by source.
  */
 (function () {
   'use strict';
@@ -62,11 +66,12 @@
     return c;
   }
 
-  function isBookLink(a) {
+  function bookEvent(a) {
     var href = a.getAttribute('href') || '';
-    return /(?:^|\/)book(?:\/|\?|#|$)/.test(href) ||
-           href.indexOf('calendar.app.google') > -1 ||
-           href.indexOf('cal.eu') > -1;
+    if (/(?:^|\/)book\/schedule(?:\?|#|$)/.test(href) ||
+        href.indexOf('calendar.app.google') > -1 ||
+        href.indexOf('cal.eu') > -1) return 'calendar_open';
+    return /(?:^|\/)book(?:\/|\?|#|$)/.test(href) ? 'book_page_open' : '';
   }
 
   function decorate(href, ft) {
@@ -88,19 +93,22 @@
     //    for booking tools that read UTM params.
     var links = document.querySelectorAll('a[href]');
     for (var i = 0; i < links.length; i++) {
-      if (isBookLink(links[i])) {
+      if (bookEvent(links[i])) {
         links[i].setAttribute('href', decorate(links[i].getAttribute('href'), ft));
       }
     }
 
-    // 2. Reliable signal: fire a Zaraz event on book click. Sends only when
+    // 2. Reliable signal: fire a Zaraz funnel event on click. Sends only when
     //    analytics consent has been granted. Capture phase so it
     //    runs before the browser navigates away.
     document.addEventListener('click', function (ev) {
       var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
-      if (!a || !isBookLink(a)) return;
+      if (!a) return;
+      var isEmail = (a.getAttribute('href') || '').indexOf('mailto:') === 0;
+      var funnelEvent = isEmail ? 'email_click' : bookEvent(a);
+      if (!funnelEvent) return;
       if (window.analyticsConsent && window.zaraz && typeof window.zaraz.track === 'function') {
-        window.zaraz.track('book_click', {
+        window.zaraz.track(funnelEvent, {
           book_source: ft.source,
           book_medium: ft.medium,
           landing_page: ft.landing
