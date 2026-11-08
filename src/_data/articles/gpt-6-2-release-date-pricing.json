@@ -1,0 +1,29 @@
+{
+  "slug": "gpt-6-2-release-date-pricing",
+  "datePublished": "2026-11-08",
+  "dateModified": "2026-11-08",
+  "image": "https://llmcfo.com/og.png",
+  "languages": {
+    "en": {
+      "title": "GPT-6.2: Release Date, Pricing and Budget Planning",
+      "titleCore": "GPT-6.2: Release Date, Pricing and Budget Planning",
+      "description": "What is known about GPT-6.2, its release date and pricing? A sourced guide to the rumors, confirmed models and cost planning.",
+      "body": "<p class=\"lede\">As of November 8, 2026, OpenAI has not announced GPT-6.2 or published its price, release date or specifications in its public model documentation. Names circulating online are not proof of a release. Teams planning budgets should use published prices for available models and treat GPT-6.2 estimates as scenarios.</p>\n<h2>What is known about GPT-6.2?</h2>\n<p>Reports describe screenshots of Google Cloud quota filters containing the names <code>gpt-6.2-sol</code> and <code>gpt-6.2-astra</code>. These are reported sightings, not an OpenAI release announcement or evidence that a model is accessible. OpenAI’s <a href=\"https://developers.openai.com/api/docs/models\">model catalog</a> and <a href=\"https://developers.openai.com/api/docs/changelog\">API changelog</a> are the places to check for a public release. We found no official GPT-6.2 model card or published price when checking on November 8.</p>\n<p>A configuration label can exist before a product becomes generally available, and a screenshot alone does not establish what is running behind a request. The name, rollout schedule, capabilities and commercial terms may change.</p>\n<h2>Is there a GPT-6.2 release date or price?</h2>\n<p>OpenAI has not published either as of our check. Dates and rates circulating online are predictions, not budget inputs. In its <a href=\"https://openai.com/index/introducing-gpt-6-1-sol/\">GPT-6.1 Sol announcement</a>, OpenAI lists standard API prices of $2 per million input tokens, $0.10 per million cached input tokens and $10 per million output tokens. Those are GPT-6.1 Sol prices, not GPT-6.2 prices. Provider, service tier and workload conditions can change the amount billed.</p>\n<h2>What should finance teams put in the forecast?</h2><p>Keep the current contracted model and rate in the approved forecast. Put any future-model price in a separate sensitivity case, with the assumed adoption date and request volume visible. A lower token price alone does not guarantee a lower bill: longer responses, retries and increased usage can offset it.</p><h2>How should teams prepare?</h2>\n<ol><li><strong>Keep a baseline.</strong> Record the current model, input and output tokens, latency, task success rate and total cost per successful task.</li><li><strong>Use scenarios, not invented prices.</strong> For example, at GPT-6.1 Sol standard rates, one million uncached input tokens plus 200,000 output tokens costs $4 before other charges. A hypothetical 25% higher token price would make the same mix $5; this is an illustration, not a GPT-6.2 forecast.</li><li><strong>Test on your own workload.</strong> If a new model becomes available, compare the same tasks, prompts and success criteria, including retries and tool costs.</li><li><strong>Keep rollback possible.</strong> Record the model identifier and route with each request, set spend limits and retain a known working configuration.</li></ol>\n<h2>What about claims that GPT-6.2 is already being used?</h2>\n<p>Some users claim that requests are being routed to GPT-6.2 Sol. Neither a convincing demo nor an answer to a knowledge question proves which model generated it. Our <a href=\"/research/gpt-6-2-sol-routing-test\">guide to checking the routing claim</a> explains what different kinds of evidence can and cannot show.</p>\n<h2>Sources and update policy</h2>\n<p>We checked the OpenAI model catalog, changelog and GPT-6.1 announcement on November 8, 2026. The reported quota screenshots are described by <a href=\"https://argolink.io/en/blog/what-is-gpt-6-2-sol\">ArgoLink</a>; we have not independently verified the screenshots. We will need a new official source before treating any GPT-6.2 specification as confirmed.</p>\n<h2>Related research</h2><ul><li><a href=\"https://finopsllm.com/research/llm-api-pricing-tracker\">LLM API pricing tracker</a></li><li><a href=\"https://finopsllm.com/research/model-routing\">Model routing</a></li></ul>",
+      "faq": [
+        {
+          "question": "Has GPT-6.2 launched?",
+          "answer": "OpenAI had not announced GPT-6.2 in its public model documentation when checked on November 8, 2026."
+        },
+        {
+          "question": "How much does GPT-6.2 cost?",
+          "answer": "OpenAI has not published GPT-6.2 pricing as of that check. GPT-6.1 Sol prices should not be presented as GPT-6.2 prices."
+        }
+      ]
+    }
+  },
+  "tags": [
+    "openai",
+    "budgeting",
+    "model-governance"
+  ]
+}
