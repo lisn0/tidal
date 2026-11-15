@@ -19,7 +19,7 @@ permalink: "index-v2.html"
   --paper-3:#EAE2D0;
   --ink:#17130B;
   --ink-2:#3E382B;
-  --muted:#7A7160;
+  --muted:#6B6252;
   --green:#155231;
   --green-2:#1C6B41;
   --red:#A63B2A;
@@ -75,14 +75,23 @@ nav.main a.btn-ink:hover{color:var(--paper)}
 .btn-ghost{background:transparent;color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--paper)}
 .btn-sm{padding:9px 18px;font-size:13px}
-@media(max-width:900px){nav.main a:not(.btn){display:none}}
+@media(max-width:900px){nav.main>a:not(.btn){display:none}}
+.nav-more{display:none;position:relative}
+@media(max-width:900px){.nav-more{display:block}}
+.nav-more summary{list-style:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink-2);padding:9px 12px;border:1px solid var(--hair-2)}
+.nav-more summary::-webkit-details-marker{display:none}
+.nav-more summary:focus-visible{outline:3px solid var(--green-2);outline-offset:2px}
+.nav-more[open] summary{background:var(--paper-2)}
+.nav-more-list{position:absolute;right:0;top:calc(100% + 8px);min-width:200px;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--ink);box-shadow:4px 4px 0 var(--paper-3);z-index:60}
+.nav-more-list a{display:block;padding:12px 16px;font-size:14px;border-bottom:1px solid var(--hair)}
+.nav-more-list a:last-child{border-bottom:none}
 
 /* ---------- hero ---------- */
 .hero{padding:88px 0 72px;border-bottom:1px solid var(--hair-2)}
 .hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;align-items:start}
 .kicker{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:7px 14px;border-radius:999px;margin-bottom:34px}
-.kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-2);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-2);}
+@media (prefers-reduced-motion:no-preference){.kicker .pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}}
 h1.display{font-family:'Fraunces',serif;font-weight:560;font-size:clamp(52px,7.2vw,104px);line-height:.98;letter-spacing:-.028em;margin-bottom:30px}
 h1.display em{font-style:italic;font-weight:480;color:var(--green);position:relative}
 h1.display .strike{position:relative;white-space:nowrap}
@@ -246,6 +255,16 @@ footer{padding:56px 0 44px;background:var(--paper)}
       <a href="#pricing">Pricing</a>
       <a href="/contact">Contact</a>
       <a href="#faq">FAQ</a>
+      <details class="nav-more">
+        <summary>Menu</summary>
+        <div class="nav-more-list">
+          <a href="#levers">Techniques</a>
+          <a href="#process">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="/contact">Contact</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </details>
       <a class="btn btn-ink btn-sm" href="#book">Book audit →</a>
     </nav>
   </div>
