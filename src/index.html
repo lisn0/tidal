@@ -108,10 +108,19 @@ body{
 @media(max-width:720px){.wrap{padding:0 22px}}
 
 /* ---------- ticker ---------- */
-.ticker{background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;padding:9px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
-.ticker-track{display:inline-block;animation:tick 38s linear infinite}
+.ticker{background:var(--ink);color:var(--paper);display:flex;align-items:center;white-space:nowrap;padding:9px 0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.ticker-viewport{flex:1;min-width:0;overflow:hidden}
+.ticker-track{display:inline-block}
+.ticker-group{display:inline-block}
+@media (prefers-reduced-motion:no-preference){
+  .ticker-track{animation:tick 38s linear infinite}
+  .ticker.is-paused .ticker-track{animation-play-state:paused}
+}
 .ticker span{margin:0 26px;font-family:'IBM Plex Mono',monospace}
 .ticker .dot{color:var(--green-2)}
+.ticker-toggle{flex:none;margin:0 12px;padding:2px 10px;background:transparent;color:var(--paper);border:1px solid currentColor;border-radius:2px;font:inherit;font-family:'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.ticker-toggle:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.ticker-toggle{display:none}}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ---------- masthead ---------- */
@@ -326,13 +335,13 @@ footer{padding:56px 0 44px;background:var(--paper)}
 </head>
 <body>
 <!-- ticker -->
-<div class="ticker"><div class="ticker-track" id="tick">
-  <span><span class="dot">✦</span> Now taking the first cohort of audit engagements</span>
+<div class="ticker" id="ticker"><div class="ticker-viewport"><div class="ticker-track" id="tick"><div class="ticker-group">
+  <span><span class="dot" aria-hidden="true">✦</span> Now taking the first cohort of audit engagements</span>
   <span>Limited slots</span>
-  <span><span class="dot">✦</span> Free audit · No savings, no fee</span>
+  <span><span class="dot" aria-hidden="true">✦</span> Free audit · No savings, no fee</span>
   <span>Reconciled to raw provider invoices</span>
-  <span><span class="dot">✦</span> Targeting 40–60% reduction</span>
-</div></div>
+  <span><span class="dot" aria-hidden="true">✦</span> Targeting 40–60% reduction</span>
+</div></div></div><button type="button" class="ticker-toggle" id="ticker-toggle" aria-controls="tick">Pause</button></div>
 
 <!-- masthead -->
 <header class="masthead">
@@ -811,10 +820,22 @@ footer{padding:56px 0 44px;background:var(--paper)}
 </footer>
 
 <script>
-// seamless ticker: duplicate track content
+// seamless ticker: visual-only duplicate (hidden from screen readers) + pause/play control
 (function(){
   var t = document.getElementById('tick');
-  t.innerHTML += t.innerHTML;
+  var ticker = document.getElementById('ticker');
+  var btn = document.getElementById('ticker-toggle');
+  if (!t || !ticker) return;
+  var group = t.querySelector('.ticker-group');
+  if (group) {
+    var copy = group.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    t.appendChild(copy);
+  }
+  if (btn) btn.addEventListener('click', function(){
+    var paused = ticker.classList.toggle('is-paused');
+    btn.textContent = paused ? 'Play' : 'Pause';
+  });
 })();
 
 // Recalculate the illustrative hero scenario from user-entered assumptions.
