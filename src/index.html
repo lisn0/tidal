@@ -93,7 +93,10 @@ permalink: "index.html"
   --hair-2:#C9BEA5;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+.skip-link{position:absolute;z-index:100;left:16px;top:8px;transform:translateY(-150%);padding:8px 12px;background:var(--ink);color:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:13px}
+.skip-link:focus{transform:translateY(0)}
+main:focus{outline:none}
 body{
   background:var(--paper);
   color:var(--ink);
@@ -120,7 +123,7 @@ body{
 .ticker .dot{color:var(--green-2)}
 .ticker-toggle{flex:none;margin:0 12px;padding:2px 10px;background:transparent;color:var(--paper);border:1px solid currentColor;border-radius:2px;font:inherit;font-family:'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
 .ticker-toggle:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.ticker-toggle{display:none}}
+@media (prefers-reduced-motion:reduce){.ticker-toggle{display:none}.ticker{white-space:normal;justify-content:center;text-align:center}.ticker-viewport{overflow:visible}.ticker-group{display:flex;flex-wrap:wrap;justify-content:center}}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ---------- masthead ---------- */
@@ -194,13 +197,13 @@ h1.display .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:54
 .scenario-controls{padding:18px 24px 8px;border-top:1px solid var(--hair);display:grid;gap:14px}
 .scenario-control{display:grid;gap:6px}
 .scenario-control label{font-size:12px;font-weight:600;color:var(--ink-2)}
-.scenario-control input[type=number]{width:100%;font:500 14px 'IBM Plex Mono',monospace;padding:9px 10px;border:1px solid var(--hair-2);background:var(--paper);color:var(--ink)}
+.scenario-control input[type=number]{width:100%;font:500 14px 'IBM Plex Mono',monospace;font-size:max(1rem,1em);padding:9px 10px;border:1px solid var(--hair-2);background:var(--paper);color:var(--ink)}
 .scenario-control input[type=range]{width:100%;accent-color:var(--green)}
 .scenario-control .range-meta{display:flex;justify-content:space-between;font:10px 'IBM Plex Mono',monospace;color:var(--muted)}
 .scenario-caption{font-size:11px;color:var(--muted);line-height:1.55}
 .scenario-control input:focus-visible{outline:3px solid var(--green-2);outline-offset:2px}
 .scenario-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 24px 14px}
-.scenario-copy{font:600 12px 'IBM Plex Mono',monospace;color:var(--green);background:transparent;border:1px solid var(--green);padding:8px 11px;cursor:pointer}
+.scenario-copy{font:600 12px 'IBM Plex Mono',monospace;font-size:max(1rem,1em);color:var(--green);background:transparent;border:1px solid var(--green);padding:8px 11px;cursor:pointer}
 .scenario-copy:hover{background:var(--green);color:var(--paper)}
 .scenario-copy:disabled{opacity:.5;cursor:not-allowed}
 .scenario-copy:focus-visible,.scenario-actions a:focus-visible,.phase-link:focus-visible{outline:3px solid var(--green-2);outline-offset:3px}
@@ -343,6 +346,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <!-- ticker -->
 <div class="ticker" id="ticker"><div class="ticker-viewport"><div class="ticker-track" id="tick"><div class="ticker-group">
   <span><span class="dot" aria-hidden="true">✦</span> Now taking the first cohort of audit engagements</span>
@@ -355,7 +359,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
 <!-- masthead -->
 <header class="masthead">
   <div class="wrap masthead-in">
-    <a class="brand" href="/">
+    <a class="brand" href="/" aria-current="page">
       <span class="mark">$</span>
       <span class="name">LLM CFO</span>
       <span class="est">Est. 2026 · AI FinOps</span>
@@ -389,6 +393,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
   </div>
 </header>
 
+<main id="main" tabindex="-1">
 <!-- hero -->
 <div class="hero">
   <div class="wrap hero-grid">
@@ -417,7 +422,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
         <div class="s-row"><span class="lbl">LLM CFO fee (20%)</span><span class="amt fee" id="scenario-fee">− $16,500</span></div>
       </div>
       <div class="s-total"><span class="lbl">You keep</span><span class="amt" id="scenario-retained">$66,000 /mo</span></div>
-      <div class="scenario-controls" id="scenario-controls" aria-label="Illustrative savings scenario controls" hidden>
+      <div class="scenario-controls" id="scenario-controls" role="group" aria-label="Illustrative savings scenario controls" hidden>
         <div class="scenario-control">
           <label for="scenario-spend">Assumed monthly AI spend (USD)</label>
           <input id="scenario-spend" type="number" min="0" max="10000000" step="1000" value="165000" inputmode="decimal" aria-describedby="scenario-assumptions scenario-validation">
@@ -700,27 +705,27 @@ footer{padding:56px 0 44px;background:var(--paper)}
     </div>
     <div class="faq-list">
       <details class="faq" open>
-        <summary>How much can I reduce my OpenAI or Anthropic bill? <span class="plus">+</span></summary>
+        <summary>How much can I reduce my OpenAI or Anthropic bill? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a">Published research and our engineering work suggests <strong>40–60% reduction</strong> is achievable for most production workloads. The biggest savings usually come from semantic caching (20–40%), model routing (30–50%), and prompt compression (15–30%). We commit to a target after the audit. <strong>If we don't deliver savings, you don't pay.</strong></div>
       </details>
       <details class="faq">
-        <summary>How are savings verified? <span class="plus">+</span></summary>
+        <summary>How are savings verified? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a">We lock a pre-engagement baseline from your provider invoices. Each month, our reconciliation report compares optimized spend to that baseline — traffic-adjusted, reconciled to raw billing. <strong>Your finance team can audit the math.</strong></div>
       </details>
       <details class="faq">
-        <summary>What do I get for the 20%? <span class="plus">+</span></summary>
+        <summary>What do I get for the 20%? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a"><strong>All three products.</strong> The audit is free. The 20% of verified savings covers the implementation and the operation of <strong>Tidal Gateway</strong>, a LiteLLM gateway we deploy and run in your cloud, plus <strong>Tidal Telemetry</strong> for live cost and the monthly statement. No licence fee, no minimum, and no savings means no fee.</div>
       </details>
       <details class="faq">
-        <summary>Will optimization hurt output quality? <span class="plus">+</span></summary>
+        <summary>Will optimization hurt output quality? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a">Every change is A/B tested against your production baseline for <strong>seven days minimum</strong>. Regressions roll back automatically. Quality SLOs are agreed per endpoint and monitored continuously alongside cost.</div>
       </details>
       <details class="faq">
-        <summary>Are you SOC 2, GDPR, or HIPAA certified? <span class="plus">+</span></summary>
+        <summary>Are you SOC 2, GDPR, or HIPAA certified? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a"><strong>Not yet — we're being honest.</strong> We're an early-stage service and don't claim certification. We follow read-only-by-default access for billing and gateway data, and can sign a mutual NDA and DPA before any engagement.</div>
       </details>
       <details class="faq">
-        <summary>Which providers do you support? <span class="plus">+</span></summary>
+        <summary>Which providers do you support? <span class="plus" aria-hidden="true">+</span></summary>
         <div class="a">OpenAI, Anthropic, Gemini &amp; Vertex AI, AWS Bedrock, Azure OpenAI, Groq, Together AI, Mistral, Cohere, Fireworks, OpenRouter, and most OSS endpoints — plus LiteLLM, Helicone, and Langfuse gateways. <strong>Multi-provider setups typically have the largest savings surface.</strong></div>
       </details>
     </div>
@@ -792,6 +797,7 @@ footer{padding:56px 0 44px;background:var(--paper)}
     <div class="fine">30-min discovery · read-only by default · NDA + DPA on request · no commitment</div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
@@ -850,14 +856,39 @@ footer{padding:56px 0 44px;background:var(--paper)}
   var btn = document.getElementById('ticker-toggle');
   if (!t || !ticker) return;
   var group = t.querySelector('.ticker-group');
-  if (group) {
-    var copy = group.cloneNode(true);
-    copy.setAttribute('aria-hidden', 'true');
-    t.appendChild(copy);
+  var copy = null;
+  var mq = window.matchMedia('(prefers-reduced-motion: no-preference)');
+  function sync(){
+    if (mq.matches && group && !copy) {
+      copy = group.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      t.appendChild(copy);
+    } else if (!mq.matches && copy) {
+      t.removeChild(copy);
+      copy = null;
+    }
   }
+  sync();
+  if (mq.addEventListener) mq.addEventListener('change', sync); else if (mq.addListener) mq.addListener(sync);
   if (btn) btn.addEventListener('click', function(){
     var paused = ticker.classList.toggle('is-paused');
     btn.textContent = paused ? 'Play' : 'Pause';
+  });
+})();
+
+// mobile menu: close on link click and on Escape
+(function(){
+  var d = document.querySelector('details.nav-more');
+  if (!d) return;
+  d.addEventListener('click', function(e){
+    if (e.target.closest && e.target.closest('a')) d.removeAttribute('open');
+  });
+  d.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && d.open) {
+      d.removeAttribute('open');
+      var s = d.querySelector('summary');
+      if (s) s.focus();
+    }
   });
 })();
 
@@ -878,14 +909,14 @@ footer{padding:56px 0 44px;background:var(--paper)}
     var rawSpend = spend.value.trim();
     var baseline = Number(rawSpend);
     if (rawSpend === '' || !Number.isFinite(baseline) || baseline < 0 || baseline > 10000000) {
-      validation.textContent = rawSpend === '' ? 'Enter monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.' : 'Enter a finite monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.';
+      spend.setAttribute('aria-invalid', 'true');
+      validation.textContent = rawSpend === '' ?'Enter monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.' : 'Enter a finite monthly spend from $0 to $10,000,000. Displayed results use the last valid assumptions.';
     }
   }
   function updateScenario(){
     var rawSpend = spend.value.trim();
     var baseline = Number(rawSpend);
     if (rawSpend === '' || !Number.isFinite(baseline) || baseline < 0 || baseline > 10000000) {
-      spend.setAttribute('aria-invalid', 'true');
       copyButton.disabled = true;
       copyStatus.textContent = '';
       return;
