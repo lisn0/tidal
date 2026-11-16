@@ -1,4 +1,4 @@
-:root { --bg:#FBFAF6; --bg-2:#F3F1EA; --ink:#0E0F0C; --fg:#2A2C26; --fg-2:#5F6158; --rule:#E0DCCE; --accent:#B83A13; --green:#1F7A3F; --green-soft:#E3F4EA; }
+:root { color-scheme:light; accent-color:var(--accent); --bg:#FBFAF6; --bg-2:#F3F1EA; --ink:#0E0F0C; --fg:#2A2C26; --fg-2:#5F6158; --rule:#E0DCCE; --accent:#B83A13; --green:#1F7A3F; --green-soft:#E3F4EA; }
 * { box-sizing:border-box; margin:0; padding:0; }
 html { scroll-behavior:smooth; }
 body { background:var(--bg); color:var(--fg); font-family:'Geist',-apple-system,system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; font-feature-settings:"ss01","ss02","cv11"; }
@@ -27,6 +27,9 @@ strong { color:var(--ink); font-weight:600; }
 .wrap { max-width:840px; margin:0 auto; padding:64px 32px 96px; }
 .eye { font-family:'Geist Mono',monospace; font-size:12px; color:var(--accent); letter-spacing:-0.01em; margin-bottom:14px; display:inline-flex; align-items:center; gap:8px; }
 .eye::before { content:""; width:14px; height:1px; background:var(--accent); display:inline-block; }
+h1.page-title, h2, h3 { text-wrap:balance; }
+p { text-wrap:pretty; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
 h1.page-title { font-family:'Geist',sans-serif; font-weight:800; font-size:clamp(40px,5.4vw,64px); letter-spacing:-0.04em; line-height:1.02; color:var(--ink); margin-bottom:12px; }
 h1.page-title em { font-family:'Geist',sans-serif; font-style:normal; font-weight:700; }
 .lede { font-size:19px; color:var(--fg); max-width:60ch; margin-bottom:8px; line-height:1.55; }
@@ -34,7 +37,7 @@ h1.page-title em { font-family:'Geist',sans-serif; font-style:normal; font-weigh
 .byline { font-size: 14px; color: var(--muted, #6b6b6b); margin: -8px 0 24px; font-family: 'Geist', system-ui, sans-serif; }
 h2 { font-family:'Geist',sans-serif; font-size:24px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); margin:44px 0 12px; }
 h3 { font-family:'Geist',sans-serif; font-size:18px; font-weight:600; letter-spacing:-0.015em; color:var(--ink); margin:28px 0 8px; }
-p, li { font-size:16px; color:var(--fg); margin-bottom:14px; }
+p, li { font-size:1rem; color:var(--fg); margin-bottom:14px; }
 ul, ol { padding-left:22px; }
 li { margin-bottom:6px; }
 .callout { border-left:2px solid var(--accent); background:var(--bg-2); padding:18px 22px; margin:24px 0; font-size:15px; color:var(--fg); }
@@ -60,6 +63,8 @@ table.kv td:last-child { text-align:right; color:var(--ink); font-weight:500; }
 @font-face { font-family:'Geist Mono'; font-style:normal; font-weight:600; font-display:swap; src:url('/assets/fonts/geist-mono-latin-600-normal.woff2') format('woff2'); unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 .contact-honeypot { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
 #contact-form input, #contact-form select, #contact-form textarea { box-sizing:border-box; width:min(100%, 36rem); padding:.7rem; border:1px solid #888; border-radius:4px; background:#fff; color:#222; font:inherit; }
+#contact-form input:user-invalid, #contact-form select:user-invalid, #contact-form textarea:user-invalid { border-color:var(--accent); }
+#contact-form input:user-valid, #contact-form select:user-valid, #contact-form textarea:user-valid { border-color:var(--green); }
 #contact-form button { padding:.8rem 1.3rem; border:0; border-radius:4px; background:#172626; color:white; font:inherit; cursor:pointer; }
 #contact-form button:disabled { opacity:.6; cursor:wait; }
 
