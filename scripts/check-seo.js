@@ -11,7 +11,7 @@
 // `[^"']` regexes: a value such as content="Don't" must not end at the apostrophe.
 const fs = require("fs");
 const path = require("path");
-const { THIN_WORD_THRESHOLD, isThin, wordCount, countWords, stripTags } = require("../lib/thin-pages.js");
+const { THIN_WORD_THRESHOLD, isThin, isCopiedFromFinops, wordCount, countWords, stripTags } = require("../lib/thin-pages.js");
 
 const root = path.join(__dirname, "..");
 const site = path.join(root, "_site");
@@ -227,7 +227,7 @@ for (const p of pages) {
   thinChecked++;
   const helperThin = isThin(articles[entry.key], lang);
   const pageCount = countWords(text, lang);
-  const pageThin = pageCount < THIN_WORD_THRESHOLD;
+  const pageThin = isCopiedFromFinops(articles[entry.key]) || pageCount < THIN_WORD_THRESHOLD;
   if (helperThin !== pageThin) {
     fail("thin-drift", p.rel, `helper says thin=${helperThin} (${wordCount(articles[entry.key], lang)} words), rendered <main> says thin=${pageThin} (${pageCount} words), threshold ${THIN_WORD_THRESHOLD}`);
   }
